@@ -1,8 +1,8 @@
-package blizzard.development.core.utils;
+package blizzard.development.essentials.utils;
 
-import blizzard.development.core.commands.EssentialsCommand;
-import blizzard.development.core.commands.essentials.*;
-import blizzard.development.core.utils.config.ConfigUtils;
+import blizzard.development.essentials.commands.EssentialsCommand;
+import blizzard.development.essentials.commands.commons.*;
+import blizzard.development.essentials.utils.config.ConfigUtils;
 import co.aikar.commands.Locales;
 import co.aikar.commands.PaperCommandManager;
 import org.bukkit.Bukkit;
@@ -29,12 +29,12 @@ public class PluginImpl {
     }
 
     public void onLoad() {
+        Config.saveDefaultConfig();
+        Database.saveDefaultConfig();
         registerDatabase();
         registerListeners();
         registerTasks();
         registerCommands();
-        Config.saveDefaultConfig();
-        Database.saveDefaultConfig();
     }
 
     public void onUnload() {
@@ -53,10 +53,6 @@ public class PluginImpl {
     private void registerCommands() {
         commandManager.registerCommand(new EssentialsCommand());
         commandManager.registerCommand(new PingCommand());
-        commandManager.registerCommand(new HealCommand());
-        commandManager.registerCommand(new GamemodeCommand());
-        commandManager.registerCommand(new FlyCommand());
-        commandManager.registerCommand(new ClearChatCommand());
     }
 
     public static PluginImpl getInstance() {

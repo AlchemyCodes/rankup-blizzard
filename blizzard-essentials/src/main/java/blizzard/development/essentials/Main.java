@@ -1,6 +1,6 @@
-package blizzard.development.core;
+package blizzard.development.essentials;
 
-import blizzard.development.core.utils.PluginImpl;
+import blizzard.development.essentials.utils.PluginImpl;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin {

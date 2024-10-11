@@ -1,4 +1,4 @@
-package blizzard.development.core.commands.essentials;
+package blizzard.development.essentials.commands.commons;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 public class PingCommand extends BaseCommand {
 
     @Default
-    @CommandPermission("alchemy.core.basic")
+    @CommandPermission("alchemy.essentials.basic")
     @Syntax("<player>")
     public void onDefault(CommandSender sender, @Optional String target) {
         if (target == null) {

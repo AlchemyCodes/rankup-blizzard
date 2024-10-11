@@ -1,4 +1,4 @@
-package blizzard.development.core.commands;
+package blizzard.development.essentials.commands;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;

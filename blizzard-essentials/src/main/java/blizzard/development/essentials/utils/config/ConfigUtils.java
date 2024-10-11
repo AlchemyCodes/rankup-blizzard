@@ -1,4 +1,4 @@
-package blizzard.development.core.utils.config;
+package blizzard.development.essentials.utils.config;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
