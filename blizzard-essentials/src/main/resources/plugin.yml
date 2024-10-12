@@ -1,11 +1,7 @@
-name: alchemy-core
+name: blizzard-essentials
 version: '${version}'
 main: blizzard.development.essentials.Main
 api-version: '1.20'
 commands:
   essentials:
   gamemode:
-  heal:
-  teleport:
-  fly:
-  clearchat:

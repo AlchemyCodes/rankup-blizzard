@@ -2,6 +2,8 @@ package blizzard.development.essentials.utils;
 
 import blizzard.development.essentials.commands.EssentialsCommand;
 import blizzard.development.essentials.commands.essentials.*;
+import blizzard.development.essentials.commands.commons.*;
+import blizzard.development.essentials.commands.staff.GameModeCommand;
 import blizzard.development.essentials.utils.config.ConfigUtils;
 import co.aikar.commands.Locales;
 import co.aikar.commands.PaperCommandManager;
@@ -29,6 +31,8 @@ public class PluginImpl {
     }
 
     public void onLoad() {
+        Config.saveDefaultConfig();
+        Database.saveDefaultConfig();
         registerDatabase();
         registerListeners();
         registerTasks();
@@ -57,6 +61,8 @@ public class PluginImpl {
         commandManager.registerCommand(new GamemodeCommand());
         commandManager.registerCommand(new FlyCommand());
         commandManager.registerCommand(new ClearChatCommand());
+        commandManager.registerCommand(new GameModeCommand());
+        commandManager.registerCommand(new PingCommand());
     }
 
     public static PluginImpl getInstance() {

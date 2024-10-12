@@ -31,7 +31,7 @@ processResources {
 
 shadowJar {
     archiveClassifier.set('')
-    relocate 'co.aikar.commands', 'blizzard.development.core.acf'
+    relocate 'co.aikar.commands', 'blizzard.development.essentials.acf'
 }
 
 build {
