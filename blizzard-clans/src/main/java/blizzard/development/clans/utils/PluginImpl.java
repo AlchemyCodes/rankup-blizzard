@@ -2,10 +2,10 @@ package blizzard.development.clans.utils;
 
 import blizzard.development.clans.commands.subcommands.*;
 import blizzard.development.clans.listeners.clans.*;
-import blizzard.development.clans.managers.ChatManager;
-import blizzard.development.clans.managers.EconomyManager;
+import blizzard.development.clans.managers.*;
 import co.aikar.commands.Locales;
 import co.aikar.commands.PaperCommandManager;
+import com.nickuc.chat.api.nChatAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
@@ -28,8 +28,6 @@ import blizzard.development.clans.database.dao.PlayersDAO;
 import blizzard.development.clans.database.storage.ClansData;
 import blizzard.development.clans.listeners.PlayerQuitListener;
 import blizzard.development.clans.listeners.PlayersJoinListener;
-import blizzard.development.clans.managers.LPermsRegistry;
-import blizzard.development.clans.managers.PlaceholderRegistry;
 import blizzard.development.clans.tasks.ClansSaveTask;
 import blizzard.development.clans.tasks.KillDeathRatioTask;
 import blizzard.development.clans.tasks.PlayerSaveTask;
@@ -47,7 +45,6 @@ public class PluginImpl {
     private static PluginImpl instance;
     private static PluginManager pluginManager;
     private static PaperCommandManager commandManager;
-    private PlaceholderRegistry placeHolderManager;
 
     public ConfigUtils Config;
     public ConfigUtils Database;
@@ -63,8 +60,13 @@ public class PluginImpl {
 
     public void onLoad() {
 
-        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+        if (pluginManager.getPlugin("PlaceholderAPI") != null) {
             new PlaceholderRegistry((Main) plugin).register();
+        }
+
+        nChatAPI api = nChatAPI.getApi();
+        if (api != null) {
+            api.setGlobalTag("clans_tag", new ClansGlobalTag(plugin));
         }
 
         Config.saveDefaultConfig();
