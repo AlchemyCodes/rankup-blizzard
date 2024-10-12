@@ -1,0 +1,18 @@
+clans:
+
+  create-price: 1500 # coins
+  max-members: 30 # per clan
+
+  names-blacklist:
+    - "NIGGERS"
+    - "niggers"
+    - "NIGGARS"
+    - "niggars"
+    - "SEXO"
+    - "sexo"
+  tags-blacklist:
+    - "NIG"
+    - "nig"
+    - "SEX"
+    - "sex"
+
