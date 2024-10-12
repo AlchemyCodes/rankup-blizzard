@@ -2,6 +2,7 @@ package blizzard.development.essentials.utils;
 
 import blizzard.development.essentials.commands.EssentialsCommand;
 import blizzard.development.essentials.commands.commons.*;
+import blizzard.development.essentials.commands.staff.GameModeCommand;
 import blizzard.development.essentials.utils.config.ConfigUtils;
 import co.aikar.commands.Locales;
 import co.aikar.commands.PaperCommandManager;
@@ -52,6 +53,7 @@ public class PluginImpl {
 
     private void registerCommands() {
         commandManager.registerCommand(new EssentialsCommand());
+        commandManager.registerCommand(new GameModeCommand());
         commandManager.registerCommand(new PingCommand());
     }
 
