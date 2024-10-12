@@ -13,15 +13,15 @@ public class GameModeCommand extends BaseCommand {
     @Default
     @CommandPermission("alchemy.essentials.staff")
     @Syntax("<modo> <jogador>")
-    public void onCommand(CommandSender sender, String gameMode, @Optional String target) {
+    public void onCommand(CommandSender commandSender, String gameMode, @Optional String target) {
 
         if (target == null) {
-            if (!(sender instanceof Player)) {
-                sender.sendMessage("§cApenas jogadores podem utilizar este comando!");
+            if (!(commandSender instanceof Player)) {
+                commandSender.sendMessage("§cApenas jogadores podem utilizar este comando!");
                 return;
             }
 
-            Player player = (Player) sender;
+            Player player = (Player) commandSender;
             switch (gameMode) {
                 case "0", "survival", "sobrevivencia" -> {
                     player.setGameMode(GameMode.SURVIVAL);
@@ -47,7 +47,7 @@ public class GameModeCommand extends BaseCommand {
         Player targetPlayer = Bukkit.getPlayer(target);
         if (targetPlayer != null) {
 
-            Player player = (Player) sender;
+            Player player = (Player) commandSender;
 
             switch (gameMode) {
                 case "0", "survival" -> {
@@ -69,7 +69,7 @@ public class GameModeCommand extends BaseCommand {
                 default -> player.sendActionBar("§7Opções disponíveis: §f0, 1, 2 e 3!");
             }
         } else {
-            sender.sendMessage("§7O jogador fornecido está offline ou é inválido!");
+            commandSender.sendMessage("§7O jogador fornecido está offline ou é inválido!");
         }
     }
 }
