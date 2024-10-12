@@ -1,6 +1,7 @@
 package blizzard.development.essentials.utils;
 
 import blizzard.development.essentials.commands.EssentialsCommand;
+import blizzard.development.essentials.commands.essentials.*;
 import blizzard.development.essentials.commands.commons.*;
 import blizzard.development.essentials.commands.staff.GameModeCommand;
 import blizzard.development.essentials.utils.config.ConfigUtils;
@@ -36,6 +37,8 @@ public class PluginImpl {
         registerListeners();
         registerTasks();
         registerCommands();
+        Config.saveDefaultConfig();
+        Database.saveDefaultConfig();
     }
 
     public void onUnload() {
@@ -53,6 +56,11 @@ public class PluginImpl {
 
     private void registerCommands() {
         commandManager.registerCommand(new EssentialsCommand());
+        commandManager.registerCommand(new PingCommand());
+        commandManager.registerCommand(new HealCommand());
+        commandManager.registerCommand(new GamemodeCommand());
+        commandManager.registerCommand(new FlyCommand());
+        commandManager.registerCommand(new ClearChatCommand());
         commandManager.registerCommand(new GameModeCommand());
         commandManager.registerCommand(new PingCommand());
     }
