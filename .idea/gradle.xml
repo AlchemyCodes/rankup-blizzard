@@ -8,8 +8,7 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/alchemy-auction" />
-            <option value="$PROJECT_DIR$/alchemy-core" />
+            <option value="$PROJECT_DIR$/blizzard-essentials" />
           </set>
         </option>
       </GradleProjectSettings>

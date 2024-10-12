@@ -1,0 +1,7 @@
+name: blizzard-clans
+version: '${version}'
+main: blizzard.development.clans.Main
+api-version: '1.20'
+commands:
+  clans:
+  c:

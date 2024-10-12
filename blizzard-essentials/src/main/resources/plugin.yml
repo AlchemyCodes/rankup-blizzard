@@ -1,6 +1,6 @@
 name: alchemy-core
 version: '${version}'
-main: blizzard.development.core.Main
+main: blizzard.development.essentials.Main
 api-version: '1.20'
 commands:
   essentials:
