@@ -3,6 +3,7 @@ package blizzard.development.clans.managers;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.luckperms.api.model.user.User;
 import net.luckperms.api.query.QueryOptions;
 import org.bukkit.entity.Player;
@@ -13,6 +14,7 @@ import java.util.regex.Pattern;
 
 public class LPerms {
     private static final net.luckperms.api.LuckPerms luckPerms = LPermsRegistry.getLuckPerms();
+
     public static Component getPrefix(Player player) {
         if (luckPerms == null) return null;
 
@@ -22,10 +24,10 @@ public class LPerms {
             QueryOptions queryOptions = luckPerms.getContextManager().getStaticQueryOptions();
             String prefix = user.getCachedData().getMetaData(queryOptions).getPrefix();
             if (prefix != null) {
-                return parseGradient(prefix);
+                prefix = color(prefix);
+                return convertColorCodes(prefix);
             }
         }
-
         return null;
     }
 
@@ -83,5 +85,13 @@ public class LPerms {
                     .decoration(TextDecoration.ITALIC, false));
         }
         return result;
+    }
+
+    public static String color(String message) {
+        return message.replace("&", "§");
+    }
+
+    public static Component convertColorCodes(String text) {
+        return LegacyComponentSerializer.legacyAmpersand().deserialize(text);
     }
 }
