@@ -60,6 +60,12 @@ public class PlaceholderRegistry extends PlaceholderExpansion {
             } else {
                 return ClansMethods.getClan(clan).getName();
             }
+        } else if (identifier.equals("tab")) {
+            if (clan == null) {
+                return "";
+            } else {
+                return "[" + ClansMethods.getClan(clan).getClan() + "]";
+            }
         } else if (identifier.equals("members")) {
             if (clan == null) {
                 return String.valueOf(0);

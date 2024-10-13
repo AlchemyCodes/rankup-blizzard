@@ -66,7 +66,7 @@ public class PluginImpl {
 
         nChatAPI api = nChatAPI.getApi();
         if (api != null) {
-            api.setGlobalTag("clans_tag", new ClansGlobalTag(plugin));
+            api.setGlobalTag("clans_tab", new ClansGlobalTag(plugin));
         }
 
         Config.saveDefaultConfig();
