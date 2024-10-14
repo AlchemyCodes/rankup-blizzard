@@ -20,6 +20,10 @@ tasks.withType(JavaCompile).configureEach {
     }
 }
 
+dependencies {
+    compileOnly 'com.comphenix.protocol:ProtocolLib:5.1.0'
+}
+
 processResources {
     def props = [version: version]
     inputs.properties props

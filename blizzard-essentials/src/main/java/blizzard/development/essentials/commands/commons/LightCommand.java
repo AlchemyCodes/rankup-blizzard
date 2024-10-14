@@ -3,13 +3,13 @@ package blizzard.development.essentials.commands.commons;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.Default;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
-@CommandAlias("trash|lixeira|lixo")
-public class TrashCommand extends BaseCommand {
+@CommandAlias("luz|light|acender")
+public class LightCommand extends BaseCommand {
 
     @Default
     public void onCommand(CommandSender commandSender) {
@@ -19,7 +19,7 @@ public class TrashCommand extends BaseCommand {
 
         Player player = (Player) commandSender;
 
-        Inventory trash = Bukkit.createInventory(null, 6 * 9, "Lixeira");
-        player.openInventory(trash);
+        player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, PotionEffect.INFINITE_DURATION, 1));
+        player.sendActionBar("§b§lYAY! §bVocê ativou o modo visão noturna.");
     }
 }

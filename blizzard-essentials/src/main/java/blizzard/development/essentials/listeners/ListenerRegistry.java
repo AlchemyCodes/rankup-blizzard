@@ -1,6 +1,7 @@
 package blizzard.development.essentials.listeners;
 
 import blizzard.development.essentials.Main;
+import blizzard.development.essentials.listeners.geral.TabCompleteEvent;
 import blizzard.development.essentials.listeners.player.PlayerEvents;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
@@ -15,4 +16,5 @@ public class ListenerRegistry {
                 new PlayerEvents()
         ).forEach(listener -> manager.registerEvents(listener, Main.getInstance()));
     }
+
 }
