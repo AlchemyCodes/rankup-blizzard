@@ -6,8 +6,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-@CommandAlias("heal|curar")
-public class HealCommand extends BaseCommand {
+@CommandAlias("feed|comer|fome")
+public class FeedCommand extends BaseCommand {
 
     @Default
     @CommandPermission("alchemy.essentials.staff")
@@ -16,13 +16,13 @@ public class HealCommand extends BaseCommand {
 
         if (playerTarget == null) {
             if (!(commandSender instanceof Player)) {
-                commandSender.sendMessage("§cApenas jogadores podem utilizar este comando!");
                 return;
             }
 
             Player player = (Player) commandSender;
-            player.setHealth(20);
-            player.sendActionBar("§b§lYAY! §bVocê se curou.");
+            player.setFoodLevel(0);
+            player.setSaturation(0);
+            player.sendActionBar("§b§lYAY! §bVocê matou a sua fome.");
 
             return;
         }
@@ -32,8 +32,9 @@ public class HealCommand extends BaseCommand {
 
         if (target != null) {
 
-            target.setHealth(20);
-            player.sendActionBar("§b§lYAY! §bVocê curou o jogador " + player.getName() + ".");
+            target.setFoodLevel(0);
+            target.setSaturation(0);
+            player.sendActionBar("§b§lYAY! §bVocê matou a fome do jogador " + player.getName() + ".");
         }
     }
 }
