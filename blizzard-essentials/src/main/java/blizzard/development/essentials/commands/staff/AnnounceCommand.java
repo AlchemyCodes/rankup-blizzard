@@ -52,6 +52,7 @@ public class AnnounceCommand extends BaseCommand {
             );
 
             commandSender.sendActionBar(Component.text("§b§lYAY! §bVocê enviou um anúncio para todos os §l" + onlinePlayers + "§b jogadores online."));
+            commandSender.sendMessage(Component.text("§b§lYAY! §bVocê enviou um anúncio para todos os §l" + onlinePlayers + "§b jogadores online."));
         }
     }
 }
