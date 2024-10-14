@@ -1,22 +1,15 @@
 package blizzard.development.essentials.listeners.player;
 
 import blizzard.development.essentials.utils.PluginImpl;
-import com.destroystokyo.paper.event.player.PlayerHandshakeEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.player.PlayerChangedMainHandEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class PlayerEvents implements Listener {
 

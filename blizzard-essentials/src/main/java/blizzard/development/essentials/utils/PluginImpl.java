@@ -1,8 +1,6 @@
 package blizzard.development.essentials.utils;
 
 import blizzard.development.essentials.commands.CommandRegistry;
-import blizzard.development.essentials.commands.commons.*;
-import blizzard.development.essentials.commands.staff.*;
 import blizzard.development.essentials.listeners.ListenerRegistry;
 import blizzard.development.essentials.utils.config.ConfigUtils;
 import co.aikar.commands.Locales;
