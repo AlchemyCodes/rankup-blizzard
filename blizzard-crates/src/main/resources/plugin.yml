@@ -1,0 +1,6 @@
+name: blizzard-crates
+version: '${version}'
+main: blizzard.development.crates.Main
+api-version: '1.20'
+commands:
+  crates:
