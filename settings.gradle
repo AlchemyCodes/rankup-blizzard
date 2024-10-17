@@ -2,4 +2,5 @@ rootProject.name = 'rankup-blizzard'
 include 'blizzard-essentials'
 include 'blizzard-clans'
 include 'blizzard-crates'
+include 'blizzard-bosses'
 
