@@ -1,7 +1,7 @@
 package blizzard.development.bosses.utils.items;
 
-import alchemy.development.lobby.utils.items.apis.SkullAPI;
-import alchemy.development.lobby.utils.items.apis.TextAPI;
+import blizzard.development.bosses.utils.items.apis.SkullAPI;
+import blizzard.development.bosses.utils.items.apis.TextAPI;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
