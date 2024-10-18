@@ -8,7 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
-@CommandAlias("trash|lixeira")
+@CommandAlias("trash|lixeira|lixo")
 public class TrashCommand extends BaseCommand {
 
     @Default

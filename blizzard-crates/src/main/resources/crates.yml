@@ -1,0 +1,30 @@
+menu:
+
+  rows: 3
+  open-sound: BLOCK_CHEST_OPEN
+
+crates:
+
+  legendary:
+    1:
+      slot: 10
+      use-heads: false
+      value: null
+      material: "GOLD_INGOT"
+      data: 0
+      command: give {player} minecraft:gold_ingot
+      display: "&6Ouro roubado"
+      lore:
+        - "&7orin gostosin"
+        -
+  mystic:
+    1:
+      slot: 10
+      use-heads: false
+      value: null
+      material: "DIAMOND_PICKAXE"
+      data: 0
+      command: give {player} minecraft:diamond_pickaxe
+      display: "&bPicareta do swagviper"
+      lore:
+        - "&7EscEscEvent"
