@@ -1,53 +1,55 @@
 package blizzard.development.bosses.commands;
 
-import blizzard.development.bosses.database.cache.ToolsCacheManager;
-import blizzard.development.bosses.tools.SwordTool;
 import blizzard.development.bosses.utils.PluginImpl;
-import blizzard.development.bosses.utils.items.ItemBuilder;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.Default;
-import co.aikar.commands.annotation.Subcommand;
-import org.bukkit.Material;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
+
 
 @CommandAlias("bosses|boss|monstros|monstro")
 public class BossesCommand extends BaseCommand {
 
     @Default
-    public void onCommand(CommandSender sender) {
+    private void onCommand(CommandSender sender) {
         if (!(sender instanceof Player)) {
             sender.sendMessage("§cEste comando só pode ser utilizado por jogadores!");
             return;
         }
-
         Player player = (Player) sender;
-        giveTools(player);
+        sendPlayerToBossWorld(player);
+        player.sendMessage("§aVocê foi teleportado para o mundo de bosses!");
+
     }
 
-    @Subcommand("type")
-    public void onType(CommandSender sender) {
-        if (!(sender instanceof Player)) {
+    private void sendPlayerToBossWorld(Player player) {
+        String worldSpawn = PluginImpl.getInstance().Locations.getConfig().getString("spawn.location.world");
+        double x = PluginImpl.getInstance().Locations.getConfig().getDouble("spawn.location.x");
+        double y = PluginImpl.getInstance().Locations.getConfig().getDouble("spawn.location.y");
+        double z = PluginImpl.getInstance().Locations.getConfig().getDouble("spawn.location.z");
+        float yaw = (float) PluginImpl.getInstance().Locations.getConfig().getDouble("spawn.location.yaw");
+        float pitch = (float) PluginImpl.getInstance().Locations.getConfig().getDouble("spawn.location.pitch");
+
+        if (worldSpawn == null) {
+            player.sendMessage("§cO local de spawn do mundo de bosses não foi definido ou é inválido!");
             return;
         }
 
-        Player player = (Player) sender;
-        ItemStack item = player.getInventory().getItemInMainHand();
+        World world = Bukkit.getWorld(worldSpawn);
 
-        boolean hasSwordTool = ItemBuilder.hasPersistentData(PluginImpl.getInstance().plugin, item, "blizzard.bosses.sword-tool");
-
-        if (hasSwordTool) {
-            String toolId = ItemBuilder.getPersistentData(PluginImpl.getInstance().plugin, item, "blizzard.bosses.tool-id");
-            ToolsCacheManager.setType(toolId, "sexo");
-            player.sendMessage("§aTipo setado para: sexo");
-        } else {
-            player.sendMessage("§cEste item não é uma ferramenta válida!");
-        }
-    }
-
-    private void giveTools(Player player) {
-        SwordTool.giveSword(player);
+        player.teleport(
+                new Location(
+                        world,
+                        x,
+                        y,
+                        z,
+                        yaw,
+                        pitch
+                )
+        );
     }
 }

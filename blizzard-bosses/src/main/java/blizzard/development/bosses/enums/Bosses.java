@@ -18,7 +18,7 @@ public enum Bosses {
     }
 
     public String getName() {
-        return value;
+        return name;
     }
 
     public String getValue() {

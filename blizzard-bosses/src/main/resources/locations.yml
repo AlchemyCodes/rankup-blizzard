@@ -1,0 +1,11 @@
+spawn:
+  location:
+    x:
+    y:
+    z:
+    yaw:
+    pitch:
+
+boss-area:
+  pos1:
+  pos2:

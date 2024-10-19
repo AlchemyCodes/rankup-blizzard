@@ -1,7 +1,8 @@
 package blizzard.development.bosses.enums;
 
 public enum Tools {
-    SWORD("sword");
+    SWORD("sword"),
+    RADAR("radar");
 
     private final String type;
 
