@@ -1,9 +1,10 @@
 package blizzard.development.core.utils;
 
-import blizzard.development.core.commands.SetTemperature;
+import blizzard.development.core.commands.CommandRegistry;
+import blizzard.development.core.commands.temperature.TemperatureCommand;
 import blizzard.development.core.database.DatabaseConnection;
 import blizzard.development.core.database.dao.PlayersDAO;
-import blizzard.development.core.listener.TrafficListener;
+import blizzard.development.core.listener.ListenerRegistry;
 import blizzard.development.core.tasks.BlizzardTask;
 import blizzard.development.core.tasks.PlayerSaveTask;
 import blizzard.development.core.utils.config.ConfigUtils;
@@ -59,7 +60,8 @@ public class PluginImpl {
     }
 
     private void registerListeners() {
-        pluginManager.registerEvents(new TrafficListener(playersDAO), plugin);
+        ListenerRegistry listenerRegistry = new ListenerRegistry(playersDAO);
+        listenerRegistry.register();
     }
 
     private void registerTasks() {
@@ -67,8 +69,8 @@ public class PluginImpl {
     }
 
     private void registerCommands() {
-        commandManager.registerCommand(new SetTemperature());
-
+        CommandRegistry commandRegistry = new CommandRegistry();
+        commandRegistry.register();
     }
 
     public static PluginImpl getInstance() {
