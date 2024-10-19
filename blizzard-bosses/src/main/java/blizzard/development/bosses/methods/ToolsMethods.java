@@ -4,6 +4,7 @@ import blizzard.development.bosses.database.cache.ToolsCacheManager;
 import blizzard.development.bosses.database.dao.ToolsDAO;
 import blizzard.development.bosses.database.storage.ToolsData;
 import blizzard.development.bosses.enums.Tools;
+import blizzard.development.bosses.managers.BatchManager;
 import org.bukkit.entity.Player;
 
 public class ToolsMethods {
@@ -17,7 +18,7 @@ public class ToolsMethods {
         );
 
         try {
-            toolsDAO.createToolsData(toolsData);
+            BatchManager.addToPendingQueue(toolsData);
             ToolsCacheManager.cacheToolData(id, toolsData);
         } catch (Exception ex) {
             player.sendMessage("§cOcorreu um erro ao salvar essa ferramenta no banco de dados!");
