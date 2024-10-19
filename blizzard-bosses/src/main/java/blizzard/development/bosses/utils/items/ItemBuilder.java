@@ -74,26 +74,27 @@ public class ItemBuilder {
         return this;
     }
 
-    public ItemBuilder addPersistentData(Plugin plugin, String value) {
-        NamespacedKey key = new NamespacedKey(plugin, value);
+    public ItemBuilder addPersistentData(Plugin plugin, String keyName, String value) {
+        NamespacedKey key = new NamespacedKey(plugin, keyName);
         pdc.set(key, PersistentDataType.STRING, value);
         return this;
     }
 
-    public ItemBuilder addPersistentData(Plugin plugin, Integer value) {
-        NamespacedKey key = new NamespacedKey(plugin, String.valueOf(value));
+    public ItemBuilder addPersistentData(Plugin plugin, String keyName, Integer value) {
+        NamespacedKey key = new NamespacedKey(plugin, keyName);
         pdc.set(key, PersistentDataType.INTEGER, value);
         return this;
     }
 
-    public ItemBuilder addPersistentData(Plugin plugin, Boolean value) {
-        NamespacedKey key = new NamespacedKey(plugin, String.valueOf(value));
+    public ItemBuilder addPersistentData(Plugin plugin, String keyName, Boolean value) {
+        NamespacedKey key = new NamespacedKey(plugin, keyName);
         pdc.set(key, PersistentDataType.BOOLEAN, value);
         return this;
     }
 
-    public ItemBuilder addPersistentData(Plugin plugin, Double value) {
-        NamespacedKey key = new NamespacedKey(plugin, String.valueOf(value));
+
+    public ItemBuilder addPersistentData(Plugin plugin, String keyName, Double value) {
+        NamespacedKey key = new NamespacedKey(plugin, keyName);
         pdc.set(key, PersistentDataType.DOUBLE, value);
         return this;
     }
@@ -103,8 +104,8 @@ public class ItemBuilder {
         return itemStack;
     }
 
-    public static boolean hasPersistentData(Plugin plugin, ItemStack item, String value) {
-        NamespacedKey key = new NamespacedKey(plugin, value);
+    public static boolean hasPersistentData(Plugin plugin, ItemStack item, String keyName) {
+        NamespacedKey key = new NamespacedKey(plugin, keyName);
 
         if (item.hasItemMeta()) {
             ItemMeta meta = item.getItemMeta();
@@ -118,13 +119,18 @@ public class ItemBuilder {
         return false;
     }
 
-    public static String getPersistentData(ItemStack item) {
+    public static String getPersistentData(Plugin plugin, ItemStack item, String key) {
         if (item.hasItemMeta()) {
             ItemMeta meta = item.getItemMeta();
             PersistentDataContainer pdc = meta.getPersistentDataContainer();
-            return Arrays.toString(pdc.getKeys().toArray());
+            NamespacedKey namespacedKey = new NamespacedKey(plugin, key);
+            if (pdc.has(namespacedKey, PersistentDataType.STRING)) {
+                return pdc.get(namespacedKey, PersistentDataType.STRING);
+            }
         }
         return null;
     }
 
+
 }
+
