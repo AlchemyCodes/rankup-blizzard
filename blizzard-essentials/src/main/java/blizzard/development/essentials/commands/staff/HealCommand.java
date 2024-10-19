@@ -33,7 +33,7 @@ public class HealCommand extends BaseCommand {
         if (target != null) {
 
             target.setHealth(20);
-            player.sendActionBar("§b§lYAY! §bVocê curou o jogador " + player.getName() + "!");
+            player.sendActionBar("§b§lYAY! §bVocê curou o jogador " + player.getName() + ".");
         }
     }
 }

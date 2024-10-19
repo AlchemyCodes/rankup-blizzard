@@ -1,7 +1,6 @@
 package blizzard.development.essentials.utils;
 
-import blizzard.development.essentials.commands.commons.*;
-import blizzard.development.essentials.commands.staff.*;
+import blizzard.development.essentials.commands.CommandRegistry;
 import blizzard.development.essentials.listeners.ListenerRegistry;
 import blizzard.development.essentials.utils.config.ConfigUtils;
 import co.aikar.commands.Locales;
@@ -35,6 +34,7 @@ public class PluginImpl {
         registerListeners();
         registerTasks();
         registerCommands();
+
     }
 
     public void onUnload() {
@@ -52,20 +52,8 @@ public class PluginImpl {
     }
 
     private void registerCommands() {
-        commandManager.registerCommand(new GameModeCommand());
-        commandManager.registerCommand(new ClearChatCommand());
-        commandManager.registerCommand(new ClearCommand());
-        commandManager.registerCommand(new HealCommand());
-        commandManager.registerCommand(new SetSpawnCommand());
-        commandManager.registerCommand(new SpawnCommand());
-        commandManager.registerCommand(new SetWarpCommand());
-        commandManager.registerCommand(new WarpCommand());
-        commandManager.registerCommand(new TrashCommand());
-        commandManager.registerCommand(new CraftCommand());
-        commandManager.registerCommand(new TpallCommand());
-        commandManager.registerCommand(new PingCommand());
-        commandManager.registerCommand(new VanishCommand());
-        commandManager.registerCommand(new EchestCommand());
+        CommandRegistry commandRegistry = new CommandRegistry();
+        commandRegistry.register();
     }
 
     public static PluginImpl getInstance() {

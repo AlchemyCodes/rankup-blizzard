@@ -8,6 +8,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 
 public class PlayerEvents implements Listener {
 
@@ -46,5 +48,38 @@ public class PlayerEvents implements Listener {
                 20
         );
 
+        String[] permissions = {
+                "*",
+                "alchemy.group.youtuber",
+                "alchemy.group.suporte",
+                "alchemy.group.alchemy",
+                "alchemy.group.blizzard",
+                "alchemy.group.esmeralda",
+                "alchemy.group.diamante",
+                "alchemy.group.ouro"
+        };
+
+        for (String permission : permissions) {
+            if (player.hasPermission(permission)) {
+                player.setAllowFlight(true);
+                player.setFlying(true);
+
+                player.sendMessage("");
+                player.sendMessage(" §d§lEI! §dVocê é um dos incríveis jogadores VIP.");
+                player.sendMessage(" §dsendo assim, você tem a §lpermissão§d de voar.");
+                player.sendMessage("");
+                break;
+            }
+        }
+    }
+
+    @EventHandler
+    public void onQuit(PlayerQuitEvent event) {
+        event.setQuitMessage(null);
+    }
+
+    @EventHandler
+    public void onSwapHand(PlayerSwapHandItemsEvent event) {
+        event.setCancelled(true);
     }
 }

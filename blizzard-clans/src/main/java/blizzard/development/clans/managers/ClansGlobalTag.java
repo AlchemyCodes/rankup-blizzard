@@ -1,5 +1,6 @@
 package blizzard.development.clans.managers;
 
+import blizzard.development.clans.database.storage.ClansData;
 import blizzard.development.clans.methods.ClansMethods;
 import com.nickuc.chat.api.translator.GlobalTag;
 import org.bukkit.entity.Player;
@@ -15,12 +16,16 @@ public class ClansGlobalTag implements GlobalTag {
 
     @Override
     public String replaceTag(Player player, String tag) {
-        String clan = ClansMethods.getUserClan(player);
-        if (clan != null) {
-            return ClansMethods.getClan(clan).getTag();
+        String clanName = ClansMethods.getUserClan(player);
+        if (clanName != null) {
+            ClansData clanData = ClansMethods.getClan(clanName);
+            if (clanData != null && clanData.getTag() != null) {
+                return "[" + clanData.getTag() + "]";
+            }
         }
         return "";
     }
+
 
     @Override
     public Plugin getOwner() {

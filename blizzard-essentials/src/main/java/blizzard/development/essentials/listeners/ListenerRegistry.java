@@ -15,4 +15,5 @@ public class ListenerRegistry {
                 new PlayerEvents()
         ).forEach(listener -> manager.registerEvents(listener, Main.getInstance()));
     }
+
 }
