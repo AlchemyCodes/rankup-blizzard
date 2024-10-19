@@ -1,15 +1,13 @@
-package blizzard.development.core.commands;
+package blizzard.development.core.commands.temperature;
 
 import blizzard.development.core.database.cache.PlayersCacheManager;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
-import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.Default;
-import co.aikar.commands.annotation.Syntax;
 import org.bukkit.entity.Player;
 
 @CommandAlias("temperature")
-public class SetTemperature extends BaseCommand {
+public class TemperatureCommand extends BaseCommand {
 
     @Default
     public void onCommand(Player player, double temperature) {

@@ -1,6 +1,7 @@
-package blizzard.development.core.utils;
+package blizzard.development.core.managers;
 
 import blizzard.development.core.database.cache.PlayersCacheManager;
+import blizzard.development.core.utils.PluginImpl;
 import org.bukkit.Bukkit;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;

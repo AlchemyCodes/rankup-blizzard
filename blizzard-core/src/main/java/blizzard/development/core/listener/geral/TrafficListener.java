@@ -1,9 +1,10 @@
-package blizzard.development.core.listener;
+package blizzard.development.core.listener.geral;
 
 import blizzard.development.core.database.cache.PlayersCacheManager;
 import blizzard.development.core.database.dao.PlayersDAO;
 import blizzard.development.core.database.storage.PlayersData;
-import blizzard.development.core.utils.BossBarManager;
+import blizzard.development.core.clothing.ClothingType;
+import blizzard.development.core.managers.BossBarManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -25,7 +26,7 @@ public class TrafficListener implements Listener {
         PlayersData playersData = database.findPlayerData(player.getUniqueId().toString());
 
         if (playersData == null) {
-            playersData = new PlayersData(player.getUniqueId().toString(), player.getName(), 10);
+            playersData = new PlayersData(player.getUniqueId().toString(), player.getName(), 10, ClothingType.COMMON);
             try {
                 database.createPlayerData(playersData);
             } catch(Exception err) {

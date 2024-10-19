@@ -2,6 +2,7 @@ package blizzard.development.core.database.dao;
 
 import blizzard.development.core.database.DatabaseConnection;
 import blizzard.development.core.database.storage.PlayersData;
+import blizzard.development.core.clothing.ClothingType;
 
 import java.sql.*;
 import java.util.function.Consumer;
@@ -15,7 +16,8 @@ public class PlayersDAO {
             String sql_player = "CREATE TABLE IF NOT EXISTS player_core (" +
                     "uuid varchar(36) primary key, " +
                     "nickname varchar(36), " +
-                    "temperature double)";
+                    "temperature double, " +
+                    "clothing varchar(36))";
             stat.execute(sql_player);
 
         } catch (SQLException e) {
@@ -45,7 +47,8 @@ public class PlayersDAO {
                     return new PlayersData(
                             resultSet.getString("uuid"),
                             resultSet.getString("nickname"),
-                            resultSet.getDouble("temperature"));
+                            resultSet.getDouble("temperature"),
+                            ClothingType.valueOf(resultSet.getString("clothing")));
                 }
             }
         } catch (SQLException e) {
@@ -65,7 +68,8 @@ public class PlayersDAO {
                     return new PlayersData(
                             resultSet.getString("uuid"),
                             resultSet.getString("nickname"),
-                            resultSet.getDouble("temperature"));
+                            resultSet.getDouble("temperature"),
+                            ClothingType.valueOf(resultSet.getString("clothing")));
                 }
             }
         } catch (SQLException e) {
@@ -75,12 +79,13 @@ public class PlayersDAO {
     }
 
     public void createPlayerData(PlayersData playerData) throws SQLException {
-        String sqlpar = "INSERT INTO player_core (uuid, nickname, temperature) VALUES (?, ?, ?)";
+        String sqlpar = "INSERT INTO player_core (uuid, nickname, temperature, clothing) VALUES (?, ?, ?, ?)";
         executeUpdate(sqlpar, (statement) -> {
             try {
                 statement.setString(1, playerData.getUuid());
                 statement.setString(2, playerData.getNickname());
                 statement.setDouble(3, playerData.getTemperature());
+                statement.setString(4, playerData.getClothingType().name());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -99,15 +104,17 @@ public class PlayersDAO {
     }
 
     public void updatePlayerData(PlayersData playerData) throws SQLException {
-        String sqlpar = "UPDATE player_core SET nickname = ?, temperature = ? WHERE uuid = ?";
+        String sqlpar = "UPDATE player_core SET nickname = ?, temperature = ?, clothing = ? WHERE uuid = ?";
         executeUpdate(sqlpar, statement -> {
             try {
                 statement.setString(1, playerData.getNickname());
                 statement.setDouble(2, playerData.getTemperature());
-                statement.setString(3, playerData.getUuid());
+                statement.setString(3, playerData.getClothingType().name());
+                statement.setString(4, playerData.getUuid());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         });
     }
+
 }

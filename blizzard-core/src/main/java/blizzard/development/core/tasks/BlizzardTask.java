@@ -31,12 +31,24 @@ public class BlizzardTask implements Runnable {
 
             world.setStorm(true);
             isSnowing = true;
-            player.sendMessage("começou nevasca");
+            player.sendTitle(
+                    "§b§lO FRIO CHEGOU.",
+                    "§fProteja-se, a tempestade de neve chegou.",
+                    10,
+                    70,
+                    20
+            );
 
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 world.setStorm(false);
                 isSnowing = false;
-                player.sendMessage("acabou nevasca");
+                player.sendTitle(
+                        "§b§lA TEMPESTADE PASSOU.",
+                        "§fAproveite a calmaria antes que ela volte.",
+                        10,
+                        70,
+                        20
+                );
             }, 20L * duration);
         }
 

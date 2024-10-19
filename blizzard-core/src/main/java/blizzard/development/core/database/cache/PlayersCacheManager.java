@@ -2,6 +2,7 @@ package blizzard.development.core.database.cache;
 
 import blizzard.development.core.database.dao.PlayersDAO;
 import blizzard.development.core.database.storage.PlayersData;
+import blizzard.development.core.clothing.ClothingType;
 import org.bukkit.entity.Player;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -50,6 +51,25 @@ public class PlayersCacheManager {
             return data.getTemperature();
         }
         return 0;
+    }
+
+    public static void setPlayerClothing(Player player, ClothingType clothingType) {
+        PlayersData data = getPlayerData(player);
+
+        if (data != null) {
+            data.setClothingType(clothingType);
+            playersCache.put(player.getName(), data);
+        }
+    }
+
+    public static String getPlayerClothing(Player player) {
+        PlayersData data = getPlayerData(player);
+
+        if (data != null) {
+            return data.getClothingType().toString();
+        }
+
+        return "Inválido";
     }
 
 
