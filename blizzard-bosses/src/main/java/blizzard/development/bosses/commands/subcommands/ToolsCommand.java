@@ -8,6 +8,7 @@ import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.Subcommand;
+import co.aikar.commands.annotation.Syntax;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -17,6 +18,8 @@ import java.util.concurrent.TimeUnit;
 public class ToolsCommand extends BaseCommand {
 
     @Subcommand("sword|espada")
+    @Syntax("<espada>")
+    @CommandPermission("blizzard.bosses.basic")
     public void onSword(CommandSender sender) {
         if (!(sender instanceof Player)) {
             sender.sendMessage("§cEste comando só pode ser utilizado por jogadores!");
@@ -37,6 +40,8 @@ public class ToolsCommand extends BaseCommand {
     }
 
     @Subcommand("radar")
+    @Syntax("<radar>")
+    @CommandPermission("blizzard.bosses.basic")
     public void onRadar(CommandSender sender) {
         if (!(sender instanceof Player)) {
             sender.sendMessage("§cEste comando só pode ser utilizado por jogadores!");
@@ -57,7 +62,8 @@ public class ToolsCommand extends BaseCommand {
     }
 
     @Subcommand("area")
-    @CommandPermission("admin")
+    @Syntax("<area>")
+    @CommandPermission("blizzard.bosses.admin")
     public void onArea(CommandSender sender) {
         if (!(sender instanceof Player)) {
             sender.sendMessage("§cEste comando só pode ser utilizado por jogadores!");

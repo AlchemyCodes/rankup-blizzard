@@ -101,6 +101,7 @@ public class ItemBuilder {
 
     public ItemStack build() {
         itemStack.setItemMeta(itemMeta);
+        itemMeta.setUnbreakable(true);
         return itemStack;
     }
 

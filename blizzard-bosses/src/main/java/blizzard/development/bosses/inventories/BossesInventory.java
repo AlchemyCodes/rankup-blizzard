@@ -1,13 +1,17 @@
 package blizzard.development.bosses.inventories;
 
+import blizzard.development.bosses.utils.PluginImpl;
 import blizzard.development.bosses.utils.items.ItemBuilder;
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
 import com.github.stefvanschie.inventoryframework.pane.util.Slot;
-import org.bukkit.Sound;
+import org.bukkit.*;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.Arrays;
 
 public class BossesInventory {
     public static void open(Player player) {
@@ -15,12 +19,36 @@ public class BossesInventory {
 
         StaticPane pane = new StaticPane(0, 0, 9, 3);
 
-        GuiItem comingSoonItem = new GuiItem(comingSoon(), event -> {
-            player.getInventory().close();
+        GuiItem stockItem = new GuiItem(stock(), event -> {
             event.setCancelled(true);
         });
 
-        pane.addItem(comingSoonItem, Slot.fromIndex(13));
+        GuiItem friendsItem = new GuiItem(friends(), event -> {
+            event.setCancelled(true);
+        });
+
+        GuiItem enterWorldItem = new GuiItem(enterWorld(), event -> {
+            player.getOpenInventory().close();
+            sendPlayerToWorld(player);
+            event.setCancelled(true);
+        });
+
+        GuiItem leaveWorldItem = new GuiItem(leaveWorld(), event -> {
+            player.getOpenInventory().close();
+            sendPlayerToWorld(player);
+            event.setCancelled(true);
+        });
+
+        GuiItem rankingItem = new GuiItem(ranking(), event -> {
+            event.setCancelled(true);
+        });
+
+        Boolean isInBossWorld = player.getWorld().equals(Bukkit.getWorld(PluginImpl.getInstance().Locations.getConfig().getString("spawn.location.world")));
+
+        pane.addItem(stockItem, Slot.fromIndex(10));
+        pane.addItem(friendsItem, Slot.fromIndex(12));
+        pane.addItem(isInBossWorld ? leaveWorldItem : enterWorldItem, Slot.fromIndex(14));
+        pane.addItem(rankingItem, Slot.fromIndex(16));
 
         inventory.addPane(pane);
 
@@ -29,10 +57,99 @@ public class BossesInventory {
         inventory.show(player);
     }
 
-    public static ItemStack comingSoon() {
-        String value = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvM2VkMWFiYTczZjYzOWY0YmM0MmJkNDgxOTZjNzE1MTk3YmUyNzEyYzNiOTYyYzk3ZWJmOWU5ZWQ4ZWZhMDI1In19fQ==";
-        return new ItemBuilder(value)
-                .setDisplayName("&cEm breve.")
+    public static ItemStack stock() {
+        return new ItemBuilder(Material.TURTLE_EGG)
+                .setDisplayName("&bArmazém")
+                .setLore(Arrays.asList(
+                        "&7Visualize e gerencie seu",
+                        "&7armazém de recompensas.",
+                        "",
+                        "&bClique para visualizar."
+                ))
                 .build();
+    }
+
+    public static ItemStack friends() {
+        return new ItemBuilder(Material.OAK_SIGN)
+                .setDisplayName("&cAmigos")
+                .setLore(Arrays.asList(
+                        "&7Gerencie seus amigos",
+                        "",
+                        "&cClique para gerenciar."
+                ))
+                .build();
+    }
+
+    public static ItemStack enterWorld() {
+        return new ItemBuilder(Material.COMPASS)
+                .setDisplayName("&bIr ao mundo")
+                .setLore(Arrays.asList(
+                        "&7Vá para o mundo e",
+                        "&7derrote seus bosses.",
+                        "",
+                        "&bClique para ir ao mundo."
+                ))
+                .build();
+    }
+
+    public static ItemStack leaveWorld() {
+        return new ItemBuilder(Material.REDSTONE_TORCH)
+                .setDisplayName("&cSair do mundo")
+                .setLore(Arrays.asList(
+                        "&7Volte ao spawn com segurança.",
+                        "",
+                        "&cClique para sair do mundo."
+                ))
+                .build();
+    }
+
+    public static ItemStack ranking() {
+        return new ItemBuilder(Material.GOLD_INGOT)
+                .setDisplayName("&eClassificação")
+                .setLore(Arrays.asList(
+                        "&7Visualize os jogadores",
+                        "&7que mais se destacam.",
+                        "",
+                        "&eClique para visualizar."
+                ))
+                .build();
+    }
+
+
+    private static void sendPlayerToWorld(Player player) {
+
+        String worldSpawn = PluginImpl.getInstance().Locations.getConfig().getString("spawn.location.world");
+        double x = PluginImpl.getInstance().Locations.getConfig().getDouble("spawn.location.x");
+        double y = PluginImpl.getInstance().Locations.getConfig().getDouble("spawn.location.y");
+        double z = PluginImpl.getInstance().Locations.getConfig().getDouble("spawn.location.z");
+        float yaw = (float) PluginImpl.getInstance().Locations.getConfig().getDouble("spawn.location.yaw");
+        float pitch = (float) PluginImpl.getInstance().Locations.getConfig().getDouble("spawn.location.pitch");
+
+        if (worldSpawn == null) {
+            player.sendMessage("§c§lEI! §cO local de spawn do mundo de bosses não foi definido ou é inválido.");
+            return;
+        }
+
+        World world = Bukkit.getWorld(worldSpawn);
+
+
+        if (!player.getWorld().equals(world)) {
+            player.teleport(
+                    new Location(
+                            world,
+                            x,
+                            y,
+                            z,
+                            yaw,
+                            pitch
+                    )
+            );
+            player.sendMessage("§a§lYAY! §aVocê foi teleportado para o mundo de bosses!");
+            return;
+        }
+
+        player.performCommand("spawn");
+
+        player.sendMessage("§a§lYAY! §aVocê foi teleportado para o spawn!");
     }
 }
