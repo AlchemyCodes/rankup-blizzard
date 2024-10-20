@@ -1,8 +1,11 @@
 package blizzard.development.bosses.utils;
 
 import blizzard.development.bosses.commands.BossesCommand;
+import blizzard.development.bosses.commands.subcommands.GiveCommand;
+import blizzard.development.bosses.commands.subcommands.ReloadCommand;
 import blizzard.development.bosses.commands.subcommands.SetSpawnCommand;
 import blizzard.development.bosses.commands.subcommands.ToolsCommand;
+import blizzard.development.bosses.currencies.CoinsCurrency;
 import blizzard.development.bosses.database.DatabaseConnection;
 import blizzard.development.bosses.database.cache.ToolsCacheManager;
 import blizzard.development.bosses.database.dao.PlayersDAO;
@@ -18,13 +21,14 @@ import blizzard.development.bosses.utils.config.ConfigUtils;
 import co.aikar.commands.Locales;
 import co.aikar.commands.PaperCommandManager;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PluginImpl {
     public final Plugin plugin;
@@ -64,6 +68,7 @@ public class PluginImpl {
         } catch (SQLException exception) {
             throw new RuntimeException(exception);
         }
+        CoinsCurrency.setupEconomy();
     }
 
     public void onUnload() {
@@ -94,6 +99,22 @@ public class PluginImpl {
         // Subcommands
         commandManager.registerCommand(new ToolsCommand());
         commandManager.registerCommand(new SetSpawnCommand());
+        commandManager.registerCommand(new GiveCommand());
+        commandManager.registerCommand(new ReloadCommand());
+
+        // Completions
+        commandManager.getCommandCompletions().registerCompletion("bosses", c -> {
+            ArrayList<String> array = new ArrayList<>();
+            array.add("pegrande");
+           return array;
+        });
+        commandManager.getCommandCompletions().registerCompletion("amount", c -> {
+            ArrayList<String> array = new ArrayList<>();
+            for (int i = 0; i < 101; i++) {
+                array.add(String.valueOf(i));
+            }
+            return array;
+        });
     }
 
     public static PluginImpl getInstance() {
