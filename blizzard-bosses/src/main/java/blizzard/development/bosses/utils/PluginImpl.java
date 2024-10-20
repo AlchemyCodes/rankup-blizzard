@@ -1,16 +1,14 @@
 package blizzard.development.bosses.utils;
 
 import blizzard.development.bosses.commands.BossesCommand;
-import blizzard.development.bosses.commands.subcommands.GiveCommand;
-import blizzard.development.bosses.commands.subcommands.ReloadCommand;
-import blizzard.development.bosses.commands.subcommands.SetSpawnCommand;
-import blizzard.development.bosses.commands.subcommands.ToolsCommand;
+import blizzard.development.bosses.commands.subcommands.*;
 import blizzard.development.bosses.currencies.CoinsCurrency;
 import blizzard.development.bosses.database.DatabaseConnection;
 import blizzard.development.bosses.database.cache.ToolsCacheManager;
 import blizzard.development.bosses.database.dao.PlayersDAO;
 import blizzard.development.bosses.database.dao.ToolsDAO;
 import blizzard.development.bosses.database.storage.ToolsData;
+import blizzard.development.bosses.handlers.eggs.BigFootEgg;
 import blizzard.development.bosses.listeners.bosses.BossesAreaListener;
 import blizzard.development.bosses.listeners.commons.PlayersJoinListener;
 import blizzard.development.bosses.listeners.commons.PlayersQuitListener;
@@ -28,7 +26,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class PluginImpl {
     public final Plugin plugin;
@@ -87,9 +84,15 @@ public class PluginImpl {
     }
 
     private void registerListeners() {
+        // Commons
         pluginManager.registerEvents(new PlayersJoinListener(playersDAO), plugin);
         pluginManager.registerEvents(new PlayersQuitListener(playersDAO), plugin);
+
+        // Bosses
         pluginManager.registerEvents(new BossesAreaListener(), plugin);
+
+        // Eggs
+        pluginManager.registerEvents(new BigFootEgg(), plugin);
     }
 
     private void registerCommands() {
@@ -100,6 +103,7 @@ public class PluginImpl {
         commandManager.registerCommand(new ToolsCommand());
         commandManager.registerCommand(new SetSpawnCommand());
         commandManager.registerCommand(new GiveCommand());
+        commandManager.registerCommand(new GoCommand());
         commandManager.registerCommand(new ReloadCommand());
 
         // Completions

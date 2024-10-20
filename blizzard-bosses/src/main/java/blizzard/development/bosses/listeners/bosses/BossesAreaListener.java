@@ -43,13 +43,13 @@ public class BossesAreaListener implements Listener {
 
     public void setPos1(Player player, Location location) {
         this.pos1 = location;
-        player.sendMessage("§aPosição 1 definida para: §7" + formatLocation(location));
+        player.sendMessage("§a§lYAY! §aPosição 1 definida para: §7" + formatLocation(location));
         checkAndSaveArea(player);
     }
 
     public void setPos2(Player player, Location location) {
         this.pos2 = location;
-        player.sendMessage("§aPosição 2 definida para: §7" + formatLocation(location));
+        player.sendMessage("§a§lYAY! §aPosição 2 definida para: §7" + formatLocation(location));
         checkAndSaveArea(player);
     }
 
@@ -71,7 +71,7 @@ public class BossesAreaListener implements Listener {
         PluginImpl.getInstance().Locations.getConfig().set("boss-area.pos2.z", pos2.getZ());
 
         PluginImpl.getInstance().Locations.saveConfig();
-        player.sendMessage("§aÁrea do boss salva com sucesso!");
+        player.sendActionBar("§a§lYAY! §aÁrea do boss salva com sucesso!");
     }
 
     public Location[] getArea() {

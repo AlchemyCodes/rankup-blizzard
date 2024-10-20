@@ -4,6 +4,7 @@ import blizzard.development.bosses.tools.AreaTool;
 import blizzard.development.bosses.tools.RadarTool;
 import blizzard.development.bosses.tools.SwordTool;
 import blizzard.development.bosses.utils.CooldownUtils;
+import blizzard.development.bosses.utils.items.apis.TextAPI;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.CommandPermission;
@@ -30,13 +31,13 @@ public class ToolsCommand extends BaseCommand {
 
         String cooldown = "blizzard.bosses.tools-sword.cooldown";
         if (CooldownUtils.getInstance().isInCountdown(player, cooldown)) {
-            sender.sendMessage("§c§lEI! §cAguarde um pouco para executar essa ação.");
+            sender.sendActionBar(TextAPI.parse("§c§lEI! §cAguarde um pouco para executar essa ação."));
             return;
         }
 
         SwordTool.give(player);
         CooldownUtils.getInstance().createCountdown(player, cooldown, 3, TimeUnit.SECONDS);
-        sender.sendMessage("§b§lYAY! §bVocê resgatou uma espada para derrotar bosses.");
+        sender.sendActionBar(TextAPI.parse("§b§lYAY! §bVocê resgatou uma espada para derrotar bosses."));
     }
 
     @Subcommand("radar")
@@ -52,13 +53,13 @@ public class ToolsCommand extends BaseCommand {
 
         String cooldown = "blizzard.bosses.tools-radar.cooldown";
         if (CooldownUtils.getInstance().isInCountdown(player, cooldown)) {
-            sender.sendMessage("§c§lEI! §cAguarde um pouco para executar essa ação.");
+            sender.sendActionBar(TextAPI.parse("§c§lEI! §cAguarde um pouco para executar essa ação."));
             return;
         }
 
         RadarTool.give(player);
         CooldownUtils.getInstance().createCountdown(player, cooldown, 3, TimeUnit.SECONDS);
-        sender.sendMessage("§b§lYAY! §bVocê resgatou um radar para encontrar bosses.");
+        sender.sendActionBar(TextAPI.parse("§b§lYAY! §bVocê resgatou um radar para encontrar bosses."));
     }
 
     @Subcommand("area")
@@ -73,6 +74,6 @@ public class ToolsCommand extends BaseCommand {
         Player player = (Player) sender;
 
         AreaTool.give(player);
-        sender.sendMessage("§b§lYAY! §bVocê resgatou um item de area.");
+        sender.sendActionBar(TextAPI.parse("§b§lYAY! §bVocê resgatou um item de area."));
     }
 }
