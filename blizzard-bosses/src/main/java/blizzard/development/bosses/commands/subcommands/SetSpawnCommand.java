@@ -34,6 +34,6 @@ public class SetSpawnCommand extends BaseCommand {
         PluginImpl.getInstance().Locations.getConfig().set("spawn.location.pitch", pitch);
         PluginImpl.getInstance().Locations.saveConfig();
 
-        player.sendMessage("§aLocal de spawn do mundo dos bosses definido!");
+        player.sendActionBar("§a§lYAY! §aLocal de spawn da área de bosses definido.");
     }
 }

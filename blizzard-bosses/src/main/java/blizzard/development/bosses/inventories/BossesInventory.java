@@ -9,9 +9,11 @@ import com.github.stefvanschie.inventoryframework.pane.util.Slot;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 public class BossesInventory {
     public static void open(Player player) {
@@ -43,7 +45,7 @@ public class BossesInventory {
             event.setCancelled(true);
         });
 
-        Boolean isInBossWorld = player.getWorld().equals(Bukkit.getWorld(PluginImpl.getInstance().Locations.getConfig().getString("spawn.location.world")));
+        boolean isInBossWorld = player.getWorld().equals(Bukkit.getWorld(Objects.requireNonNull(PluginImpl.getInstance().Locations.getConfig().getString("spawn.location.world"))));
 
         pane.addItem(stockItem, Slot.fromIndex(10));
         pane.addItem(friendsItem, Slot.fromIndex(12));
@@ -89,17 +91,21 @@ public class BossesInventory {
                         "",
                         "&bClique para ir ao mundo."
                 ))
+                .addItemFlags(ItemFlag.HIDE_ENCHANTS)
+                .addEnchant(Enchantment.DURABILITY, 1, true)
                 .build();
     }
 
     public static ItemStack leaveWorld() {
-        return new ItemBuilder(Material.REDSTONE_TORCH)
+        return new ItemBuilder(Material.REDSTONE)
                 .setDisplayName("&cSair do mundo")
                 .setLore(Arrays.asList(
                         "&7Volte ao spawn com segurança.",
                         "",
                         "&cClique para sair do mundo."
                 ))
+                .addItemFlags(ItemFlag.HIDE_ENCHANTS)
+                .addEnchant(Enchantment.DURABILITY, 1, true)
                 .build();
     }
 
@@ -126,7 +132,7 @@ public class BossesInventory {
         float pitch = (float) PluginImpl.getInstance().Locations.getConfig().getDouble("spawn.location.pitch");
 
         if (worldSpawn == null) {
-            player.sendMessage("§c§lEI! §cO local de spawn do mundo de bosses não foi definido ou é inválido.");
+            player.sendActionBar("§c§lEI! §cO local de spawn do mundo de bosses não foi definido ou é inválido.");
             return;
         }
 
@@ -144,12 +150,24 @@ public class BossesInventory {
                             pitch
                     )
             );
-            player.sendMessage("§a§lYAY! §aVocê foi teleportado para o mundo de bosses!");
+            player.sendTitle(
+                    "§a§lBosses!",
+                    "§aVocê entrou na área de bosses.",
+                    10,
+                    70,
+                    20
+            );
             return;
         }
 
         player.performCommand("spawn");
 
-        player.sendMessage("§a§lYAY! §aVocê foi teleportado para o spawn!");
+        player.sendTitle(
+                "§c§lBOSSES!",
+                "§cVocê saiu da área de bosses.",
+                10,
+                70,
+                20
+        );
     }
 }

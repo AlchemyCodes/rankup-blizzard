@@ -54,6 +54,11 @@ public class ItemBuilder {
         return this;
     }
 
+    public ItemBuilder setAmount(int amount) {
+        itemStack.setAmount(amount);
+        return this;
+    }
+
     public ItemBuilder addEnchantment(Enchantment enchantment, int level) {
         itemStack.addEnchantment(enchantment, level);
         return this;
@@ -131,7 +136,6 @@ public class ItemBuilder {
         }
         return null;
     }
-
 
 }
 
