@@ -1,0 +1,4 @@
+name: blizzard-excavation
+version: 1.0
+main: blizzard.development.excavation.Main
+api-version: '1.20'
