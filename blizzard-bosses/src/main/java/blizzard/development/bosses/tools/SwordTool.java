@@ -13,16 +13,15 @@ import java.util.List;
 import java.util.UUID;
 
 public class SwordTool {
-    public static void giveSword(Player player) {
+    public static void give(Player player) {
         String id = UUID.randomUUID().toString();
         ItemStack item = new ItemBuilder(Material.IRON_SWORD)
                 .setDisplayName("&fSpada de Fero")
-                .setLore(List.of("&fUna spadita de Fero"))
+                .setLore(List.of("&7Una spadita de Fero"))
                 .addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
-                .addPersistentData(PluginImpl.getInstance().plugin, "blizzard.bosses.sword-tool", "sword")
-                .addPersistentData(PluginImpl.getInstance().plugin, "blizzard.bosses.tool-id",  id)
+                .addPersistentData(PluginImpl.getInstance().plugin, "blizzard.bosses.tools-sword", "sword")
+                .addPersistentData(PluginImpl.getInstance().plugin, "blizzard.bosses.tools-id",  id)
                 .build();
-
         ToolsMethods.createTool(player, id, Tools.SWORD);
         player.getInventory().addItem(item);
     }
