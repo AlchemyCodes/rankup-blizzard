@@ -1,0 +1,321 @@
+ranks:
+  pig16:
+    order: 1
+    tag: '§d[PorcoXVI]'
+    name: 'Porco XVI'
+    price: 5000
+    item:
+      type:
+      amount: 1
+    lore:
+      - '§7Confira abaixo os requisitos'
+      - '§7Para passar por este rank'
+      - ''
+      - ' §6Preço:'
+      - ' §7{price}'
+    rankup:
+      command: ''
+      messages:
+        chat: ''
+        actionbar: ''
+        title: ''
+  pig15:
+    order: 2
+    tag: '§d[PorcoXV]'
+    name: 'Porco XV'
+    price: 5000
+    item:
+      type:
+      amount: 1
+    lore:
+      - '§7Confira abaixo os requisitos'
+      - '§7Para passar por este rank'
+      - ''
+      - ' §6Preço:'
+      - ' §7{price}'
+    rankup:
+      command: ''
+      messages:
+        chat: ''
+        actionbar: ''
+        title: ''
+  pig14:
+    order: 3
+    tag: '§d[PorcoXIV]'
+    name: 'Porco XIV'
+    price: 5000
+    item:
+      type:
+      amount: 1
+    lore:
+      - '§7Confira abaixo os requisitos'
+      - '§7Para passar por este rank'
+      - ''
+      - ' §6Preço:'
+      - ' §7{price}'
+    rankup:
+      command: ''
+      messages:
+        chat: ''
+        actionbar: ''
+        title: ''
+  pig13:
+    order: 4
+    tag: '§d[PorcoXIII]'
+    name: 'Porco XIII'
+    price: 5000
+    item:
+      type:
+      amount: 1
+    lore:
+      - '§7Confira abaixo os requisitos'
+      - '§7Para passar por este rank'
+      - ''
+      - ' §6Preço:'
+      - ' §7{price}'
+    rankup:
+      command: ''
+      messages:
+        chat: ''
+        actionbar: ''
+        title: ''
+  pig12:
+    order: 5
+    tag: '§d[PorcoXII]'
+    name: 'Porco XII'
+    price: 5000
+    item:
+      type:
+      amount: 1
+    lore:
+      - '§7Confira abaixo os requisitos'
+      - '§7Para passar por este rank'
+      - ''
+      - ' §6Preço:'
+      - ' §7{price}'
+    rankup:
+      command: ''
+      messages:
+        chat: ''
+        actionbar: ''
+        title: ''
+  pig11:
+    order: 6
+    tag: '§d[PorcoXI]'
+    name: 'Porco XI'
+    price: 5000
+    item:
+      type:
+      amount: 1
+    lore:
+      - '§7Confira abaixo os requisitos'
+      - '§7Para passar por este rank'
+      - ''
+      - ' §6Preço:'
+      - ' §7{price}'
+    rankup:
+      command: ''
+      messages:
+        chat: ''
+        actionbar: ''
+        title: ''
+  pig10:
+    order: 7
+    tag: '§d[PorcoX]'
+    name: 'Porco X'
+    price: 5000
+    item:
+      type:
+      amount: 1
+    lore:
+      - '§7Confira abaixo os requisitos'
+      - '§7Para passar por este rank'
+      - ''
+      - ' §6Preço:'
+      - ' §7{price}'
+    rankup:
+      command: ''
+      messages:
+        chat: ''
+        actionbar: ''
+        title: ''
+  pig9:
+    order: 8
+    tag: '§d[PorcoIX]'
+    name: 'Porco IX'
+    price: 4500
+    item:
+      type:
+      amount: 1
+    lore:
+      - '§7Confira abaixo os requisitos'
+      - '§7Para passar por este rank'
+      - ''
+      - ' §6Preço:'
+      - ' §7{price}'
+    rankup:
+      command: ''
+      messages:
+        chat: ''
+        actionbar: ''
+        title: ''
+  pig8:
+    order: 9
+    tag: '§d[PorcoVIII]'
+    name: 'Porco VIII'
+    price: 4000
+    item:
+      type:
+      amount: 1
+    lore:
+      - '§7Confira abaixo os requisitos'
+      - '§7Para passar por este rank'
+      - ''
+      - ' §6Preço:'
+      - ' §7{price}'
+    rankup:
+      command: ''
+      messages:
+        chat: ''
+        actionbar: ''
+        title: ''
+  pig7:
+    order: 10
+    tag: '§d[PorcoVII]'
+    name: 'Porco VII'
+    price: 3500
+    item:
+      type:
+      amount: 1
+    lore:
+      - '§7Confira abaixo os requisitos'
+      - '§7Para passar por este rank'
+      - ''
+      - ' §6Preço:'
+      - ' §7{price}'
+    rankup:
+      command: ''
+      messages:
+        chat: ''
+        actionbar: ''
+        title: ''
+  pig6:
+    order: 11
+    tag: '§d[PorcoVI]'
+    name: 'Porco VI'
+    price: 3000
+    item:
+      type:
+      amount: 1
+    lore:
+      - '§7Confira abaixo os requisitos'
+      - '§7Para passar por este rank'
+      - ''
+      - ' §6Preço:'
+      - ' §7{price}'
+    rankup:
+      command: ''
+      messages:
+        chat: ''
+        actionbar: ''
+        title: ''
+  pig5:
+    order: 12
+    tag: '§d[PorcoV]'
+    name: 'Porco V'
+    price: 2500
+    item:
+      type:
+      amount: 1
+    lore:
+      - '§7Confira abaixo os requisitos'
+      - '§7Para passar por este rank'
+      - ''
+      - ' §6Preço:'
+      - ' §7{price}'
+    rankup:
+      command: ''
+      messages:
+        chat: ''
+        actionbar: ''
+        title: ''
+  pig4:
+    order: 13
+    tag: '§d[PorcoIV]'
+    name: 'Porco IV'
+    price: 2000
+    item:
+      type:
+      amount: 1
+    lore:
+      - '§7Confira abaixo os requisitos'
+      - '§7Para passar por este rank'
+      - ''
+      - ' §6Preço:'
+      - ' §7{price}'
+    rankup:
+      command: ''
+      messages:
+        chat: ''
+        actionbar: ''
+        title: ''
+  pig3:
+    order: 14
+    tag: '§d[PorcoIII]'
+    name: 'Porco III'
+    price: 1500
+    item:
+      type:
+      amount: 1
+    lore:
+      - '§7Confira abaixo os requisitos'
+      - '§7Para passar por este rank'
+      - ''
+      - ' §6Preço:'
+      - ' §7{price}'
+    rankup:
+      command: ''
+      messages:
+        chat: ''
+        actionbar: ''
+        title: ''
+  pig2:
+    order: 15
+    tag: '§d[PorcoII]'
+    name: 'Porco II'
+    price: 1000
+    item:
+      type:
+      amount: 1
+    lore:
+      - '§7Confira abaixo os requisitos'
+      - '§7Para passar por este rank'
+      - ''
+      - ' §6Preço:'
+      - ' §7{price}'
+    rankup:
+      command: ''
+      messages:
+        chat: ''
+        actionbar: ''
+        title: ''
+  pig1:
+    order: 16
+    tag: '§d[PorcoI]'
+    name: 'Porco I'
+    price: 500
+    item:
+      type:
+      amount: 1
+    lore:
+      - '§7Confira abaixo os requisitos'
+      - '§7Para passar por este rank'
+      - ''
+      - ' §6Preço:'
+      - ' §7{price}'
+    rankup:
+      command: ''
+      messages:
+        chat: ''
+        actionbar: ''
+        title: ''
