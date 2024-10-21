@@ -4,3 +4,6 @@ include 'blizzard-clans'
 include 'blizzard-crates'
 include 'blizzard-bosses'
 include 'blizzard-core'
+include 'blizzard-excavation'
+include 'blizzard-excavation'
+
