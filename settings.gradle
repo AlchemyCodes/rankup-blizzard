@@ -3,4 +3,5 @@ include 'blizzard-essentials'
 include 'blizzard-clans'
 include 'blizzard-crates'
 include 'blizzard-bosses'
+include 'blizzard-currencies'
 
