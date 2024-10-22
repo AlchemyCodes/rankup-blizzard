@@ -1,4 +1,4 @@
-package blizzard.development.bosses.handlers;
+package blizzard.development.bosses.handlers.bosses;
 
 import blizzard.development.bosses.enums.Bosses;
 import blizzard.development.bosses.utils.packets.npcs.NPC;
@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class BigFootHandler {
+public class BigFootBoss {
     public static void spawn(Player player) {
         UUID uuid = UUID.randomUUID();
         NPC npc = new NPC(ProtocolLibrary.getProtocolManager(), uuid);

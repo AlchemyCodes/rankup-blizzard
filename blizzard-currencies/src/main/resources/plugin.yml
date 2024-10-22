@@ -1,0 +1,8 @@
+name: blizzard-currencies
+version: '${version}'
+main: blizzard.development.currencies.Main
+api-version: '1.20'
+depend: [Vault]
+commands:
+  currencies:
+  souls:
