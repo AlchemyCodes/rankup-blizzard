@@ -2,12 +2,14 @@ package blizzard.development.currencies.database.storage;
 
 public class PlayersData {
     private String uuid, nickname;
-    private Double souls;
+    private Double souls, flakes, fossils;
 
-    public PlayersData(String uuid, String nickname, Double souls) {
+    public PlayersData(String uuid, String nickname, Double souls, Double flakes, Double fossils) {
         this.uuid = uuid;
         this.nickname = nickname;
         this.souls = souls;
+        this.flakes = flakes;
+        this.fossils = fossils;
     }
 
     // Commons
@@ -36,5 +38,21 @@ public class PlayersData {
 
     public void setSouls(Double souls) {
         this.souls = souls;
+    }
+
+    public Double getFlakes() {
+        return flakes;
+    }
+
+    public void setFlakes(Double flakes) {
+        this.flakes = flakes;
+    }
+
+    public Double getFossils() {
+        return fossils;
+    }
+
+    public void setFossils(Double fossils) {
+        this.fossils = fossils;
     }
 }

@@ -1,4 +1,4 @@
-package blizzard.development.currencies.listeners;
+package blizzard.development.currencies.listeners.commons;
 
 import blizzard.development.currencies.database.cache.PlayersCacheManager;
 import blizzard.development.currencies.database.dao.PlayersDAO;

@@ -1,4 +1,4 @@
-package blizzard.development.currencies.listeners;
+package blizzard.development.currencies.listeners.commons;
 
 import blizzard.development.currencies.database.cache.PlayersCacheManager;
 import blizzard.development.currencies.database.dao.PlayersDAO;
@@ -18,8 +18,8 @@ public class PlayersJoinListener implements Listener {
     public void whenPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         PlayersData playersData = database.findPlayerData(player.getUniqueId().toString());
-        if(playersData == null) {
-            playersData = new PlayersData(player.getUniqueId().toString(), player.getName(), 0.0);
+        if (playersData == null) {
+            playersData = new PlayersData(player.getUniqueId().toString(), player.getName(), 0.0, 0.0, 0.0);
             try {
                 database.createPlayerData(playersData);
             } catch(Exception err) {
