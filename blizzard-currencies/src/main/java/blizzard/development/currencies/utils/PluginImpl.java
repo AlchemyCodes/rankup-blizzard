@@ -62,14 +62,6 @@ public class PluginImpl {
 
     private void registerCommands() {
         CommandRegistry.getInstance().register();
-
-        commandManager.getCommandCompletions().registerCompletion("amount", c -> {
-            ArrayList<String> array = new ArrayList<>();
-            for (int i = 0; i < 1000; i++) {
-                array.add(String.valueOf(i));
-            }
-            return array;
-        });
     }
 
     public static PluginImpl getInstance() {
