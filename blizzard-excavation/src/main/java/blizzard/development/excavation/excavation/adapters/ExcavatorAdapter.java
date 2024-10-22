@@ -1,5 +1,6 @@
 package blizzard.development.excavation.excavation.adapters;
 
+import blizzard.development.excavation.database.cache.methods.ExcavatorCacheMethod;
 import blizzard.development.excavation.database.dao.ExcavatorDAO;
 import blizzard.development.excavation.database.storage.ExcavatorData;
 import blizzard.development.excavation.excavation.factory.ExcavatorFactory;
@@ -27,6 +28,7 @@ public class ExcavatorAdapter implements ExcavatorFactory {
 
             try {
                 excavatorDAO.createExcavatorData(excavatorData);
+                ExcavatorCacheMethod.createExcavator(player);
             } catch (SQLException exception) {
                 exception.printStackTrace();
             }

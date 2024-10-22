@@ -18,8 +18,6 @@ public class ExcavatorBuildItem {
     private final PlayerCacheMethod playerCacheMethod = new PlayerCacheMethod();
 
     public ItemStack buildExcavator(Player player) {
-        ExcavatorCacheMethod.createExcavator(player);
-
         int blocksBroken = playerCacheMethod.getBlocks(player);
         int efficiencyLevel = excavatorCacheMethod.effiencyEnchant(player.getName());
         int agilityLevel = excavatorCacheMethod.agilityEnchant(player.getName());
@@ -42,6 +40,33 @@ public class ExcavatorBuildItem {
                         ""
                 ))
                 .addEnchant(Enchantment.DIG_SPEED, excavatorCacheMethod.effiencyEnchant(player.getName()), true)
+                .addPersistentData(Main.getInstance(), "excavator.tool", "excavator")
+                .addPersistentData(Main.getInstance(), "excavator.nickname", "nickname")
+                .build();
+
+    }
+
+    public ItemStack buildExcavator(Player player, int efficiencyLevel, int agilityLevel, int extractorLevel) {
+
+        int blocksBroken = playerCacheMethod.getBlocks(player);
+
+        return new ItemBuilder(Material.DIAMOND_SHOVEL)
+                .setDisplayName("<#34f2f5>Escavadora<#34f2f5> §7[§l" + blocksBroken + "§7]")
+                .setLore(Arrays.asList(
+                        "§7Utilize esta escavadora",
+                        "§7para coletar recursos.",
+                        "",
+                        " <#1bf4f7>Encantamentos:<#0ec9cc>",
+                        "  §7Eficiência §l" + efficiencyLevel,
+                        "  §7Durabilidade §l∞",
+                        "  §7Agilidade §l" + agilityLevel,
+                        "  §7Extrator §l" + extractorLevel,
+                        "",
+                        " §bOs encantamentos são",
+                        " §bupados automaticamente.",
+                        ""
+                ))
+                .addEnchant(Enchantment.DIG_SPEED, efficiencyLevel, true)
                 .addPersistentData(Main.getInstance(), "excavator.tool", "excavator")
                 .addPersistentData(Main.getInstance(), "excavator.nickname", "nickname")
                 .build();

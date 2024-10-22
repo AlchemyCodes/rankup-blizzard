@@ -6,6 +6,8 @@ import blizzard.development.excavation.database.storage.ExcavatorData;
 import blizzard.development.excavation.managers.BatchManager;
 import org.bukkit.entity.Player;
 
+import static blizzard.development.excavation.database.cache.ExcavatorCacheManager.excavatorCache;
+
 public class ExcavatorCacheMethod {
 
     private static final ExcavatorDAO excavatorDAO = new ExcavatorDAO();
@@ -15,7 +17,7 @@ public class ExcavatorCacheMethod {
         String nickname = player.getName();
 
         ExcavatorData excavatorData = new ExcavatorData(
-                nickname, 5, 1, 1
+                nickname, 1, 1, 1
         );
 
         try {
@@ -32,6 +34,7 @@ public class ExcavatorCacheMethod {
         ExcavatorData excavatorData = excavatorCacheManager.getExcavatorData(nickname);
 
         if (excavatorData != null) {
+            excavatorCache.put(nickname, excavatorData);
             return excavatorData.getEfficiency();
         }
 
@@ -42,15 +45,16 @@ public class ExcavatorCacheMethod {
         ExcavatorData excavatorData = excavatorCacheManager.getExcavatorData(nickname);
 
         if (excavatorData != null) {
-            excavatorData.setEfficiency(excavatorData.getEfficiency() + amount);
+            excavatorData.setEfficiency(amount);
+            excavatorCache.put(nickname, excavatorData);
         }
-
     }
 
     public int agilityEnchant(String nickname) {
         ExcavatorData excavatorData = excavatorCacheManager.getExcavatorData(nickname);
 
         if (excavatorData != null) {
+            excavatorCache.put(nickname, excavatorData);
             return excavatorData.getAgility();
         }
 
@@ -61,15 +65,16 @@ public class ExcavatorCacheMethod {
         ExcavatorData excavatorData = excavatorCacheManager.getExcavatorData(nickname);
 
         if (excavatorData != null) {
-            excavatorData.setAgility(excavatorData.getAgility() + amount);
+            excavatorData.setAgility(amount);
+            excavatorCache.put(nickname, excavatorData);
         }
-
     }
 
     public int extractorEnchant(String nickname) {
         ExcavatorData excavatorData = excavatorCacheManager.getExcavatorData(nickname);
 
         if (excavatorData != null) {
+            excavatorCache.put(nickname, excavatorData);
             return excavatorData.getExtractor();
         }
 
@@ -80,8 +85,8 @@ public class ExcavatorCacheMethod {
         ExcavatorData excavatorData = excavatorCacheManager.getExcavatorData(nickname);
 
         if (excavatorData != null) {
-            excavatorData.setExtractor(excavatorData.getExtractor() + amount);
+            excavatorData.setExtractor(amount);
+            excavatorCache.put(nickname, excavatorData);
         }
-
     }
 }
