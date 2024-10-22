@@ -4,21 +4,21 @@ import blizzard.development.currencies.database.cache.PlayersCacheManager;
 import blizzard.development.currencies.database.storage.PlayersData;
 import org.bukkit.entity.Player;
 
-public class SoulsCurrency {
-    private static SoulsCurrency instance;
+public class FlakesCurrency {
+    private static FlakesCurrency instance;
 
     PlayersCacheManager cache = PlayersCacheManager.getInstance();
 
     public Double getBalance(Player player) {
         PlayersData data = cache.getPlayerData(player);
         if (data == null) return 0.0;
-        return data.getSouls();
+        return data.getFlakes();
     }
 
     public boolean setBalance(Player player, Double balance) {
         PlayersData data = cache.getPlayerData(player);
         if (data == null) return false;
-        data.setSouls(balance);
+        data.setFlakes(balance);
         cache.cachePlayerData(player, data);
         return true;
     }
@@ -26,8 +26,8 @@ public class SoulsCurrency {
     public boolean addBalance(Player player, Double balance) {
         PlayersData data = cache.getPlayerData(player);
         if (data == null) return false;
-        double initialBalance = data.getSouls();
-        data.setSouls(initialBalance + balance);
+        double initialBalance = data.getFlakes();
+        data.setFlakes(initialBalance + balance);
         cache.cachePlayerData(player, data);
         return true;
     }
@@ -35,15 +35,15 @@ public class SoulsCurrency {
     public boolean removeBalance(Player player, Double balance) {
         PlayersData data = cache.getPlayerData(player);
         if (data == null) return false;
-        double initialBalance = data.getSouls();
+        double initialBalance = data.getFlakes();
         if (initialBalance < balance) return false;
-        data.setSouls(initialBalance - balance);
+        data.setFlakes(initialBalance - balance);
         cache.cachePlayerData(player, data);
         return true;
     }
 
-    public static SoulsCurrency getInstance() {
-        if (instance == null) instance = new SoulsCurrency();
+    public static FlakesCurrency getInstance() {
+        if (instance == null) instance = new FlakesCurrency();
         return instance;
     }
 }

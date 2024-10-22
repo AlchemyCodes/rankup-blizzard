@@ -1,0 +1,6 @@
+currencies:
+
+  can-pay:
+    souls: true
+    flakes: true
+    fossils: true
