@@ -1,7 +1,10 @@
 package blizzard.development.currencies.enums;
 
 public enum Currencies {
-    SOULS("souls");
+    COINS("coins"),
+    SOULS("souls"),
+    FLAKES("flakes"),
+    FOSSILS("fossils");
 
     private final String name;
 

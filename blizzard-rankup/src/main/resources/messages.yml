@@ -1,8 +1,0 @@
-chat:
-  rank-up: "§6§lYAY! §7Você upou para o rank "
-  no-money-for-rank-up: "§cVocê não tem dinheiro suficiente para upar de rank!"
-  max-rank: "§cVocê já atingiu o rank máximo!"
-  prestige: "§6§lYAY! §7Você ativou um prestígio!"
-  no-money-for-prestige: "§cVocê não tem dinheiro suficiente para dar prestígio!"
-  no-rank-for-prestige: "§cVocê não está no rank necessário para dar prestígio!"
-  max-prestige: "§cVocê não pode mais ativar um prestígio!"

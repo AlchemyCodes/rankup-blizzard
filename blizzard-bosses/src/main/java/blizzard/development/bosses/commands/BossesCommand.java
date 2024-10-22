@@ -1,11 +1,14 @@
 package blizzard.development.bosses.commands;
 
 import blizzard.development.bosses.inventories.BossesInventory;
+import blizzard.development.currencies.api.CurrenciesAPI;
+import blizzard.development.currencies.enums.Currencies;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.Default;
 import co.aikar.commands.annotation.Syntax;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -23,5 +26,17 @@ public class BossesCommand extends BaseCommand {
         }
         Player player = (Player) sender;
         BossesInventory.open(player);
+
+        CurrenciesAPI api = CurrenciesAPI.getInstance();
+        Currencies currency = Currencies.SOULS;
+
+        if (api.addBalance(player, currency, 1000000)) {
+            Bukkit.getConsoleSender().sendMessage("deu tudo serto ao transa souls");
+        } else {
+            Bukkit.getConsoleSender().sendMessage("ocoreu ero ao transa souls");
+        }
     }
+
+
+
 }

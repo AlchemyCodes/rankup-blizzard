@@ -4,6 +4,8 @@ import blizzard.development.currencies.database.DatabaseConnection;
 import blizzard.development.currencies.database.storage.PlayersData;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class PlayersDAO {
@@ -15,7 +17,9 @@ public class PlayersDAO {
             String sql_player = "CREATE TABLE IF NOT EXISTS currencies_users (" +
                     "uuid VARCHAR(36) PRIMARY KEY, " +
                     "nickname VARCHAR(36), " +
-                    "souls DOUBLE" +
+                    "souls DOUBLE, " +
+                    "flakes DOUBLE, " +
+                    "fossils DOUBLE" +
                     ")";
             stat.execute(sql_player);
 
@@ -46,7 +50,9 @@ public class PlayersDAO {
                     return new PlayersData(
                             resultSet.getString("uuid"),
                             resultSet.getString("nickname"),
-                            resultSet.getDouble("souls")
+                            resultSet.getDouble("souls"),
+                            resultSet.getDouble("flakes"),
+                            resultSet.getDouble("fossils")
                     );
                 }
             }
@@ -57,12 +63,14 @@ public class PlayersDAO {
     }
 
     public void createPlayerData(PlayersData playerData) throws SQLException {
-        String sql = "INSERT INTO currencies_users (uuid, nickname, souls) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO currencies_users (uuid, nickname, souls) VALUES (?, ?, ?, ?, ?)";
         executeUpdate(sql, statement -> {
             try {
                 statement.setString(1, playerData.getUuid());
                 statement.setString(2, playerData.getNickname());
                 statement.setDouble(3, playerData.getSouls());
+                statement.setDouble(4, playerData.getFlakes());
+                statement.setDouble(5, playerData.getFossils());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -73,7 +81,7 @@ public class PlayersDAO {
         String sqlpar = "DELETE FROM currencies_users WHERE uuid = ?";
         executeUpdate(sqlpar, statement -> {
             try {
-                statement.setString(1, playerData.getUuid());
+                statement.setString(1, playerData.getNickname());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -81,15 +89,41 @@ public class PlayersDAO {
     }
 
     public void updatePlayerData(PlayersData playerData) throws SQLException {
-        String sql = "UPDATE currencies_users SET nickname = ?, souls = ? WHERE uuid = ?";
+        String sql = "UPDATE currencies_users SET nickname = ?, souls = ?, flakes = ?, fossils = ? WHERE uuid = ?";
         executeUpdate(sql, statement -> {
             try {
                 statement.setString(1, playerData.getNickname());
                 statement.setDouble(2, playerData.getSouls());
-                statement.setString(3, playerData.getUuid());
+                statement.setDouble(3, playerData.getFlakes());
+                statement.setDouble(4, playerData.getFossils());
+                statement.setString(5, playerData.getUuid());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         });
+    }
+
+    public List<PlayersData> getAllPlayers() {
+        List<PlayersData> players = new ArrayList<>();
+        String sql = "SELECT * FROM currencies_users";
+
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement statement = conn.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+                PlayersData player = new PlayersData(
+                        resultSet.getString("uuid"),
+                        resultSet.getString("nickname"),
+                        resultSet.getDouble("souls"),
+                        resultSet.getDouble("flakes"),
+                        resultSet.getDouble("fossils")
+                        );
+                players.add(player);
+            }
+        } catch (SQLException e) {
+            System.out.println("Failed to load all players: " + e);
+        }
+        return players;
     }
 }

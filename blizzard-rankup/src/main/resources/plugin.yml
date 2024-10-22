@@ -1,6 +1,0 @@
-name: blizzard-rankup
-version: '${version}'
-main: blizzard.development.rankup.Main
-api-version: '1.20'
-commands:
-
