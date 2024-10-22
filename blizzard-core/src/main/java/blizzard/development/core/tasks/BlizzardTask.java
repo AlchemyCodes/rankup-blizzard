@@ -1,5 +1,6 @@
 package blizzard.development.core.tasks;
 
+import blizzard.development.core.managers.CampfireManager;
 import blizzard.development.core.utils.PluginImpl;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -42,6 +43,7 @@ public class BlizzardTask implements Runnable {
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 world.setStorm(false);
                 isSnowing = false;
+                CampfireManager.removeCampfire(player);
                 player.sendTitle(
                         "§b§lA TEMPESTADE PASSOU.",
                         "§fAproveite a calmaria antes que ela volte.",

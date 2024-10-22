@@ -7,10 +7,12 @@ import blizzard.development.core.database.dao.PlayersDAO;
 import blizzard.development.core.listener.ListenerRegistry;
 import blizzard.development.core.tasks.BlizzardTask;
 import blizzard.development.core.tasks.PlayerSaveTask;
+import blizzard.development.core.tasks.TemperatureDecayTask;
 import blizzard.development.core.utils.config.ConfigUtils;
 import co.aikar.commands.Locales;
 import co.aikar.commands.PaperCommandManager;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -65,7 +67,7 @@ public class PluginImpl {
     }
 
     private void registerTasks() {
-        new BlizzardTask();
+     //   new BlizzardTask();
     }
 
     private void registerCommands() {

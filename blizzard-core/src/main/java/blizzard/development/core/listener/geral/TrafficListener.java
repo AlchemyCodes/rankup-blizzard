@@ -5,6 +5,7 @@ import blizzard.development.core.database.dao.PlayersDAO;
 import blizzard.development.core.database.storage.PlayersData;
 import blizzard.development.core.clothing.ClothingType;
 import blizzard.development.core.managers.BossBarManager;
+import blizzard.development.core.tasks.TemperatureDecayTask;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -36,10 +37,14 @@ public class TrafficListener implements Listener {
 
         PlayersCacheManager.cachePlayerData(player, playersData);
         BossBarManager.createBossBar(player);
+        TemperatureDecayTask.startPlayerRunnable(player);
     }
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
-        BossBarManager.removeBossBar(event.getPlayer());
+        Player player = event.getPlayer();
+
+        BossBarManager.removeBossBar(player);
+        TemperatureDecayTask.stopPlayerRunnable(player);
     }
 }

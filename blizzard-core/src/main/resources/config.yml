@@ -4,5 +4,21 @@ blizzard:
 
 temperature:
   max: 20
-  initial: 10
-  freezing: 0
+  initialTemperature: 10
+  freezingTemperature: 0
+  timeToDecay: 10
+  temperatureDecay: 0.1
+  damage: 1
+
+clothes:
+  common:
+    percentage: 5
+  rare:
+    percentage: 15
+  mystic:
+    percentage: 25
+  legendary:
+    percentage: 35
+
+campfires:
+  spawnCampfire:

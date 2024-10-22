@@ -57,7 +57,7 @@ public class BossBarManager {
         bossBar.setProgress(progress);
 
         if (temperature <= 0) {
-            bossBar.setTitle("§b❄❄❄❄❄❄❄❄ Você está congelando! ❄❄❄❄❄❄❄❄");
+            bossBar.setTitle("§b❄❄❄ Você está congelando! ❄❄❄");
         } else {
             bossBar.setTitle("§bTemperatura: §b§l" + temperature + " §b°C");
         }

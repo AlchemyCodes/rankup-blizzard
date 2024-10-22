@@ -8,6 +8,7 @@ import blizzard.development.core.clothing.adapters.MysticClothingAdapter;
 import blizzard.development.core.clothing.adapters.RareClothingAdapter;
 import blizzard.development.core.database.cache.PlayersCacheManager;
 import blizzard.development.core.clothing.ClothingType;
+import blizzard.development.core.tasks.TemperatureDecayTask;
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
@@ -45,6 +46,10 @@ public class SelectInventory {
                     70,
                     20
             );
+
+            TemperatureDecayTask.stopPlayerRunnable(player);
+            TemperatureDecayTask.startPlayerRunnable(player);
+
             return;
         }
 
@@ -64,6 +69,10 @@ public class SelectInventory {
                     70,
                     20
             );
+
+            TemperatureDecayTask.stopPlayerRunnable(player);
+            TemperatureDecayTask.startPlayerRunnable(player);
+
             return;
         }
 
@@ -83,6 +92,9 @@ public class SelectInventory {
                     70,
                     20
             );
+
+            TemperatureDecayTask.stopPlayerRunnable(player);
+            TemperatureDecayTask.startPlayerRunnable(player);
         }
 
         if (hasPersistentData(Main.getInstance(), item, "ativador.comum")) {
@@ -101,6 +113,10 @@ public class SelectInventory {
                     70,
                     20
             );
+
+            TemperatureDecayTask.stopPlayerRunnable(player);
+            TemperatureDecayTask.startPlayerRunnable(player);
+
         }
         });
 

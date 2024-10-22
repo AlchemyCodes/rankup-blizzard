@@ -2,6 +2,7 @@ package blizzard.development.core.listener;
 
 import blizzard.development.core.Main;
 import blizzard.development.core.database.dao.PlayersDAO;
+import blizzard.development.core.listener.campfire.CampfirePlace;
 import blizzard.development.core.listener.clothing.ClothingActivatorInteractEvent;
 import blizzard.development.core.listener.clothing.ClothingInventoryEvent;
 import blizzard.development.core.listener.geral.TrafficListener;
@@ -24,7 +25,8 @@ public class ListenerRegistry {
         Arrays.asList(
                 new TrafficListener(playersDAO),
                 new ClothingActivatorInteractEvent(),
-                new ClothingInventoryEvent()
+                new ClothingInventoryEvent(),
+                new CampfirePlace()
         ).forEach(listener -> pluginManager.registerEvents(listener, Main.getInstance()));
     }
 }
