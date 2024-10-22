@@ -2,8 +2,11 @@ package blizzard.development.excavation.listeners.excavation;
 
 import blizzard.development.excavation.Main;
 import blizzard.development.excavation.database.cache.methods.PlayerCacheMethod;
+import blizzard.development.excavation.excavation.adapters.ExcavatorAdapter;
 import blizzard.development.excavation.excavation.events.ExcavationBlockBreakEvent;
+import blizzard.development.excavation.excavation.item.ExcavatorBuildItem;
 import blizzard.development.excavation.managers.RewardManager;
+import blizzard.development.excavation.managers.upgrades.UpgradeExcavatorManager;
 import blizzard.development.excavation.tasks.HologramTask;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -18,13 +21,16 @@ import static blizzard.development.excavation.builder.ItemBuilder.hasPersistentD
 
 public class ExcavationListener implements Listener {
 
+    private final PlayerCacheMethod playerCacheMethod = new PlayerCacheMethod();
+    private final UpgradeExcavatorManager upgradeExcavatorManager = new UpgradeExcavatorManager();
+    private final HologramTask hologramTask = new HologramTask();
+
     @EventHandler
     public void onBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
         Block block = event.getBlock();
         ItemStack item = player.getInventory().getItemInMainHand();
 
-        PlayerCacheMethod playerCacheMethod = new PlayerCacheMethod();
 
         ExcavationBlockBreakEvent excavationBlockBreakEvent = new ExcavationBlockBreakEvent(player, block);
         Bukkit.getPluginManager().callEvent(excavationBlockBreakEvent);
@@ -35,7 +41,7 @@ public class ExcavationListener implements Listener {
                 return;
             }
 
-            if (!hasPersistentData(Main.getInstance(), item, "excavator")) {
+            if (!hasPersistentData(Main.getInstance(), item, "excavator.tool")) {
                 player.sendActionBar("§c§lEI! §cUse uma ferramenta de escavação para isso.");
                 excavationBlockBreakEvent.setCancelled(true);
                 event.setCancelled(true);
@@ -51,13 +57,18 @@ public class ExcavationListener implements Listener {
 
         ItemStack item = player.getInventory().getItemInMainHand();
 
-        PlayerCacheMethod playerCacheMethod = new PlayerCacheMethod();
+        ExcavatorBuildItem excavatorBuildItem = new ExcavatorBuildItem();
+
 
         if (playerCacheMethod.isInExcavation(player)) {
-            if (hasPersistentData(Main.getInstance(), item, "excavator")) {
-                HologramTask hologramTask = new HologramTask();
-
+            if (hasPersistentData(Main.getInstance(), item, "excavator.tool")) {
                 double percentage = 1;
+
+                player.getInventory().setItemInMainHand(excavatorBuildItem.buildExcavator(player));
+
+                upgradeExcavatorManager.check(player);
+
+                player.sendActionBar("§cVocê não encontrou nada :(");
 
                 if (RewardManager.reward(percentage)) {
                     hologramTask.initializeHologramTask(player, block);

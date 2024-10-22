@@ -3,15 +3,21 @@ package blizzard.development.excavation.utils;
 import blizzard.development.excavation.Main;
 import blizzard.development.excavation.commands.CommandRegistry;
 import blizzard.development.excavation.database.DatabaseConnection;
+import blizzard.development.excavation.database.cache.ExcavatorCacheManager;
 import blizzard.development.excavation.database.dao.ExcavatorDAO;
 import blizzard.development.excavation.database.dao.PlayerDAO;
+import blizzard.development.excavation.database.storage.ExcavatorData;
 import blizzard.development.excavation.listeners.ListenerRegistry;
+import blizzard.development.excavation.tasks.ExcavatorSaveTask;
 import blizzard.development.excavation.tasks.PlayerSaveTask;
 import blizzard.development.excavation.utils.config.ConfigUtils;
 import co.aikar.commands.Locales;
 import co.aikar.commands.PaperCommandManager;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.sql.SQLException;
+import java.util.List;
 
 public class PluginImpl {
     public final Plugin plugin;
@@ -44,8 +50,21 @@ public class PluginImpl {
         registerTasks();
         registerCommands();
 
+        try {
+            List<ExcavatorData> allExcavator = excavatorDAO.getAllExcavatorData();
+            for (ExcavatorData excavator : allExcavator) {
+                ExcavatorCacheManager.cacheExcavatorData(excavator.getNickname(), excavator);
+            }
+        } catch (SQLException exception) {
+            throw new RuntimeException(exception);
+        }
+
         PlayerSaveTask playerSaveTask = new PlayerSaveTask(playerDAO);
         playerSaveTask.runTaskTimerAsynchronously(Main.getInstance(), 0L, 20 * 5);
+
+        ExcavatorSaveTask excavatorSaveTask = new ExcavatorSaveTask(excavatorDAO);
+        excavatorSaveTask.runTaskTimerAsynchronously(Main.getInstance(), 0, 20 * 5);
+
     }
 
     public void onUnload() {

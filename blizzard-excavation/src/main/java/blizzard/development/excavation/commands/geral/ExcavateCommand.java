@@ -56,7 +56,7 @@ public class ExcavateCommand extends BaseCommand {
         Player player = (Player) commandSender;
 
         ExcavatorBuildItem excavatorBuildItem = new ExcavatorBuildItem();
-        player.getInventory().addItem(excavatorBuildItem.buildExcavator());
+        player.getInventory().addItem(excavatorBuildItem.buildExcavator(player));
     }
 
     @Subcommand("ir")

@@ -3,7 +3,6 @@ include 'blizzard-essentials'
 include 'blizzard-clans'
 include 'blizzard-crates'
 include 'blizzard-bosses'
+include 'blizzard-currencies'
 include 'blizzard-core'
 include 'blizzard-excavation'
-include 'blizzard-excavation'
-

@@ -23,7 +23,7 @@ public class ExcavatorAdapter implements ExcavatorFactory {
         ExcavatorBuildItem excavatorBuildItem = new ExcavatorBuildItem();
 
         if (excavatorData == null) {
-            excavatorData = new ExcavatorData(player.getName(), 5, 1, 1);
+            excavatorData = new ExcavatorData(player.getName(), 1, 1, 1);
 
             try {
                 excavatorDAO.createExcavatorData(excavatorData);
@@ -31,14 +31,14 @@ public class ExcavatorAdapter implements ExcavatorFactory {
                 exception.printStackTrace();
             }
 
-            player.getInventory().addItem(excavatorBuildItem.buildExcavator());
-        } else player.getInventory().addItem(excavatorBuildItem.buildExcavator());
+            player.getInventory().addItem(excavatorBuildItem.buildExcavator(player));
+        } else player.getInventory().addItem(excavatorBuildItem.buildExcavator(player));
     }
 
     @Override
     public void giveWithData(Player player) {
         ExcavatorBuildItem excavatorBuildItem = new ExcavatorBuildItem();
 
-        player.getInventory().addItem(excavatorBuildItem.buildExcavator());
+        player.getInventory().addItem(excavatorBuildItem.buildExcavator(player));
     }
 }
