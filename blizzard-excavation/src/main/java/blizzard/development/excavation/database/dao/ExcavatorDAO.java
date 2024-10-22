@@ -4,6 +4,8 @@ import blizzard.development.excavation.database.DatabaseConnection;
 import blizzard.development.excavation.database.storage.ExcavatorData;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class ExcavatorDAO {
@@ -112,5 +114,28 @@ public class ExcavatorDAO {
                 throw new RuntimeException(e);
             }
         });
+    }
+
+    public List<ExcavatorData> getAllExcavatorData() throws SQLException {
+        String sql = "SELECT * FROM excavator_excavator";
+        List<ExcavatorData> toolsDataList = new ArrayList<>();
+
+        try (Connection connection = DatabaseConnection.getInstance().getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(sql)) {
+
+            while (resultSet.next()) {
+                toolsDataList.add(new ExcavatorData(
+                        resultSet.getString("nickname"),
+                        resultSet.getInt("efficiency"),
+                        resultSet.getInt("agility"),
+                        resultSet.getInt("extractor")
+                ));
+            }
+        } catch (SQLException e) {
+            System.out.println("Failed to retrieve excavator data: " + e.getMessage());
+        }
+
+        return toolsDataList;
     }
 }
