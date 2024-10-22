@@ -1,0 +1,7 @@
+name: blizzard-core
+version: '1.0-SNAPSHOT'
+main: blizzard.development.core.Main
+depend: [ProtocolLib]
+api-version: '1.20'
+commands:
+
