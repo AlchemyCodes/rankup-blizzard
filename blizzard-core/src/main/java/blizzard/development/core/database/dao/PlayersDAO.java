@@ -1,12 +1,15 @@
 /*     */ package blizzard.development.core.database.dao;
-/*     */ import blizzard.development.core.database.DatabaseConnection;
+/*     */ import blizzard.development.core.clothing.ClothingType;
+import blizzard.development.core.database.DatabaseConnection;
 /*     */ import blizzard.development.core.database.storage.PlayersData;
 /*     */ import java.sql.Connection;
 /*     */ import java.sql.PreparedStatement;
 /*     */ import java.sql.ResultSet;
 /*     */ import java.sql.SQLException;
 /*     */ import java.sql.Statement;
-/*     */ 
+import java.util.function.Consumer;
+
+/*     */
 /*     */ public class PlayersDAO {
 /*     */   public void initializeDatabase() {
 /*     */     
