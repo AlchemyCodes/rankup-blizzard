@@ -47,7 +47,7 @@ public class CurrenciesAPI {
     }
 
     public boolean setBalance(Player player, Currencies currency, double balance) {
-        if (balance < 0) {
+        if (balance <= 0) {
             return false;
         }
         if (currency.getName().equals(coins)) {
@@ -94,19 +94,20 @@ public class CurrenciesAPI {
         return true;
     }
 
-    public boolean transferBalance(Player player, Player target, Currencies currency, double amount) {
-        if (amount <= 0) {
+    public boolean transferBalance(Player player, Player target, Currencies currency, double balance) {
+        if (balance <= 0) {
             return false;
         }
-
-        double currentBalance = currency.getName().equals(coins) ? coinsCurrency.getBalance(player) : soulsCurrency.getBalance(target);
-        if (currentBalance < amount) {
-            return false;
+        if (currency.getName().equals(souls)) {
+            soulsCurrency.removeBalance(player, balance);
+            soulsCurrency.addBalance(target, balance);
+        } else if (currency.getName().equals(flakes)) {
+            flakesCurrency.removeBalance(player, balance);
+            flakesCurrency.addBalance(target, balance);
+        } else if (currency.getName().equals(fossils)) {
+            fossilsCurrency.removeBalance(player, balance);
+            fossilsCurrency.addBalance(target, balance);
         }
-
-        coinsCurrency.removeBalance(player, amount);
-        soulsCurrency.addBalance(target, amount);
-
         return true;
     }
 

@@ -50,7 +50,7 @@ public class SoulsCommand extends BaseCommand {
                 return;
             }
 
-            String balance = api.getBalance(player, currency);
+            String balance = api.getFormattedBalance(player, currency);
             List<String> messages = Arrays.asList(
                     "",
                     " §dConfira agora o seu saldo disponível de Almas.",
@@ -80,7 +80,7 @@ public class SoulsCommand extends BaseCommand {
                 return;
             }
 
-            String balance = api.getBalance(target, currency);
+            String balance = api.getFormattedBalance(target, currency);
             List<String> messages = Arrays.asList(
                     "",
                     " §dConfira agora o saldo disponível de almas do jogador §l"  + target.getName() + "§d.",

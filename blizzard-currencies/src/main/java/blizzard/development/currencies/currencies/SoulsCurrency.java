@@ -9,7 +9,7 @@ public class SoulsCurrency {
 
     PlayersCacheManager cache = PlayersCacheManager.getInstance();
 
-    public Double getBalance(Player player) {
+    public double getBalance(Player player) {
         PlayersData data = cache.getPlayerData(player);
         if (data == null) return 0.0;
         return data.getSouls();
