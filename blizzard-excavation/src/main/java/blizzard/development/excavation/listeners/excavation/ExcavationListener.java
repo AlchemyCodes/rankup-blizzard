@@ -7,6 +7,8 @@ import blizzard.development.excavation.excavation.item.ExcavatorBuildItem;
 import blizzard.development.excavation.excavation.events.ExcavationBlockBreakEvent;
 import blizzard.development.excavation.managers.RewardManager;
 import blizzard.development.excavation.managers.upgrades.UpgradeExcavatorManager;
+import blizzard.development.excavation.managers.upgrades.agility.AgilityManager;
+import blizzard.development.excavation.managers.upgrades.extractor.ExcavatorBreakEffect;
 import blizzard.development.excavation.tasks.HologramTask;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -24,6 +26,7 @@ public class ExcavationListener implements Listener {
     private final PlayerCacheMethod playerCacheMethod = new PlayerCacheMethod();
     private final ExcavatorCacheMethod excavatorCacheMethod = new ExcavatorCacheMethod();
     private final UpgradeExcavatorManager upgradeExcavatorManager = new UpgradeExcavatorManager();
+    private final AgilityManager agilityManager = new AgilityManager();
     private final HologramTask hologramTask = new HologramTask();
     private final ExcavatorBuildItem excavatorBuildItem = new ExcavatorBuildItem();
 
@@ -55,6 +58,7 @@ public class ExcavationListener implements Listener {
         Player player = event.getPlayer();
         Block block = event.getBlock();
 
+
         if (playerCacheMethod.isInExcavation(player)) {
             ItemStack item = player.getInventory().getItemInMainHand();
 
@@ -67,9 +71,10 @@ public class ExcavationListener implements Listener {
 
                 player.getInventory().setItemInMainHand(excavatorBuildItem.buildExcavator(player, efficiencyLevel, agilityLevel, extractorLevel));
 
-                upgradeExcavatorManager.check(player);
 
-                player.sendActionBar("§cVocê não encontrou nada :(");
+                upgradeExcavatorManager.check(player, block);
+                agilityManager.check(player, excavatorCacheMethod);
+
 
                 if (RewardManager.reward(percentage)) {
                     hologramTask.initializeHologramTask(player, block);
