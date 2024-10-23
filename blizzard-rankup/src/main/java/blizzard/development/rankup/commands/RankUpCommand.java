@@ -1,22 +1,22 @@
-/*    */ package blizzard.development.rankup.commands;
-/*    */ 
-/*    */ import blizzard.development.essentials.acf.BaseCommand;
-/*    */ import blizzard.development.essentials.acf.annotation.CommandAlias;
-/*    */ import blizzard.development.essentials.acf.annotation.Default;
-/*    */ import blizzard.development.rankup.inventories.ConfirmationInventory;
-/*    */ import org.bukkit.entity.Player;
-/*    */ 
-/*    */ @CommandAlias("rankup")
-/*    */ public class RankUpCommand
-/*    */   extends BaseCommand {
-/*    */   @Default
-/*    */   public void onCommand(Player player) {
-/* 14 */     ConfirmationInventory.openConfirmationInventory(player);
-/*    */   }
-/*    */ }
+package blizzard.development.rankup.commands;
 
+import blizzard.development.rankup.inventories.ConfirmationInventory;
+import co.aikar.commands.BaseCommand;
+import co.aikar.commands.annotation.CommandAlias;
+import co.aikar.commands.annotation.CommandPermission;
+import co.aikar.commands.annotation.Default;
+import org.bukkit.entity.Player;
 
-/* Location:              C:\Users\joaop\Desktop\blizzard-rankup-1.0-SNAPSHOT.jar!\blizzard\development\rankup\commands\RankUpCommand.class
- * Java compiler version: 17 (61.0)
- * JD-Core Version:       1.1.3
- */
+@CommandAlias("rankup")
+@CommandPermission("rankup.use")
+public class RankUpCommand extends BaseCommand {
+
+    @Default
+    public void onCommand(Player player) {
+        if (player == null || !player.isOnline()) {
+            return;
+        }
+
+        ConfirmationInventory.openConfirmationInventory(player);
+    }
+}

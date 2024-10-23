@@ -1,110 +1,101 @@
-/*     */ package blizzard.development.rankup.utils;
-/*     */ 
-/*     */ import java.io.File;
-/*     */ import java.io.IOException;
-/*     */ import java.util.List;
-/*     */ import org.bukkit.configuration.file.YamlConfiguration;
-/*     */ import org.bukkit.plugin.java.JavaPlugin;
-/*     */ 
-/*     */ public class ConfigUtils
-/*     */ {
-/*     */   public ConfigUtils(JavaPlugin plugin, String nome) {
-/*  12 */     this.plugin = plugin;
-/*  13 */     setName(nome);
-/*  14 */     reloadConfig();
-/*     */   }
-/*     */   private JavaPlugin plugin;
-/*     */   private String name;
-/*     */   private File file;
-/*     */   private YamlConfiguration config;
-/*     */   
-/*     */   public JavaPlugin getPlugin() {
-/*  22 */     return this.plugin;
-/*     */   }
-/*     */   
-/*     */   public void setPlugin(JavaPlugin plugin) {
-/*  26 */     this.plugin = plugin;
-/*     */   }
-/*     */   
-/*     */   public String getName() {
-/*  30 */     return this.name;
-/*     */   }
-/*     */   
-/*     */   public void setName(String name) {
-/*  34 */     this.name = name;
-/*     */   }
-/*     */   
-/*     */   public File getFile() {
-/*  38 */     return this.file;
-/*     */   }
-/*     */   
-/*     */   public YamlConfiguration getConfig() {
-/*  42 */     return this.config;
-/*     */   }
-/*     */ 
-/*     */ 
-/*     */   
-/*     */   public void saveConfig() {
-/*     */     try {
-/*  49 */       getConfig().save(getFile());
-/*  50 */     } catch (IOException e) {
-/*  51 */       e.printStackTrace();
-/*     */     } 
-/*     */   }
-/*     */   
-/*     */   public void saveDefault() {
-/*  56 */     getConfig().options().copyDefaults(true);
-/*     */   }
-/*     */   
-/*     */   public void saveDefaultConfig() {
-/*  60 */     getPlugin().saveResource(getName(), false);
-/*     */   }
-/*     */   
-/*     */   public void reloadConfig() {
-/*  64 */     this.file = new File(getPlugin().getDataFolder(), getName());
-/*  65 */     this.config = YamlConfiguration.loadConfiguration(getFile());
-/*     */   }
-/*     */ 
-/*     */   
-/*     */   public void deleteConfig() {
-/*  70 */     getFile().delete();
-/*     */   }
-/*     */   
-/*     */   public boolean existsConfig() {
-/*  74 */     return getFile().exists();
-/*     */   }
-/*     */   
-/*     */   public String getString(String path) {
-/*  78 */     return getConfig().getString(path);
-/*     */   }
-/*     */   
-/*     */   public int getInt(String path) {
-/*  82 */     return getConfig().getInt(path);
-/*     */   }
-/*     */   
-/*     */   public boolean getBoolean(String path) {
-/*  86 */     return getConfig().getBoolean(path);
-/*     */   }
-/*     */   
-/*     */   public double getDouble(String path) {
-/*  90 */     return getConfig().getDouble(path);
-/*     */   }
-/*     */   
-/*     */   public List<?> getList(String path) {
-/*  94 */     return getConfig().getList(path);
-/*     */   }
-/*     */   
-/*     */   public boolean contains(String path) {
-/*  98 */     return getConfig().contains(path);
-/*     */   }
-/*     */   
-/*     */   public void set(String path, Object value) {
-/* 102 */     getConfig().set(path, value);
-/*     */   }
-/*     */ }
+package blizzard.development.rankup.utils;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
 
-/* Location:              C:\Users\joaop\Desktop\blizzard-rankup-1.0-SNAPSHOT.jar!\blizzard\development\ranku\\utils\ConfigUtils.class
- * Java compiler version: 17 (61.0)
- * JD-Core Version:       1.1.3
- */
+public class ConfigUtils {
+    private JavaPlugin plugin;
+    private String name;
+    private File file;
+    private YamlConfiguration config;
+
+    public ConfigUtils(JavaPlugin plugin, String nome) {
+        this.plugin = plugin;
+        setName(nome);
+        reloadConfig();
+    }
+
+    public JavaPlugin getPlugin() {
+        return this.plugin;
+    }
+
+    public void setPlugin(JavaPlugin plugin) {
+        this.plugin = plugin;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public File getFile() {
+        return this.file;
+    }
+
+    public YamlConfiguration getConfig() {
+        return this.config;
+    }
+
+    public void saveConfig() {
+        try {
+            getConfig().save(getFile());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void saveDefault() {
+        getConfig().options().copyDefaults(true);
+    }
+
+    public void saveDefaultConfig() {
+        getPlugin().saveResource(getName(), false);
+    }
+
+    public void reloadConfig() {
+        this.file = new File(getPlugin().getDataFolder(), getName());
+        this.config = YamlConfiguration.loadConfiguration(getFile());
+    }
+
+    public void deleteConfig() {
+        getFile().delete();
+    }
+
+    public boolean existsConfig() {
+        return getFile().exists();
+    }
+
+    public String getString(String path) {
+        return getConfig().getString(path);
+    }
+
+    public int getInt(String path) {
+        return getConfig().getInt(path);
+    }
+
+    public boolean getBoolean(String path) {
+        return getConfig().getBoolean(path);
+    }
+
+    public double getDouble(String path) {
+        return getConfig().getDouble(path);
+    }
+
+    public List<?> getList(String path) {
+        return getConfig().getList(path);
+    }
+
+    public boolean contains(String path) {
+        return getConfig().contains(path);
+    }
+
+    public void set(String path, Object value) {
+        getConfig().set(path, value);
+    }
+}
