@@ -24,7 +24,18 @@ public class CurrenciesAPI {
     String fossils = Currencies.FOSSILS.getName();
 
     // API Methods
-    public String getBalance(Player player, Currencies currency) {
+    public Double getBalance(Player player, Currencies currency) {
+        if (currency.getName().equals(souls)) {
+            return soulsCurrency.getBalance(player);
+        } else if (currency.getName().equals(flakes)) {
+            return flakesCurrency.getBalance(player);
+        } else if (currency.getName().equals(fossils)) {
+            return fossilsCurrency.getBalance(player);
+        }
+        return 0.0;
+    }
+
+    public String getFormattedBalance(Player player, Currencies currency) {
         if (currency.getName().equals(souls)) {
             return format.formatNumber(soulsCurrency.getBalance(player));
         } else if (currency.getName().equals(flakes)) {
