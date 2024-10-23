@@ -1,0 +1,93 @@
+rankInventory:
+  size: 3
+  title: "§6Rank"
+  items:
+    information:
+      material: "OAK_HANGING_SIGN"
+      slot: 10
+      displayName: "§6Suas informações"
+      lore:
+        - ""
+        - "§7Seu rank: §6{current_rank}"
+        - "§7Próximo rank: §6{next_rank}"
+        - ""
+        - "§7Seu prestígio: §6{prestige}"
+        - "§7Próximo prestígio: §6{next_prestige}"
+        - "§7Aumento do preço: §6{prestige_cost}§7x"
+        - ""
+    ranks:
+      material: "GREEN_DYE"
+      slot: 12
+      displayName: "§6Ranks"
+      lore:
+        - "§7Clique para ver"
+        - "§7os ranks disponíveis."
+        -
+    tops:
+      material: "BLACK_DYE"
+      slot: 14
+      displayName: "§6Tops"
+      lore:
+        - "§7Clique para ver"
+        - "§7os melhores jogadores."
+        -
+    rankup:
+      material: "ORANGE_DYE"
+      slot: 16
+      displayName: "§6RankUp"
+      lore:
+        - "§7Clique para"
+
+confirmationInventory:
+  size: 3
+  title: "§6Confirmar"
+  items:
+    confirm:
+      material: "GREEN_DYE"
+      displayName: "§aConfirmar"
+      lore:
+        - "§7Clique para confirmar"
+        - "§7sua melhoria de rank."
+    information:
+      material: "OAK_HANGING_SIGN"
+      displayName: "§6Informações"
+      lore:
+        - ""
+        - "§7Seu rank: §6{current_rank}"
+        - "§7Próximo rank: §6{next_rank}"
+        - ""
+    deny:
+      material: "RED_DYE"
+      displayName: "§cRecusar"
+      lore:
+        - "§7Clique para voltar"
+        - "§7ao menu anterior."
+
+
+topsInventory:
+  size: 4
+  title: "§6Tops"
+  items:
+    back:
+      material: "RED_DYE"
+      displayName: "§cVoltar"
+      lore:
+        - "§7Clique para voltar"
+        - "§7ao menu anterior."
+    information:
+      material: "PLAYER_HEAD"
+      displayName: "§6Suas Estatísticas"
+      lore:
+        - "§7Confira agora suas"
+        - "§7estatísticas."
+        - ""
+        - "§7Prestígio: §f{prestige}"
+        - ""
+    head:
+      material: "PLAYER_HEAD"
+      displayName: "§6Top #§l"
+      lore:
+        - ""
+        - "§7Nome: §f{nickname}"
+        - "§7Prestígio: §f{prestige}"
+        - ""
