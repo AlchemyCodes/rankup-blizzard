@@ -63,7 +63,7 @@ public class PlayersDAO {
     }
 
     public void createPlayerData(PlayersData playerData) throws SQLException {
-        String sql = "INSERT INTO currencies_users (uuid, nickname, souls) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO currencies_users (uuid, nickname, souls, flakes, fossils) VALUES (?, ?, ?, ?, ?)";
         executeUpdate(sql, statement -> {
             try {
                 statement.setString(1, playerData.getUuid());
@@ -81,7 +81,7 @@ public class PlayersDAO {
         String sqlpar = "DELETE FROM currencies_users WHERE uuid = ?";
         executeUpdate(sqlpar, statement -> {
             try {
-                statement.setString(1, playerData.getNickname());
+                statement.setString(1, playerData.getUuid());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -118,7 +118,7 @@ public class PlayersDAO {
                         resultSet.getDouble("souls"),
                         resultSet.getDouble("flakes"),
                         resultSet.getDouble("fossils")
-                        );
+                );
                 players.add(player);
             }
         } catch (SQLException e) {
