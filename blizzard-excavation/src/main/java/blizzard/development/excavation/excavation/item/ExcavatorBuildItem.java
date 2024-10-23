@@ -24,7 +24,7 @@ public class ExcavatorBuildItem {
         int extractorLevel = excavatorCacheMethod.extractorEnchant(player.getName());
 
         return new ItemBuilder(Material.DIAMOND_SHOVEL)
-                .setDisplayName("<#34f2f5>Escavadora<#34f2f5> §7[§l" + blocksBroken + "§7]")
+                .setDisplayName("<#34f2f5>Escavadora<#34f2f5> §7[" + blocksBroken + "§7]")
                 .setLore(Arrays.asList(
                         "§7Utilize esta escavadora",
                         "§7para coletar recursos.",
@@ -51,7 +51,7 @@ public class ExcavatorBuildItem {
         int blocksBroken = playerCacheMethod.getBlocks(player);
 
         return new ItemBuilder(Material.DIAMOND_SHOVEL)
-                .setDisplayName("<#34f2f5>Escavadora<#34f2f5> §7[§l" + blocksBroken + "§7]")
+                .setDisplayName("<#34f2f5>Escavadora<#34f2f5> §7[" + blocksBroken + "§7]")
                 .setLore(Arrays.asList(
                         "§7Utilize esta escavadora",
                         "§7para coletar recursos.",

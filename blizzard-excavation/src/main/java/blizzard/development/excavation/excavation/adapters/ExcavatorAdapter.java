@@ -34,7 +34,14 @@ public class ExcavatorAdapter implements ExcavatorFactory {
             }
 
             player.getInventory().addItem(excavatorBuildItem.buildExcavator(player));
-        } else player.getInventory().addItem(excavatorBuildItem.buildExcavator(player));
+        } else {
+            player.getInventory().addItem(excavatorBuildItem.buildExcavator(
+                    player,
+                    excavatorData.getEfficiency(),
+                    excavatorData.getAgility(),
+                    excavatorData.getExtractor()
+            ));
+        }
     }
 
     @Override
