@@ -38,23 +38,24 @@ public class ClansChatCommand extends BaseCommand {
         }
 
         if (player.hasPermission("players.chat.color")) {
-            message = color(message);
+            message = message.replace("&a", "§a").replace("&b", "§b").replace("&c", "§c").replace("&d", "§d")
+                    .replace("&e", "§e").replace("&f", "§f").replace("&0", "§0").replace("&1", "§1").replace("&2", "§2")
+                    .replace("&3", "§3").replace("&4", "§4").replace("&5", "§5").replace("&6", "§6").replace("&7", "§7")
+                    .replace("&8", "§8").replace("&9", "§9");
         }
 
         Component formattedMessage = Component.text("§a[C] ")
                 .append(Component.text("§7[" + ClansMethods.getClan(userClan).getTag() + "] "))
                 .append(Objects.requireNonNull(LPerms.getPrefix(player)))
                 .append(Component.text(ClansMethods.getRoleEmojiByName(player) + " "))
-                .append(Component.text("§f" + player.getName() + "§f: "))
-                .append(LPerms.convertColorCodes(message));
+                .append(Component.text("§f" + player.getName() + "§f: §7" + message));
 
         Component spyFormattedMessage = Component.text("§c[SPY] ")
                 .append(Component.text("§a[C] "))
                 .append(Component.text("§7[" + ClansMethods.getClan(userClan).getTag() + "] "))
                 .append(Objects.requireNonNull(LPerms.getPrefix(player)))
                 .append(Component.text(ClansMethods.getRoleEmojiByName(player) + " "))
-                .append(Component.text("§f" + player.getName() + "§f: "))
-                .append(LPerms.convertColorCodes(message));
+                .append(Component.text("§f" + player.getName() + "§f: §7" + message));
 
         List<String> members = ClansMethods.getMembers(userClan);
 
@@ -67,8 +68,5 @@ public class ClansChatCommand extends BaseCommand {
             }
         }
     }
-
-    public static String color(String message) {
-        return message.replace("&", "§");
-    }
 }
+

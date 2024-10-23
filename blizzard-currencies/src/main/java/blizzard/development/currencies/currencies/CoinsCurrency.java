@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 public class CoinsCurrency {
+    private static CoinsCurrency instance;
     private static Economy economy;
 
     public boolean setupEconomy() {
@@ -20,24 +21,30 @@ public class CoinsCurrency {
         return economy != null;
     }
 
-    public boolean hasEnough(Player player, double amount) {
-        return economy != null && economy.getBalance(player) > amount;
-    }
-
-    public boolean withdraw(Player player, double amount) {
-        if (economy == null) return false;
-        economy.withdrawPlayer(player, amount);
-        return true;
-    }
-
-    public boolean deposit(Player player, double amount) {
-        if (economy == null) return false;
-        economy.depositPlayer(player, amount);
-        return true;
-    }
-
-    public double getBalance(Player player) {
+    public Double getBalance(Player player) {
         if (economy == null) return 0.0;
         return economy.getBalance(player);
+    }
+
+    public void setBalance(Player player, Double balance) {
+        if (economy == null) return;
+        double bal = economy.getBalance(player);
+        economy.withdrawPlayer(player, bal);
+        economy.depositPlayer(player, balance);
+    }
+
+    public void addBalance(Player player, Double balance) {
+        if (economy == null) return;
+        economy.depositPlayer(player, balance);
+    }
+
+    public void removeBalance(Player player, Double balance) {
+        if (economy == null) return;
+        economy.withdrawPlayer(player, balance);
+    }
+
+    public static CoinsCurrency getInstance() {
+        if (instance == null) instance = new CoinsCurrency();
+        return instance;
     }
 }
