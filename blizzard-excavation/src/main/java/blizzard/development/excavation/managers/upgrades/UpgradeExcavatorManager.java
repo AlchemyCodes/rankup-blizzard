@@ -23,6 +23,7 @@ public class UpgradeExcavatorManager {
 
         if (totalBlocks >= 300) {
             randomEnchant(player, block);
+            playerCacheMethod.setBlocks(player, 0);
         }
     }
 

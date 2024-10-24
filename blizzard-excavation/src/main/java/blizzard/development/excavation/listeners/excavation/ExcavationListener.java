@@ -9,6 +9,7 @@ import blizzard.development.excavation.managers.RewardManager;
 import blizzard.development.excavation.managers.upgrades.UpgradeExcavatorManager;
 import blizzard.development.excavation.managers.upgrades.agility.AgilityManager;
 import blizzard.development.excavation.managers.upgrades.extractor.ExcavatorBreakEffect;
+import blizzard.development.excavation.tasks.BlockRegenTask;
 import blizzard.development.excavation.tasks.HologramTask;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -18,6 +19,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static blizzard.development.excavation.builder.ItemBuilder.hasPersistentData;
 
@@ -29,6 +33,7 @@ public class ExcavationListener implements Listener {
     private final AgilityManager agilityManager = new AgilityManager();
     private final HologramTask hologramTask = new HologramTask();
     private final ExcavatorBuildItem excavatorBuildItem = new ExcavatorBuildItem();
+    public static Map<Player, Block> blocks = new HashMap<>();
 
     @EventHandler
     public void onBreak(BlockBreakEvent event) {
@@ -38,6 +43,7 @@ public class ExcavationListener implements Listener {
 
         ExcavationBlockBreakEvent excavationBlockBreakEvent = new ExcavationBlockBreakEvent(player, block);
         Bukkit.getPluginManager().callEvent(excavationBlockBreakEvent);
+
 
         if (playerCacheMethod.isInExcavation(player)) {
             if (excavationBlockBreakEvent.isCancelled()) {
@@ -62,8 +68,13 @@ public class ExcavationListener implements Listener {
         if (playerCacheMethod.isInExcavation(player)) {
             ItemStack item = player.getInventory().getItemInMainHand();
 
+
             if (hasPersistentData(Main.getInstance(), item, "excavator.tool")) {
                 double percentage = 1;
+
+                blocks.put(player, block);
+                block.setType(Material.AIR);
+
 
                 int efficiencyLevel = excavatorCacheMethod.effiencyEnchant(player.getName());
                 int agilityLevel = excavatorCacheMethod.agilityEnchant(player.getName());
@@ -81,7 +92,10 @@ public class ExcavationListener implements Listener {
                     player.sendActionBar("§b§lYAY! §bVocê encontrou um Fóssil de Mamute.");
                 }
 
-                block.setType(Material.AIR);
+                ExcavationListener.blocks.forEach(((players, blocks) -> {
+                    BlockRegenTask.create(blocks, Material.COARSE_DIRT, 5);
+                }));
+
                 playerCacheMethod.setBlocks(player, playerCacheMethod.getBlocks(player) + 1);
             }
         }
