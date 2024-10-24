@@ -5,6 +5,7 @@ import blizzard.development.currencies.database.cache.PlayersCacheManager;
 import blizzard.development.currencies.enums.Currencies;
 import blizzard.development.currencies.utils.CooldownUtils;
 import blizzard.development.currencies.utils.NumberFormat;
+import blizzard.development.currencies.utils.PluginImpl;
 import blizzard.development.currencies.utils.TextAPI;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
@@ -17,11 +18,11 @@ import java.util.concurrent.TimeUnit;
 
 @CommandAlias("souls|almas")
 public class SoulsExchangeCommand extends BaseCommand {
-
     private final Map<UUID, UUID> transactionPairs = new HashMap<>();
 
     NumberFormat format = NumberFormat.getInstance();
     CooldownUtils cooldown = CooldownUtils.getInstance();
+    PluginImpl impl = PluginImpl.getInstance();
     PlayersCacheManager cache = PlayersCacheManager.getInstance();
     CurrenciesAPI api = CurrenciesAPI.getInstance();
     Currencies currency = Currencies.SOULS;
@@ -36,45 +37,48 @@ public class SoulsExchangeCommand extends BaseCommand {
             return;
         }
 
+        if (!impl.Config.getBoolean("currencies.can-pay.souls")) {
+            sender.sendMessage("§c§lEI §cVocê não pode utilizar este comando.");
+            return;
+        }
+
+        String cooldownName = currency.getName() + "_pay";
+
+        if (cooldown.isInCountdown(player, cooldownName)) {
+            sender.sendActionBar(TextAPI.parse("§c§lEI! §cAguarde alguns segundos executar esse comando."));
+            return;
+        }
+
+        cooldown.createCountdown(player, cooldownName, 5, TimeUnit.SECONDS);
+
         Player target = Bukkit.getPlayer(nickname);
         if (target == null) {
             sender.sendActionBar(TextAPI.parse("§c§lEI! §cO jogador informado é inválido ou está offline."));
             return;
         }
 
-        if (transactionPairs.containsKey(player.getUniqueId()) || transactionPairs.containsKey(target.getUniqueId()) ||
-                transactionPairs.containsValue(player.getUniqueId()) || transactionPairs.containsValue(target.getUniqueId())) {
-            sender.sendActionBar(TextAPI.parse("§c§lEI! §cVocê ou o jogador alvo já estão envolvidos em uma transação!"));
+        if (player.equals(target)) {
+            sender.sendActionBar(TextAPI.parse("§c§lEI! §cVocê não pode enviar almas para si mesmo."));
             return;
         }
 
-        transactionPairs.put(player.getUniqueId(), target.getUniqueId());
+        if (cache.getPlayerData(player) == null) {
+            sender.sendActionBar(TextAPI.parse("§c§lEI! §cVocê não foi encontrado no banco de dados."));
+            return;
+        }
+
+        if (cache.getPlayerData(target) == null) {
+            sender.sendActionBar(TextAPI.parse("§c§lEI! §cO jogador informado não foi encontrado no banco de dados."));
+            return;
+        }
+
+        if (transactionPairs.containsKey(player.getUniqueId()) || transactionPairs.containsKey(target.getUniqueId()) ||
+                transactionPairs.containsValue(player.getUniqueId()) || transactionPairs.containsValue(target.getUniqueId())) {
+            sender.sendActionBar(TextAPI.parse("§c§lEI! §cVocês já estão envolvidos em uma transação!"));
+            return;
+        }
 
         try {
-            String cooldownName = currency.getName() + "_pay";
-
-            if (cooldown.isInCountdown(player, cooldownName)) {
-                sender.sendActionBar(TextAPI.parse("§c§lEI! §cAguarde alguns segundos executar esse comando."));
-                return;
-            }
-
-            cooldown.createCountdown(player, cooldownName, 5, TimeUnit.SECONDS);
-
-            if (player.equals(target)) {
-                sender.sendActionBar(TextAPI.parse("§c§lEI! §cVocê não pode enviar almas para si mesmo."));
-                return;
-            }
-
-            if (cache.getPlayerData(player) == null) {
-                sender.sendActionBar(TextAPI.parse("§c§lEI! §cVocê não foi encontrado no banco de dados."));
-                return;
-            }
-
-            if (cache.getPlayerData(target) == null) {
-                sender.sendActionBar(TextAPI.parse("§c§lEI! §cO jogador informado não foi encontrado no banco de dados."));
-                return;
-            }
-
             double doubleAmount = Double.parseDouble(amount);
             double bal = api.getBalance(player, currency);
             if (bal < doubleAmount) {
@@ -106,15 +110,50 @@ public class SoulsExchangeCommand extends BaseCommand {
                 for (String targetMessage : targetMessages) {
                     target.sendMessage(TextAPI.parse(targetMessage));
                 }
+                transactionPairs.remove(player.getUniqueId());
+                transactionPairs.remove(target.getUniqueId());
             } else {
                 sender.sendActionBar(TextAPI.parse("§c§lEI! §cOcorreu um erro ao concluir a transação."));
             }
         } catch (NumberFormatException ex) {
-            sender.sendActionBar(TextAPI.parse("§c§lEI! §cO valor inserido é inválido."));
-        } finally {
-            transactionPairs.remove(player.getUniqueId());
-            transactionPairs.remove(target.getUniqueId());
+            if (format.parseNumber(amount) == null) {
+                sender.sendActionBar(TextAPI.parse("§c§lEI! §cO valor inserido é inválido."));
+                return;
+            }
+            double doubleFormatted = format.parseNumber(amount);
+            double bal = api.getBalance(player, currency);
+            if (bal < doubleFormatted) {
+                sender.sendActionBar(TextAPI.parse("§c§lEI! §cVocê não possui a quantia necessária de almas para realizar essa transação."));
+                return;
+            }
+            if (api.transferBalance(player, target, currency, doubleFormatted)) {
+                List<String> playerMessages = Arrays.asList(
+                        "",
+                        "§d§lTransferência realizada!",
+                        "§dVocê pagou §l👻" + format.formatNumber(doubleFormatted) + " §dalmas para o jogador " + target.getName() + ".",
+                        ""
+                );
+
+                List<String> targetMessages = Arrays.asList(
+                        "",
+                        "§d§lTransferência recebida!",
+                        "§dVocê recebeu §l👻" + format.formatNumber(doubleFormatted) + " §dalmas do jogador " + player.getName() + ".",
+                        ""
+                );
+
+                for (String playerMessage : playerMessages) {
+                    player.sendMessage(TextAPI.parse(playerMessage));
+                }
+                for (String targetMessage : targetMessages) {
+                    target.sendMessage(TextAPI.parse(targetMessage));
+                }
+                transactionPairs.remove(player.getUniqueId());
+                transactionPairs.remove(target.getUniqueId());
+            } else {
+                sender.sendActionBar(TextAPI.parse("§c§lEI! §cOcorreu um erro ao concluir a transação."));
+            }
         }
+
     }
 
     @Subcommand("set|setar")

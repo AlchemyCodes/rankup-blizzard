@@ -25,7 +25,9 @@ public class CurrenciesAPI {
 
     // API Methods
     public Double getBalance(Player player, Currencies currency) {
-        if (currency.getName().equals(souls)) {
+        if (currency.getName().equals(coins)) {
+            return coinsCurrency.getBalance(player);
+        } else if (currency.getName().equals(souls)) {
             return soulsCurrency.getBalance(player);
         } else if (currency.getName().equals(flakes)) {
             return flakesCurrency.getBalance(player);
@@ -36,7 +38,9 @@ public class CurrenciesAPI {
     }
 
     public String getFormattedBalance(Player player, Currencies currency) {
-        if (currency.getName().equals(souls)) {
+        if (currency.getName().equals(coins)) {
+            return format.formatNumber(coinsCurrency.getBalance(player));
+        } else if (currency.getName().equals(souls)) {
             return format.formatNumber(soulsCurrency.getBalance(player));
         } else if (currency.getName().equals(flakes)) {
             return format.formatNumber(flakesCurrency.getBalance(player));

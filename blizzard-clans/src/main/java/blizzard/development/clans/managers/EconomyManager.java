@@ -6,7 +6,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 public class EconomyManager {
-
     private static Economy economy;
 
     public static boolean setupEconomy() {
