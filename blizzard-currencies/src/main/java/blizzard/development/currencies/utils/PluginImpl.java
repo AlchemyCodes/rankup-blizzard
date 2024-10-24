@@ -67,22 +67,15 @@ public class PluginImpl {
 
     private void registerCommands() {
         CommandRegistry.getInstance().register();
-        commandManager.getCommandCompletions().registerCompletion("amount", c -> {
-            ArrayList<String> amount = new ArrayList<>();
-            for (int i = 0; i < 1001; i++) {
-                amount.add(String.valueOf(i));
-            }
-            return amount;
-        });
     }
 
     public void registerExtensions() {
-        if (pluginManager.getPlugin("PlaceholderAPI") != null) {
-            new PlaceholderAPIExtension((Main) plugin).register();
-        }
         nChatAPI api = nChatAPI.getApi();
         if (api != null) {
             api.setGlobalTag("currencies_flakes_tag", new NChatExtension(plugin));
+        }
+        if (pluginManager.getPlugin("PlaceholderAPI") != null) {
+            new PlaceholderAPIExtension((Main) plugin).register();
         }
     }
 
