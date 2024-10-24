@@ -3,18 +3,39 @@ package blizzard.development.rankup.utils;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public class PrestigeUtils {
-    public static double prestigePrice(int prestigeLevel) {
+
+    public static double prestigeCoinsPrice(int prestigeLevel) {
         YamlConfiguration prestigeConfig = (PluginImpl.getInstance()).Prestige.getConfig();
 
-        double prestigePrice = prestigeConfig.getDouble("prestige.price");
+        double prestigeCoinsPrice = prestigeConfig.getDouble("prestige.coinsPrice");
 
-        return prestigePrice * (prestigeLevel + 1);
+        return prestigeCoinsPrice * (prestigeLevel + 1);
     }
 
-    public static double prestigeCostAdd(int prestigeLevel) {
+    public static double prestigeFlakesPrice(int prestigeLevel) {
         YamlConfiguration prestigeConfig = (PluginImpl.getInstance()).Prestige.getConfig();
 
-        double costAdd = prestigeConfig.getDouble("prestige.cost-add");
+        double prestigeFlakesPrice = prestigeConfig.getDouble("prestige.flakesPrice");
+
+        return prestigeFlakesPrice * (prestigeLevel + 1);
+    }
+
+    public static double prestigeCoinsCostAdd(int prestigeLevel) {
+        YamlConfiguration prestigeConfig = (PluginImpl.getInstance()).Prestige.getConfig();
+
+        double costAdd = prestigeConfig.getDouble("prestige.costCoins-add");
+
+        if (prestigeLevel == 0) {
+            return 1.0D;
+        }
+
+        return costAdd * prestigeLevel;
+    }
+
+    public static double prestigeFlakesCostAdd(int prestigeLevel) {
+        YamlConfiguration prestigeConfig = (PluginImpl.getInstance()).Prestige.getConfig();
+
+        double costAdd = prestigeConfig.getDouble("prestige.costFlakes-add");
 
         if (prestigeLevel == 0) {
             return 1.0D;

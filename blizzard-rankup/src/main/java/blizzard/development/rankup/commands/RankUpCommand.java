@@ -1,5 +1,6 @@
 package blizzard.development.rankup.commands;
 
+
 import blizzard.development.rankup.inventories.ConfirmationInventory;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;

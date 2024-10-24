@@ -2,9 +2,11 @@ prestige:
   need-rank: 3
   max: 10
   # Acrescimo no valor dos ranks (cost-add * current-prestige)
-  cost-add: 2.0
+  costCoins-add: 2.0
+  costFlakes-add: 2.0
   # Custo para dar prestígio (custo * nível de prestígio)
-  price: 200000.0
+  coinsPrice: 200000.0
+  flakesPrice: 200000.0
   # Comandos que serão executados ao dar prestígio
   command: ''
   # Mensagens que serão enviadas ao dar prestígio
