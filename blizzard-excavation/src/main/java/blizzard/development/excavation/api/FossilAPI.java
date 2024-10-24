@@ -6,13 +6,13 @@ import org.bukkit.entity.Player;
 
 public class FossilAPI {
 
-    public String getFossilBalance(Player player) {
+    public static double getFossilBalance(Player player) {
         CurrenciesAPI api = CurrenciesAPI.getInstance();
 
         return api.getBalance(player, Currencies.FOSSILS);
     }
 
-    public void setFossilBalance(Player player, double amount) {
+    public static void setFossilBalance(Player player, double amount) {
         CurrenciesAPI api = CurrenciesAPI.getInstance();
 
         api.setBalance(player, Currencies.FOSSILS, amount);

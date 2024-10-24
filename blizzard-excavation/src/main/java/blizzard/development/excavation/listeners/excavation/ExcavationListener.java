@@ -1,6 +1,7 @@
 package blizzard.development.excavation.listeners.excavation;
 
 import blizzard.development.excavation.Main;
+import blizzard.development.excavation.api.FossilAPI;
 import blizzard.development.excavation.database.cache.methods.ExcavatorCacheMethod;
 import blizzard.development.excavation.database.cache.methods.PlayerCacheMethod;
 import blizzard.development.excavation.excavation.item.ExcavatorBuildItem;
@@ -56,6 +57,7 @@ public class ExcavationListener implements Listener {
                 excavationBlockBreakEvent.setCancelled(true);
                 event.setCancelled(true);
             }
+            block.setType(Material.AIR);
         }
     }
 
@@ -73,7 +75,6 @@ public class ExcavationListener implements Listener {
                 double percentage = 1;
 
                 blocks.put(player, block);
-                block.setType(Material.AIR);
 
 
                 int efficiencyLevel = excavatorCacheMethod.effiencyEnchant(player.getName());
@@ -90,6 +91,8 @@ public class ExcavationListener implements Listener {
                 if (RewardManager.reward(percentage)) {
                     hologramTask.initializeHologramTask(player, block);
                     player.sendActionBar("§b§lYAY! §bVocê encontrou um Fóssil de Mamute.");
+
+                    FossilAPI.setFossilBalance(player, FossilAPI.getFossilBalance(player) + 1);
                 }
 
                 ExcavationListener.blocks.forEach(((players, blocks) -> {
