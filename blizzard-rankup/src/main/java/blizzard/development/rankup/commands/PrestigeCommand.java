@@ -1,5 +1,7 @@
 package blizzard.development.rankup.commands;
 
+import blizzard.development.currencies.api.CurrenciesAPI;
+import blizzard.development.currencies.enums.Currencies;
 import blizzard.development.rankup.database.cache.PlayersCacheManager;
 import blizzard.development.rankup.database.storage.PlayersData;
 import blizzard.development.rankup.utils.PluginImpl;
@@ -29,15 +31,25 @@ public class PrestigeCommand extends BaseCommand {
             sendMessage(player, messagesConfig, "chat.no-rank-for-prestige");
             return;
         }
-        if (playersData.getPrestige() >= 10) {
+
+        if (playersData.getPrestige() >= prestigeConfig.getInt("prestige.max")) {
             sendMessage(player, messagesConfig, "chat.max-prestige");
             return;
         }
-        double prestigePrice = PrestigeUtils.prestigePrice(playersData.getPrestige());
-        if (!hasCoinsForPrestige(player, prestigePrice)) {
+
+        double prestigeCoinsPrice = PrestigeUtils.prestigeCoinsPrice(playersData.getPrestige());
+        double prestigeFlakesPrice = PrestigeUtils.prestigeFlakesPrice(playersData.getPrestige());
+
+        if (!hasCoinsForPrestige(player, prestigeCoinsPrice)) {
             sendMessage(player, messagesConfig, "chat.no-money-for-prestige");
             return;
         }
+
+        if (!hasFlakesForPrestige(player, prestigeFlakesPrice)) {
+            sendMessage(player, messagesConfig, "chat.no-flakes-for-prestige");
+            return;
+        }
+
         onPrestige(player, playersData, ranksConfig, messagesConfig);
     }
 
@@ -48,7 +60,11 @@ public class PrestigeCommand extends BaseCommand {
     }
 
     private boolean hasCoinsForPrestige(Player player, double requiredCoins) {
-        return true;
+        return CurrenciesAPI.getInstance().getBalance(player, Currencies.COINS) >= requiredCoins;
+    }
+
+    private boolean hasFlakesForPrestige(Player player, double requiredCoins) {
+        return CurrenciesAPI.getInstance().getBalance(player, Currencies.FLAKES) >= requiredCoins;
     }
 
     private void onPrestige(Player player, PlayersData playersData, YamlConfiguration ranksConfig, YamlConfiguration messagesConfig) {

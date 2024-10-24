@@ -121,7 +121,7 @@ public class TopsInventory {
                         .replace("{next_rank}", RanksUtils.getNextRank(ranksConfig, currentRankSection) != null ? RanksUtils.getNextRank(ranksConfig, currentRankSection) : "Nenhum")
                         .replace("{prestige}", String.valueOf(prestige))
                         .replace("{next_prestige}", String.valueOf(prestige + 1))
-                        .replace("{prestige_cost}", String.valueOf(PrestigeUtils.prestigeCostAdd(prestige))))
+                        .replace("{prestige_cost}", String.valueOf(PrestigeUtils.prestigeCoinsCostAdd(prestige))))
                 .collect(Collectors.toList());
 
         ItemStack info = new ItemStack(material);

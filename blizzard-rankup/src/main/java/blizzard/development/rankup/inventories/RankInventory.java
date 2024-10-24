@@ -17,7 +17,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -83,7 +82,7 @@ public class RankInventory {
         Material material = Material.valueOf(infoConfig.getString("material"));
         String displayName = infoConfig.getString("displayName");
 
-        List<String> lore = (List<String>)infoConfig.getStringList("lore").stream().map(line -> line.replace("{current_rank}", RanksUtils.getCurrentRank(ranksConfig, currentRank)).replace("{next_rank}", (RanksUtils.getNextRank(ranksConfig, currentRankSection) != null) ? RanksUtils.getNextRank(ranksConfig, currentRankSection) : "Nenhum").replace("{prestige}", String.valueOf(prestige)).replace("{next_prestige}", String.valueOf(prestige + 1)).replace("{prestige_cost}", String.valueOf(PrestigeUtils.prestigeCostAdd(prestige)))).collect(Collectors.toList());
+        List<String> lore = (List<String>)infoConfig.getStringList("lore").stream().map(line -> line.replace("{current_rank}", RanksUtils.getCurrentRank(ranksConfig, currentRank)).replace("{next_rank}", (RanksUtils.getNextRank(ranksConfig, currentRankSection) != null) ? RanksUtils.getNextRank(ranksConfig, currentRankSection) : "Nenhum").replace("{prestige}", String.valueOf(prestige)).replace("{next_prestige}", String.valueOf(prestige + 1)).replace("{prestige_cost}", String.valueOf(PrestigeUtils.prestigeCoinsCostAdd(prestige)))).collect(Collectors.toList());
 
         ItemStack info = new ItemStack(material);
         ItemMeta meta = info.getItemMeta();

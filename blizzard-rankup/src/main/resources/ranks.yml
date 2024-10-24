@@ -3,7 +3,8 @@ ranks:
     order: 1
     tag: '§d[PorcoXVI]'
     name: 'Porco XVI'
-    price: 5000
+    coinsPrice: 5000
+    flakesPrice: 2000
     item:
       type:
       amount: 1
@@ -23,7 +24,8 @@ ranks:
     order: 2
     tag: '§d[PorcoXV]'
     name: 'Porco XV'
-    price: 5000
+    coinsPrice: 5000
+    flakesPrice: 2000
     item:
       type:
       amount: 1
@@ -43,7 +45,8 @@ ranks:
     order: 3
     tag: '§d[PorcoXIV]'
     name: 'Porco XIV'
-    price: 5000
+    coinsPrice: 5000
+    flakesPrice: 2000
     item:
       type:
       amount: 1
@@ -63,7 +66,8 @@ ranks:
     order: 4
     tag: '§d[PorcoXIII]'
     name: 'Porco XIII'
-    price: 5000
+    coinsPrice: 5000
+    flakesPrice: 2000
     item:
       type:
       amount: 1
@@ -83,7 +87,8 @@ ranks:
     order: 5
     tag: '§d[PorcoXII]'
     name: 'Porco XII'
-    price: 5000
+    coinsPrice: 5000
+    flakesPrice: 2000
     item:
       type:
       amount: 1
@@ -103,7 +108,8 @@ ranks:
     order: 6
     tag: '§d[PorcoXI]'
     name: 'Porco XI'
-    price: 5000
+    coinsPrice: 5000
+    flakesPrice: 2000
     item:
       type:
       amount: 1
@@ -123,7 +129,8 @@ ranks:
     order: 7
     tag: '§d[PorcoX]'
     name: 'Porco X'
-    price: 5000
+    coinsPrice: 5000
+    flakesPrice: 2000
     item:
       type:
       amount: 1
@@ -143,7 +150,8 @@ ranks:
     order: 8
     tag: '§d[PorcoIX]'
     name: 'Porco IX'
-    price: 4500
+    coinsPrice: 4500
+    flakesPrice: 2000
     item:
       type:
       amount: 1
@@ -163,7 +171,8 @@ ranks:
     order: 9
     tag: '§d[PorcoVIII]'
     name: 'Porco VIII'
-    price: 4000
+    coinsPrice: 4000
+    flakesPrice: 2000
     item:
       type:
       amount: 1
@@ -183,7 +192,8 @@ ranks:
     order: 10
     tag: '§d[PorcoVII]'
     name: 'Porco VII'
-    price: 3500
+    coinsPrice: 3500
+    flakesPrice: 2000
     item:
       type:
       amount: 1
@@ -203,7 +213,8 @@ ranks:
     order: 11
     tag: '§d[PorcoVI]'
     name: 'Porco VI'
-    price: 3000
+    coinsPrice: 3000
+    flakesPrice: 2000
     item:
       type:
       amount: 1
@@ -223,7 +234,8 @@ ranks:
     order: 12
     tag: '§d[PorcoV]'
     name: 'Porco V'
-    price: 2500
+    coinsPrice: 2500
+    flakesPrice: 2000
     item:
       type:
       amount: 1
@@ -243,7 +255,8 @@ ranks:
     order: 13
     tag: '§d[PorcoIV]'
     name: 'Porco IV'
-    price: 2000
+    coinsPrice: 2000
+    flakesPrice: 2000
     item:
       type:
       amount: 1
@@ -263,7 +276,8 @@ ranks:
     order: 14
     tag: '§d[PorcoIII]'
     name: 'Porco III'
-    price: 1500
+    coinsPrice: 1500
+    flakesPrice: 2000
     item:
       type:
       amount: 1
@@ -283,7 +297,8 @@ ranks:
     order: 15
     tag: '§d[PorcoII]'
     name: 'Porco II'
-    price: 1000
+    coinsPrice: 1000
+    flakesPrice: 2000
     item:
       type:
       amount: 1
@@ -303,7 +318,8 @@ ranks:
     order: 16
     tag: '§d[PorcoI]'
     name: 'Porco I'
-    price: 500
+    coinsPrice: 500
+    flakesPrice: 2000
     item:
       type:
       amount: 1
