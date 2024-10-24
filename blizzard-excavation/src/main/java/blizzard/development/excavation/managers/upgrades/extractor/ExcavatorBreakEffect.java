@@ -1,6 +1,8 @@
 package blizzard.development.excavation.managers.upgrades.extractor;
 
 import blizzard.development.excavation.database.cache.methods.PlayerCacheMethod;
+import blizzard.development.excavation.listeners.excavation.ExcavationListener;
+import blizzard.development.excavation.tasks.BlockRegenTask;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -12,7 +14,8 @@ import java.util.*;
 public class ExcavatorBreakEffect {
     private final JavaPlugin plugin;
     private final Random random;
-    private PlayerCacheMethod playerCacheMethod = new PlayerCacheMethod();
+    private final PlayerCacheMethod playerCacheMethod = new PlayerCacheMethod();
+    private final Map<Player, List<Block>> brokenBlocksMap = new HashMap<>(); // Map para armazenar listas de blocos quebrados por jogador
 
     public ExcavatorBreakEffect(JavaPlugin plugin) {
         this.plugin = plugin;
@@ -21,6 +24,8 @@ public class ExcavatorBreakEffect {
 
     public void startExcavatorBreak(Block centerBlock, Player player, int radius, int depth) {
         List<Block> affectedBlocks = getBlocksInCone(centerBlock, radius, depth);
+        brokenBlocksMap.putIfAbsent(player, new ArrayList<>()); // Inicializa a lista de blocos para o jogador, se não existir
+
         player.playSound(centerBlock.getLocation(), Sound.BLOCK_ANCIENT_DEBRIS_BREAK, 1.0f, 0.5f);
 
         new BukkitRunnable() {
@@ -35,6 +40,14 @@ public class ExcavatorBreakEffect {
                 if (time >= ANIMATION_DURATION || blockIndex >= affectedBlocks.size()) {
                     if (totalBlocksBroken > 0) {
                         playerCacheMethod.setBlocks(player, playerCacheMethod.getBlocks(player) + totalBlocksBroken);
+
+                        List<Block> playerBrokenBlocks = brokenBlocksMap.get(player);
+
+                        playerBrokenBlocks.forEach(block -> {
+                            BlockRegenTask.create(block, Material.COARSE_DIRT, 5);
+                        });
+
+                        playerBrokenBlocks.clear();
                     }
                     cancel();
                     return;
@@ -48,6 +61,10 @@ public class ExcavatorBreakEffect {
                         block.setType(Material.AIR);
                         blocksBrokenThisTick++;
                         totalBlocksBroken++;
+
+                        // Adiciona o bloco à lista de blocos quebrados do jogador
+                        brokenBlocksMap.get(player).add(block);
+
                         if (random.nextInt(4) == 0) {
                             spawnEffectParticles(player, block.getLocation());
                         }

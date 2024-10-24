@@ -1,6 +1,7 @@
 package blizzard.development.excavation.inventories;
 
 import blizzard.development.excavation.builder.ItemBuilder;
+import blizzard.development.excavation.database.cache.methods.ExcavatorCacheMethod;
 import blizzard.development.excavation.database.cache.methods.PlayerCacheMethod;
 import blizzard.development.excavation.utils.LocationUtils;
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
@@ -21,8 +22,12 @@ public class ExcavationInventory {
         StaticPane pane = new StaticPane(0, 0, 9, 3);
 
         PlayerCacheMethod playerCacheMethod = new PlayerCacheMethod();
+        ExcavatorCacheMethod excavatorCacheMethod = new ExcavatorCacheMethod();
 
         GuiItem enchantments = new GuiItem(enchantments(), event -> {
+            EnchantmentInventory enchantmentInventory = new EnchantmentInventory();
+            enchantmentInventory.open(player, excavatorCacheMethod);
+
             event.setCancelled(true);
         });
 
