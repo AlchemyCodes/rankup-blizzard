@@ -1,4 +1,4 @@
-package blizzard.development.currencies.commands.currencies.bosses.subcommands;
+package blizzard.development.currencies.commands.currencies.excavation.subcommands;
 
 import blizzard.development.currencies.api.CurrenciesAPI;
 import blizzard.development.currencies.database.cache.PlayersCacheManager;
@@ -16,16 +16,16 @@ import org.bukkit.entity.Player;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-@CommandAlias("souls|almas")
-public class SoulsExchangeCommand extends BaseCommand {
+@CommandAlias("fossils|fosseis|fossil")
+public class FossilsExchangeCommand extends BaseCommand {
     private final Map<UUID, UUID> transactionPairs = new HashMap<>();
 
     NumberFormat format = NumberFormat.getInstance();
     CooldownUtils cooldown = CooldownUtils.getInstance();
-    PluginImpl impl = PluginImpl.getInstance();
     PlayersCacheManager cache = PlayersCacheManager.getInstance();
+    PluginImpl impl = PluginImpl.getInstance();
     CurrenciesAPI api = CurrenciesAPI.getInstance();
-    Currencies currency = Currencies.SOULS;
+    Currencies currency = Currencies.FOSSILS;
 
     @Subcommand("pay|pagar|enviar|transferir")
     @CommandPermission("blizzard.currencies.basic")
@@ -37,7 +37,7 @@ public class SoulsExchangeCommand extends BaseCommand {
             return;
         }
 
-        if (!impl.Config.getBoolean("currencies.can-pay.souls")) {
+        if (!impl.Config.getBoolean("currencies.can-pay.fossils")) {
             sender.sendMessage("§c§lEI §cVocê não pode utilizar este comando.");
             return;
         }
@@ -58,7 +58,7 @@ public class SoulsExchangeCommand extends BaseCommand {
         }
 
         if (player.equals(target)) {
-            sender.sendActionBar(TextAPI.parse("§c§lEI! §cVocê não pode enviar almas para si mesmo."));
+            sender.sendActionBar(TextAPI.parse("§c§lEI! §cVocê não pode enviar fósseis para si mesmo."));
             return;
         }
 
@@ -82,7 +82,7 @@ public class SoulsExchangeCommand extends BaseCommand {
             double doubleAmount = Double.parseDouble(amount);
             double bal = api.getBalance(player, currency);
             if (bal < doubleAmount) {
-                sender.sendActionBar(TextAPI.parse("§c§lEI! §cVocê não possui a quantia necessária de almas para realizar essa transação."));
+                sender.sendActionBar(TextAPI.parse("§c§lEI! §cVocê não possui a quantia necessária de fósseis para realizar essa transação."));
                 return;
             }
             if (doubleAmount <= 0) {
@@ -92,15 +92,15 @@ public class SoulsExchangeCommand extends BaseCommand {
             if (api.transferBalance(player, target, currency, doubleAmount)) {
                 List<String> playerMessages = Arrays.asList(
                         "",
-                        "§d§lTransferência realizada!",
-                        "§dVocê pagou §l👻" + format.formatNumber(doubleAmount) + " §dalmas para o jogador " + target.getName() + ".",
+                        "<#e6e3dc><bold>Transferência realizada!</bold><#e6e3dc>",
+                        "<#e6e3dc>Você pagou <bold>🦴" + format.formatNumber(doubleAmount) + "</bold> fósseis para o jogador " + target.getName() + ".<#e6e3dc>",
                         ""
                 );
 
                 List<String> targetMessages = Arrays.asList(
                         "",
-                        "§d§lTransferência recebida!",
-                        "§dVocê recebeu §l👻" + format.formatNumber(doubleAmount) + " §dalmas do jogador " + player.getName() + ".",
+                        "<#e6e3dc><bold>Transferência recebida</bold><#e6e3dc>",
+                        "<#e6e3dc>Você recebeu <bold>🦴" + format.formatNumber(doubleAmount) + "</bold> fósseis do jogador " + player.getName() + ".<#e6e3dc>",
                         ""
                 );
 
@@ -123,21 +123,21 @@ public class SoulsExchangeCommand extends BaseCommand {
             double doubleFormatted = format.parseNumber(amount);
             double bal = api.getBalance(player, currency);
             if (bal < doubleFormatted) {
-                sender.sendActionBar(TextAPI.parse("§c§lEI! §cVocê não possui a quantia necessária de almas para realizar essa transação."));
+                sender.sendActionBar(TextAPI.parse("§c§lEI! §cVocê não possui a quantia necessária de fósseis para realizar essa transação."));
                 return;
             }
             if (api.transferBalance(player, target, currency, doubleFormatted)) {
                 List<String> playerMessages = Arrays.asList(
                         "",
-                        "§d§lTransferência realizada!",
-                        "§dVocê pagou §l👻" + format.formatNumber(doubleFormatted) + " §dalmas para o jogador " + target.getName() + ".",
+                        "<#e6e3dc><bold>Transferência realizada!</bold><#e6e3dc>",
+                        "<#e6e3dc>Você pagou <bold>🦴" + format.formatNumber(doubleFormatted) + "</bold> fósseis para o jogador " + target.getName() + ".<#e6e3dc>",
                         ""
                 );
 
                 List<String> targetMessages = Arrays.asList(
                         "",
-                        "§d§lTransferência recebida!",
-                        "§dVocê recebeu §l👻" + format.formatNumber(doubleFormatted) + " §dalmas do jogador " + player.getName() + ".",
+                        "<#e6e3dc><bold>Transferência recebida!</bold><#e6e3dc>",
+                        "<#e6e3dc>Você recebeu <bold>🦴" + format.formatNumber(doubleFormatted) + "</bold> fósseis do jogador " + player.getName() + ".<#e6e3dc>",
                         ""
                 );
 
@@ -179,7 +179,7 @@ public class SoulsExchangeCommand extends BaseCommand {
                 return;
             }
             if (api.setBalance(target, currency, doubleAmount)) {
-                sender.sendActionBar(TextAPI.parse("§a§lYAY! §aVocê setou " + format.formatNumber(doubleAmount) + " almas para o jogador " + target.getName()));
+                sender.sendActionBar(TextAPI.parse("§a§lYAY! §aVocê setou " + format.formatNumber(doubleAmount) + " fósseis para o jogador " + target.getName()));
             } else {
                 sender.sendActionBar(TextAPI.parse("§c§lEI! §cOcorreu um erro ao concluir a transação."));
             }
@@ -190,7 +190,7 @@ public class SoulsExchangeCommand extends BaseCommand {
             }
             double doubleFormatted = format.parseNumber(amount);
             if (api.setBalance(target, currency, doubleFormatted)) {
-                sender.sendActionBar(TextAPI.parse("§a§lYAY! §aVocê setou " + format.formatNumber(doubleFormatted) + " almas para o jogador " + target.getName()));
+                sender.sendActionBar(TextAPI.parse("§a§lYAY! §aVocê setou " + format.formatNumber(doubleFormatted) + " fósseis para o jogador " + target.getName()));
             } else {
                 sender.sendActionBar(TextAPI.parse("§c§lEI! §cOcorreu um erro ao concluir a transação."));
             }
@@ -220,7 +220,7 @@ public class SoulsExchangeCommand extends BaseCommand {
                 return;
             }
             if (api.addBalance(target, currency, doubleAmount)) {
-                sender.sendActionBar(TextAPI.parse("§a§lYAY! §aVocê adicionou " + format.formatNumber(doubleAmount) + " almas para o jogador " + target.getName()));
+                sender.sendActionBar(TextAPI.parse("§a§lYAY! §aVocê adicionou " + format.formatNumber(doubleAmount) + " fósseis para o jogador " + target.getName()));
             } else {
                 sender.sendActionBar(TextAPI.parse("§c§lEI! §cOcorreu um erro ao concluir a transação."));
             }
@@ -231,7 +231,7 @@ public class SoulsExchangeCommand extends BaseCommand {
             }
             double doubleFormatted = format.parseNumber(amount);
             if (api.addBalance(target, currency, doubleFormatted)) {
-                sender.sendActionBar(TextAPI.parse("§a§lYAY! §aVocê adicionou " + format.formatNumber(doubleFormatted) + " almas para o jogador " + target.getName()));
+                sender.sendActionBar(TextAPI.parse("§a§lYAY! §aVocê adicionou " + format.formatNumber(doubleFormatted) + " fósseis para o jogador " + target.getName()));
             } else {
                 sender.sendActionBar(TextAPI.parse("§c§lEI! §cOcorreu um erro ao concluir a transação."));
             }
@@ -266,7 +266,7 @@ public class SoulsExchangeCommand extends BaseCommand {
                 return;
             }
             if (api.removeBalance(target, currency, doubleAmount)) {
-                sender.sendActionBar(TextAPI.parse("§a§lYAY! §aVocê removeu " + format.formatNumber(doubleAmount) + " almas do jogador " + target.getName()));
+                sender.sendActionBar(TextAPI.parse("§a§lYAY! §aVocê removeu " + format.formatNumber(doubleAmount) + " fósseis do jogador " + target.getName()));
             } else {
                 sender.sendActionBar(TextAPI.parse("§c§lEI! §cOcorreu um erro ao concluir a transação."));
             }
@@ -282,7 +282,7 @@ public class SoulsExchangeCommand extends BaseCommand {
                 return;
             }
             if (api.removeBalance(target, currency, doubleFormatted)) {
-                sender.sendActionBar(TextAPI.parse("§a§lYAY! §aVocê removeu " + format.formatNumber(doubleFormatted) + " almas do jogador " + target.getName()));
+                sender.sendActionBar(TextAPI.parse("§a§lYAY! §aVocê removeu " + format.formatNumber(doubleFormatted) + " fósseis do jogador " + target.getName()));
             } else {
                 sender.sendActionBar(TextAPI.parse("§c§lEI! §cOcorreu um erro ao concluir a transação."));
             }
