@@ -17,13 +17,4 @@ public class ToolsCacheManager {
         toolsCache.remove(toolId);
     }
 
-
-    public static void setType(String id, String type) {
-        ToolsData toolsData = getToolData(id);
-        if (toolsData != null) {
-            toolsData.setType(type);
-            cacheToolData(id, toolsData);
-        }
-    }
-
 }
