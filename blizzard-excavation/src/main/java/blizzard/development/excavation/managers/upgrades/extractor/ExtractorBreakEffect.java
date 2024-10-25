@@ -1,7 +1,6 @@
 package blizzard.development.excavation.managers.upgrades.extractor;
 
 import blizzard.development.excavation.database.cache.methods.PlayerCacheMethod;
-import blizzard.development.excavation.listeners.excavation.ExcavationListener;
 import blizzard.development.excavation.tasks.BlockRegenTask;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -11,13 +10,13 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 
-public class ExcavatorBreakEffect {
+public class ExtractorBreakEffect {
     private final JavaPlugin plugin;
     private final Random random;
     private final PlayerCacheMethod playerCacheMethod = new PlayerCacheMethod();
     private final Map<Player, List<Block>> brokenBlocksMap = new HashMap<>(); // Map para armazenar listas de blocos quebrados por jogador
 
-    public ExcavatorBreakEffect(JavaPlugin plugin) {
+    public ExtractorBreakEffect(JavaPlugin plugin) {
         this.plugin = plugin;
         this.random = new Random();
     }

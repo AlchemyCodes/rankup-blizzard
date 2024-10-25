@@ -7,12 +7,13 @@ public class Main extends JavaPlugin {
 
     public static Main instance;
 
+
     @Override
     public void onEnable() {
         instance = this;
 
         PluginImpl pluginImpl = new PluginImpl(this);
-        pluginImpl.onLoad();
+        pluginImpl.onEnable();
     }
 
     public static Main getInstance() {

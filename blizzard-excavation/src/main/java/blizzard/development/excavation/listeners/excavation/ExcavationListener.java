@@ -7,9 +7,9 @@ import blizzard.development.excavation.database.cache.methods.PlayerCacheMethod;
 import blizzard.development.excavation.excavation.item.ExcavatorBuildItem;
 import blizzard.development.excavation.excavation.events.ExcavationBlockBreakEvent;
 import blizzard.development.excavation.managers.RewardManager;
-import blizzard.development.excavation.managers.upgrades.UpgradeExcavatorManager;
+import blizzard.development.excavation.managers.upgrades.ExcavatorUpgradeManager;
 import blizzard.development.excavation.managers.upgrades.agility.AgilityManager;
-import blizzard.development.excavation.managers.upgrades.extractor.ExcavatorBreakEffect;
+import blizzard.development.excavation.managers.upgrades.extractor.ExtractorManager;
 import blizzard.development.excavation.tasks.BlockRegenTask;
 import blizzard.development.excavation.tasks.HologramTask;
 import org.bukkit.Bukkit;
@@ -30,8 +30,6 @@ public class ExcavationListener implements Listener {
 
     private final PlayerCacheMethod playerCacheMethod = new PlayerCacheMethod();
     private final ExcavatorCacheMethod excavatorCacheMethod = new ExcavatorCacheMethod();
-    private final UpgradeExcavatorManager upgradeExcavatorManager = new UpgradeExcavatorManager();
-    private final AgilityManager agilityManager = new AgilityManager();
     private final HologramTask hologramTask = new HologramTask();
     private final ExcavatorBuildItem excavatorBuildItem = new ExcavatorBuildItem();
     public static Map<Player, Block> blocks = new HashMap<>();
@@ -72,28 +70,15 @@ public class ExcavationListener implements Listener {
 
 
             if (hasPersistentData(Main.getInstance(), item, "excavator.tool")) {
-                double percentage = 1;
-
                 blocks.put(player, block);
 
-
-                int efficiencyLevel = excavatorCacheMethod.effiencyEnchant(player.getName());
-                int agilityLevel = excavatorCacheMethod.agilityEnchant(player.getName());
-                int extractorLevel = excavatorCacheMethod.extractorEnchant(player.getName());
-
-                player.getInventory().setItemInMainHand(excavatorBuildItem.buildExcavator(player, efficiencyLevel, agilityLevel, extractorLevel));
+                player.getInventory().setItemInMainHand(excavatorBuildItem.buildExcavator(player));
 
 
-                upgradeExcavatorManager.check(player, block);
-                agilityManager.check(player, excavatorCacheMethod);
-
-
-                if (RewardManager.reward(percentage)) {
-                    hologramTask.initializeHologramTask(player, block);
-                    player.sendActionBar("§b§lYAY! §bVocê encontrou um Fóssil de Mamute.");
-
-                    FossilAPI.setFossilBalance(player, FossilAPI.getFossilBalance(player) + 1);
-                }
+                AgilityManager.check(player, excavatorCacheMethod);
+                ExcavatorUpgradeManager.check(player, block);
+                RewardManager.check(player, block, hologramTask);
+                ExtractorManager.check(player, block);
 
                 ExcavationListener.blocks.forEach(((players, blocks) -> {
                     BlockRegenTask.create(blocks, Material.COARSE_DIRT, 5);
