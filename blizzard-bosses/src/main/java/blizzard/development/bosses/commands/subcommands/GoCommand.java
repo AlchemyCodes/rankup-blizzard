@@ -1,6 +1,6 @@
 package blizzard.development.bosses.commands.subcommands;
 
-import blizzard.development.bosses.inventories.BossesInventory;
+import blizzard.development.bosses.methods.GeneralMethods;
 import blizzard.development.bosses.utils.PluginImpl;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
@@ -44,7 +44,6 @@ public class GoCommand extends BaseCommand {
     }
 
     public static void sendPlayerToWorld(Player player, Boolean isInBossesWorld) {
-
         String worldSpawn = PluginImpl.getInstance().Locations.getConfig().getString("spawn.location.world");
         double x = PluginImpl.getInstance().Locations.getConfig().getDouble("spawn.location.x");
         double y = PluginImpl.getInstance().Locations.getConfig().getDouble("spawn.location.y");
@@ -60,6 +59,8 @@ public class GoCommand extends BaseCommand {
         World world = Bukkit.getWorld(worldSpawn);
 
         if (isInBossesWorld) {
+            GeneralMethods.removePlayerFromWorld(player);
+
             player.performCommand("spawn");
 
             player.sendTitle(
@@ -70,6 +71,8 @@ public class GoCommand extends BaseCommand {
                     20
             );
         } else {
+            GeneralMethods.setPlayerInWorld(player);
+
             player.teleport(
                     new Location(
                             world,

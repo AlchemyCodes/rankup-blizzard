@@ -1,5 +1,6 @@
 package blizzard.development.bosses.inventories;
 
+import blizzard.development.bosses.methods.GeneralMethods;
 import blizzard.development.bosses.utils.PluginImpl;
 import blizzard.development.bosses.utils.items.ItemBuilder;
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
@@ -13,7 +14,6 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
-import java.util.Objects;
 
 public class BossesInventory {
     public static void open(Player player) {
@@ -45,11 +45,11 @@ public class BossesInventory {
             event.setCancelled(true);
         });
 
-        boolean isInBossWorld = player.getWorld().equals(Bukkit.getWorld(Objects.requireNonNull(PluginImpl.getInstance().Locations.getConfig().getString("spawn.location.world"))));
+        boolean playerBossWorldState = GeneralMethods.getPlayerWorldState(player);
 
         pane.addItem(stockItem, Slot.fromIndex(10));
         pane.addItem(friendsItem, Slot.fromIndex(12));
-        pane.addItem(isInBossWorld ? leaveWorldItem : enterWorldItem, Slot.fromIndex(14));
+        pane.addItem(playerBossWorldState ? leaveWorldItem : enterWorldItem, Slot.fromIndex(14));
         pane.addItem(rankingItem, Slot.fromIndex(16));
 
         inventory.addPane(pane);
@@ -123,7 +123,6 @@ public class BossesInventory {
 
 
     private static void sendPlayerToWorld(Player player) {
-
         String worldSpawn = PluginImpl.getInstance().Locations.getConfig().getString("spawn.location.world");
         double x = PluginImpl.getInstance().Locations.getConfig().getDouble("spawn.location.x");
         double y = PluginImpl.getInstance().Locations.getConfig().getDouble("spawn.location.y");
@@ -138,8 +137,18 @@ public class BossesInventory {
 
         World world = Bukkit.getWorld(worldSpawn);
 
+        if (GeneralMethods.getPlayerWorldState(player)) {
+            player.performCommand("spawn");
 
-        if (!player.getWorld().equals(world)) {
+            player.sendTitle(
+                    "§c§lBOSSES!",
+                    "§cVocê saiu da área de bosses.",
+                    10,
+                    70,
+                    20
+            );
+            GeneralMethods.removePlayerFromWorld(player);
+        } else {
             player.teleport(
                     new Location(
                             world,
@@ -157,17 +166,7 @@ public class BossesInventory {
                     70,
                     20
             );
-            return;
+            GeneralMethods.setPlayerInWorld(player);
         }
-
-        player.performCommand("spawn");
-
-        player.sendTitle(
-                "§c§lBOSSES!",
-                "§cVocê saiu da área de bosses.",
-                10,
-                70,
-                20
-        );
     }
 }

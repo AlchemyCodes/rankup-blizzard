@@ -2,7 +2,6 @@ package blizzard.development.bosses.utils;
 
 import blizzard.development.bosses.commands.BossesCommand;
 import blizzard.development.bosses.commands.subcommands.*;
-import blizzard.development.bosses.currencies.CoinsCurrency;
 import blizzard.development.bosses.database.DatabaseConnection;
 import blizzard.development.bosses.database.cache.ToolsCacheManager;
 import blizzard.development.bosses.database.dao.PlayersDAO;
@@ -10,15 +9,18 @@ import blizzard.development.bosses.database.dao.ToolsDAO;
 import blizzard.development.bosses.database.storage.ToolsData;
 import blizzard.development.bosses.handlers.eggs.BigFootEgg;
 import blizzard.development.bosses.listeners.bosses.BossesAreaListener;
+import blizzard.development.bosses.listeners.bosses.BossesGeneralListener;
 import blizzard.development.bosses.listeners.commons.PlayersJoinListener;
 import blizzard.development.bosses.listeners.commons.PlayersQuitListener;
 import blizzard.development.bosses.managers.BatchManager;
+import blizzard.development.bosses.methods.GeneralMethods;
 import blizzard.development.bosses.tasks.PlayersSaveTask;
 import blizzard.development.bosses.tasks.ToolsSaveTask;
 import blizzard.development.bosses.utils.config.ConfigUtils;
 import co.aikar.commands.Locales;
 import co.aikar.commands.PaperCommandManager;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -57,19 +59,13 @@ public class PluginImpl {
         registerListeners();
         registerCommands();
         BatchManager.initialize(this.plugin);
-        try {
-            List<ToolsData> allTools = toolsDAO.getAllToolsData();
-            for (ToolsData tool : allTools) {
-                ToolsCacheManager.cacheToolData(tool.getId(), tool);
-            }
-        } catch (SQLException exception) {
-            throw new RuntimeException(exception);
-        }
-        CoinsCurrency.setupEconomy();
     }
 
     public void onUnload() {
         DatabaseConnection.getInstance().close();
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            GeneralMethods.removePlayerFromWorld(player);
+        }
     }
 
     public void registerDatabase() {
@@ -81,6 +77,15 @@ public class PluginImpl {
 
         new PlayersSaveTask(playersDAO).runTaskTimerAsynchronously(plugin, 0, 20L * 3);
         new ToolsSaveTask(toolsDAO).runTaskTimerAsynchronously(plugin, 0, 20L * 3);
+
+        try {
+            List<ToolsData> allTools = toolsDAO.getAllToolsData();
+            for (ToolsData tool : allTools) {
+                ToolsCacheManager.cacheToolData(tool.getId(), tool);
+            }
+        } catch (SQLException exception) {
+            throw new RuntimeException(exception);
+        }
     }
 
     private void registerListeners() {
@@ -90,6 +95,7 @@ public class PluginImpl {
 
         // Bosses
         pluginManager.registerEvents(new BossesAreaListener(), plugin);
+        pluginManager.registerEvents(new BossesGeneralListener(), plugin);
 
         // Eggs
         pluginManager.registerEvents(new BigFootEgg(), plugin);
