@@ -55,44 +55,44 @@ public class AreaCommand extends BaseCommand implements PacketListener {
     }
 
 
-    @Override
-    public void onPacketReceive(PacketReceiveEvent event) {
-        User user = event.getUser();
-
-        if (event.getPacketType() == PacketType.Play.Client.PLAYER_DIGGING) {
-            WrapperPlayClientPlayerDigging digging = new WrapperPlayClientPlayerDigging(event);
-
-            if (digging.getAction() == DiggingAction.FINISHED_DIGGING) {
-                event.setCancelled(true);
-
-                user.sendTitle(
-                        "§4§lPACKETS",
-                        "§4Quebrou um bloco.",
-                        10,
-                        70,
-                        20
-                );
-            }
-            return;
-        }
-
-        if (event.getPacketType() == PacketType.Play.Client.USE_ITEM) {
-            WrapperPlayClientUseItem wrapper = new WrapperPlayClientUseItem(event);
-
-            Vector3i blockPos = wrapper.readBlockPosition();
-
-
-            event.setCancelled(true);
-
-            user.sendTitle(
-                    "§aBloco Protegido!",
-                    "§aVocê não pode interagir com este bloco.",
-                    10,
-                    70,
-                    20
-            );
-
-
-        }
-    }
+//    @Override
+//    public void onPacketReceive(PacketReceiveEvent event) {
+//        User user = event.getUser();
+//
+//        if (event.getPacketType() == PacketType.Play.Client.PLAYER_DIGGING) {
+//            WrapperPlayClientPlayerDigging digging = new WrapperPlayClientPlayerDigging(event);
+//
+//            if (digging.getAction() == DiggingAction.FINISHED_DIGGING) {
+//                event.setCancelled(true);
+//
+//                user.sendTitle(
+//                        "§4§lPACKETS",
+//                        "§4Quebrou um bloco.",
+//                        10,
+//                        70,
+//                        20
+//                );
+//            }
+//            return;
+//        }
+//
+//        if (event.getPacketType() == PacketType.Play.Client.USE_ITEM) {
+//            WrapperPlayClientUseItem wrapper = new WrapperPlayClientUseItem(event);
+//
+//            Vector3i blockPos = wrapper.readBlockPosition();
+//
+//
+//            event.setCancelled(true);
+//
+//            user.sendTitle(
+//                    "§aBloco Protegido!",
+//                    "§aVocê não pode interagir com este bloco.",
+//                    10,
+//                    70,
+//                    20
+//            );
+//
+//
+//        }
+//    }
 }

@@ -17,4 +17,10 @@ public class FossilAPI {
 
         api.setBalance(player, Currencies.FOSSILS, amount);
     }
+
+    public static void removeFossil(Player player, double amount) {
+        CurrenciesAPI api = CurrenciesAPI.getInstance();
+
+        api.removeBalance(player, Currencies.FOSSILS, amount);
+    }
 }

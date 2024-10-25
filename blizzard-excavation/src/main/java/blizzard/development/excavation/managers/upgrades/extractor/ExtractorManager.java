@@ -33,8 +33,8 @@ public class ExtractorManager {
 
     public static double activation(int level) {
 
-        double base = 0.2;
-        double increase = 0.5;
+        double base = 0.002;
+        double increase = 0.005;
 
         return Math.min(base + (increase * level), 100.0);
     }

@@ -3,11 +3,13 @@ package blizzard.development.excavation.inventories;
 import blizzard.development.excavation.builder.ItemBuilder;
 import blizzard.development.excavation.database.cache.methods.ExcavatorCacheMethod;
 import blizzard.development.excavation.database.cache.methods.PlayerCacheMethod;
+import blizzard.development.excavation.inventories.shop.ShopInventory;
 import blizzard.development.excavation.utils.LocationUtils;
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
 import com.github.stefvanschie.inventoryframework.pane.util.Slot;
+import eu.decentsoftware.holograms.api.utils.scheduler.S;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -24,6 +26,7 @@ public class ExcavationInventory {
         PlayerCacheMethod playerCacheMethod = new PlayerCacheMethod();
         ExcavatorCacheMethod excavatorCacheMethod = new ExcavatorCacheMethod();
 
+
         GuiItem enchantments = new GuiItem(enchantments(), event -> {
             EnchantmentInventory enchantmentInventory = new EnchantmentInventory();
             enchantmentInventory.open(player, excavatorCacheMethod);
@@ -32,6 +35,9 @@ public class ExcavationInventory {
         });
 
         GuiItem shop = new GuiItem(shop(), event -> {
+            ShopInventory shopInventory = new ShopInventory();
+            shopInventory.open(player);
+
             event.setCancelled(true);
         });
 

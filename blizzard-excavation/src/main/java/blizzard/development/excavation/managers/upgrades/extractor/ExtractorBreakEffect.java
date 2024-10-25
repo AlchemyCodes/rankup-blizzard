@@ -14,7 +14,7 @@ public class ExtractorBreakEffect {
     private final JavaPlugin plugin;
     private final Random random;
     private final PlayerCacheMethod playerCacheMethod = new PlayerCacheMethod();
-    private final Map<Player, List<Block>> brokenBlocksMap = new HashMap<>(); // Map para armazenar listas de blocos quebrados por jogador
+    private final Map<Player, List<Block>> brokenBlocksMap = new HashMap<>();
 
     public ExtractorBreakEffect(JavaPlugin plugin) {
         this.plugin = plugin;
@@ -23,9 +23,9 @@ public class ExtractorBreakEffect {
 
     public void startExcavatorBreak(Block centerBlock, Player player, int radius, int depth) {
         List<Block> affectedBlocks = getBlocksInCone(centerBlock, radius, depth);
-        brokenBlocksMap.putIfAbsent(player, new ArrayList<>()); // Inicializa a lista de blocos para o jogador, se não existir
+        brokenBlocksMap.putIfAbsent(player, new ArrayList<>());
 
-        player.playSound(centerBlock.getLocation(), Sound.BLOCK_ANCIENT_DEBRIS_BREAK, 1.0f, 0.5f);
+        player.playSound(centerBlock.getLocation(), Sound.BLOCK_NOTE_BLOCK_HARP, 1.0f, 0.5f);
 
         new BukkitRunnable() {
             double time = 0;
@@ -61,7 +61,6 @@ public class ExtractorBreakEffect {
                         blocksBrokenThisTick++;
                         totalBlocksBroken++;
 
-                        // Adiciona o bloco à lista de blocos quebrados do jogador
                         brokenBlocksMap.get(player).add(block);
 
                         if (random.nextInt(4) == 0) {
