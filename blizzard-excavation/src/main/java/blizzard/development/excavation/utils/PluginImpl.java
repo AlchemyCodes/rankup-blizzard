@@ -2,7 +2,8 @@ package blizzard.development.excavation.utils;
 
 import blizzard.development.excavation.Main;
 import blizzard.development.excavation.commands.CommandRegistry;
-import blizzard.development.excavation.database.DatabaseConnection;
+import blizzard.development.excavation.commands.geral.AreaCommand;
+import blizzard.development.excavation.commands.geral.ExcavateCommand;
 import blizzard.development.excavation.database.cache.ExcavatorCacheManager;
 import blizzard.development.excavation.database.dao.ExcavatorDAO;
 import blizzard.development.excavation.database.dao.PlayerDAO;
@@ -13,6 +14,9 @@ import blizzard.development.excavation.tasks.PlayerSaveTask;
 import blizzard.development.excavation.utils.config.ConfigUtils;
 import co.aikar.commands.Locales;
 import co.aikar.commands.PaperCommandManager;
+import com.github.retrooper.packetevents.PacketEvents;
+import com.github.retrooper.packetevents.event.PacketListenerPriority;
+import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -42,13 +46,29 @@ public class PluginImpl {
     }
 
     public void onLoad() {
+        PacketEvents.setAPI(SpigotPacketEventsBuilder.build(Main.getInstance()));
+        PacketEvents.getAPI().load();
+    }
+    public void onEnable() {
         Config.saveDefaultConfig();
         Locations.saveDefaultConfig();
         Database.saveDefaultConfig();
         registerDatabase();
+
+
         registerListeners();
-        registerTasks();
         registerCommands();
+        registerTasks();
+
+        PacketEvents.setAPI(SpigotPacketEventsBuilder.build(Main.getInstance()));
+        PacketEvents.getAPI().load();
+
+        PacketEvents.getAPI().getEventManager().registerListener(
+                new AreaCommand(), PacketListenerPriority.HIGHEST
+        );
+
+        PacketEvents.getAPI().init();
+
 
         try {
             List<ExcavatorData> allExcavator = excavatorDAO.getAllExcavatorData();
@@ -67,7 +87,8 @@ public class PluginImpl {
 
     }
 
-    public void onUnload() {
+    public void onDisable() {
+        PacketEvents.getAPI().terminate();
     }
 
     public void registerDatabase() {

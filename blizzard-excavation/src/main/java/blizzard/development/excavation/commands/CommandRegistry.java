@@ -1,6 +1,7 @@
 package blizzard.development.excavation.commands;
 
 import blizzard.development.excavation.Main;
+import blizzard.development.excavation.commands.geral.AreaCommand;
 import blizzard.development.excavation.commands.geral.ExcavateCommand;
 import co.aikar.commands.PaperCommandManager;
 
@@ -13,6 +14,7 @@ public class CommandRegistry {
 
         Arrays.asList(
                 new ExcavateCommand()
+//                new AreaCommand()
         ).forEach(paperCommandManager::registerCommand);
     }
 }
