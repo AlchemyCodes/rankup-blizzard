@@ -30,6 +30,7 @@ public class PluginImpl {
     private static ExcavatorDAO excavatorDAO;
     private static PlayerDAO playerDAO;
     public ConfigUtils Config;
+    public ConfigUtils Shop;
     public ConfigUtils Locations;
     public ConfigUtils Database;
 
@@ -41,6 +42,7 @@ public class PluginImpl {
         excavatorDAO = new ExcavatorDAO();
         playerDAO = new PlayerDAO();
         Config = new ConfigUtils((JavaPlugin) plugin, "config.yml");
+        Shop = new ConfigUtils((JavaPlugin) plugin, "shop.yml");
         Locations = new ConfigUtils((JavaPlugin) plugin, "locations.yml");
         Database = new ConfigUtils((JavaPlugin) plugin, "database.yml");
     }
@@ -51,6 +53,7 @@ public class PluginImpl {
     }
     public void onEnable() {
         Config.saveDefaultConfig();
+        Shop.saveDefaultConfig();
         Locations.saveDefaultConfig();
         Database.saveDefaultConfig();
         registerDatabase();
@@ -60,14 +63,14 @@ public class PluginImpl {
         registerCommands();
         registerTasks();
 
-        PacketEvents.setAPI(SpigotPacketEventsBuilder.build(Main.getInstance()));
-        PacketEvents.getAPI().load();
-
-        PacketEvents.getAPI().getEventManager().registerListener(
-                new AreaCommand(), PacketListenerPriority.HIGHEST
-        );
-
-        PacketEvents.getAPI().init();
+//        PacketEvents.setAPI(SpigotPacketEventsBuilder.build(Main.getInstance()));
+//        PacketEvents.getAPI().load();
+//
+//        PacketEvents.getAPI().getEventManager().registerListener(
+//                new AreaCommand(), PacketListenerPriority.HIGHEST
+//        );
+//
+//        PacketEvents.getAPI().init();
 
 
         try {
