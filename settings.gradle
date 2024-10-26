@@ -7,3 +7,5 @@ include 'blizzard-currencies'
 include 'blizzard-core'
 include 'blizzard-excavation'
 include 'blizzard-rankup'
+include 'blizzard-spawners'
+

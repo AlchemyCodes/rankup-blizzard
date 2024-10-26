@@ -1,0 +1,6 @@
+name: blizzard-spawners
+version: '${version}'
+main: blizzard.development.spawners.Main
+api-version: '1.20'
+commands:
+  spawners:
