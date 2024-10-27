@@ -12,6 +12,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.sql.SQLException;
 
@@ -57,8 +58,7 @@ public class PlayerListener implements Listener {
             }
         }
 
-        PlayerCacheManager playerCacheManager = new PlayerCacheManager();
-        playerCacheManager.cachePlayerData(player, playerData);
+        PlayerCacheManager.cachePlayerData(player.getName(), playerData);
     }
 
     @EventHandler
@@ -67,5 +67,16 @@ public class PlayerListener implements Listener {
 
         PlayerCacheMethod playerCacheMethod = new PlayerCacheMethod();
         playerCacheMethod.removeInExcavation(player);
+    }
+
+    @EventHandler
+    public void onTeleport(PlayerTeleportEvent event) {
+        Player player = event.getPlayer();
+
+        PlayerCacheMethod playerCacheMethod = new PlayerCacheMethod();
+
+        if (playerCacheMethod.isInExcavation(player)) {
+            playerCacheMethod.removeInExcavation(player);
+        }
     }
 }

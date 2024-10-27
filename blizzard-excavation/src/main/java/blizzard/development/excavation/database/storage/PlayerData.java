@@ -1,5 +1,7 @@
 package blizzard.development.excavation.database.storage;
 
+import org.bukkit.entity.Player;
+
 public class PlayerData {
 
     private String uuid, nickname;

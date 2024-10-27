@@ -1,4 +1,4 @@
-package blizzard.development.excavation.inventories;
+package blizzard.development.excavation.inventories.enchantment;
 
 import blizzard.development.excavation.builder.ItemBuilder;
 import blizzard.development.excavation.database.cache.methods.ExcavatorCacheMethod;

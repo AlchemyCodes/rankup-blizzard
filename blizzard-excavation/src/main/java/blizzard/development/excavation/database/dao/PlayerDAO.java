@@ -4,6 +4,8 @@ import blizzard.development.excavation.database.DatabaseConnection;
 import blizzard.development.excavation.database.storage.PlayerData;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class PlayerDAO {
@@ -113,5 +115,48 @@ public class PlayerDAO {
             }
         });
     }
+
+    public List<PlayerData> getAllPlayersData() throws SQLException {
+        String sql = "SELECT * FROM excavator_player";
+        List<PlayerData> playerDataList = new ArrayList<>();
+
+        try (Connection connection = DatabaseConnection.getInstance().getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(sql)) {
+
+            while (resultSet.next()) {
+                playerDataList.add(new PlayerData(
+                        resultSet.getString("uuid"),
+                        resultSet.getString("nickname"),
+                        resultSet.getBoolean("excavation"),
+                        resultSet.getInt("blocks")
+                ));
+            }
+        }
+        return playerDataList;
+    }
+
+//    public List<PlayerData> getTopPlayers() throws Exception {
+//        List<PlayerData> topPlayers = new ArrayList<>();
+//        String sql = "SELECT uuid, nickname, excavation, blocks FROM excavator_player ORDER BY blocks DESC LIMIT 10";
+//
+//        try (Connection connection = DatabaseConnection.getInstance().getConnection();
+//             PreparedStatement preparedStatement = connection.prepareStatement(sql);
+//             ResultSet resultSet = preparedStatement.executeQuery()) {
+//
+//            while (resultSet.next()) {
+//                PlayerData playerData = new PlayerData(
+//                        resultSet.getString("uuid"),
+//                        resultSet.getString("nickname"),
+//                        resultSet.getBoolean("excavation"),
+//                        resultSet.getInt("blocks"));
+//                topPlayers.add(playerData);
+//            }
+//        } catch (SQLException exception) {
+//            throw new RuntimeException("Erro ao buscar top players: " + exception.getMessage(), exception);
+//        }
+//
+//        return topPlayers;
+//    }
 
 }

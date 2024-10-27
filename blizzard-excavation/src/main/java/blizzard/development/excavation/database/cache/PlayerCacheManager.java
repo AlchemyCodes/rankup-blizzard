@@ -4,7 +4,9 @@ import blizzard.development.excavation.database.dao.PlayerDAO;
 import blizzard.development.excavation.database.storage.PlayerData;
 import org.bukkit.entity.Player;
 
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 public class PlayerCacheManager {
 
@@ -16,8 +18,8 @@ public class PlayerCacheManager {
         return getPlayerDataByUUID(player.getUniqueId().toString());
     }
 
-    public void cachePlayerData(Player player, PlayerData playerData) {
-        playerCache.put(player.getUniqueId().toString(), playerData);
+    public static void cachePlayerData(String player, PlayerData playerData) {
+        playerCache.put(player, playerData);
     }
 
     public PlayerData getPlayerDataByUUID(String playerUUID) {
@@ -33,4 +35,10 @@ public class PlayerCacheManager {
         return playerData;
     }
 
+    public List<PlayerData> getTopPlayers() {
+        return playerCache.values().stream()
+                .sorted((p1, p2) -> Integer.compare(p2.getBlocks(), p1.getBlocks()))
+                .limit(10)
+                .collect(Collectors.toList());
+    }
 }
