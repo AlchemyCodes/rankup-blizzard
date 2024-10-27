@@ -1,5 +1,6 @@
 package blizzard.development.plantations.utils;
 
+import blizzard.development.plantations.listeners.ListenerRegistry;
 import blizzard.development.plantations.utils.config.ConfigUtils;
 import co.aikar.commands.Locales;
 import co.aikar.commands.PaperCommandManager;
@@ -27,6 +28,10 @@ public class PluginImpl {
     public void onLoad() {
     }
     public void onEnable() {
+        registerDatabase();
+        registerTasks();
+        registerListeners();
+        registerCommands();
     }
 
     public void onDisable() {
@@ -36,7 +41,8 @@ public class PluginImpl {
     }
 
     private void registerListeners() {
-
+        ListenerRegistry listenerRegistry = new ListenerRegistry();
+        listenerRegistry.register();
     }
 
     private void registerTasks() {
