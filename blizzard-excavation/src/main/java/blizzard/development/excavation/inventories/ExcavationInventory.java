@@ -3,13 +3,15 @@ package blizzard.development.excavation.inventories;
 import blizzard.development.excavation.builder.ItemBuilder;
 import blizzard.development.excavation.database.cache.methods.ExcavatorCacheMethod;
 import blizzard.development.excavation.database.cache.methods.PlayerCacheMethod;
+import blizzard.development.excavation.inventories.enchantment.EnchantmentInventory;
+import blizzard.development.excavation.inventories.ranking.RankingInventory;
 import blizzard.development.excavation.inventories.shop.ShopInventory;
 import blizzard.development.excavation.utils.LocationUtils;
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
 import com.github.stefvanschie.inventoryframework.pane.util.Slot;
-import eu.decentsoftware.holograms.api.utils.scheduler.S;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -58,7 +60,7 @@ public class ExcavationInventory {
                 playerCacheMethod.setInExcavation(player);
             } else {
 
-                player.teleport(player.getWorld().getSpawnLocation());
+                player.teleport(Bukkit.getWorld("spawn2").getSpawnLocation());
                 player.sendTitle(
                         "§c§lEscavação!",
                         "§cVocê saiu da escavação.",
@@ -78,6 +80,9 @@ public class ExcavationInventory {
         });
 
         GuiItem classification = new GuiItem(classification(), event -> {
+            RankingInventory rankingInventory = new RankingInventory();
+            rankingInventory.open(player);
+
             event.setCancelled(true);
         });
 

@@ -1,0 +1,101 @@
+ranking:
+  1:
+    item: PLAYER_HEAD
+    top: 0
+    slot: 10
+    display-name: "§6Destaque #§l1"
+    lore:
+      - ""
+      - " &7Nome: §f{player-name}"
+      - " &7Blocos: &f{blocks}"
+      - ""
+  2:
+    item: PLAYER_HEAD
+    top: 1
+    slot: 11
+    display-name: "§6Destaque #§l2"
+    lore:
+      - ""
+      - " &7Nome: §f{player-name}"
+      - " &7Blocos: &f{blocks}"
+      - ""
+  3:
+    item: PLAYER_HEAD
+    top: 2
+    slot: 12
+    display-name: "§6Destaque #§l3"
+    lore:
+      - ""
+      - " &7Nome: §f{player-name}"
+      - " &7Blocos: &f{blocks}"
+      - ""
+  4:
+    item: PLAYER_HEAD
+    top: 3
+    slot: 13
+    display-name: "§6Destaque #§l4"
+    lore:
+      - ""
+      - " &7Nome: §f{player-name}"
+      - " &7Blocos: &f{blocks}"
+      - ""
+  5:
+    item: PLAYER_HEAD
+    top: 4
+    slot: 14
+    display-name: "§6Destaque #§l5"
+    lore:
+      - ""
+      - " &7Nome: §f{player-name}"
+      - " &7Blocos: &f{blocks}"
+      - ""
+  6:
+    item: PLAYER_HEAD
+    top: 5
+    slot: 15
+    display-name: "§6Destaque #§l6"
+    lore:
+      - ""
+      - " &7Nome: §f{player-name}"
+      - " &7Blocos: &f{blocks}"
+      - ""
+  7:
+    item: PLAYER_HEAD
+    top: 6
+    slot: 16
+    display-name: "§6Destaque #§l7"
+    lore:
+      - ""
+      - " &7Nome: §f{player-name}"
+      - " &7Blocos: &f{blocks}"
+      - ""
+  8:
+    item: PLAYER_HEAD
+    top: 7
+    slot: 21
+    display-name: "§6Destaque #§l8"
+    lore:
+      - ""
+      - " &7Nome: §f{player-name}"
+      - " &7Blocos: &f{blocks}"
+      - ""
+  9:
+    item: PLAYER_HEAD
+    top: 8
+    slot: 22
+    display-name: "§6Destaque #§l9"
+    lore:
+      - ""
+      - " &7Nome: §f{player-name}"
+      - " &7Blocos: &f{blocks}"
+      - ""
+  10:
+    item: PLAYER_HEAD
+    top: 9
+    slot: 23
+    display-name: "§6Destaque #§l10"
+    lore:
+      - ""
+      - " &7Nome: §f{player-name}"
+      - " &7Blocos: &f{blocks}"
+      - ""

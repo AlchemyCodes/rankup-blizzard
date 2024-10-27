@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 public class ShopInventory {
 
-    public static void open(Player player) {
+    public void open(Player player) {
         ChestGui inventory = new ChestGui(5, "§8Loja de Itens");
 
         StaticPane pane = new StaticPane(0, 0, 9, 5);
@@ -41,16 +41,17 @@ public class ShopInventory {
         player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.5f, 0.5f);
     }
 
-    public static ItemStack backwardButton() {
+    public ItemStack backwardButton() {
         return new ItemBuilder(Material.REDSTONE)
-                .setDisplayName("<#f70000>Voltar<#f70000>")
+                .setDisplayName("§cVoltar")
                 .setLore(List.of(
-                        "§7Clique para voltar."
+                        "§7Clique para voltar",
+                        "§7ao menu anterior."
                 ))
                 .build();
     }
 
-    private static void items(StaticPane pane, String configPath, FileConfiguration config, Player player) {
+    public void items(StaticPane pane, String configPath, FileConfiguration config, Player player) {
         for (String item : config.getConfigurationSection(configPath).getKeys(false)) {
 
             boolean skull = config.getBoolean(configPath + "." + item + ".skull");
@@ -80,7 +81,7 @@ public class ShopInventory {
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
 
                         FossilAPI.removeFossil(player, cost);
-                        ShopInventory.open(player);
+                        open(player);
                     }
 
                     event.setCancelled(true);
@@ -104,7 +105,7 @@ public class ShopInventory {
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
 
                         FossilAPI.removeFossil(player, cost);
-                        ShopInventory.open(player);
+                        open(player);
                     }
 
                     event.setCancelled(true);
