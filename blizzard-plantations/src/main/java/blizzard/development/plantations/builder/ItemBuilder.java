@@ -99,6 +99,16 @@ public class ItemBuilder {
         return this;
     }
 
+    public ItemStack build(int amount) {
+        itemMeta.setUnbreakable(true);
+        itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        itemMeta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+        itemStack.setItemMeta(itemMeta);
+        itemStack.setAmount(amount);
+        return itemStack;
+    }
+
     public ItemStack build() {
         itemMeta.setUnbreakable(true);
         itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
