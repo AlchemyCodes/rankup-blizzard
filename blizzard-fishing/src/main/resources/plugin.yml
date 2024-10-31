@@ -1,0 +1,6 @@
+name: blizzard-fishing
+version: '1.0-SNAPSHOT'
+main: blizzard.development.fishing.Main
+api-version: '1.20'
+commands:
+

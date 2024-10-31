@@ -1,0 +1,31 @@
+fishes:
+  tilapia:
+    rarity: comum
+    price: 1
+
+  bacalhau:
+    rarity: comum
+    price: 2
+
+  salmao:
+    rarity: comum
+    price: 3
+  atum:
+    rarity: comum
+    price: 4
+
+  baiacu:
+    rarity: comum
+    price: 5
+
+  sardinha:
+    rarity: comum
+    price: 6
+
+  linguado:
+    rarity: comum
+    price: 7
+
+  pirarucu:
+    rarity: comum
+    price: 8

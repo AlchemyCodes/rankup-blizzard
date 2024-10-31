@@ -9,4 +9,6 @@ include 'blizzard-excavation'
 include 'blizzard-rankup'
 include 'blizzard-spawners'
 include 'blizzard-plantations'
+include 'blizzard-fishing'
+
 
