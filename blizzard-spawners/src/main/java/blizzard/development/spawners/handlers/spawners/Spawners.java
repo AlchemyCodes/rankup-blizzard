@@ -1,7 +1,8 @@
 package blizzard.development.spawners.handlers.spawners;
 
 public enum Spawners {
-    PIG("pig");
+    PIG("porco"),
+    COW("vaca");
 
     private final String type;
 

@@ -7,11 +7,11 @@ import blizzard.development.spawners.managers.BatchManager;
 import org.bukkit.entity.Player;
 
 public class SpawnersMethods {
-    public static void createSpawner(Player player, String id, String location, Spawners spawner) {
+    public static void createSpawner(Player player, String id, String location, Spawners spawner, Double amount) {
         String type = spawner.getType();
         String nickname = player.getName();
         SpawnersData spawnersData = new SpawnersData(
-                id, type, location, nickname
+                id, type, amount, location, nickname
         );
         try {
             BatchManager.addToPendingQueue(spawnersData);

@@ -15,6 +15,9 @@ public class SpawnersCacheManager {
     public SpawnersData getSpawnerData(String id) {
         return spawnersCache.get(id);
     }
+    public SpawnersData getSpawnerDataByLocation(String location) {
+        return spawnersCache.get(location);
+    }
     public void removeSpawnerData(String id) {
         spawnersCache.remove(id);
     }
