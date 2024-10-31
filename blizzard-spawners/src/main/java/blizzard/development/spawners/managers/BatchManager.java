@@ -1,7 +1,5 @@
 package blizzard.development.spawners.managers;
 
-import blizzard.development.bosses.database.dao.ToolsDAO;
-import blizzard.development.bosses.database.storage.ToolsData;
 import blizzard.development.spawners.database.dao.SpawnersDAO;
 import blizzard.development.spawners.database.storage.SpawnersData;
 import org.bukkit.Bukkit;
