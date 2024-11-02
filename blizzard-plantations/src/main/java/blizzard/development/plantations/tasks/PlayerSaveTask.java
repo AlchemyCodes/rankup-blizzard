@@ -10,6 +10,7 @@ import java.sql.SQLException;
 public class PlayerSaveTask extends BukkitRunnable {
 
     private final PlayerDAO playerDAO;
+    private final PlayerCacheManager playerCacheManager = PlayerCacheManager.getInstance();
 
     public PlayerSaveTask(PlayerDAO playerDAO) {
         this.playerDAO = playerDAO;
@@ -17,14 +18,14 @@ public class PlayerSaveTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        PlayerCacheManager.playerCache.forEach((player, playerData) -> {
+        playerCacheManager.playerCache.forEach((player, playerData) -> {
             try {
                 playerDAO.updatePlayerData(playerData);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
+            } catch (SQLException exception) {
+                throw new RuntimeException("Erro ao atualizar dados do jogador " + playerData.getNickname(), exception);
             }
         });
 
-        Bukkit.getConsoleSender().sendMessage("§a[Escavação] §aSalvando " + Bukkit.getOnlinePlayers().size() + " jogadores do cache na database.");
+        Bukkit.getConsoleSender().sendMessage("§a[Estufa] §aSalvando " + Bukkit.getOnlinePlayers().size() + " jogadores do cache na database.");
     }
 }

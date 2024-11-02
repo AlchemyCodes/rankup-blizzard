@@ -4,22 +4,21 @@ import blizzard.development.plantations.database.dao.PlayerDAO;
 import blizzard.development.plantations.database.storage.PlayerData;
 import org.bukkit.entity.Player;
 
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class PlayerCacheManager {
 
-    public static final ConcurrentHashMap<String, PlayerData> playerCache = new ConcurrentHashMap<>();
-
+    private static final PlayerCacheManager instance = new PlayerCacheManager();
+    public final Map<String, PlayerData> playerCache = new HashMap<>();
     public final PlayerDAO playerDAO = new PlayerDAO();
+
+    public static PlayerCacheManager getInstance() {
+        return instance;
+    }
 
     public PlayerData getPlayerData(Player player) {
         return getPlayerDataByUUID(player.getUniqueId().toString());
-    }
-
-    public static void cachePlayerData(String player, PlayerData playerData) {
-        playerCache.put(player, playerData);
     }
 
     public PlayerData getPlayerDataByUUID(String playerUUID) {
@@ -35,10 +34,22 @@ public class PlayerCacheManager {
         return playerData;
     }
 
-    public List<PlayerData> getTopPlayers() {
+    public void cachePlayerData(String player, PlayerData playerData) {
+        playerCache.put(player, playerData);
+    }
+
+    public void removePlayerData(String playerId) {
+        playerCache.remove(playerId);
+    }
+
+    public void clearCache() {
+        playerCache.clear();
+    }
+
+    public List<PlayerData> getTopPlayers(int topCount) {
         return playerCache.values().stream()
                 .sorted((p1, p2) -> Integer.compare(p2.getPlantations(), p1.getPlantations()))
-                .limit(10)
+                .limit(topCount)
                 .collect(Collectors.toList());
     }
 }

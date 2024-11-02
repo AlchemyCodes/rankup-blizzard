@@ -2,13 +2,13 @@ package blizzard.development.plantations.database.storage;
 
 public class PlayerData {
 
-    private String nickname, uuid;
+    private String uuid, nickname;
     private Integer plantations;
     private Boolean isInPlantation;
 
-    public PlayerData(String nickname, String uuid, Integer plantations, boolean isInPlantation) {
-        this.nickname = nickname;
+    public PlayerData(String uuid, String nickname, Integer plantations, boolean isInPlantation) {
         this.uuid = uuid;
+        this.nickname = nickname;
         this.plantations = plantations;
         this.isInPlantation = isInPlantation;
     }

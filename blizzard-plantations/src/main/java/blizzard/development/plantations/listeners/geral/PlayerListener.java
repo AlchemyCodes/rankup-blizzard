@@ -3,9 +3,11 @@ package blizzard.development.plantations.listeners.geral;
 import blizzard.development.plantations.database.cache.PlayerCacheManager;
 import blizzard.development.plantations.database.dao.PlayerDAO;
 import blizzard.development.plantations.database.storage.PlayerData;
+import blizzard.development.plantations.plantations.adapters.ToolAdapter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import java.sql.SQLException;
@@ -13,6 +15,7 @@ import java.sql.SQLException;
 public class PlayerListener implements Listener {
 
     private final PlayerDAO playerDAO;
+    private final PlayerCacheManager playerCacheManager = PlayerCacheManager.getInstance();
 
     public PlayerListener(PlayerDAO playerDAO) {
         this.playerDAO = playerDAO;
@@ -35,6 +38,18 @@ public class PlayerListener implements Listener {
             }
         }
 
-        PlayerCacheManager.cachePlayerData(player.getUniqueId().toString(), playerData);
+        playerCacheManager.cachePlayerData(player.getName(), playerData);
+    }
+
+    @EventHandler
+    public void onChat(AsyncPlayerChatEvent event) {
+        Player player = event.getPlayer();
+        String message = event.getMessage();
+
+        if (message.equalsIgnoreCase("arar")) {
+            ToolAdapter toolAdapter = new ToolAdapter();
+            toolAdapter.givePlowingTool(player);
+            event.setCancelled(true);
+        }
     }
 }
