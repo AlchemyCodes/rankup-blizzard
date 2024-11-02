@@ -2,64 +2,52 @@ package blizzard.development.plantations.database.cache.methods;
 
 import blizzard.development.plantations.database.cache.PlayerCacheManager;
 import blizzard.development.plantations.database.storage.PlayerData;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffectType;
-
-import static blizzard.development.plantations.database.cache.PlayerCacheManager.playerCache;
 
 public class PlayerCacheMethod {
 
-    public Integer getBlocks(Player player) {
-        PlayerCacheManager playerCacheManager = new PlayerCacheManager();
+    private final PlayerCacheManager playerCacheManager = PlayerCacheManager.getInstance();
 
+    public Integer getPlantations(Player player) {
         PlayerData playerData = playerCacheManager.getPlayerData(player);
 
         if (playerData != null) {
-            playerCache.put(player.getUniqueId().toString(), playerData);
             return playerData.getPlantations();
         }
-
         return 0;
     }
 
-    public void setBlocks(Player player, int amount) {
-        PlayerCacheManager playerCacheManager = new PlayerCacheManager();
-
+    public void setPlantations(Player player, int amount) {
         PlayerData playerData = playerCacheManager.getPlayerData(player);
 
         if (playerData != null) {
             playerData.setPlantations(amount);
-            playerCache.put(player.getUniqueId().toString(), playerData);
+            playerCacheManager.playerCache.put(player.getName(), playerData);
+            Bukkit.getConsoleSender().sendMessage("§a[Debug] Plantations atualizadas para " + amount + " para o jogador " + player.getName());
         }
     }
 
     public void setInPlantation(Player player) {
-        PlayerCacheManager playerCacheManager = new PlayerCacheManager();
-
         PlayerData playerData = playerCacheManager.getPlayerData(player);
 
         if (playerData != null) {
             playerData.setInPlantation(true);
+            playerCacheManager.playerCache.put(player.getName(), playerData);
         }
-
     }
 
     public void removeInPlantation(Player player) {
-        PlayerCacheManager playerCacheManager = new PlayerCacheManager();
-
         PlayerData playerData = playerCacheManager.getPlayerData(player);
 
         if (playerData != null) {
             playerData.setInPlantation(false);
+            playerCacheManager.playerCache.put(player.getName(), playerData);
         }
-
     }
 
     public boolean isInPlantation(Player player) {
-        PlayerCacheManager playerCacheManager = new PlayerCacheManager();
         PlayerData playerData = playerCacheManager.getPlayerData(player);
-
         return playerData.getIsInPlantation();
     }
-
 }

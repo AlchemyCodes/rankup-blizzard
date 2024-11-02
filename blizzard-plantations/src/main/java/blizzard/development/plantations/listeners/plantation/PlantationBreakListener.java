@@ -59,6 +59,7 @@ public class PlantationBreakListener implements Listener {
                     PlantationRegenTask.create(plantations, Material.WHEAT, 5);
                 }));
 
+                playerCacheMethod.setPlantations(player, playerCacheMethod.getPlantations(player) + 1);
                 block.setType(Material.AIR);
             }
         }

@@ -1,6 +1,6 @@
 package blizzard.development.plantations.commands.farm;
 
-import blizzard.development.plantations.database.cache.methods.PlayerCacheMethod;
+import blizzard.development.plantations.inventories.FarmInventory;
 import blizzard.development.plantations.plantations.adapters.SeedAdapter;
 import blizzard.development.plantations.plantations.enums.SeedEnum;
 import co.aikar.commands.BaseCommand;
@@ -9,6 +9,8 @@ import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.Default;
 import co.aikar.commands.annotation.Subcommand;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -21,8 +23,8 @@ public class FarmCommand extends BaseCommand {
 
         Player player = (Player) commandSender;
 
-        PlayerCacheMethod playerCacheMethod = new PlayerCacheMethod();
-        playerCacheMethod.setInPlantation(player);
+        FarmInventory farmInventory = new FarmInventory();
+        farmInventory.open(player);
 
         // TODO: criar o inventário da estufa para o player.
     }
@@ -41,6 +43,7 @@ public class FarmCommand extends BaseCommand {
         }
 
 
+
         SeedAdapter seedAdapter = new SeedAdapter();
 
         switch (seed) {
@@ -56,6 +59,15 @@ public class FarmCommand extends BaseCommand {
                 player.sendMessage(" §cDisponíveis: §7[tomate, alface]");
                 player.sendMessage("");
         }
+    }
+
+    @Subcommand("criar")
+    public void onCreate(CommandSender commandSender) {
+        Player player = (Player) commandSender;
+
+        World world = player.getWorld();
+        Location location = player.getLocation();
+
     }
 
 }

@@ -23,7 +23,9 @@ public class PluginImpl {
     private PlayerDAO playerDAO;
     public ConfigUtils Config;
     public ConfigUtils Locations;
+    public ConfigUtils Ranking;
     public ConfigUtils Database;
+    private final PlayerCacheManager playerCacheManager = PlayerCacheManager.getInstance();
 
     public PluginImpl(Plugin plugin) {
         this.plugin = plugin;
@@ -33,12 +35,14 @@ public class PluginImpl {
         commandManager.getLocales().setDefaultLocale(Locales.PORTUGUESE);
         Config = new ConfigUtils((JavaPlugin) plugin, "config.yml");
         Locations = new ConfigUtils((JavaPlugin) plugin, "locations.yml");
+        Ranking = new ConfigUtils((JavaPlugin) plugin, "ranking.yml");
         Database = new ConfigUtils((JavaPlugin) plugin, "database.yml");
     }
 
     public void onEnable() {
         Config.saveDefaultConfig();
         Locations.saveDefaultConfig();
+        Ranking.saveDefaultConfig();
         Database.saveDefaultConfig();
         registerDatabase();
         registerListeners();
@@ -48,7 +52,7 @@ public class PluginImpl {
             List<PlayerData> allPlayers = playerDAO.getAllPlayersData();
 
             for (PlayerData player : allPlayers) {
-                PlayerCacheManager.cachePlayerData(player.getNickname(), player);
+                playerCacheManager.cachePlayerData(player.getNickname(), player);
             }
         } catch (SQLException exception) {
             throw new RuntimeException(exception);
@@ -58,15 +62,15 @@ public class PluginImpl {
     }
 
     public void onDisable() {
-        PlayerCacheManager.playerCache.forEach((player, playerData) -> {
+        playerCacheManager.playerCache.forEach((player, playerData) -> {
             try {
                 playerDAO.updatePlayerData(playerData);
             } catch (SQLException exception) {
-                throw new RuntimeException(exception);
+                throw new RuntimeException("Erro ao atualizar dados do jogador " + playerData.getNickname(), exception);
             }
         });
-
     }
+
 
     public void registerDatabase() {
         playerDAO = new PlayerDAO();
