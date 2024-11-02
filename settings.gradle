@@ -10,5 +10,5 @@ include 'blizzard-rankup'
 include 'blizzard-spawners'
 include 'blizzard-plantations'
 include 'blizzard-fishing'
-
+include 'blizzard-slimeworlds'
 
