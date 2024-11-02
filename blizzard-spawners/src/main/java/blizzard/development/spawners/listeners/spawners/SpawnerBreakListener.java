@@ -47,7 +47,7 @@ public class SpawnerBreakListener implements Listener {
         }
     }
 
-    // botar verificação de slot vazio / formatar os double
+    // botar verificação de slot vazio / formatar os double / botar op direto com a db / n esquecer dos evento de clear e etc de plot
 
     private void removeSpawner(Player player, String id, String type, Double amount) {
         try {
