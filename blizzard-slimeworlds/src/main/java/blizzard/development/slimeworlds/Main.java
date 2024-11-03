@@ -10,6 +10,7 @@ public class Main extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
+        saveDefaultConfig();
         Bukkit.getConsoleSender().sendMessage("§a§l[SlimeWorlds] §aAPI em funcionamento.");
     }
 

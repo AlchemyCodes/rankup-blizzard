@@ -10,13 +10,10 @@ repositories {
 
 dependencies {
     compileOnly "io.papermc.paper:paper-api:1.20.3-R0.1-SNAPSHOT"
-    compileOnly 'com.github.decentsoftware-eu:decentholograms:2.8.11'
-    compileOnly 'com.github.retrooper:packetevents-spigot:2.5.0'
-    compileOnly 'com.infernalsuite.aswm:api:3.0.0-SNAPSHOT'
-    compileOnly 'com.github.Paul19988:Advanced-Slime-World-Manager:master-SNAPSHOT'
+    compileOnly 'com.infernalsuite.aswm:api:1.20.4-R0.1-SNAPSHOT'
     compileOnly 'com.sk89q.worldedit:worldedit-bukkit:7.2.12'
-    compileOnly project(":blizzard-currencies")
 }
+
 
 def targetJavaVersion = 21
 java {
@@ -43,4 +40,3 @@ processResources {
         expand props
     }
 }
-

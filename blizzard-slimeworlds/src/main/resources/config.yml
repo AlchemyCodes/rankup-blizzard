@@ -1,0 +1,5 @@
+name: blizzard-slimeworlds
+version: 1.0
+main: blizzard.development.slimeworlds.Main
+api-version: '1.20'
+depend: [SlimeWorldManager]

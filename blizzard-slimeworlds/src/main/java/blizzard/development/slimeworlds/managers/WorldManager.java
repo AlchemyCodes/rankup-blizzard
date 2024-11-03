@@ -1,10 +1,8 @@
 package blizzard.development.slimeworlds.managers;
 
 import blizzard.development.slimeworlds.Main;
-import blizzard.development.slimeworlds.api.SlimeWorldAPI;
 import blizzard.development.slimeworlds.tasks.SchematicTask;
-import com.grinderwolf.swm.api.SlimePlugin;
-import com.infernalsuite.aswm.api.AdvancedSlimePaperAPI;
+import com.infernalsuite.aswm.api.SlimePlugin;
 import com.infernalsuite.aswm.api.loaders.SlimeLoader;
 import com.infernalsuite.aswm.api.world.SlimeWorld;
 import com.infernalsuite.aswm.api.world.properties.SlimeProperties;
@@ -12,7 +10,6 @@ import com.infernalsuite.aswm.api.world.properties.SlimePropertyMap;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
@@ -25,9 +22,8 @@ public class WorldManager {
     private final Map<UUID, String> worlds = new HashMap<>();
 
     public void createWorld(Player player) throws Exception {
-        String name = "mundo_".concat(player.getName()).concat("_").concat(player.getUniqueId().toString().substring(0, 8));
+        String name = "mundo_" + player.getName();
 
-        AdvancedSlimePaperAPI asp = AdvancedSlimePaperAPI.instance();
 
         SlimePropertyMap properties = new SlimePropertyMap();
         properties.setValue(SlimeProperties.DIFFICULTY, "normal");
@@ -43,21 +39,17 @@ public class WorldManager {
         properties.setValue(SlimeProperties.DEFAULT_BIOME, "minecraft:plains");
 
 
-        Plugin plugin = Bukkit.getPluginManager().getPlugin("SlimeWorldManager");
-        SlimePlugin slimePlugin = (SlimePlugin) plugin;
+        SlimePlugin slimePlugin = (SlimePlugin) Bukkit.getServer().getPluginManager().getPlugin("SlimeWorldManager");
+        SlimeLoader loader = slimePlugin.getLoader("file");
 
-        SlimeLoader loader = (SlimeLoader) slimePlugin.getLoader("slime-worlds");
-
-        SlimeWorld world = asp.createEmptyWorld(
+        SlimeWorld world = slimePlugin.createEmptyWorld(
+                loader,
                 name,
                 false,
-                properties,
-                loader
+                properties
         );
 
-        SlimeWorld mirror = asp.loadWorld(world, true);
-        asp.saveWorld(world);
-
+        slimePlugin.loadWorld(world, true);
 
         worlds.put(player.getUniqueId(), name);
 
@@ -80,7 +72,7 @@ public class WorldManager {
             public void run() {
                 if (seconds > 0) {
                     player.sendTitle(
-                            "" + seconds,
+                            "§a§l" + seconds,
                             "",
                             10,
                             70,
