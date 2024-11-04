@@ -3,6 +3,7 @@ package blizzard.development.spawners.handlers.spawners.mobs;
 import blizzard.development.spawners.database.cache.SpawnersCacheManager;
 import blizzard.development.spawners.handlers.spawners.Spawners;
 import blizzard.development.spawners.utils.InventoryUtil;
+import blizzard.development.spawners.utils.NumberFormat;
 import blizzard.development.spawners.utils.PluginImpl;
 import blizzard.development.spawners.utils.items.ItemBuilder;
 import org.bukkit.Material;
@@ -21,8 +22,9 @@ public class PigMob {
     final String key = "blizzard.spawners-" + spawner;
 
     public void give(Player player, Double amount, Integer stack) {
+        String formattedAmount = NumberFormat.getInstance().formatNumber(amount);
         final ItemStack item = new ItemBuilder(Material.SPAWNER)
-                .setDisplayName("&dSpawner de Proco &7(x" + amount + ")")
+                .setDisplayName("&dSpawner de Proco &7(x" + formattedAmount + ")")
                 .setLore(Arrays.asList(
                         "&7Isso é um definitivamente",
                         "&7um spawner de proco.",
