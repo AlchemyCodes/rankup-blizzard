@@ -30,6 +30,7 @@ public class SpawnerBreakListener implements Listener {
         String cooldownName = "blizzard.spawners.break-cooldown";
 
         if (spawnerBlock.getType().equals(Material.SPAWNER)) {
+            event.setExpToDrop(0);
             String serializedLocation = LocationUtil.getSerializedLocation(spawnerBlock.getLocation());
 
             SpawnersData data = null;
