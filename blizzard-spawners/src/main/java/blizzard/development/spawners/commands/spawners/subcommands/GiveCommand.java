@@ -1,6 +1,7 @@
 package blizzard.development.spawners.commands.spawners.subcommands;
 
 import blizzard.development.spawners.handlers.spawners.mobs.PigMob;
+import blizzard.development.spawners.utils.NumberFormat;
 import blizzard.development.spawners.utils.items.apis.TextAPI;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
@@ -14,10 +15,8 @@ import java.util.List;
 @CommandAlias("spawners|spawner|geradores|gerador")
 public class GiveCommand extends BaseCommand {
 
-    // formatar os double
-
     @Subcommand("give")
-    @CommandPermission("blizzard.spawners.basic")
+    @CommandPermission("blizzard.spawners.admin")
     @CommandCompletion("@players @spawners @amount @amount")
     @Syntax("<player> <spawner> <quantia> <stack>")
     public void onCommand(CommandSender sender, String target, String type, Double amount, Integer stack) {
@@ -52,7 +51,8 @@ public class GiveCommand extends BaseCommand {
     }
 
     public String successMessage(Player player, String type, Double amount, Integer stack) {
-        return "§a§lYAY! §aVocê deu §fx" + amount + " spawner(s) §f" + type + " (" + stack + ")" + "§a para o jogador §f" + player.getName() + "§a!";
+        String formattedAmount = NumberFormat.getInstance().formatNumber(amount);
+        return "§a§lYAY! §aVocê deu §fx" + formattedAmount + " spawner(s) §ade §f" + type + " (" + stack + ")" + "§a para o jogador §f" + player.getName() + "§a!";
     }
 
     public Boolean verifyAmount(Double amount) {

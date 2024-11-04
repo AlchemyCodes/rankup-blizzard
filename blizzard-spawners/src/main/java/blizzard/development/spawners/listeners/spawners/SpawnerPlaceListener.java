@@ -2,6 +2,7 @@ package blizzard.development.spawners.listeners.spawners;
 
 import blizzard.development.spawners.handlers.spawners.Spawners;
 import blizzard.development.spawners.methods.SpawnersMethods;
+import blizzard.development.spawners.utils.CooldownUtils;
 import blizzard.development.spawners.utils.LocationUtil;
 import blizzard.development.spawners.utils.NumberFormat;
 import blizzard.development.spawners.utils.PluginImpl;
@@ -21,16 +22,26 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 public class SpawnerPlaceListener implements Listener {
+
+    private final CooldownUtils cooldown = CooldownUtils.getInstance();
 
     @EventHandler
     public void onSpawnerPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
         Block spawnerBlock = event.getBlockPlaced();
+        String cooldownName = "blizzard.spawners.place-cooldown";
 
         if (spawnerBlock.getType().equals(Material.SPAWNER)) {
             if (!terrainVerify(player, spawnerBlock)) {
+                event.setCancelled(true);
+                return;
+            }
+
+            if (cooldown.isInCountdown(player, cooldownName) && !player.hasPermission("blizzard.spawners.admin")) {
+                player.sendActionBar(TextAPI.parse("§c§lEI! §cAguarde um pouco antes de colocar outro spawner."));
                 event.setCancelled(true);
                 return;
             }
@@ -57,15 +68,14 @@ public class SpawnerPlaceListener implements Listener {
                 player.sendActionBar(TextAPI.parse("§c§lEI! §cEste é um spawner sem dados."));
                 event.setCancelled(true);
             }
+            cooldown.createCountdown(player, cooldownName, 500, TimeUnit.MILLISECONDS);
         }
     }
-
-    // formatar os double
 
     public void setupSpawner(Player player, String id, Location location, Spawners spawner, Double amount) {
         SpawnersMethods.createSpawner(player, id, LocationUtil.getSerializedLocation(location), spawner, amount);
         String formattedAmount = NumberFormat.getInstance().formatNumber(amount);
-        player.sendActionBar(TextAPI.parse("§a§lYAY! §aVocê colocou §f x" + formattedAmount + " §aspawner(s) de " + spawner.getType() + "§a!"));
+        player.sendActionBar(TextAPI.parse("§a§lYAY! §aVocê colocou §fx" + formattedAmount + " §aspawner(s) de " + spawner.getType() + "§a!"));
     }
 
     public Boolean terrainVerify(Player player, Block block) {
