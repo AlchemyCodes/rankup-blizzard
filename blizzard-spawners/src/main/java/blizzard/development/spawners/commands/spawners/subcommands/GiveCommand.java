@@ -1,8 +1,8 @@
 package blizzard.development.spawners.commands.spawners.subcommands;
 
-import blizzard.development.spawners.handlers.spawners.mobs.PigMob;
+import blizzard.development.spawners.handlers.mobs.PigMob;
 import blizzard.development.spawners.utils.NumberFormat;
-import blizzard.development.spawners.utils.items.apis.TextAPI;
+import blizzard.development.spawners.utils.items.TextAPI;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
 import org.bukkit.Bukkit;
