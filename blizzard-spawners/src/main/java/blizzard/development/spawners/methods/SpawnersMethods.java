@@ -3,7 +3,7 @@ package blizzard.development.spawners.methods;
 import blizzard.development.spawners.database.cache.SpawnersCacheManager;
 import blizzard.development.spawners.database.dao.SpawnersDAO;
 import blizzard.development.spawners.database.storage.SpawnersData;
-import blizzard.development.spawners.handlers.spawners.Spawners;
+import blizzard.development.spawners.handlers.enums.Spawners;
 import org.bukkit.entity.Player;
 
 public class SpawnersMethods {

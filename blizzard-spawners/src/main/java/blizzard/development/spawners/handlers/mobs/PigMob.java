@@ -1,11 +1,9 @@
-package blizzard.development.spawners.handlers.spawners.mobs;
+package blizzard.development.spawners.handlers.mobs;
 
-import blizzard.development.spawners.database.cache.SpawnersCacheManager;
-import blizzard.development.spawners.handlers.spawners.Spawners;
-import blizzard.development.spawners.utils.InventoryUtil;
+import blizzard.development.spawners.handlers.enums.Spawners;
 import blizzard.development.spawners.utils.NumberFormat;
 import blizzard.development.spawners.utils.PluginImpl;
-import blizzard.development.spawners.utils.items.ItemBuilder;
+import blizzard.development.spawners.builders.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
