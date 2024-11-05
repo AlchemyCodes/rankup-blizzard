@@ -1,4 +1,4 @@
-package blizzard.development.spawners.utils.items.apis;
+package blizzard.development.spawners.utils.items;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;

@@ -19,6 +19,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -48,7 +49,7 @@ public class SpawnerPlaceListener implements Listener {
 
             ItemStack spawnerItem = player.getInventory().getItemInMainHand();
 
-            final String id = UUID.randomUUID().toString();
+            final String id = UUID.randomUUID().toString().substring(0, 8);
 
             final Spawners pigSpawner = Spawners.PIG;
             final String pigKey = "blizzard.spawners-" + pigSpawner.getType();
@@ -56,13 +57,23 @@ public class SpawnerPlaceListener implements Listener {
             final Spawners cowSpawner = Spawners.COW;
             final String cowKey = "blizzard.spawners-" + cowSpawner.getType();
 
+            final com.plotsquared.core.location.Location plotLocation = getPlotLocation(spawnerBlock);
+            final PlotArea plotArea = plotLocation.getPlotArea();
+            final Plot plot = Objects.requireNonNull(plotArea).getPlot(plotLocation);
+
             if (ItemBuilder.hasPersistentData(PluginImpl.getInstance().plugin, spawnerItem, pigKey)) {
                 String value = ItemBuilder.getPersistentData(PluginImpl.getInstance().plugin, spawnerItem, pigKey);
-                setupSpawner(player, id, spawnerBlock.getLocation(), pigSpawner, Double.valueOf(value));
+                if (!setupSpawner(player, id, spawnerBlock.getLocation(), pigSpawner, Double.valueOf(value), String.valueOf(plot.getId()))) {
+                    event.setCancelled(true);
+                    return;
+                }
 
             } else if (ItemBuilder.hasPersistentData(PluginImpl.getInstance().plugin, spawnerItem, cowKey)) {
                 String value = ItemBuilder.getPersistentData(PluginImpl.getInstance().plugin, spawnerItem, cowKey);
-                setupSpawner(player, id, spawnerBlock.getLocation(), cowSpawner, Double.valueOf(value));
+                if (!setupSpawner(player, id, spawnerBlock.getLocation(), cowSpawner, Double.valueOf(value), String.valueOf(plot.getId()))) {
+                    event.setCancelled(true);
+                    return;
+                }
 
             } else {
                 player.sendActionBar(TextAPI.parse("§c§lEI! §cEste é um spawner sem dados."));
@@ -72,19 +83,17 @@ public class SpawnerPlaceListener implements Listener {
         }
     }
 
-    public void setupSpawner(Player player, String id, Location location, Spawners spawner, Double amount) {
-        SpawnersMethods.createSpawner(player, id, LocationUtil.getSerializedLocation(location), spawner, amount);
+    public Boolean setupSpawner(Player player, String id, Location location, Spawners spawner, Double amount, String plotId) {
+        if (!SpawnersMethods.createSpawner(player, id, LocationUtil.getSerializedLocation(location), spawner, amount, plotId)) {
+            return false;
+        }
         String formattedAmount = NumberFormat.getInstance().formatNumber(amount);
         player.sendActionBar(TextAPI.parse("§a§lYAY! §aVocê colocou §fx" + formattedAmount + " §aspawner(s) de " + spawner.getType() + "§a!"));
+        return true;
     }
 
     public Boolean terrainVerify(Player player, Block block) {
-        com.plotsquared.core.location.Location blockLocation = com.plotsquared.core.location.Location.at(
-                block.getLocation().getWorld().getName(),
-                (int) block.getLocation().getX(),
-                (int) block.getLocation().getY(),
-                (int) block.getLocation().getZ()
-        );
+        com.plotsquared.core.location.Location blockLocation = getPlotLocation(block);
 
         UUID playerUUID = player.getUniqueId();
         PlotArea plotArea = PlotSquared.get().getPlotAreaManager().getPlotArea(blockLocation);
@@ -106,5 +115,14 @@ public class SpawnerPlaceListener implements Listener {
             return false;
         }
         return true;
+    }
+
+    public com.plotsquared.core.location.Location getPlotLocation(Block block) {
+        return com.plotsquared.core.location.Location.at(
+                block.getLocation().getWorld().getName(),
+                (int) block.getLocation().getX(),
+                (int) block.getLocation().getY(),
+                (int) block.getLocation().getZ()
+        );
     }
 }

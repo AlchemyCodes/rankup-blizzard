@@ -1,5 +1,6 @@
-package blizzard.development.spawners.utils.items.apis;
+package blizzard.development.spawners.builders.skulls;
 
+import blizzard.development.spawners.utils.items.SkullAPI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;

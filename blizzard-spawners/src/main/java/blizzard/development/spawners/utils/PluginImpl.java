@@ -7,19 +7,21 @@ import blizzard.development.spawners.database.dao.PlayersDAO;
 import blizzard.development.spawners.database.dao.SpawnersDAO;
 import blizzard.development.spawners.database.storage.SpawnersData;
 import blizzard.development.spawners.listeners.ListenerRegistry;
+import blizzard.development.spawners.listeners.plots.PlotClearListener;
+import blizzard.development.spawners.listeners.plots.PlotDeleteListener;
 import blizzard.development.spawners.managers.BatchManager;
 import blizzard.development.spawners.tasks.PlayersSaveTask;
 import blizzard.development.spawners.tasks.SpawnersSaveTask;
 import blizzard.development.spawners.utils.config.ConfigUtils;
 import co.aikar.commands.Locales;
 import co.aikar.commands.PaperCommandManager;
+import com.plotsquared.core.PlotAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class PluginImpl {
@@ -27,6 +29,7 @@ public class PluginImpl {
     private static PluginImpl instance;
     private static PluginManager pluginManager;
     private static PaperCommandManager commandManager;
+    private static PlotAPI plotAPI;
     public PlayersDAO playersDAO;
     public SpawnersDAO spawnersDAO;
 
@@ -38,6 +41,7 @@ public class PluginImpl {
         pluginManager = Bukkit.getPluginManager();
         commandManager = new PaperCommandManager(plugin);
         commandManager.getLocales().setDefaultLocale(Locales.PORTUGUESE);
+        plotAPI = new PlotAPI();
         Config = new ConfigUtils((JavaPlugin) plugin, "config.yml");
         Database = new ConfigUtils((JavaPlugin) plugin, "database.yml");
     }
@@ -77,6 +81,8 @@ public class PluginImpl {
 
     private void registerListeners() {
         ListenerRegistry.getInstance().register();
+        new PlotClearListener(plotAPI, spawnersDAO);
+        new PlotDeleteListener(plotAPI, spawnersDAO);
     }
 
     private void registerCommands() {
