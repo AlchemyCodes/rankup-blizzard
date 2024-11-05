@@ -7,11 +7,11 @@ import blizzard.development.spawners.handlers.enums.Spawners;
 import org.bukkit.entity.Player;
 
 public class SpawnersMethods {
-    public static void createSpawner(Player player, String id, String location, Spawners spawner, Double amount) {
+    public static Boolean createSpawner(Player player, String id, String location, Spawners spawner, Double amount, String plotId) {
         String type = spawner.getType();
         String nickname = player.getName();
         SpawnersData spawnersData = new SpawnersData(
-                id, type, amount, location, nickname
+                id, type, amount, location, nickname, plotId
         );
         try {
             new SpawnersDAO().createSpawnerData(spawnersData);
@@ -19,6 +19,8 @@ public class SpawnersMethods {
         } catch (Exception ex) {
             player.sendMessage("§cOcorreu um erro ao salvar essa ferramenta no banco de dados!");
             ex.printStackTrace();
+            return false;
         }
+        return true;
     }
 }

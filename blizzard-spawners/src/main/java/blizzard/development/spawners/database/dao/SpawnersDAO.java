@@ -18,7 +18,8 @@ public class SpawnersDAO {
                     "type VARCHAR(50), " +
                     "amount DOUBLE," +
                     "location VARCHAR(255), " +
-                    "nickname VARCHAR(36))";
+                    "nickname VARCHAR(36), " +
+                    "plotId VARCHAR(36))";
             stat.execute(sql);
 
         } catch (SQLException e) {
@@ -50,7 +51,8 @@ public class SpawnersDAO {
                             resultSet.getString("type"),
                             resultSet.getDouble("amount"),
                             resultSet.getString("location"),
-                            resultSet.getString("nickname")
+                            resultSet.getString("nickname"),
+                            resultSet.getString("plotId")
                     );
                 }
             }
@@ -60,8 +62,31 @@ public class SpawnersDAO {
         return null;
     }
 
+    public List<SpawnersData> findSpawnerDataByPlotId(String plotId) {
+        String sql = "SELECT * FROM spawners WHERE plotId = ?";
+        List<SpawnersData> spawnersData = new ArrayList<>();
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement statement = conn.prepareStatement(sql)) {
+            statement.setString(1, plotId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    spawnersData.add(new SpawnersData(
+                            resultSet.getString("id"),
+                            resultSet.getString("type"),
+                            resultSet.getDouble("amount"),
+                            resultSet.getString("location"),
+                            resultSet.getString("nickname"),
+                            resultSet.getString("plotId")));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return spawnersData;
+    }
+
     public void createSpawnerData(SpawnersData spawnerData) throws SQLException {
-        String sql = "INSERT INTO spawners (id, type, amount, location, nickname) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO spawners (id, type, amount, location, nickname, plotId) VALUES (?, ?, ?, ?, ?, ?)";
         executeUpdate(sql, statement -> {
             try {
                 statement.setString(1, spawnerData.getId());
@@ -69,6 +94,7 @@ public class SpawnersDAO {
                 statement.setDouble(3, spawnerData.getAmount());
                 statement.setString(4, spawnerData.getLocation());
                 statement.setString(5, spawnerData.getNickname());
+                statement.setString(6, spawnerData.getPlotId());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -87,14 +113,15 @@ public class SpawnersDAO {
     }
 
     public void updateSpawnerData(SpawnersData spawnerData) throws SQLException {
-        String sql = "UPDATE spawners SET type = ?, amount = ?, location = ?, nickname = ? WHERE id = ?";
+        String sql = "UPDATE spawners SET type = ?, amount = ?, location = ?, nickname = ?, plotId = ? WHERE id = ?";
         executeUpdate(sql, statement -> {
             try {
                 statement.setString(1, spawnerData.getType());
                 statement.setDouble(2, spawnerData.getAmount());
                 statement.setString(3, spawnerData.getLocation());
                 statement.setString(4, spawnerData.getNickname());
-                statement.setString(5, spawnerData.getId());
+                statement.setString(5, spawnerData.getPlotId());
+                statement.setString(6, spawnerData.getId());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -115,7 +142,8 @@ public class SpawnersDAO {
                         resultSet.getString("type"),
                         resultSet.getDouble("amount"),
                         resultSet.getString("location"),
-                        resultSet.getString("nickname")
+                        resultSet.getString("nickname"),
+                        resultSet.getString("plotId")
                 ));
             }
         } catch (SQLException e) {

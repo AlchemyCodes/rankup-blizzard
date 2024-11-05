@@ -1,4 +1,4 @@
-package blizzard.development.spawners.handlers.spawners;
+package blizzard.development.spawners.handlers.enums;
 
 public enum Spawners {
     PIG("porco"),

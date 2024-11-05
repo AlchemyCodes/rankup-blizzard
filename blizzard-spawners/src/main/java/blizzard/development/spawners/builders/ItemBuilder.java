@@ -1,7 +1,7 @@
-package blizzard.development.spawners.utils.items;
+package blizzard.development.spawners.builders;
 
-import blizzard.development.spawners.utils.items.apis.SkullAPI;
-import blizzard.development.spawners.utils.items.apis.TextAPI;
+import blizzard.development.spawners.utils.items.SkullAPI;
+import blizzard.development.spawners.utils.items.TextAPI;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
