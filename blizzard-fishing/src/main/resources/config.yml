@@ -1,31 +1,32 @@
 fishes:
-  tilapia:
-    rarity: comum
+  bacalhau:
+    rarity: "common"
     price: 1
 
-  bacalhau:
-    rarity: comum
+  salmao:
+    rarity: "common"
     price: 2
 
-  salmao:
-    rarity: comum
+  caranguejo:
+    rarity: "rare"
     price: 3
-  atum:
-    rarity: comum
+
+  lagosta:
+    rarity: "rare"
     price: 4
 
-  baiacu:
-    rarity: comum
+  lula:
+    rarity: "legendary"
     price: 5
 
-  sardinha:
-    rarity: comum
+  lula_brilhante:
+    rarity: "legendary"
     price: 6
 
-  linguado:
-    rarity: comum
+  tubarao:
+    rarity: "mystic"
     price: 7
 
-  pirarucu:
-    rarity: comum
+  baleia:
+    rarity: "mystic"
     price: 8

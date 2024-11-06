@@ -14,7 +14,7 @@ public class FishingRodHandler {
     private static final Plugin plugin = PluginImpl.getInstance().plugin;
     private static final String key = "blizzard.fishing.rod";
 
-    public static void setRod(Player player) {
+    public static void setRod(Player player, int slot) {
         Plugin plugin = PluginImpl.getInstance().plugin;
 
         ItemStack rod = new ItemBuilder(Material.FISHING_ROD)
@@ -24,7 +24,7 @@ public class FishingRodHandler {
                 .addPersistentData(plugin, key, 1)
                 .build();
 
-        player.getInventory().setItem(1, rod);
+        player.getInventory().setItem(slot, rod);
     }
 
     public static boolean isRod (Player player) {
