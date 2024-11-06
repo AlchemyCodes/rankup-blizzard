@@ -1,6 +1,8 @@
 package blizzard.development.fishing.listeners;
 
 import blizzard.development.fishing.Main;
+import blizzard.development.fishing.database.dao.PlayersDAO;
+import blizzard.development.fishing.database.dao.RodsDAO;
 import blizzard.development.fishing.listeners.fishing.FishingListener;
 import blizzard.development.fishing.listeners.items.FishBucketListener;
 import blizzard.development.fishing.listeners.items.FishingNetListener;
@@ -15,9 +17,12 @@ public class ListenerRegistry {
     public void register() {
         PluginManager pluginManager = Bukkit.getPluginManager();
 
+        PlayersDAO playersDAO = new PlayersDAO();
+        RodsDAO rodsDAO = new RodsDAO();
+
         Arrays.asList(
                 new FishingListener(),
-                new TrafficListener(),
+                new TrafficListener(playersDAO, rodsDAO),
                 new FishBucketListener(),
                 new FishingNetListener(),
                 new FishingRodListener()

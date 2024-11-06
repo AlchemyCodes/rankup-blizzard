@@ -1,6 +1,7 @@
 package blizzard.development.fishing.listeners.items;
 
 import blizzard.development.fishing.handlers.FishingRodHandler;
+import blizzard.development.fishing.inventories.items.FishingRodInventory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -12,18 +13,16 @@ public class FishingRodListener implements Listener {
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        Action action = event.getAction();
 
         if (!(FishingRodHandler.isRod(player))) return;
 
         if (event.getItem() == null) return;
 
         if (player.isSneaking()) {
-            player.sendMessage("abrir inventario");
+            FishingRodInventory.openRod(player);
             return;
         }
 
-        event.setCancelled(true);
         player.sendMessage("é vara");
     }
 

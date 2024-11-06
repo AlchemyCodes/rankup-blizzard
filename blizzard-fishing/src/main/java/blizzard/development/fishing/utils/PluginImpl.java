@@ -1,11 +1,14 @@
 package blizzard.development.fishing.utils;
 
+import blizzard.development.fishing.commands.CommandRegistry;
 import blizzard.development.fishing.database.DatabaseConnection;
 import blizzard.development.fishing.database.cache.PlayersCacheManager;
 import blizzard.development.fishing.database.dao.PlayersDAO;
+import blizzard.development.fishing.database.dao.RodsDAO;
 import blizzard.development.fishing.listeners.ListenerRegistry;
 import blizzard.development.fishing.tasks.FishingTask;
 import blizzard.development.fishing.tasks.PlayerSaveTask;
+import blizzard.development.fishing.tasks.RodSaveTask;
 import co.aikar.commands.Locales;
 import co.aikar.commands.PaperCommandManager;
 import lombok.Getter;
@@ -17,6 +20,7 @@ import java.sql.SQLException;
 
 public class PluginImpl {
     public PlayersDAO playersDAO;
+    public RodsDAO rodsDAO;
     public final Plugin plugin;
     @Getter
     private static PluginImpl instance;
@@ -71,8 +75,11 @@ public class PluginImpl {
         DatabaseConnection.getInstance();
         this.playersDAO = new PlayersDAO();
         this.playersDAO.initializeDatabase();
+        this.rodsDAO = new RodsDAO();
+        this.rodsDAO.initializeDatabase();
 
         new PlayerSaveTask(playersDAO).runTaskTimerAsynchronously(plugin, 0L, 60L);
+        new RodSaveTask(rodsDAO).runTaskTimerAsynchronously(plugin, 0L, 60L);
     }
 
     private void registerTasks() {
@@ -85,7 +92,8 @@ public class PluginImpl {
     }
 
     private void registerCommands() {
-
+        CommandRegistry commandRegistry = new CommandRegistry();
+        commandRegistry.register();
     }
 
     public File getDataFolder() {

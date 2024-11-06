@@ -14,7 +14,7 @@ public class FishingNetHandler {
     private static final Plugin plugin = PluginImpl.getInstance().plugin;
     private static final String key = "blizzard.fishing.net";
 
-    public static void setNet(Player player) {
+    public static void setNet(Player player, int slot) {
         Plugin plugin = PluginImpl.getInstance().plugin;
 
         ItemStack rod = new ItemBuilder(Material.COBWEB)
@@ -24,7 +24,7 @@ public class FishingNetHandler {
                 .addPersistentData(plugin, key, 1)
                 .build();
 
-        player.getInventory().setItem(2, rod);
+        player.getInventory().setItem(slot, rod);
     }
 
     public static boolean isNet (Player player) {

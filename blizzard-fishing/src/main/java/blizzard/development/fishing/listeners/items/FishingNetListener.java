@@ -2,6 +2,7 @@ package blizzard.development.fishing.listeners.items;
 
 import blizzard.development.fishing.handlers.FishingNetHandler;
 import blizzard.development.fishing.handlers.FishingRodHandler;
+import blizzard.development.fishing.inventories.items.FishingNetInventory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -20,6 +21,8 @@ public class FishingNetListener implements Listener {
         if (event.getItem() == null) return;
 
         if (!(action == Action.RIGHT_CLICK_BLOCK || action == Action.RIGHT_CLICK_AIR)) {
+            FishingNetInventory.openNet(player);
+            event.setCancelled(true);
             return;
         }
 

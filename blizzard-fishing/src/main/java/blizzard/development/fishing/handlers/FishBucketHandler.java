@@ -14,7 +14,7 @@ public class FishBucketHandler {
     private static final Plugin plugin = PluginImpl.getInstance().plugin;
     private static final String key = "blizzard.fishing.bucket";
 
-    public static void setBucket(Player player) {
+    public static void setBucket(Player player, int slot) {
         Plugin plugin = PluginImpl.getInstance().plugin;
 
         ItemStack rod = new ItemBuilder(Material.PUFFERFISH_BUCKET)
@@ -24,7 +24,7 @@ public class FishBucketHandler {
                 .addPersistentData(plugin, key, 1)
                 .build();
 
-        player.getInventory().setItem(3, rod);
+        player.getInventory().setItem(slot, rod);
     }
 
     public static boolean isBucket(Player player) {
