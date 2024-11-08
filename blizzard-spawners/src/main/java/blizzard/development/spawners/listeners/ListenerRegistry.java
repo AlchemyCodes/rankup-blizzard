@@ -5,6 +5,7 @@ import blizzard.development.spawners.listeners.commons.PlayersJoinListener;
 import blizzard.development.spawners.listeners.commons.PlayersQuitListener;
 import blizzard.development.spawners.listeners.spawners.SpawnerBreakListener;
 import blizzard.development.spawners.listeners.spawners.SpawnerPlaceListener;
+import blizzard.development.spawners.listeners.spawners.SpawnersJoinListener;
 import blizzard.development.spawners.utils.PluginImpl;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
@@ -23,7 +24,8 @@ public class ListenerRegistry {
                 new PlayersJoinListener(playersDAO),
                 new PlayersQuitListener(playersDAO),
                 new SpawnerPlaceListener(),
-                new SpawnerBreakListener()
+                new SpawnerBreakListener(),
+                new SpawnersJoinListener()
         ).forEach(listener -> pluginManager.registerEvents(listener, PluginImpl.getInstance().plugin));
     }
 

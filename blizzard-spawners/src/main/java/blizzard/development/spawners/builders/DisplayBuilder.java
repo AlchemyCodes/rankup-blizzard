@@ -11,10 +11,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.TextDisplay;
 
 public class DisplayBuilder {
-
-    public static TextDisplay createSpawnerDisplay(Location location, String spawnerType, Double amount, Player player) {
+    public static void createSpawnerDisplay(Location location, String spawnerType, Double amount, Player player) {
         Location displayLoc = location.clone().add(0.5, 1, 0.5);
         TextDisplay display = (TextDisplay) location.getWorld().spawnEntity(displayLoc, EntityType.TEXT_DISPLAY);
+
+        display.setInvulnerable(true);
+        display.setPersistent(true);
 
         display.setAlignment(TextDisplay.TextAlignment.CENTER);
         display.setBillboard(Display.Billboard.CENTER);
@@ -26,7 +28,7 @@ public class DisplayBuilder {
         if (spawnerType.equals(Spawners.PIG.getType())) {
             spawner = "§dGerador de §lPorco";
         } else if (spawnerType.equals(Spawners.COW.getType())) {
-            spawner = "§7Gerador de §lVaca";
+            spawner = "§8Gerador de §lVaca";
         } else {
             spawner = spawnerType;
         }
@@ -47,7 +49,6 @@ public class DisplayBuilder {
         display.setPersistent(true);
         display.setDefaultBackground(false);
 
-        return display;
     }
 
     public static void removeSpawnerDisplay(Location location) {

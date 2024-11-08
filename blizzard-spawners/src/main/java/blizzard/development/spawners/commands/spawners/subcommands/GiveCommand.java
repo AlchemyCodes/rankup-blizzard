@@ -1,5 +1,6 @@
 package blizzard.development.spawners.commands.spawners.subcommands;
 
+import blizzard.development.spawners.handlers.mobs.CowMob;
 import blizzard.development.spawners.handlers.mobs.PigMob;
 import blizzard.development.spawners.utils.NumberFormat;
 import blizzard.development.spawners.utils.items.TextAPI;
@@ -33,14 +34,18 @@ public class GiveCommand extends BaseCommand {
 
         switch (type) {
             case "pigs", "pig", "porcos", "porco" -> {
-                PigMob.getInstance().give(player, amount, stack);
+                PigMob.give(player, amount, stack);
+                sender.sendActionBar(TextAPI.parse(successMessage(player, type, amount, stack)));
+            }
+            case "cows", "cow", "vacas", "vaca" -> {
+                CowMob.give(player, amount, stack);
                 sender.sendActionBar(TextAPI.parse(successMessage(player, type, amount, stack)));
             }
             default -> {
                 List<String> messages = Arrays.asList(
                         "",
                         " §c§lEI §cO spawner §7" + type + "§c não existe.",
-                        " §cDisponíveis: §7[porco]",
+                        " §cDisponíveis: §7[porco, vaca]",
                         ""
                 );
                 for (String message : messages) {
