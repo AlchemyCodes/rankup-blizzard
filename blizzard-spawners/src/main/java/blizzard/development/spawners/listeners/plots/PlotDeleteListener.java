@@ -1,6 +1,7 @@
 package blizzard.development.spawners.listeners.plots;
 
 import blizzard.development.spawners.builders.DisplayBuilder;
+import blizzard.development.spawners.builders.EffectsBuilder;
 import blizzard.development.spawners.database.dao.SpawnersDAO;
 import blizzard.development.spawners.database.storage.SpawnersData;
 import blizzard.development.spawners.utils.LocationUtil;
@@ -37,6 +38,7 @@ public class PlotDeleteListener {
                 try {
                     Location spawnerLocation = LocationUtil.deserializeLocation(spawnersData.getLocation());
                     DisplayBuilder.removeSpawnerDisplay(spawnerLocation);
+                    EffectsBuilder.removeSpawnerEffect(spawnerLocation);
                     final String spawnerId = spawnersData.getId();
                     spawnersDAO.deleteSpawnerData(spawnerId);
                 } catch (SQLException e) {

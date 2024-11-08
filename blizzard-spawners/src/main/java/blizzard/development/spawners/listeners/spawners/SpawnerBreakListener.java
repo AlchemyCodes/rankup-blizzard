@@ -1,9 +1,11 @@
 package blizzard.development.spawners.listeners.spawners;
 
 import blizzard.development.spawners.builders.DisplayBuilder;
+import blizzard.development.spawners.builders.EffectsBuilder;
 import blizzard.development.spawners.database.cache.SpawnersCacheManager;
 import blizzard.development.spawners.database.dao.SpawnersDAO;
 import blizzard.development.spawners.database.storage.SpawnersData;
+import blizzard.development.spawners.handlers.mobs.CowMob;
 import blizzard.development.spawners.handlers.mobs.PigMob;
 import blizzard.development.spawners.utils.*;
 import blizzard.development.spawners.utils.items.TextAPI;
@@ -80,13 +82,15 @@ public class SpawnerBreakListener implements Listener {
             if (spawnerData != null) {
                 Location location = LocationUtil.deserializeLocation(spawnerData.getLocation());
                 DisplayBuilder.removeSpawnerDisplay(location);
+                EffectsBuilder.removeSpawnerEffect(location);
             }
 
             spawnersDAO.deleteSpawnerData(id);
             cache.removeSpawnerData(id);
 
             switch (type.toLowerCase()) {
-                case "pigs", "pig", "porcos", "porco" -> PigMob.getInstance().give(player, amount, 1);
+                case "pigs", "pig", "porcos", "porco" -> PigMob.give(player, amount, 1);
+                case "cows", "cow", "vacas", "vaca" -> CowMob.give(player, amount, 1);
             }
 
             String formattedAmount = NumberFormat.getInstance().formatNumber(amount);

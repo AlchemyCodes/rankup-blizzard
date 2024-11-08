@@ -27,35 +27,35 @@ import java.util.List;
 public class PluginImpl {
     public final Plugin plugin;
     private static PluginImpl instance;
-    private static PluginManager pluginManager;
-    private static PaperCommandManager commandManager;
     private static PlotAPI plotAPI;
     public PlayersDAO playersDAO;
     public SpawnersDAO spawnersDAO;
 
     public ConfigUtils Config;
     public ConfigUtils Database;
+
     public PluginImpl(Plugin plugin) {
         this.plugin = plugin;
         instance = this;
-        pluginManager = Bukkit.getPluginManager();
-        commandManager = new PaperCommandManager(plugin);
-        commandManager.getLocales().setDefaultLocale(Locales.PORTUGUESE);
         plotAPI = new PlotAPI();
         Config = new ConfigUtils((JavaPlugin) plugin, "config.yml");
         Database = new ConfigUtils((JavaPlugin) plugin, "database.yml");
     }
 
-    public void onLoad() {
+    public void onEnable() {
         Config.saveDefaultConfig();
         Database.saveDefaultConfig();
+
+        PaperCommandManager commandManager = new PaperCommandManager(plugin);
+        commandManager.getLocales().setDefaultLocale(Locales.PORTUGUESE);
+
         registerDatabase();
         registerListeners();
         registerCommands();
         BatchManager.initialize(this.plugin);
     }
 
-    public void onUnload() {
+    public void onDisable() {
         DatabaseConnection.getInstance().close();
     }
 

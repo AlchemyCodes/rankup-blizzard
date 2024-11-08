@@ -1,6 +1,7 @@
 package blizzard.development.spawners.listeners.spawners;
 
 import blizzard.development.spawners.builders.DisplayBuilder;
+import blizzard.development.spawners.builders.EffectsBuilder;
 import blizzard.development.spawners.handlers.enums.Spawners;
 import blizzard.development.spawners.methods.SpawnersMethods;
 import blizzard.development.spawners.utils.*;
@@ -92,6 +93,7 @@ public class SpawnerPlaceListener implements Listener {
         }
 
         DisplayBuilder.createSpawnerDisplay(location, spawner.getType(), amount, player);
+        EffectsBuilder.createSpawnerEffect(player, location, spawner.getType());
 
         String formattedAmount = NumberFormat.getInstance().formatNumber(amount);
         player.sendActionBar(TextAPI.parse("§a§lYAY! §aVocê colocou §fx" + formattedAmount + " §aspawner(s) de " + spawner.getType() + "§a!"));

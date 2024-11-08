@@ -9,10 +9,12 @@ public class Main extends JavaPlugin {
     @Override
     public void onEnable() {
         pluginImpl = new PluginImpl(this);
-        pluginImpl.onLoad();
+        pluginImpl.onEnable();
     }
 
+    @Override
     public void onDisable() {
-        pluginImpl.onUnload();
+        pluginImpl = new PluginImpl(this);
+        pluginImpl.onDisable();
     }
 }

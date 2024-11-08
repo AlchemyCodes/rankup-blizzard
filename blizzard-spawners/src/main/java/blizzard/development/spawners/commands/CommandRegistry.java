@@ -1,6 +1,7 @@
 package blizzard.development.spawners.commands;
 
 import blizzard.development.spawners.commands.spawners.subcommands.GiveCommand;
+import blizzard.development.spawners.handlers.enums.Spawners;
 import blizzard.development.spawners.utils.PluginImpl;
 import co.aikar.commands.PaperCommandManager;
 
@@ -18,11 +19,7 @@ public class CommandRegistry {
                 new GiveCommand()
         ).forEach(paperCommandManager::registerCommand);
 
-        paperCommandManager.getCommandCompletions().registerCompletion("spawners", c -> {
-            ArrayList<String> array = new ArrayList<>();
-            array.add("porco");
-            return array;
-        });
+        paperCommandManager.getCommandCompletions().registerCompletion("spawners", c -> Spawners.getAllTypes());
 
         paperCommandManager.getCommandCompletions().registerCompletion("amount", c -> {
             ArrayList<String> array = new ArrayList<>();
