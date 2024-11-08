@@ -1,13 +1,13 @@
 package blizzard.development.spawners.listeners.spawners;
 
+import blizzard.development.spawners.builders.DisplayBuilder;
 import blizzard.development.spawners.database.cache.SpawnersCacheManager;
 import blizzard.development.spawners.database.dao.SpawnersDAO;
 import blizzard.development.spawners.database.storage.SpawnersData;
 import blizzard.development.spawners.handlers.mobs.PigMob;
-import blizzard.development.spawners.utils.CooldownUtils;
-import blizzard.development.spawners.utils.LocationUtil;
-import blizzard.development.spawners.utils.NumberFormat;
+import blizzard.development.spawners.utils.*;
 import blizzard.development.spawners.utils.items.TextAPI;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -30,6 +30,7 @@ public class SpawnerBreakListener implements Listener {
         String cooldownName = "blizzard.spawners.break-cooldown";
 
         if (spawnerBlock.getType().equals(Material.SPAWNER)) {
+
             event.setExpToDrop(0);
             String serializedLocation = LocationUtil.getSerializedLocation(spawnerBlock.getLocation());
 
@@ -75,15 +76,23 @@ public class SpawnerBreakListener implements Listener {
 
     private void removeSpawner(Player player, String id, String type, Double amount) {
         try {
+            SpawnersData spawnerData = cache.getSpawnerData(id);
+            if (spawnerData != null) {
+                Location location = LocationUtil.deserializeLocation(spawnerData.getLocation());
+                DisplayBuilder.removeSpawnerDisplay(location);
+            }
+
             spawnersDAO.deleteSpawnerData(id);
             cache.removeSpawnerData(id);
+
             switch (type.toLowerCase()) {
                 case "pigs", "pig", "porcos", "porco" -> PigMob.getInstance().give(player, amount, 1);
             }
+
             String formattedAmount = NumberFormat.getInstance().formatNumber(amount);
             player.sendActionBar(TextAPI.parse("§a§lYAY! §aVocê removeu §fx" + formattedAmount + " §aspawner(s) de " + type + "§a!"));
         } catch (Exception e) {
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
     }
 }

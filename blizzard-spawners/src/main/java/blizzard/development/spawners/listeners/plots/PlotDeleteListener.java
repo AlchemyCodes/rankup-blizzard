@@ -1,11 +1,14 @@
 package blizzard.development.spawners.listeners.plots;
 
+import blizzard.development.spawners.builders.DisplayBuilder;
 import blizzard.development.spawners.database.dao.SpawnersDAO;
 import blizzard.development.spawners.database.storage.SpawnersData;
+import blizzard.development.spawners.utils.LocationUtil;
 import com.google.common.eventbus.Subscribe;
 import com.plotsquared.core.PlotAPI;
 import com.plotsquared.core.events.PlotDeleteEvent;
 import com.plotsquared.core.plot.Plot;
+import org.bukkit.Location;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -32,6 +35,8 @@ public class PlotDeleteListener {
         if (!spawnersList.isEmpty()) {
             for (SpawnersData spawnersData : spawnersList) {
                 try {
+                    Location spawnerLocation = LocationUtil.deserializeLocation(spawnersData.getLocation());
+                    DisplayBuilder.removeSpawnerDisplay(spawnerLocation);
                     final String spawnerId = spawnersData.getId();
                     spawnersDAO.deleteSpawnerData(spawnerId);
                 } catch (SQLException e) {

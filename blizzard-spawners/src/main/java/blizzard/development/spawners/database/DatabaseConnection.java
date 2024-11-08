@@ -42,6 +42,9 @@ public class DatabaseConnection {
     }
 
     public Connection getConnection() throws SQLException {
+        if (dataSource.isClosed()) {
+            loadDatabaseConfig();
+        }
         return dataSource.getConnection();
     }
 

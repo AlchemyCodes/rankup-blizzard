@@ -1,11 +1,9 @@
 package blizzard.development.spawners.listeners.spawners;
 
+import blizzard.development.spawners.builders.DisplayBuilder;
 import blizzard.development.spawners.handlers.enums.Spawners;
 import blizzard.development.spawners.methods.SpawnersMethods;
-import blizzard.development.spawners.utils.CooldownUtils;
-import blizzard.development.spawners.utils.LocationUtil;
-import blizzard.development.spawners.utils.NumberFormat;
-import blizzard.development.spawners.utils.PluginImpl;
+import blizzard.development.spawners.utils.*;
 import blizzard.development.spawners.builders.ItemBuilder;
 import blizzard.development.spawners.utils.items.TextAPI;
 import com.plotsquared.core.PlotSquared;
@@ -19,7 +17,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
-import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -37,6 +34,12 @@ public class SpawnerPlaceListener implements Listener {
 
         if (spawnerBlock.getType().equals(Material.SPAWNER)) {
             if (!terrainVerify(player, spawnerBlock)) {
+                event.setCancelled(true);
+                return;
+            }
+
+            if (hasNearbySpawners(spawnerBlock.getLocation(), 5)) {
+                player.sendActionBar(TextAPI.parse("§c§lEI! §cJá existe um spawner no raio de 5 blocos."));
                 event.setCancelled(true);
                 return;
             }
@@ -87,6 +90,9 @@ public class SpawnerPlaceListener implements Listener {
         if (!SpawnersMethods.createSpawner(player, id, LocationUtil.getSerializedLocation(location), spawner, amount, plotId)) {
             return false;
         }
+
+        DisplayBuilder.createSpawnerDisplay(location, spawner.getType(), amount, player);
+
         String formattedAmount = NumberFormat.getInstance().formatNumber(amount);
         player.sendActionBar(TextAPI.parse("§a§lYAY! §aVocê colocou §fx" + formattedAmount + " §aspawner(s) de " + spawner.getType() + "§a!"));
         return true;
@@ -124,5 +130,27 @@ public class SpawnerPlaceListener implements Listener {
                 (int) block.getLocation().getY(),
                 (int) block.getLocation().getZ()
         );
+    }
+
+    private boolean hasNearbySpawners(Location location, int radius) {
+        int x = location.getBlockX();
+        int y = location.getBlockY();
+        int z = location.getBlockZ();
+
+        for (int i = -radius; i <= radius; i++) {
+            for (int j = -radius; j <= radius; j++) {
+                for (int k = -radius; k <= radius; k++) {
+                    Location checkLoc = new Location(location.getWorld(), x + i, y + j, z + k);
+
+                    if (i == 0 && j == 0 && k == 0) continue;
+
+                    if (checkLoc.getBlock().getType() == Material.SPAWNER &&
+                            checkLoc.distance(location) <= radius) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 }
