@@ -32,7 +32,7 @@ public class EffectsBuilder {
     );
 
     public static void createSpawnerEffect(Player player, Location location, String spawnerType) {
-        if (activeEffects.containsKey(location) || location.getWorld() == null) {
+        if (location.getWorld() == null) {
             return;
         }
 
@@ -98,7 +98,6 @@ public class EffectsBuilder {
 
     public static void restorePlayerEffects(Player player) {
         String playerName = player.getName();
-
         for (SpawnersData spawnerData : cache.spawnersCache.values()) {
             if (spawnerData.getNickname().equals(playerName)) {
                 Location location = LocationUtil.deserializeLocation(spawnerData.getLocation());
