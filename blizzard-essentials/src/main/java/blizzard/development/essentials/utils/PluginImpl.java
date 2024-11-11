@@ -1,7 +1,9 @@
 package blizzard.development.essentials.utils;
 
+import blizzard.development.essentials.Main;
 import blizzard.development.essentials.commands.CommandRegistry;
 import blizzard.development.essentials.listeners.ListenerRegistry;
+import blizzard.development.essentials.tasks.AnnounceTask;
 import blizzard.development.essentials.utils.config.ConfigUtils;
 import co.aikar.commands.Locales;
 import co.aikar.commands.PaperCommandManager;
@@ -49,6 +51,8 @@ public class PluginImpl {
     }
 
     private void registerTasks() {
+        AnnounceTask announceTask = new AnnounceTask();
+        announceTask.runTaskTimerAsynchronously(Main.getInstance(), 20 * 5, 60 * 20);
     }
 
     private void registerCommands() {

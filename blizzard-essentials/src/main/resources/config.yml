@@ -1,2 +1,42 @@
+announces:
+  1:
+    actionbar: "§d§lEI! §dUm novo anúncio, confira agora o chat."
+    message:
+      - "§8"
+      - "§d Apoie o servidor e garanta §lvantagens exclusivas!"
+      - "§f Confira os preços dos §lVIPs §fcom o cupom §lBLIZZARD§f."
+      - "§8"
+      - "§6  [Ouro] §fde §7§mR$44,90§f por apenas §7R$17,96"
+      - "§3  [Diamante] §fde §7§mR$59,90§f por apenas §7R$23,96"
+      - "§a  [Esmeralda] §fde §7§mR$89,90§f por apenas §7R$35,96."
+      - "§b  [Blizzard] §fde §7§mR$399,90§f por apenas §7R$129,96"
+      - "§d  [Alchemy] §fde §7§mR$999,90§f por apenas §7R$369,96"
+      - "§8"
+      - "§f Aproveite os §opreços imperdíveis§f! Garanta seu VIP em §dwww.alchemynetwork.net§f."
+      - "§8"
+  2:
+    actionbar: "§d§lEI! §dUm novo anúncio, confira agora o chat."
+    message:
+      - ""
+      - "§d Vincule já sua conta do servidor com o nosso Discord"
+      - "§f e receba de primeira mão novidades e recompensas."
+      - "§7 Utilize o comando /vincular e siga todo o passo a passo."
+      - ""
 
+  3:
+    actionbar: "§d§lEI! §dUm novo anúncio, confira agora o chat."
+    message:
+      - ""
+      - "§b Faça parte da nossa equipe de staffs."
+      - "§f Estamos com vagas abertas para suportes e moderadores."
+      - "§7 Para mais informações, consulte o edital em nosso Discord."
+      - ""
 
+  4:
+    actionbar: "§d§lEI! §dUm novo anúncio, confira agora o chat."
+    message:
+      - ""
+      - "§6 Participe de eventos exclusivos toda semana!"
+      - "§f Não perca a chance de ganhar prêmios e recompensas únicas."
+      - "§7 Confira os detalhes e datas dos próximos eventos no Discord."
+      - ""

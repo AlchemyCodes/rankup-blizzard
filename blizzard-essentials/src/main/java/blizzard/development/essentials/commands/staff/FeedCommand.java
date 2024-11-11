@@ -20,8 +20,8 @@ public class FeedCommand extends BaseCommand {
             }
 
             Player player = (Player) commandSender;
-            player.setFoodLevel(0);
-            player.setSaturation(0);
+            player.setFoodLevel(20);
+            player.setSaturation(20);
             player.sendActionBar("§b§lYAY! §bVocê matou a sua fome.");
 
             return;
@@ -32,8 +32,8 @@ public class FeedCommand extends BaseCommand {
 
         if (target != null) {
 
-            target.setFoodLevel(0);
-            target.setSaturation(0);
+            target.setFoodLevel(20);
+            target.setSaturation(20);
             player.sendActionBar("§b§lYAY! §bVocê matou a fome do jogador " + player.getName() + ".");
         }
     }
