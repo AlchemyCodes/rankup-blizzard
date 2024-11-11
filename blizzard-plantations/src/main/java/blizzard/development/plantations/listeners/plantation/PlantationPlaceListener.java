@@ -2,6 +2,7 @@ package blizzard.development.plantations.listeners.plantation;
 
 import blizzard.development.plantations.Main;
 import blizzard.development.plantations.database.cache.methods.PlayerCacheMethod;
+import blizzard.development.plantations.plantations.enums.SeedEnum;
 import blizzard.development.plantations.plantations.events.PlantationPlaceEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -15,7 +16,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 
-import static blizzard.development.plantations.builder.ItemBuilder.hasPersistentData;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static blizzard.development.plantations.builder.ItemBuilder.*;
 
 public class PlantationPlaceListener implements Listener {
 
@@ -34,7 +39,7 @@ public class PlantationPlaceListener implements Listener {
         if (playerCacheMethod.isInPlantation(player)) {
 
             if (!hasPersistentData(Main.getInstance(), item, "semente")) {
-                if (player.isOp()) return;
+                if (player.hasPermission("*")) return;
 
                 event.setCancelled(true);
             }
@@ -55,14 +60,23 @@ public class PlantationPlaceListener implements Listener {
         if (playerCacheMethod.isInPlantation(player)) {
             if (hasPersistentData(Main.getInstance(), item, "semente")) {
 
-                block.setType(Material.WHEAT);
+                String data = getPersistentData(Main.getInstance(), item, "semente");
+                if (data == null) return;
+
+                switch (data) {
+                    case "semente.batata" -> block.setType(Material.POTATOES);
+                    case "semente.cenoura" -> block.setType(Material.CARROTS);
+                    case "semente.tomate" -> block.setType(Material.BEETROOTS);
+                    case "semente.milho" -> block.setType(Material.WHEAT);
+                }
+
                 Block blockUP = block.getRelative(BlockFace.UP);
                 BlockState blockState = blockUP.getState();
 
                 if (blockState instanceof Ageable ageable) {
                     ageable.setAge(0);
                 }
-
+                
             }
         }
     }

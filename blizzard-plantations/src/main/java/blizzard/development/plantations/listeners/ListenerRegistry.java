@@ -3,6 +3,7 @@ package blizzard.development.plantations.listeners;
 import blizzard.development.plantations.Main;
 import blizzard.development.plantations.database.dao.PlayerDAO;
 import blizzard.development.plantations.listeners.geral.PlayerListener;
+import blizzard.development.plantations.listeners.plantation.PlantationBlockListener;
 import blizzard.development.plantations.listeners.plantation.PlantationBreakListener;
 import blizzard.development.plantations.listeners.plantation.PlantationPlaceListener;
 import org.bukkit.Bukkit;
@@ -24,7 +25,8 @@ public class ListenerRegistry {
         Arrays.asList(
                 new PlantationBreakListener(),
                 new PlantationPlaceListener(),
-                new PlayerListener(playerDAO)
+                new PlayerListener(playerDAO),
+                new PlantationBlockListener()
         ).forEach(listener -> pluginManager.registerEvents(listener, Main.getInstance()));
     }
 }

@@ -5,6 +5,7 @@
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleJvm" value="corretto-20" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
@@ -18,6 +19,7 @@
             <option value="$PROJECT_DIR$/blizzard-fishing" />
             <option value="$PROJECT_DIR$/blizzard-plantations" />
             <option value="$PROJECT_DIR$/blizzard-rankup" />
+            <option value="$PROJECT_DIR$/blizzard-slimeworlds" />
             <option value="$PROJECT_DIR$/blizzard-spawners" />
           </set>
         </option>
