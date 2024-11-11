@@ -4,6 +4,6 @@ import org.bukkit.entity.Player;
 
 public interface ToolFactory {
 
-    void giveTool();
+    void giveTool(Player player);
     void givePlowingTool(Player player);
 }

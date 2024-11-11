@@ -33,6 +33,9 @@ public class PlayerListener implements Listener {
             try {
                 playerDAO.createPlayerData(playerData);
 
+                ToolAdapter toolAdapter = new ToolAdapter();
+                toolAdapter.giveTool(player);
+                toolAdapter.givePlowingTool(player);
             } catch (SQLException exception) {
                 exception.printStackTrace();
             }
@@ -49,6 +52,7 @@ public class PlayerListener implements Listener {
         if (message.equalsIgnoreCase("arar")) {
             ToolAdapter toolAdapter = new ToolAdapter();
             toolAdapter.givePlowingTool(player);
+            toolAdapter.giveTool(player);
             event.setCancelled(true);
         }
     }

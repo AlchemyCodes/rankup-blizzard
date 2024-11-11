@@ -2,3 +2,4 @@ name: blizzard-plantations
 version: 1.0
 main: blizzard.development.plantations.Main
 api-version: '1.20'
+depend: [SlimeWorldManager, blizzard-slimeworlds]

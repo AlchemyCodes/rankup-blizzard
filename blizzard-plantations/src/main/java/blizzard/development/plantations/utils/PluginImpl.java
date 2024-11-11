@@ -3,10 +3,15 @@ package blizzard.development.plantations.utils;
 import blizzard.development.plantations.Main;
 import blizzard.development.plantations.commands.CommandRegistry;
 import blizzard.development.plantations.database.cache.PlayerCacheManager;
+import blizzard.development.plantations.database.cache.ToolCacheManager;
 import blizzard.development.plantations.database.dao.PlayerDAO;
+import blizzard.development.plantations.database.dao.ToolDAO;
 import blizzard.development.plantations.database.storage.PlayerData;
+import blizzard.development.plantations.database.storage.ToolData;
 import blizzard.development.plantations.listeners.ListenerRegistry;
+import blizzard.development.plantations.managers.BatchManager;
 import blizzard.development.plantations.tasks.PlayerSaveTask;
+import blizzard.development.plantations.tasks.ToolSaveTask;
 import blizzard.development.plantations.utils.config.ConfigUtils;
 import co.aikar.commands.Locales;
 import co.aikar.commands.PaperCommandManager;
@@ -21,6 +26,7 @@ public class PluginImpl {
     private static PluginImpl instance;
     private static PaperCommandManager commandManager;
     private PlayerDAO playerDAO;
+    private ToolDAO toolDAO;
     public ConfigUtils Config;
     public ConfigUtils Locations;
     public ConfigUtils Ranking;
@@ -31,6 +37,7 @@ public class PluginImpl {
         this.plugin = plugin;
         instance = this;
         playerDAO = new PlayerDAO();
+        toolDAO = new ToolDAO();
         commandManager = new PaperCommandManager(plugin);
         commandManager.getLocales().setDefaultLocale(Locales.PORTUGUESE);
         Config = new ConfigUtils((JavaPlugin) plugin, "config.yml");
@@ -47,13 +54,20 @@ public class PluginImpl {
         registerDatabase();
         registerListeners();
         registerCommands();
+        BatchManager.initialize(Main.getInstance());
 
         try {
             List<PlayerData> allPlayers = playerDAO.getAllPlayersData();
+            List<ToolData> allTools = toolDAO.getAllToolData();
 
             for (PlayerData player : allPlayers) {
                 playerCacheManager.cachePlayerData(player.getNickname(), player);
             }
+
+            for (ToolData tool : allTools) {
+                ToolCacheManager.cacheToolData(tool.getId(), tool);
+            }
+
         } catch (SQLException exception) {
             throw new RuntimeException(exception);
         }
@@ -75,6 +89,9 @@ public class PluginImpl {
     public void registerDatabase() {
         playerDAO = new PlayerDAO();
         playerDAO.initializeDatabase();
+
+        toolDAO = new ToolDAO();
+        toolDAO.initializeDatabase();
     }
 
     private void registerListeners() {
@@ -85,6 +102,9 @@ public class PluginImpl {
     private void registerTasks() {
         PlayerSaveTask playerSaveTask = new PlayerSaveTask(playerDAO);
         playerSaveTask.runTaskTimerAsynchronously(Main.getInstance(), 0L, 20 * 5);
+
+        ToolSaveTask toolSaveTask = new ToolSaveTask(toolDAO);
+        toolSaveTask.runTaskTimerAsynchronously(Main.getInstance(), 0L, 20 * 5);
     }
 
     private void registerCommands() {
