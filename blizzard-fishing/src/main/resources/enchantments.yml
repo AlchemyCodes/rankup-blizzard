@@ -1,0 +1,43 @@
+enchantments:
+  rod:
+    x:
+      perlevel: 1
+      # tanto que aumenta por level
+      maxlevel: 10
+
+    sortudo:
+      # aumentar chance de vir mais peixe
+      chance: 2
+      # chance a mais de vir por level
+      maxlevel: 10
+
+    experiente:
+      # fará com que o player consiga mais experiência
+      perlevel: 1
+      # experiencia a mais por nivel
+      maxlevel: 10
+
+  bucket:
+    storage:
+      initial: 50
+      # valor inicial do armazem
+      perupgrade: 50
+      # quanto aumenta por nivel
+      maxstorage: 500
+      # tamanho maximo do armazem
+    price:
+      initial: 10
+      perlevel: 10
+      multiplier: 2
+      maxlevel: 10
+
+  trash:
+    necessary: 50
+    # lixo necessário para upar
+    cooldown: 2
+    # de quanto em quanto tempo o jogador tera chance de pegar lixo
+    chance: 50
+    # chance de ganhar lixo
+
+
+

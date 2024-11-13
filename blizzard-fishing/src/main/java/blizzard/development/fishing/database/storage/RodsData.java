@@ -2,10 +2,12 @@ package blizzard.development.fishing.database.storage;
 
 import blizzard.development.fishing.enums.RodMaterials;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
 @Getter
+@Setter
 public class RodsData {
     private String uuid, nickname;
     private int strength;

@@ -2,6 +2,8 @@ package blizzard.development.fishing.database.dao;
 
 import blizzard.development.fishing.database.DatabaseConnection;
 import blizzard.development.fishing.database.storage.PlayersData;
+import blizzard.development.fishing.utils.PluginImpl;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -25,7 +27,8 @@ public class PlayersDAO {
                     + "lula_brilhante int DEFAULT 0, "
                     + "tubarao int DEFAULT 0, "
                     + "baleia int DEFAULT 0, "
-                    + "storage int DEFAULT 0, "
+                    + "frozen_fish int DEFAULT 0,"
+                    + "storage int DEFAULT 50, "
                     + "trash int DEFAULT 0)";
             stat.execute(sql_player);
 
@@ -64,6 +67,7 @@ public class PlayersDAO {
                             resultSet.getInt("lula_brilhante"),
                             resultSet.getInt("tubarao"),
                             resultSet.getInt("baleia"),
+                            resultSet.getInt("frozen_fish"),
                             resultSet.getInt("storage"),
                             resultSet.getInt("trash"));
                 }
@@ -93,6 +97,7 @@ public class PlayersDAO {
                             resultSet.getInt("lula_brilhante"),
                             resultSet.getInt("tubarao"),
                             resultSet.getInt("baleia"),
+                            resultSet.getInt("frozen_fish"),
                             resultSet.getInt("storage"),
                             resultSet.getInt("trash"));
                 }
@@ -104,7 +109,7 @@ public class PlayersDAO {
     }
 
     public void createPlayerData(PlayersData playerData) throws SQLException {
-        String sql = "INSERT INTO fishing_users (uuid, nickname, bacalhau, salmao, caranguejo, lagosta, lula, lula_brilhante, tubarao, baleia, storage, trash) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO fishing_users (uuid, nickname, bacalhau, salmao, caranguejo, lagosta, lula, lula_brilhante, tubarao, baleia, frozen_fish, storage, trash) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         executeUpdate(sql, statement -> {
             try {
                 statement.setString(1, playerData.getUuid());
@@ -117,8 +122,9 @@ public class PlayersDAO {
                 statement.setInt(8, playerData.getLula_brilhante());
                 statement.setInt(9, playerData.getTubarao());
                 statement.setInt(10, playerData.getBaleia());
-                statement.setInt(11, playerData.getStorage());
-                statement.setInt(12, playerData.getTrash());
+                statement.setInt(11, playerData.getFrozen_fish());
+                statement.setInt(12, playerData.getStorage());
+                statement.setInt(13, playerData.getTrash());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -137,7 +143,7 @@ public class PlayersDAO {
     }
 
     public void updatePlayerData(PlayersData playerData) throws SQLException {
-        String sql = "UPDATE fishing_users SET nickname = ?, bacalhau = ?, salmao = ?, caranguejo = ?, lagosta = ?, lula = ?, lula_brilhante = ?, tubarao = ?, baleia = ?, storage = ?, trash = ? WHERE uuid = ?";
+        String sql = "UPDATE fishing_users SET nickname = ?, bacalhau = ?, salmao = ?, caranguejo = ?, lagosta = ?, lula = ?, lula_brilhante = ?, tubarao = ?, baleia = ?, frozen_fish = ?, storage = ?, trash = ? WHERE uuid = ?";
         executeUpdate(sql, statement -> {
             try {
                 statement.setString(1, playerData.getNickname());
@@ -149,9 +155,10 @@ public class PlayersDAO {
                 statement.setInt(7, playerData.getLula_brilhante());
                 statement.setInt(8, playerData.getTubarao());
                 statement.setInt(9, playerData.getBaleia());
-                statement.setInt(10, playerData.getStorage());
-                statement.setInt(11, playerData.getTrash());
-                statement.setString(12, playerData.getUuid());
+                statement.setInt(10, playerData.getFrozen_fish());
+                statement.setInt(11, playerData.getStorage());
+                statement.setInt(12, playerData.getTrash());
+                statement.setString(13, playerData.getUuid());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -178,6 +185,7 @@ public class PlayersDAO {
                         resultSet.getInt("lula_brilhante"),
                         resultSet.getInt("tubarao"),
                         resultSet.getInt("baleia"),
+                        resultSet.getInt("frozen_fish"),
                         resultSet.getInt("storage"),
                         resultSet.getInt("trash")));
             }

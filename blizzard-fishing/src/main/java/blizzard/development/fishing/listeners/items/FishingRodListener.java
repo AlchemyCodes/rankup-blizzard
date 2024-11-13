@@ -23,7 +23,6 @@ public class FishingRodListener implements Listener {
             return;
         }
 
-        player.sendMessage("é vara");
     }
 
 

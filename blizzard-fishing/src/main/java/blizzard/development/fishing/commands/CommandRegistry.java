@@ -1,6 +1,7 @@
 package blizzard.development.fishing.commands;
 
 import blizzard.development.fishing.Main;
+import blizzard.development.fishing.commands.subcommands.SetCommands;
 import co.aikar.commands.PaperCommandManager;
 
 import java.util.Arrays;
@@ -11,7 +12,8 @@ public class CommandRegistry {
         PaperCommandManager paperCommandManager = new PaperCommandManager(Main.getInstance());
 
         Arrays.asList(
-                new FishingCommand()
+                new FishingCommand(),
+                new SetCommands()
         ).forEach(paperCommandManager::registerCommand);
     }
 }

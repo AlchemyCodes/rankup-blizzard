@@ -1,5 +1,6 @@
 package blizzard.development.fishing.handlers;
 
+import blizzard.development.fishing.database.cache.methods.RodsCacheMethod;
 import blizzard.development.fishing.utils.PluginImpl;
 import blizzard.development.fishing.utils.items.ItemBuilder;
 import org.bukkit.Material;
@@ -16,11 +17,22 @@ public class FishingRodHandler {
 
     public static void setRod(Player player, int slot) {
         Plugin plugin = PluginImpl.getInstance().plugin;
+        RodsCacheMethod instance = RodsCacheMethod.getInstance();
 
         ItemStack rod = new ItemBuilder(Material.FISHING_ROD)
-                .setDisplayName("Vara")
-                .setLore(Arrays.asList("a",
-                        "a"))
+                .setDisplayName("§6Vara de Pesca")
+                .setLore(Arrays.asList(
+                        "§7Utilize esse vara para",
+                        "§7pescar uma varidade de peixes.",
+                        "",
+                        " §6Encantamentos:",
+                        "  §7XXXXXXXX §l{rod_enchant_xxxxxx}",
+                        "  §7Experiente §l" + instance.getExperienced(player),
+                        "  §7Sortudo §l" + instance.getLucky(player),
+                        "",
+                        "  §8▶ §fForça: §7" + instance.getStrength(player),
+                        "  §8■ §fMaterial: §7" + instance.getMaterials(player),
+                        ""))
                 .addPersistentData(plugin, key, 1)
                 .build();
 

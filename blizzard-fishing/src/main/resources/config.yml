@@ -30,3 +30,9 @@ fishes:
   baleia:
     rarity: "mystic"
     price: 8
+
+strengthNeeded:
+  common: 1
+  rare: 2
+  legendary: 3
+  mystic: 4

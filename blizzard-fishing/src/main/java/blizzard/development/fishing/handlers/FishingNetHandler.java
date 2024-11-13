@@ -1,5 +1,6 @@
 package blizzard.development.fishing.handlers;
 
+import blizzard.development.fishing.database.cache.methods.PlayersCacheMethod;
 import blizzard.development.fishing.utils.PluginImpl;
 import blizzard.development.fishing.utils.items.ItemBuilder;
 import org.bukkit.Material;
@@ -18,9 +19,12 @@ public class FishingNetHandler {
         Plugin plugin = PluginImpl.getInstance().plugin;
 
         ItemStack rod = new ItemBuilder(Material.COBWEB)
-                .setDisplayName("Rede")
-                .setLore(Arrays.asList("a",
-                        "a"))
+                .setDisplayName("§eRede de Pesca §7[" + PlayersCacheMethod.getInstance().getTrash(player) + "§7]")
+                .setLore(Arrays.asList(
+                        "§7Obtenha uma chance de upar um",
+                        "§7encantamento aleatório ao coletar lixos.",
+                        "",
+                        "§eClique na água para coletar."))
                 .addPersistentData(plugin, key, 1)
                 .build();
 

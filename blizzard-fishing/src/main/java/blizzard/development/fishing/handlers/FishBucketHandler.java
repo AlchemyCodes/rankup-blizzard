@@ -1,5 +1,6 @@
 package blizzard.development.fishing.handlers;
 
+import blizzard.development.fishing.database.cache.methods.PlayersCacheMethod;
 import blizzard.development.fishing.utils.PluginImpl;
 import blizzard.development.fishing.utils.items.ItemBuilder;
 import org.bukkit.Material;
@@ -18,9 +19,17 @@ public class FishBucketHandler {
         Plugin plugin = PluginImpl.getInstance().plugin;
 
         ItemStack rod = new ItemBuilder(Material.PUFFERFISH_BUCKET)
-                .setDisplayName("bALDE")
-                .setLore(Arrays.asList("a",
-                        "a"))
+                .setDisplayName("§9Balde de Peixes " +
+                        "§7["
+                        + PlayersCacheMethod.getInstance().getFishes(player)
+                        + "/"
+                        + PlayersCacheMethod.getInstance().getStorage(player)
+                        + "§7]")
+                .setLore(Arrays.asList(
+                        "§7Gerencie o seu",
+                        "§7balde de peixes.",
+                        "",
+                        "§9Clique para gerenciar."))
                 .addPersistentData(plugin, key, 1)
                 .build();
 
