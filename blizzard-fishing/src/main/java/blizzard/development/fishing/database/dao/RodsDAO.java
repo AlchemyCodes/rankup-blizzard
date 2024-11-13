@@ -19,7 +19,7 @@ public class RodsDAO {
             String sql_player = "CREATE TABLE IF NOT EXISTS fishing_rods ("
                     + "uuid VARCHAR(36) PRIMARY KEY, "
                     + "nickname VARCHAR(36), "
-                    + "strength INT DEFAULT 0, "
+                    + "strength INT DEFAULT 1, "
                     + "xp DOUBLE DEFAULT 0, "
                     + "experienced INT DEFAULT 0, "
                     + "lucky INT DEFAULT 0, "

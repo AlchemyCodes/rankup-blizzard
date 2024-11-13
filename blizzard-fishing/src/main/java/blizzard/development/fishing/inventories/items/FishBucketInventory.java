@@ -130,22 +130,24 @@ public class FishBucketInventory {
 
     private static ItemStack peixeCongelado(Player player) {
         return new ItemBuilder("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzY0YjExYWU1ZDM4NzdjZjA4OGU0Yjg0MjQ4MzM3ODNiZmE5NzNhMDM0OTUwYTc0ZDc4Yjg5ZjMzMTVkMzZiZCJ9fX0=")
-                .setDisplayName("§bPeixe Congelados [X]")
-                .setLore(Arrays.asList("a", "b"))
+                .setDisplayName("§bPeixe Congelados §7[" + PlayersCacheMethod.getInstance().getFrozenFish(player) +"]")
+                .setLore(Arrays.asList
+                        ("§7Peixes congelados ao descongelar","§7viram outro peixe aleatório"
+                        ,"§7dando dinheiro extra ao descongelar!"))
                 .build();
     }
 
     private static ItemStack back(Player player) {
         return new ItemBuilder(Material.RED_DYE)
                 .setDisplayName("§cVoltar")
-                .setLore(Arrays.asList("voltar menu", "b"))
+                .setLore(Arrays.asList("§7Volte ao menu anterior."))
                 .build();
     }
 
     private static ItemStack go(Player player) {
         return new ItemBuilder(Material.GREEN_DYE)
                 .setDisplayName("§aMelhorias")
-                .setLore(Arrays.asList("ir para melhorias", "b"))
+                .setLore(Arrays.asList("§7Clique para ir ao", "§7menu de melhorias do balde."))
                 .build();
     }
 
@@ -158,8 +160,8 @@ public class FishBucketInventory {
 
     private static ItemStack createFishItem(Player player, String name, String textureValue, String fishName) {
         YamlConfiguration config = PluginImpl.getInstance().Config.getConfig();
-        int fishAmount = PlayersCacheMethod.getFishAmount(player, fishName);
-        int strength = RodsCacheMethod.getStrength(player);
+        int fishAmount = PlayersCacheMethod.getInstance().getFishAmount(player, fishName);
+        int strength = RodsCacheMethod.getInstance().getStrength(player);
         String rarity = config.getString("fishes." + fishName + ".rarity");
         assert rarity != null;
         int requiredStrength = FishesUtils.getStrengthNecessary(rarity);

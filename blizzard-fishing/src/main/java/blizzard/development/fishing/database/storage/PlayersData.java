@@ -15,11 +15,13 @@ public class PlayersData {
     private int lula_brilhante;
     private int tubarao;
     private int baleia;
+    private int frozen_fish;
     private int storage;
     private int trash;
 
     public PlayersData(String uuid, String nickname, int bacalhau, int salmao, int caranguejo,
-                       int lagosta, int lula, int lula_brilhante, int tubarao, int baleia, int storage, int trash) {
+                       int lagosta, int lula, int lula_brilhante, int tubarao, int baleia,
+                       int frozen_fish, int storage, int trash) {
 
         this.uuid = uuid;
         this.nickname = nickname;
@@ -31,12 +33,9 @@ public class PlayersData {
         this.lula_brilhante = lula_brilhante;
         this.tubarao = tubarao;
         this.baleia = baleia;
+        this.frozen_fish = frozen_fish;
         this.storage = storage;
         this.trash = trash;
     }
-
-    public int capacity() {
-        return bacalhau + salmao + caranguejo + lagosta + lula + lula_brilhante + tubarao + baleia;
-        }
     }
 

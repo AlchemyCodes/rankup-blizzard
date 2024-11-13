@@ -22,6 +22,5 @@ public class FishBucketListener implements Listener {
 
         FishBucketInventory.openBucket(player);
         event.setCancelled(true);
-        player.sendMessage("é balde");
     }
 }

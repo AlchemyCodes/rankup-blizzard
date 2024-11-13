@@ -6,6 +6,7 @@ import blizzard.development.fishing.database.cache.PlayersCacheManager;
 import blizzard.development.fishing.database.dao.PlayersDAO;
 import blizzard.development.fishing.database.dao.RodsDAO;
 import blizzard.development.fishing.listeners.ListenerRegistry;
+import blizzard.development.fishing.tasks.FishingNetTask;
 import blizzard.development.fishing.tasks.FishingTask;
 import blizzard.development.fishing.tasks.PlayerSaveTask;
 import blizzard.development.fishing.tasks.RodSaveTask;
@@ -22,11 +23,14 @@ public class PluginImpl {
     public PlayersDAO playersDAO;
     public RodsDAO rodsDAO;
     public final Plugin plugin;
+
     @Getter
     private static PluginImpl instance;
     private static PaperCommandManager commandManager;
+
     public ConfigUtils Database;
     public ConfigUtils Config;
+    public ConfigUtils Enchantments;
 
     public PluginImpl(Plugin plugin) {
         this.plugin = plugin;
@@ -37,6 +41,7 @@ public class PluginImpl {
 
         this.Database = new ConfigUtils((JavaPlugin)plugin, "database.yml");
         this.Config = new ConfigUtils((JavaPlugin)plugin, "config.yml");
+        this.Enchantments = new ConfigUtils((JavaPlugin)plugin, "enchantments.yml");
     }
 
     public void onLoad() {
@@ -54,15 +59,19 @@ public class PluginImpl {
         if (!this.Config.existsConfig()) {
             this.Config.saveDefaultConfig();
         }
+        if (!this.Enchantments.existsConfig()) {
+            this.Enchantments.saveDefaultConfig();
+        }
 
 
         this.Database.reloadConfig();
         this.Config.reloadConfig();
+        this.Enchantments.reloadConfig();
 
     }
 
     public void onUnload() {
-        PlayersCacheManager.playerCache.forEach((player, playersData) -> {
+        PlayersCacheManager.getInstance().playerCache.forEach((player, playersData) -> {
             try {
                 this.playersDAO.updatePlayerData(playersData);
             } catch (SQLException exception) {
@@ -78,12 +87,13 @@ public class PluginImpl {
         this.rodsDAO = new RodsDAO();
         this.rodsDAO.initializeDatabase();
 
-        new PlayerSaveTask(playersDAO).runTaskTimerAsynchronously(plugin, 0L, 60L);
-        new RodSaveTask(rodsDAO).runTaskTimerAsynchronously(plugin, 0L, 60L);
+        new PlayerSaveTask(playersDAO).runTaskTimerAsynchronously(plugin, 0L, 20L * 3);
+        new RodSaveTask(rodsDAO).runTaskTimerAsynchronously(plugin, 0L, 20L * 3);
     }
 
     private void registerTasks() {
         new FishingTask(plugin);
+        new FishingNetTask(plugin);
     }
 
     private void registerListeners() {

@@ -13,10 +13,11 @@ public class PlayerSaveTask extends BukkitRunnable {
         this.playersDAO = playersDAO;
     }
 
+    @Override
     public void run() {
-        PlayersCacheManager.playerCache.forEach((player, playersData) -> {
+        PlayersCacheManager.getInstance().playerCache.forEach((player, playersData) -> {
             try {
-                this.playersDAO.updatePlayerData(playersData);
+                playersDAO.updatePlayerData(playersData);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }

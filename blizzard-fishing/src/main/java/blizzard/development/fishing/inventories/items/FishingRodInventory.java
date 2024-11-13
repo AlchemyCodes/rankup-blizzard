@@ -15,21 +15,21 @@ import java.util.Arrays;
 
 public class FishingRodInventory {
     public static void openRod(Player player) {
-        ChestGui gui = new ChestGui(3, "Vara de pesca");
+        ChestGui gui = new ChestGui(5, "Vara de pesca");
 
-        StaticPane pane = new StaticPane(0, 0, 9, 3);
+        StaticPane pane = new StaticPane(0, 0, 9, 5);
 
         GuiItem enchant2 = new GuiItem(experienced(player), event -> { event.setCancelled(true);
         });
         GuiItem enchant3 = new GuiItem(lucky(player), event -> { event.setCancelled(true);
         });
 
-        GuiItem back = new GuiItem(back(), event -> { event.setCancelled(true);
+        GuiItem explanation = new GuiItem(explanation(), event -> { event.setCancelled(true);
         });
 
         pane.addItem(enchant2, Slot.fromIndex(13));
         pane.addItem(enchant3, Slot.fromIndex(15));
-        pane.addItem(back, Slot.fromIndex(18));
+        pane.addItem(explanation, Slot.fromIndex(31));
 
 
         gui.addPane(pane);
@@ -37,14 +37,14 @@ public class FishingRodInventory {
         gui.show(player);
     }
 
-    public static ItemStack back() {
+    public static ItemStack explanation() {
 
-        ItemStack back = new ItemStack(Material.RED_DYE);
+        ItemStack back = new ItemStack(Material.GREEN_DYE);
         ItemMeta meta = back.getItemMeta();
-        meta.setDisplayName("§cVoltar");
+        meta.setDisplayName("§aEncantamentos");
         meta.setLore(Arrays.asList(
-                "§7Clique para voltar",
-                "§7ao menu anterior."
+                "§7Nesse menu estão os encantamentos",
+                "§7que serão melhorados ao coletar lixo."
         ));
 
         back.setItemMeta(meta);
@@ -56,7 +56,7 @@ public class FishingRodInventory {
 
         ItemStack back = new ItemStack(Material.BOOK);
         ItemMeta meta = back.getItemMeta();
-        meta.setDisplayName("§6Sortudo §7[§l" + RodsCacheMethod.getLucky(player) + "§7]");
+        meta.setDisplayName("§6Sortudo §7[§l" + RodsCacheMethod.getInstance().getLucky(player) + "§7]");
         meta.setLore(Arrays.asList(
                 "§7Esse encantamento adiciona",
                 "§7a chance de pescar mais peixes."
@@ -71,7 +71,7 @@ public class FishingRodInventory {
 
         ItemStack back = new ItemStack(Material.BOOK);
         ItemMeta meta = back.getItemMeta();
-        meta.setDisplayName("§6Experiente §7[§l" + RodsCacheMethod.getExperienced(player) + "§7]");
+        meta.setDisplayName("§6Experiente §7[§l" + RodsCacheMethod.getInstance().getExperienced(player) + "§7]");
         meta.setLore(Arrays.asList(
                 "§7Esse encantamento aumenta",
                 "§7a experiência que você ganha."
