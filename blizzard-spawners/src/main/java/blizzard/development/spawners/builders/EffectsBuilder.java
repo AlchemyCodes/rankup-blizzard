@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class EffectsBuilder {
-    private static final Map<Location, BukkitRunnable> activeEffects = new HashMap<>();
+    private static final Map<String, BukkitRunnable> activeEffects = new HashMap<>();
     private static final SpawnersCacheManager cache = SpawnersCacheManager.getInstance();
 
     private static final Particle.DustTransition PIG_PARTICLE = new Particle.DustTransition(
@@ -31,10 +31,16 @@ public class EffectsBuilder {
             1.5f
     );
 
+    private static String serializeLocation(Location location) {
+        return location.getWorld().getName() + ":" + location.getBlockX() + ":" + location.getBlockY() + ":" + location.getBlockZ();
+    }
+
     public static void createSpawnerEffect(Player player, Location location, String spawnerType) {
         if (location.getWorld() == null) {
             return;
         }
+
+        String locationKey = serializeLocation(location);
 
         BukkitRunnable effectTask = new BukkitRunnable() {
             double angle = 0;
@@ -43,7 +49,7 @@ public class EffectsBuilder {
             public void run() {
                 if (!location.getChunk().isLoaded()) {
                     cancel();
-                    activeEffects.remove(location);
+                    activeEffects.remove(locationKey);
                     return;
                 }
 
@@ -93,7 +99,7 @@ public class EffectsBuilder {
         };
 
         effectTask.runTaskTimer(PluginImpl.getInstance().plugin, 0L, 4L);
-        activeEffects.put(location, effectTask);
+        activeEffects.put(locationKey, effectTask);
     }
 
     public static void restorePlayerEffects(Player player) {
@@ -110,7 +116,8 @@ public class EffectsBuilder {
     }
 
     public static void removeSpawnerEffect(Location location) {
-        BukkitRunnable task = activeEffects.remove(location);
+        String locationKey = serializeLocation(location);
+        BukkitRunnable task = activeEffects.remove(locationKey);
         if (task != null) {
             task.cancel();
         }
