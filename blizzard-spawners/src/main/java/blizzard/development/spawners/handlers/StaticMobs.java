@@ -14,7 +14,7 @@ import blizzard.development.spawners.utils.PluginImpl;
 
 public class StaticMobs {
 
-    public static void spawnStaticMob(Player player, Spawners spawnerType, Location location) {
+    public static void spawn(Player player, Spawners spawnerType, Location location) {
         EntityType entityType = getEntityTypeFromSpawner(spawnerType);
         if (entityType == null) return;
         LivingEntity mob = (LivingEntity) location.getWorld().spawnEntity(location, entityType);

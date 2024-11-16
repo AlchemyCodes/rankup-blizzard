@@ -1,4 +1,4 @@
-package blizzard.development.spawners.listeners.spawners;
+package blizzard.development.spawners.listeners.spawners.spawners;
 
 import blizzard.development.spawners.builders.DisplayBuilder;
 import blizzard.development.spawners.builders.EffectsBuilder;
@@ -9,6 +9,7 @@ import blizzard.development.spawners.handlers.mobs.CowMob;
 import blizzard.development.spawners.handlers.mobs.PigMob;
 import blizzard.development.spawners.utils.*;
 import blizzard.development.spawners.utils.items.TextAPI;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -42,6 +43,12 @@ public class SpawnerBreakListener implements Listener {
                     data = spawner;
                     break;
                 }
+            }
+
+            if (!player.getGameMode().equals(GameMode.SURVIVAL) && !player.hasPermission("blizzard.spawners.admin")) {
+                player.sendActionBar(TextAPI.parse("§c§lEI! §cVocê precisa estar no modo sobrevivência para quebrar."));
+                event.setCancelled(true);
+                return;
             }
 
             if (data == null) {
