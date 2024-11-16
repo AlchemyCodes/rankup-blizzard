@@ -2,17 +2,26 @@ package blizzard.development.spawners.listeners.spawners;
 
 import blizzard.development.spawners.builders.DisplayBuilder;
 import blizzard.development.spawners.builders.EffectsBuilder;
+import blizzard.development.spawners.handlers.StaticMobs;
+import blizzard.development.spawners.handlers.StaticSpawners;
 import blizzard.development.spawners.handlers.enums.Spawners;
 import blizzard.development.spawners.methods.SpawnersMethods;
-import blizzard.development.spawners.utils.*;
+import blizzard.development.spawners.utils.CooldownUtils;
+import blizzard.development.spawners.utils.LocationUtil;
+import blizzard.development.spawners.utils.NumberFormat;
 import blizzard.development.spawners.builders.ItemBuilder;
+import blizzard.development.spawners.utils.PluginImpl;
 import blizzard.development.spawners.utils.items.TextAPI;
 import com.plotsquared.core.PlotSquared;
 import com.plotsquared.core.plot.Plot;
 import com.plotsquared.core.plot.PlotArea;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.CreatureSpawner;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -28,13 +37,19 @@ public class SpawnerPlaceListener implements Listener {
     private final CooldownUtils cooldown = CooldownUtils.getInstance();
 
     @EventHandler
-    public void onSpawnerPlace(BlockPlaceEvent event) {
+    private void onSpawnerPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
         Block spawnerBlock = event.getBlockPlaced();
         String cooldownName = "blizzard.spawners.place-cooldown";
 
         if (spawnerBlock.getType().equals(Material.SPAWNER)) {
             if (!terrainVerify(player, spawnerBlock)) {
+                event.setCancelled(true);
+                return;
+            }
+
+            if (!player.getGameMode().equals(GameMode.SURVIVAL)) {
+                player.sendActionBar(TextAPI.parse("§c§lEI! §cVocê precisa estar no modo sobrevivência para quebrar."));
                 event.setCancelled(true);
                 return;
             }
@@ -52,55 +67,49 @@ public class SpawnerPlaceListener implements Listener {
             }
 
             ItemStack spawnerItem = player.getInventory().getItemInMainHand();
-
             final String id = UUID.randomUUID().toString().substring(0, 8);
-
-            final Spawners pigSpawner = Spawners.PIG;
-            final String pigKey = "blizzard.spawners-" + pigSpawner.getType();
 
             final Spawners cowSpawner = Spawners.COW;
             final String cowKey = "blizzard.spawners-" + cowSpawner.getType();
 
-            final com.plotsquared.core.location.Location plotLocation = getPlotLocation(spawnerBlock);
-            final PlotArea plotArea = plotLocation.getPlotArea();
-            final Plot plot = Objects.requireNonNull(plotArea).getPlot(plotLocation);
-
-            if (ItemBuilder.hasPersistentData(PluginImpl.getInstance().plugin, spawnerItem, pigKey)) {
-                String value = ItemBuilder.getPersistentData(PluginImpl.getInstance().plugin, spawnerItem, pigKey);
-                if (!setupSpawner(player, id, spawnerBlock.getLocation(), pigSpawner, Double.valueOf(value), String.valueOf(plot.getId()))) {
-                    event.setCancelled(true);
-                    return;
-                }
-
-            } else if (ItemBuilder.hasPersistentData(PluginImpl.getInstance().plugin, spawnerItem, cowKey)) {
+            if (ItemBuilder.hasPersistentData(PluginImpl.getInstance().plugin, spawnerItem, cowKey)) {
                 String value = ItemBuilder.getPersistentData(PluginImpl.getInstance().plugin, spawnerItem, cowKey);
-                if (!setupSpawner(player, id, spawnerBlock.getLocation(), cowSpawner, Double.valueOf(value), String.valueOf(plot.getId()))) {
+                if (!setupSpawner(player, id, spawnerBlock.getLocation(), cowSpawner, Double.valueOf(value))) {
                     event.setCancelled(true);
                     return;
                 }
-
             } else {
                 player.sendActionBar(TextAPI.parse("§c§lEI! §cEste é um spawner sem dados."));
                 event.setCancelled(true);
             }
+
             cooldown.createCountdown(player, cooldownName, 500, TimeUnit.MILLISECONDS);
         }
     }
 
-    public Boolean setupSpawner(Player player, String id, Location location, Spawners spawner, Double amount, String plotId) {
-        if (!SpawnersMethods.createSpawner(player, id, LocationUtil.getSerializedLocation(location), spawner, amount, plotId)) {
+    private Boolean setupSpawner(Player player, String id, Location spawnerLocation, Spawners spawner, Double amount) {
+        StaticSpawners.setupCreatureSpawner(spawnerLocation, spawner);
+
+        Location mobLocation = spawnerLocation.clone();
+        Location playerLocation = player.getLocation();
+        mobLocation.add(spawnerLocation.toVector().subtract(playerLocation.toVector()).normalize().multiply(-1).setY(0));
+        mobLocation.add(0.5, 0, 0.5);
+
+        if (!SpawnersMethods.createSpawner(player, id, LocationUtil.getSerializedLocation(spawnerLocation), spawner, amount, "N/A")) {
             return false;
         }
 
-        DisplayBuilder.createSpawnerDisplay(location, spawner.getType(), amount, player);
-        EffectsBuilder.createSpawnerEffect(player, location, spawner.getType());
+        StaticMobs.spawnStaticMob(player, spawner, mobLocation);
+
+        DisplayBuilder.createSpawnerDisplay(spawnerLocation, spawner.getType(), amount, player);
+        EffectsBuilder.createSpawnerEffect(player, spawnerLocation, spawner.getType());
 
         String formattedAmount = NumberFormat.getInstance().formatNumber(amount);
         player.sendActionBar(TextAPI.parse("§a§lYAY! §aVocê colocou §fx" + formattedAmount + " §aspawner(s) de " + spawner.getType() + "§a!"));
         return true;
     }
 
-    public Boolean terrainVerify(Player player, Block block) {
+    private Boolean terrainVerify(Player player, Block block) {
         com.plotsquared.core.location.Location blockLocation = getPlotLocation(block);
 
         UUID playerUUID = player.getUniqueId();
@@ -125,7 +134,7 @@ public class SpawnerPlaceListener implements Listener {
         return true;
     }
 
-    public com.plotsquared.core.location.Location getPlotLocation(Block block) {
+    private com.plotsquared.core.location.Location getPlotLocation(Block block) {
         return com.plotsquared.core.location.Location.at(
                 block.getLocation().getWorld().getName(),
                 (int) block.getLocation().getX(),
