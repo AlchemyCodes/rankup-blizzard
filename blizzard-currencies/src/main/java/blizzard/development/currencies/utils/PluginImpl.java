@@ -4,21 +4,23 @@ import blizzard.development.currencies.Main;
 import blizzard.development.currencies.commands.CommandRegistry;
 import blizzard.development.currencies.currencies.CoinsCurrency;
 import blizzard.development.currencies.database.DatabaseConnection;
+import blizzard.development.currencies.database.cache.PlayersCacheManager;
 import blizzard.development.currencies.database.dao.PlayersDAO;
-import blizzard.development.currencies.extensions.NChatExtension;
+import blizzard.development.currencies.database.storage.PlayersData;
 import blizzard.development.currencies.extensions.PlaceholderAPIExtension;
 import blizzard.development.currencies.listeners.ListenerRegistry;
 import blizzard.development.currencies.tasks.PlayersSaveTask;
 import blizzard.development.currencies.utils.config.ConfigUtils;
 import co.aikar.commands.Locales;
 import co.aikar.commands.PaperCommandManager;
-import com.nickuc.chat.api.nChatAPI;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.ArrayList;
+import java.sql.SQLException;
+import java.util.List;
 
 public class PluginImpl {
     public final Plugin plugin;
@@ -51,12 +53,25 @@ public class PluginImpl {
 
     public void onUnload() {
         DatabaseConnection.getInstance().close();
+        playersDAO = new PlayersDAO();
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            try {
+                playersDAO.updatePlayerData(PlayersCacheManager.getInstance().getPlayerData(player));
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     public void registerDatabase() {
         DatabaseConnection.getInstance();
         playersDAO = new PlayersDAO();
         playersDAO.initializeDatabase();
+
+        List<PlayersData> players = playersDAO.getAllPlayers();
+        for (PlayersData player : players) {
+            PlayersCacheManager.getInstance().cachePlayerData(player.getNickname(), player);
+        }
 
         new PlayersSaveTask(playersDAO).runTaskTimerAsynchronously(plugin, 0, 20L * 3);
     }
@@ -70,10 +85,6 @@ public class PluginImpl {
     }
 
     public void registerExtensions() {
-        nChatAPI api = nChatAPI.getApi();
-        if (api != null) {
-            api.setGlobalTag("currencies_flakes_tag", new NChatExtension(plugin));
-        }
         if (pluginManager.getPlugin("PlaceholderAPI") != null) {
             new PlaceholderAPIExtension((Main) plugin).register();
         }

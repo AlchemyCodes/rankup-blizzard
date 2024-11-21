@@ -4,6 +4,9 @@ import blizzard.development.currencies.database.cache.PlayersCacheManager;
 import blizzard.development.currencies.database.storage.PlayersData;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class FlakesCurrency {
     private static FlakesCurrency instance;
 
@@ -40,6 +43,13 @@ public class FlakesCurrency {
         data.setFlakes(initialBalance - balance);
         cache.cachePlayerData(player, data);
         return true;
+    }
+
+    public List<PlayersData> getTopPlayers() {
+        return PlayersCacheManager.getInstance().playersCache.values().stream()
+                .sorted((p1, p2) -> Double.compare(p2.getFlakes(), p1.getFlakes()))
+                .limit(10)
+                .collect(Collectors.toList());
     }
 
     public static FlakesCurrency getInstance() {

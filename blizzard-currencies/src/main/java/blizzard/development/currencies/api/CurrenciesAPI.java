@@ -4,9 +4,12 @@ import blizzard.development.currencies.currencies.CoinsCurrency;
 import blizzard.development.currencies.currencies.FlakesCurrency;
 import blizzard.development.currencies.currencies.FossilsCurrency;
 import blizzard.development.currencies.currencies.SoulsCurrency;
+import blizzard.development.currencies.database.storage.PlayersData;
 import blizzard.development.currencies.enums.Currencies;
 import blizzard.development.currencies.utils.NumberFormat;
 import org.bukkit.entity.Player;
+
+import java.util.List;
 
 public class CurrenciesAPI {
     private static CurrenciesAPI instance;
@@ -113,6 +116,17 @@ public class CurrenciesAPI {
             fossilsCurrency.addBalance(target, balance);
         }
         return true;
+    }
+
+    public List<PlayersData> getTopPlayers(Currencies currency) {
+        if (currency.getName().equals(souls)) {
+            return soulsCurrency.getTopPlayers();
+        } else if (currency.getName().equals(flakes)) {
+            return flakesCurrency.getTopPlayers();
+        } else if (currency.getName().equals(fossils)) {
+            return fossilsCurrency.getTopPlayers();
+        }
+        return null;
     }
 
     public static CurrenciesAPI getInstance() {
