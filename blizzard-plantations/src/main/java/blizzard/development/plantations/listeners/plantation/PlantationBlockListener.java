@@ -3,7 +3,6 @@ package blizzard.development.plantations.listeners.plantation;
 import blizzard.development.plantations.Main;
 import blizzard.development.plantations.database.cache.methods.PlayerCacheMethod;
 import blizzard.development.plantations.managers.upgrades.ToolUpgradeManager;
-import blizzard.development.plantations.managers.upgrades.plow.PlowEffect;
 import blizzard.development.plantations.managers.upgrades.plow.PlowManager;
 import blizzard.development.plantations.plantations.events.PlantationBlockPlowEvent;
 import org.bukkit.Bukkit;
@@ -11,15 +10,12 @@ import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.block.data.Levelled;
 import org.bukkit.block.data.type.Farmland;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockFadeEvent;
-import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.MoistureChangeEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -69,7 +65,6 @@ public class PlantationBlockListener implements Listener {
         if (block.getType() == Material.COARSE_DIRT) {
             block.setType(Material.FARMLAND);
             setMoisture(block);
-
 
             String id = getPersistentData(Main.getInstance(), item, "ferramenta-id");
 
