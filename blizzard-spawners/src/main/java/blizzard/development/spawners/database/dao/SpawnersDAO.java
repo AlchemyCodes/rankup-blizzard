@@ -16,8 +16,9 @@ public class SpawnersDAO {
             String sql = "CREATE TABLE IF NOT EXISTS spawners (" +
                     "id VARCHAR(36) PRIMARY KEY, " +
                     "type VARCHAR(50), " +
-                    "amount DOUBLE," +
+                    "amount DOUBLE, " +
                     "location VARCHAR(255), " +
+                    "mob_location VARCHAR(255), " +
                     "nickname VARCHAR(36), " +
                     "plotId VARCHAR(36))";
             stat.execute(sql);
@@ -51,6 +52,7 @@ public class SpawnersDAO {
                             resultSet.getString("type"),
                             resultSet.getDouble("amount"),
                             resultSet.getString("location"),
+                            resultSet.getString("mob_location"),
                             resultSet.getString("nickname"),
                             resultSet.getString("plotId")
                     );
@@ -75,6 +77,7 @@ public class SpawnersDAO {
                             resultSet.getString("type"),
                             resultSet.getDouble("amount"),
                             resultSet.getString("location"),
+                            resultSet.getString("mob_location"),
                             resultSet.getString("nickname"),
                             resultSet.getString("plotId")));
                 }
@@ -86,15 +89,16 @@ public class SpawnersDAO {
     }
 
     public void createSpawnerData(SpawnersData spawnerData) throws SQLException {
-        String sql = "INSERT INTO spawners (id, type, amount, location, nickname, plotId) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO spawners (id, type, amount, location, mob_location, nickname, plotId) VALUES (?, ?, ?, ?, ?, ?, ?)";
         executeUpdate(sql, statement -> {
             try {
                 statement.setString(1, spawnerData.getId());
                 statement.setString(2, spawnerData.getType());
                 statement.setDouble(3, spawnerData.getAmount());
                 statement.setString(4, spawnerData.getLocation());
-                statement.setString(5, spawnerData.getNickname());
-                statement.setString(6, spawnerData.getPlotId());
+                statement.setString(5, spawnerData.getMob_location());
+                statement.setString(6, spawnerData.getNickname());
+                statement.setString(7, spawnerData.getPlotId());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -113,20 +117,23 @@ public class SpawnersDAO {
     }
 
     public void updateSpawnerData(SpawnersData spawnerData) throws SQLException {
-        String sql = "UPDATE spawners SET type = ?, amount = ?, location = ?, nickname = ?, plotId = ? WHERE id = ?";
+        String sql = "UPDATE spawners SET type = ?, amount = ?, location = ?, mob_location = ?, nickname = ?, plotId = ? WHERE id = ?";
         executeUpdate(sql, statement -> {
             try {
                 statement.setString(1, spawnerData.getType());
                 statement.setDouble(2, spawnerData.getAmount());
                 statement.setString(3, spawnerData.getLocation());
-                statement.setString(4, spawnerData.getNickname());
-                statement.setString(5, spawnerData.getPlotId());
-                statement.setString(6, spawnerData.getId());
+                statement.setString(4, spawnerData.getMob_location());
+                statement.setString(5, spawnerData.getNickname());
+                statement.setString(6, spawnerData.getPlotId());
+                statement.setString(7, spawnerData.getId());
             } catch (SQLException e) {
-                throw new RuntimeException(e);
+                System.out.println("Erro ao atualizar spawner: " + e.getMessage());
+                e.printStackTrace();
             }
         });
     }
+
 
     public List<SpawnersData> getAllSpawnersData() throws SQLException {
         String sql = "SELECT * FROM spawners";
@@ -142,6 +149,7 @@ public class SpawnersDAO {
                         resultSet.getString("type"),
                         resultSet.getDouble("amount"),
                         resultSet.getString("location"),
+                        resultSet.getString("mob_location"),
                         resultSet.getString("nickname"),
                         resultSet.getString("plotId")
                 ));

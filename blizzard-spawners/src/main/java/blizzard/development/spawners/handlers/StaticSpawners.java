@@ -6,7 +6,6 @@ import org.bukkit.block.CreatureSpawner;
 import org.bukkit.entity.EntityType;
 
 public class StaticSpawners {
-
     public static void create(Location spawnerLocation, Spawners spawnerType) {
         if (spawnerLocation.getBlock().getState() instanceof CreatureSpawner creatureSpawner) {
             creatureSpawner.setSpawnedType(getEntityTypeFromSpawner(spawnerType));

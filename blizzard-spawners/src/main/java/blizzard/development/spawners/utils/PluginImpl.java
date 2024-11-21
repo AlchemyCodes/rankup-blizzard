@@ -2,23 +2,20 @@ package blizzard.development.spawners.utils;
 
 import blizzard.development.spawners.commands.CommandRegistry;
 import blizzard.development.spawners.database.DatabaseConnection;
-import blizzard.development.spawners.database.cache.SpawnersCacheManager;
+import blizzard.development.spawners.database.cache.managers.SpawnersCacheManager;
 import blizzard.development.spawners.database.dao.PlayersDAO;
 import blizzard.development.spawners.database.dao.SpawnersDAO;
 import blizzard.development.spawners.database.storage.SpawnersData;
 import blizzard.development.spawners.listeners.ListenerRegistry;
 import blizzard.development.spawners.listeners.plots.PlotClearListener;
 import blizzard.development.spawners.listeners.plots.PlotDeleteListener;
-import blizzard.development.spawners.managers.BatchManager;
 import blizzard.development.spawners.tasks.PlayersSaveTask;
 import blizzard.development.spawners.tasks.SpawnersSaveTask;
 import blizzard.development.spawners.utils.config.ConfigUtils;
 import co.aikar.commands.Locales;
 import co.aikar.commands.PaperCommandManager;
 import com.plotsquared.core.PlotAPI;
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.SQLException;
@@ -52,7 +49,6 @@ public class PluginImpl {
         registerDatabase();
         registerListeners();
         registerCommands();
-        BatchManager.initialize(this.plugin);
     }
 
     public void onDisable() {

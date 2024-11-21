@@ -9,7 +9,9 @@ import com.google.common.eventbus.Subscribe;
 import com.plotsquared.core.PlotAPI;
 import com.plotsquared.core.events.PlotClearEvent;
 import com.plotsquared.core.plot.Plot;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -35,14 +37,20 @@ public class PlotClearListener {
 
         if (!spawnersList.isEmpty()) {
             for (SpawnersData spawnersData : spawnersList) {
+                Location spawnerLocation = LocationUtil.deserializeLocation(spawnersData.getLocation());
+
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    if (player.getWorld().equals(spawnerLocation.getWorld())) {
+                        DisplayBuilder.removeSpawnerDisplay(spawnerLocation);
+                        EffectsBuilder.removeSpawnerEffect(spawnerLocation);
+                    }
+                }
+
+                final String spawnerId = spawnersData.getId();
                 try {
-                    Location spawnerLocation = LocationUtil.deserializeLocation(spawnersData.getLocation());
-                    DisplayBuilder.removeSpawnerDisplay(spawnerLocation);
-                    EffectsBuilder.removeSpawnerEffect(spawnerLocation);
-                    final String spawnerId = spawnersData.getId();
                     spawnersDAO.deleteSpawnerData(spawnerId);
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    throw new RuntimeException(e);
                 }
             }
         }

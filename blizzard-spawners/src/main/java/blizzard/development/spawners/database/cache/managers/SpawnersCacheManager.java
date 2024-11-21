@@ -1,4 +1,4 @@
-package blizzard.development.spawners.database.cache;
+package blizzard.development.spawners.database.cache.managers;
 
 import blizzard.development.spawners.database.storage.SpawnersData;
 
