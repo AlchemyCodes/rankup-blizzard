@@ -104,30 +104,6 @@ public class PlayersDAO {
         });
     }
 
-    public List<PlayersData> getTopPlayer(Currencies currency) {
-        List<PlayersData> players = new ArrayList<>();
-        String sql = "SELECT * FROM currencies_users ORDER BY " + currency.getName() + " LIMIT 1";
-
-        try (Connection conn = DatabaseConnection.getInstance().getConnection();
-             PreparedStatement statement = conn.prepareStatement(sql);
-             ResultSet resultSet = statement.executeQuery()) {
-
-            while (resultSet.next()) {
-                PlayersData player = new PlayersData(
-                        resultSet.getString("uuid"),
-                        resultSet.getString("nickname"),
-                        resultSet.getDouble("souls"),
-                        resultSet.getDouble("flakes"),
-                        resultSet.getDouble("fossils")
-                );
-                players.add(player);
-            }
-        } catch (SQLException e) {
-            System.out.println("Failed to load top player: " + e);
-        }
-        return players;
-    }
-
     public List<PlayersData> getAllPlayers() {
         List<PlayersData> players = new ArrayList<>();
         String sql = "SELECT * FROM currencies_users";
