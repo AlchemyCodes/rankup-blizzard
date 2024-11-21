@@ -94,14 +94,32 @@ public class SpawnerPlaceListener implements Listener {
         Plot plot = plotArea.getPlot(LocationUtil.getPlotLocation(spawnerLocation.getBlock()));
 
         Location mobLocation = spawnerLocation.clone();
-        Vector direction = player.getLocation().getDirection().normalize();
+        mobLocation.setX(mobLocation.getBlockX() + 0.5);
+        mobLocation.setZ(mobLocation.getBlockZ() + 0.5);
+        mobLocation.setY(spawnerLocation.getBlockY());
 
-        mobLocation.add(direction.multiply(2.0));
-        mobLocation.setY(spawnerLocation.getY());
+        Vector playerDirection = player.getLocation().toVector().subtract(spawnerLocation.toVector());
+        playerDirection.setY(0);
+        playerDirection = playerDirection.normalize();
 
-        if (!SpawnersMethods.createSpawner(player, id, LocationUtil.getSerializedLocation(spawnerLocation), spawner, amount, String.valueOf(plot.getId()))) return false;
+        mobLocation.add(playerDirection.multiply(1.5));
 
-        StaticMobs.spawn(player, spawner, mobLocation);
+        Vector lookDirection = player.getLocation().toVector().subtract(mobLocation.toVector());
+        lookDirection.setY(0);
+        mobLocation.setDirection(lookDirection.normalize());
+
+        if (!SpawnersMethods.createSpawner(
+                player,
+                id,
+                LocationUtil.getSerializedLocation(spawnerLocation),
+                LocationUtil.getSerializedLocation(mobLocation),
+                spawner,
+                amount,
+                String.valueOf(plot.getId()))) {
+            return false;
+        }
+
+        StaticMobs.spawn(spawner, amount, mobLocation);
 
         DisplayBuilder.createSpawnerDisplay(spawnerLocation, spawner.getType(), amount, player);
         EffectsBuilder.createSpawnerEffect(player, spawnerLocation, spawner.getType());
@@ -110,5 +128,4 @@ public class SpawnerPlaceListener implements Listener {
         player.sendActionBar(TextAPI.parse("§a§lYAY! §aVocê colocou §fx" + formattedAmount + " §aspawner(s) de " + spawner.getType() + "§a!"));
         return true;
     }
-
 }

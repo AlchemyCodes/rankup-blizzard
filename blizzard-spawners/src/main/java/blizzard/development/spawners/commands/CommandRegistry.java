@@ -23,7 +23,7 @@ public class CommandRegistry {
 
         paperCommandManager.getCommandCompletions().registerCompletion("amount", c -> {
             ArrayList<String> array = new ArrayList<>();
-            for (int i = 0; i < 101; i++) {
+            for (int i = 1; i < 101; i++) {
                 array.add(String.valueOf(i));
             }
             return array;

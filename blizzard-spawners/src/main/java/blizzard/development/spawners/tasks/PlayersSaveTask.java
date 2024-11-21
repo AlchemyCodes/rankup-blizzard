@@ -1,6 +1,6 @@
 package blizzard.development.spawners.tasks;
 
-import blizzard.development.spawners.database.cache.PlayersCacheManager;
+import blizzard.development.spawners.database.cache.managers.PlayersCacheManager;
 import blizzard.development.spawners.database.dao.PlayersDAO;
 import org.bukkit.scheduler.BukkitRunnable;
 

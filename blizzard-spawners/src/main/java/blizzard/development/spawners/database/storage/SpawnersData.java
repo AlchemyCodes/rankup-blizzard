@@ -1,14 +1,15 @@
 package blizzard.development.spawners.database.storage;
 
 public class SpawnersData {
-    private String id, type, location, nickname, plotId;
+    private String id, type, location, mob_location, nickname, plotId;
     private Double amount;
 
-    public SpawnersData(String id, String type, Double amount, String location, String nickname, String plotId) {
+    public SpawnersData(String id, String type, Double amount, String location, String mobLocation, String nickname, String plotId) {
         this.id = id;
         this.type = type;
         this.amount = amount;
         this.location = location;
+        mob_location = mobLocation;
         this.nickname = nickname;
         this.plotId = plotId;
     }
@@ -59,5 +60,13 @@ public class SpawnersData {
 
     public void setPlotId(String plotId) {
         this.plotId = plotId;
+    }
+
+    public String getMob_location() {
+        return mob_location;
+    }
+
+    public void setMob_location(String mob_location) {
+        this.mob_location = mob_location;
     }
 }

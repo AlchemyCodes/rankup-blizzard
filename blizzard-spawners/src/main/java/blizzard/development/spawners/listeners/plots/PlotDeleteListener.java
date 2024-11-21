@@ -35,14 +35,14 @@ public class PlotDeleteListener {
 
         if (!spawnersList.isEmpty()) {
             for (SpawnersData spawnersData : spawnersList) {
+                Location spawnerLocation = LocationUtil.deserializeLocation(spawnersData.getLocation());
+                DisplayBuilder.removeSpawnerDisplay(spawnerLocation);
+                EffectsBuilder.removeSpawnerEffect(spawnerLocation);
+                final String spawnerId = spawnersData.getId();
                 try {
-                    Location spawnerLocation = LocationUtil.deserializeLocation(spawnersData.getLocation());
-                    DisplayBuilder.removeSpawnerDisplay(spawnerLocation);
-                    EffectsBuilder.removeSpawnerEffect(spawnerLocation);
-                    final String spawnerId = spawnersData.getId();
                     spawnersDAO.deleteSpawnerData(spawnerId);
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    throw new RuntimeException(e);
                 }
             }
         }
