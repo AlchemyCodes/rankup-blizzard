@@ -53,14 +53,6 @@ public class PluginImpl {
 
     public void onUnload() {
         DatabaseConnection.getInstance().close();
-        playersDAO = new PlayersDAO();
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            try {
-                playersDAO.updatePlayerData(PlayersCacheManager.getInstance().getPlayerData(player));
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }
     }
 
     public void registerDatabase() {
