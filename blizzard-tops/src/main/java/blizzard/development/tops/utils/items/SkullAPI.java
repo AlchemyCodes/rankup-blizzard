@@ -1,6 +1,6 @@
 package blizzard.development.tops.utils.items;
 
-import blizzard.development.spawners.builders.skulls.SkullBuilder;
+import blizzard.development.tops.builders.skulls.SkullBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
