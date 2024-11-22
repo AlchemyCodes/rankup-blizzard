@@ -1,6 +1,5 @@
 package blizzard.development.tops.commands;
 
-import blizzard.development.tops.extensions.LPermsExtension;
 import blizzard.development.tops.inventories.TopsInventory;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;

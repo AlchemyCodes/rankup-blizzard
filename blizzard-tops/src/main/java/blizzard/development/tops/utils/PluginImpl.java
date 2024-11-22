@@ -1,6 +1,9 @@
 package blizzard.development.tops.utils;
 
 import blizzard.development.tops.commands.CommandRegistry;
+import blizzard.development.tops.extensions.nchat.FlakesPlaceholderExtension;
+import blizzard.development.tops.extensions.nchat.FossilsPlaceholderExtension;
+import blizzard.development.tops.extensions.nchat.SoulsPlaceholderExtension;
 import blizzard.development.tops.tasks.TopsMessageTask;
 import blizzard.development.tops.utils.config.ConfigUtils;
 import co.aikar.commands.Locales;
@@ -29,6 +32,7 @@ public class PluginImpl {
 
         registerCommands();
         registerTasks();
+        registerExtensions();
     }
 
     public void onDisable() {}
@@ -44,7 +48,9 @@ public class PluginImpl {
     private void registerExtensions() {
         nChatAPI api = nChatAPI.getApi();
         if (api != null) {
-            api.setGlobalTag();
+            api.setGlobalTag("tops_flakes", new FlakesPlaceholderExtension(plugin));
+            api.setGlobalTag("tops_fossils", new FossilsPlaceholderExtension(plugin));
+            api.setGlobalTag("tops_souls", new SoulsPlaceholderExtension(plugin));
         }
     }
 
