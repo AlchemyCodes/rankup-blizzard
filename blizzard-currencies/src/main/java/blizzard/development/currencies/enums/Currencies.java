@@ -1,10 +1,10 @@
 package blizzard.development.currencies.enums;
 
 public enum Currencies {
-    COINS("coins", "$"),
-    SOULS("souls", "👻"),
-    FLAKES("flakes", "❄"),
-    FOSSILS("fossils", "🦴");
+    COINS("coins", "§2$"),
+    SOULS("souls", "§d👻"),
+    FLAKES("flakes", "§b❄"),
+    FOSSILS("fossils", "§f🦴");
 
     private final String name, emoji;
 
