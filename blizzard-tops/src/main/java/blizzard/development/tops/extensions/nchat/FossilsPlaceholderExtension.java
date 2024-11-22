@@ -1,4 +1,4 @@
-package blizzard.development.tops.extensions;
+package blizzard.development.tops.extensions.nchat;
 
 import blizzard.development.currencies.api.CurrenciesAPI;
 import blizzard.development.currencies.enums.Currencies;
@@ -8,11 +8,10 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.UUID;
 
-public class NChatExtension implements GlobalTag {
-
+public class FossilsPlaceholderExtension implements GlobalTag {
     private final Plugin plugin;
 
-    public NChatExtension(Plugin plugin) {
+    public FossilsPlaceholderExtension(Plugin plugin) {
         this.plugin = plugin;
     }
 
@@ -20,14 +19,13 @@ public class NChatExtension implements GlobalTag {
     public String replaceTag(Player player, String tag) {
         final CurrenciesAPI api = CurrenciesAPI.getInstance();
 
-        for (Currencies currency : Currencies.values()) {
-            if (tag.equalsIgnoreCase("{tops_" + currency.getName() + "}")) {
-                UUID topPlayerUUID = UUID.fromString(api.getTopPlayers(currency).get(0).getUuid());
-                if (player.getUniqueId().equals(topPlayerUUID)) {
-                    return currency.getEmoji();
-                }
-            }
+        Currencies currency = Currencies.FOSSILS;
+
+        UUID topPlayerUUID = UUID.fromString(api.getTopPlayers(currency).get(0).getUuid());
+        if (player.getUniqueId().equals(topPlayerUUID)) {
+            return currency.getEmoji();
         }
+
         return "";
     }
 
