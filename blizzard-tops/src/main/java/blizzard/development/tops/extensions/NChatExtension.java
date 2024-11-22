@@ -1,7 +1,7 @@
 package blizzard.development.tops.extensions;
 
 import blizzard.development.currencies.api.CurrenciesAPI;
-import blizzard.development.tops.enums.Currencies;
+import blizzard.development.currencies.enums.Currencies;
 import com.nickuc.chat.api.translator.GlobalTag;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -28,7 +28,6 @@ public class NChatExtension implements GlobalTag {
                 }
             }
         }
-
         return "";
     }
 
