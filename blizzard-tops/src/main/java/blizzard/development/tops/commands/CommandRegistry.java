@@ -1,5 +1,6 @@
 package blizzard.development.tops.commands;
 
+import blizzard.development.tops.commands.tops.TopsCommand;
 import blizzard.development.tops.utils.PluginImpl;
 import co.aikar.commands.PaperCommandManager;
 
@@ -15,6 +16,14 @@ public class CommandRegistry {
         Arrays.asList(
                 new TopsCommand()
         ).forEach(paperCommandManager::registerCommand);
+
+        paperCommandManager.getCommandCompletions().registerCompletion("currencies", c -> {
+            ArrayList<String> array = new ArrayList<>();
+            array.add("Flocos");
+            array.add("Fosseis");
+            array.add("Almas");
+            return array;
+        });
     }
 
     public static CommandRegistry getInstance() {
