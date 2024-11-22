@@ -40,6 +40,8 @@ public class TopsMessageTask extends BukkitRunnable {
             String soulsPlayerPrefix = LPermsExtension.getPlayerPrefix(UUID.fromString(api.getTopPlayers(Currencies.SOULS).get(0).getUuid()));
             String soulsAmount = NumberFormat.getInstance().formatNumber(api.getTopPlayers(Currencies.SOULS).get(0).getSouls());
 
+            // Fish
+
             List<String> messages = Arrays.asList(
                     "",
                     " §d§lWOW! §dConfira os jogadores que mais se destacam.",
@@ -48,6 +50,7 @@ public class TopsMessageTask extends BukkitRunnable {
                     "   §b❒ " + flakesPlayerPrefix + flakesPlayer + "§b: §b§l❆§b" + flakesAmount,
                     "   §f❒ " + fossilsPlayerPrefix + fossilsPlayer + "§f: §f§l🦴§f" + fossilsAmount,
                     "   §d❒ " + soulsPlayerPrefix + soulsPlayer + "§d: §d§l👻§d" + soulsAmount,
+                    "   §b❒ " + soulsPlayerPrefix + soulsPlayer + "§b: §b§l🐟§b" + soulsAmount,
                     "",
                     "  §fNão desista, continue jogando",
                     "  §fpara conseguir se §ldestacar§f.",
