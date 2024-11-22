@@ -2,5 +2,6 @@ name: blizzard-tops
 version: '${version}'
 main: blizzard.development.tops.Main
 api-version: '1.20'
+depend: ['blizzard-currencies']
 commands:
   tops:

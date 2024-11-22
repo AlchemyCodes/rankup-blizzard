@@ -1,4 +1,4 @@
-package blizzard.development.tops.currencies.enums;
+package blizzard.development.tops.enums;
 
 public enum Currencies {
     COINS("coins", "$"),
