@@ -4,6 +4,8 @@ import blizzard.development.time.database.cache.managers.PlayersCacheManager;
 import blizzard.development.time.database.storage.PlayersData;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+
 public class PlayersCacheSetters {
     private static PlayersCacheSetters instance;
 
@@ -32,6 +34,62 @@ public class PlayersCacheSetters {
         if (data != null) {
             long playTime = data.getPlayTime();
             data.setPlayTime(playTime - time);
+            cache.cachePlayerData(player, data);
+        }
+    }
+
+    public void setCompletedMissions(Player player, List<String> missions) {
+        PlayersData data = cache.getPlayerData(player);
+        if (data != null) {
+            data.setCompletedMissions(missions);
+            cache.cachePlayerData(player, data);
+        }
+    }
+
+    public void addCompletedMission(Player player, List<String> mission) {
+        PlayersData data = cache.getPlayerData(player);
+        if (data != null) {
+            List<String> completedMissions = data.getCompletedMissions();
+            completedMissions.addAll(mission);
+            data.setCompletedMissions(completedMissions);
+            cache.cachePlayerData(player, data);
+        }
+    }
+
+    public void removeCompletedMission(Player player, List<String> mission) {
+        PlayersData data = cache.getPlayerData(player);
+        if (data != null) {
+            List<String> completedMissions = data.getCompletedMissions();
+            completedMissions.removeAll(mission);
+            data.setCompletedMissions(completedMissions);
+            cache.cachePlayerData(player, data);
+        }
+    }
+
+    public void setNotifiedMissions(Player player, List<String> missions) {
+        PlayersData data = cache.getPlayerData(player);
+        if (data != null) {
+            data.setNotifiedMissions(missions);
+            cache.cachePlayerData(player, data);
+        }
+    }
+
+    public void addNotifiedMission(Player player, List<String> mission) {
+        PlayersData data = cache.getPlayerData(player);
+        if (data != null) {
+            List<String> notifiedMissions = data.getNotifiedMissions();
+            notifiedMissions.addAll(mission);
+            data.setNotifiedMissions(notifiedMissions);
+            cache.cachePlayerData(player, data);
+        }
+    }
+
+    public void removeNotifiedMission(Player player, List<String> mission) {
+        PlayersData data = cache.getPlayerData(player);
+        if (data != null) {
+            List<String> notifiedMissions = data.getNotifiedMissions();
+            notifiedMissions.removeAll(mission);
+            data.setNotifiedMissions(notifiedMissions);
             cache.cachePlayerData(player, data);
         }
     }

@@ -3,7 +3,7 @@ package blizzard.development.time.inventories;
 import blizzard.development.time.database.cache.managers.PlayersCacheManager;
 import blizzard.development.time.database.storage.PlayersData;
 import blizzard.development.time.inventories.ranking.RankingInventory;
-import blizzard.development.time.inventories.rewards.RewardsInventory;
+import blizzard.development.time.inventories.missions.MissionsInventory;
 import blizzard.development.time.utils.TimeConverter;
 import blizzard.development.time.utils.items.SkullAPI;
 import blizzard.development.time.utils.items.TextAPI;
@@ -12,7 +12,6 @@ import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
 import com.github.stefvanschie.inventoryframework.pane.util.Slot;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -31,7 +30,7 @@ public class TimeInventory {
         });
 
         GuiItem rewardsItem = new GuiItem(rewards(), event -> {
-            RewardsInventory.getInstance().open(player, 1);
+            MissionsInventory.getInstance().open(player, 1);
             event.setCancelled(true);
         });
 

@@ -8,6 +8,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
+import java.util.ArrayList;
+
 public class PlayersJoinListener implements Listener {
     private final PlayersDAO database;
     public PlayersJoinListener(PlayersDAO database) {
@@ -19,7 +21,7 @@ public class PlayersJoinListener implements Listener {
         Player player = event.getPlayer();
         PlayersData playersData = database.findPlayerData(player.getUniqueId().toString());
         if (playersData == null) {
-            playersData = new PlayersData(player.getUniqueId().toString(), player.getName(), 0);
+            playersData = new PlayersData(player.getUniqueId().toString(), player.getName(), 0, new ArrayList<>(), new ArrayList<>());
             try {
                 database.createPlayerData(playersData);
             } catch(Exception err) {

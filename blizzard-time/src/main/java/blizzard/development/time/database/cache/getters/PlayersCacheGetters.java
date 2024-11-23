@@ -2,7 +2,6 @@ package blizzard.development.time.database.cache.getters;
 
 import blizzard.development.time.database.cache.managers.PlayersCacheManager;
 import blizzard.development.time.database.storage.PlayersData;
-import blizzard.development.time.utils.TimeConverter;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -19,6 +18,22 @@ public class PlayersCacheGetters {
             return data.getPlayTime();
         }
         return 0;
+    }
+
+    public List<String> getCompletedMissions(Player player) {
+        PlayersData data = cache.getPlayerData(player);
+        if (data != null) {
+            return data.getCompletedMissions();
+        }
+        return null;
+    }
+
+    public List<String> getNotifiedMissions(Player player) {
+        PlayersData data = cache.getPlayerData(player);
+        if (data != null) {
+            return data.getNotifiedMissions();
+        }
+        return null;
     }
 
     public List<PlayersData> getTopPlayers() {
