@@ -13,6 +13,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+
 @CommandAlias("time|tempo")
 @CommandPermission("alchemy.time.admin")
 public class TimeExchangeCommand extends BaseCommand {
@@ -85,6 +87,24 @@ public class TimeExchangeCommand extends BaseCommand {
         String timeToString = TimeConverter.convertSecondsToTimeFormat(time);
         sender.sendActionBar(TextAPI.parse(
                 "§a§lYAY! §aVocê removeu do jogador §7" + target.getName() + "§a o tempo de §7" + timeToString)
+        );
+    }
+
+    @Subcommand("reset|resetar")
+    @CommandCompletion("@players")
+    public void onReset(CommandSender sender, String name) {
+        Player target = Bukkit.getPlayer(name);
+        if (target == null) {
+            sender.sendActionBar(TextAPI.parse("§c§lEI! §cO jogador fornecido é inválido ou está offline."));
+            return;
+        }
+
+        setters.setPlayTime(target, 0);
+        setters.setCompletedMissions(target, new ArrayList<>());
+        setters.setNotifiedMissions(target, new ArrayList<>());
+
+        sender.sendActionBar(TextAPI.parse(
+                "§a§lYAY! §aVocê resetou o tempo e missões do jogador §7" + target.getName())
         );
     }
 }
