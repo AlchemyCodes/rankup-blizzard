@@ -1,6 +1,8 @@
 package blizzard.development.time.commands;
 
 import blizzard.development.time.commands.time.TimeCommand;
+import blizzard.development.time.commands.time.subcommands.ReloadCommand;
+import blizzard.development.time.commands.time.subcommands.TimeExchangeCommand;
 import blizzard.development.time.utils.PluginImpl;
 import co.aikar.commands.PaperCommandManager;
 
@@ -13,7 +15,9 @@ public class CommandRegistry {
         PaperCommandManager paperCommandManager = new PaperCommandManager(PluginImpl.getInstance().plugin);
 
         Arrays.asList(
-                new TimeCommand()
+                new TimeCommand(),
+                new TimeExchangeCommand(),
+                new ReloadCommand()
         ).forEach(paperCommandManager::registerCommand);
     }
 

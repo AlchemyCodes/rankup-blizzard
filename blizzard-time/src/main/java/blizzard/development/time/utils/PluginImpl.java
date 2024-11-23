@@ -2,14 +2,19 @@ package blizzard.development.time.utils;
 
 import blizzard.development.time.commands.CommandRegistry;
 import blizzard.development.time.database.DatabaseConnection;
+import blizzard.development.time.database.cache.managers.PlayersCacheManager;
 import blizzard.development.time.database.dao.PlayersDAO;
+import blizzard.development.time.database.storage.PlayersData;
 import blizzard.development.time.listeners.ListenerRegistry;
 import blizzard.development.time.tasks.PlayersSaveTask;
+import blizzard.development.time.tasks.PlayersTimeTask;
 import blizzard.development.time.utils.config.ConfigUtils;
 import co.aikar.commands.Locales;
 import co.aikar.commands.PaperCommandManager;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.List;
 
 public class PluginImpl {
     public final Plugin plugin;
@@ -38,12 +43,19 @@ public class PluginImpl {
         registerTasks();
     }
 
-    public void onDisable() {}
+    public void onDisable() {
+        DatabaseConnection.getInstance().close();
+    }
 
     public void registerDatabase() {
         DatabaseConnection.getInstance();
         playersDAO = new PlayersDAO();
         playersDAO.initializeDatabase();
+
+        List<PlayersData> players = playersDAO.getAllPlayers();
+        for (PlayersData player : players) {
+            PlayersCacheManager.getInstance().cachePlayerData(player.getNickname(), player);
+        }
 
         new PlayersSaveTask(playersDAO).runTaskTimerAsynchronously(plugin, 0, 20L * 3);
     }
@@ -57,7 +69,7 @@ public class PluginImpl {
     }
 
     private void registerTasks() {
-        //new TopsMessageTask().runTaskTimerAsynchronously(plugin, 0, 20L * 600);
+        new PlayersTimeTask().runTaskTimerAsynchronously(plugin, 20L, 20L);
     }
 
     public static PluginImpl getInstance() {
