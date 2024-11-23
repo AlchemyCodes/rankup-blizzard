@@ -1,9 +1,9 @@
 package blizzard.development.time.inventories;
 
-import blizzard.development.time.database.cache.getters.PlayersCacheGetters;
 import blizzard.development.time.database.cache.managers.PlayersCacheManager;
 import blizzard.development.time.database.storage.PlayersData;
 import blizzard.development.time.inventories.ranking.RankingInventory;
+import blizzard.development.time.inventories.rewards.RewardsInventory;
 import blizzard.development.time.utils.TimeConverter;
 import blizzard.development.time.utils.items.SkullAPI;
 import blizzard.development.time.utils.items.TextAPI;
@@ -31,6 +31,7 @@ public class TimeInventory {
         });
 
         GuiItem rewardsItem = new GuiItem(rewards(), event -> {
+            RewardsInventory.getInstance().open(player, 1);
             event.setCancelled(true);
         });
 
@@ -44,10 +45,8 @@ public class TimeInventory {
         pane.addItem(rewardsItem, Slot.fromIndex(13));
         pane.addItem(rankingItem, Slot.fromIndex(16));
 
-
         inventory.addPane(pane);
         inventory.show(player);
-        player.playSound(player.getLocation(), Sound.BLOCK_CHEST_OPEN, 0.5f, 0.5f);
     }
 
     public ItemStack profile(Player player) {
@@ -61,8 +60,8 @@ public class TimeInventory {
 
         meta.setLore(Arrays.asList(
                 "",
-                "§7 Tempo Online",
-                "§8 ■§f " + formattedTime,
+                "§f Seu tempo de jogo:",
+                "§8 ▶§7 " + formattedTime,
                 ""
         ));
         skull.setItemMeta(meta);
@@ -73,12 +72,12 @@ public class TimeInventory {
     public ItemStack rewards() {
         ItemStack item = new ItemStack(Material.ENDER_EYE);
         ItemMeta meta = item.getItemMeta();
-        meta.displayName(TextAPI.parse("§aRecompensas"));
+        meta.displayName(TextAPI.parse("§3Missões"));
         meta.setLore(Arrays.asList(
-                "§7Visualize as recompensas dadas",
+                "§7Visualize as missões disponíveis",
                 "§7a partir do seu tempo online",
                 "",
-                "§aClique para visualizar."
+                "§3Clique para visualizar."
         ));
 
         item.setItemMeta(meta);

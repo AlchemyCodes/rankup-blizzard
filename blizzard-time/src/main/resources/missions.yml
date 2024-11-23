@@ -1,0 +1,8 @@
+missions:
+
+  1:
+    time: 60 # seconds
+    rewards: [ '1', '2' ] # rewards.yml
+  2:
+    time: 120
+    rewards: [ '1', '2' ]

@@ -9,12 +9,11 @@ import co.aikar.commands.annotation.*;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 
 import java.util.Arrays;
 import java.util.List;
 
-@CommandAlias("times|time|tempo|tempos")
+@CommandAlias("time|tempo")
 @CommandPermission("alchemy.time.basic")
 public class TimeCommand extends BaseCommand {
 
