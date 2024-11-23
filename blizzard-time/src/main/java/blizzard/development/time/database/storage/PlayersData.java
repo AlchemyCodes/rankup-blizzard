@@ -2,10 +2,12 @@ package blizzard.development.time.database.storage;
 
 public class PlayersData {
     private String uuid, nickname;
+    private long playTime;
 
-    public PlayersData(String uuid, String nickname) {
+    public PlayersData(String uuid, String nickname, long playTime) {
         this.uuid = uuid;
         this.nickname = nickname;
+        this.playTime = playTime;
     }
 
     public String getUuid() {
@@ -22,5 +24,13 @@ public class PlayersData {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public long getPlayTime() {
+        return playTime;
+    }
+
+    public void setPlayTime(long playTime) {
+        this.playTime = playTime;
     }
 }
