@@ -1,0 +1,26 @@
+menu:
+
+  item-yes:
+    material: "CHEST_MINECART"
+    display: "&aRecompensa &2&l#{index}"
+    lore:
+      - ""
+      - "&7 Tempo: &a{time}"
+      - "&7 {reward}"
+      - ""
+      - "&aClique para coletar a recompensa."
+  item-no:
+    material: "BARRIER"
+    display: "&cRecompensa &4&l#{index}"
+    lore:
+      - ""
+      - "&7 Tempo: &c{time}"
+      - "&7 {reward}"
+      - ""
+      - "&cVocê não pode coletar essa recompensa."
+
+  rewards:
+    reward1:
+      display: "Limite de Membro"
+      time: 10 # in seconds
+      command: "clans give limite LucwsH 1 1"
