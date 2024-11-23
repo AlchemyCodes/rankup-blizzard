@@ -54,9 +54,6 @@ public class RankingInventory {
         pane.addItem(backItem, Slot.fromIndex(27));
 
         inventory.addPane(pane);
-
-        player.playSound(player.getLocation(), Sound.BLOCK_CHEST_OPEN, 0.5f, 0.5f);
-
         inventory.show(player);
     }
 

@@ -23,16 +23,23 @@ public class PluginImpl {
 
     public ConfigUtils Config;
     public ConfigUtils Database;
+    public ConfigUtils Missions;
+    public ConfigUtils Rewards;
 
     public PluginImpl(Plugin plugin) {
         this.plugin = plugin;
         instance = this;
         Config = new ConfigUtils((JavaPlugin) plugin, "config.yml");
         Database = new ConfigUtils((JavaPlugin) plugin, "database.yml");
+        Missions = new ConfigUtils((JavaPlugin) plugin, "missions.yml");
+        Rewards = new ConfigUtils((JavaPlugin) plugin, "rewards.yml");
     }
 
     public void onEnable() {
         Config.saveDefaultConfig();
+        Database.saveDefaultConfig();
+        Missions.saveDefaultConfig();
+        Rewards.saveDefaultConfig();
 
         PaperCommandManager commandManager = new PaperCommandManager(plugin);
         commandManager.getLocales().setDefaultLocale(Locales.PORTUGUESE);

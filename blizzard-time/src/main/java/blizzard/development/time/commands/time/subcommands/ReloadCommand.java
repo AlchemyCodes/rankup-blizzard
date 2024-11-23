@@ -8,7 +8,7 @@ import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.Subcommand;
 import org.bukkit.command.CommandSender;
 
-@CommandAlias("times|time|tempo|tempos")
+@CommandAlias("time|tempo")
 @CommandPermission("alchemy.time.admin")
 public class ReloadCommand extends BaseCommand {
 
@@ -18,6 +18,8 @@ public class ReloadCommand extends BaseCommand {
 
         plugin.Config.reloadConfig();
         plugin.Database.reloadConfig();
+        plugin.Missions.reloadConfig();
+        plugin.Rewards.reloadConfig();
 
         sender.sendActionBar(TextAPI.parse("§a§lYAY! §aPlugin reiniciado."));
     }

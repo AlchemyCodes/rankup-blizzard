@@ -13,7 +13,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-@CommandAlias("times|time|tempo|tempos")
+@CommandAlias("time|tempo")
 @CommandPermission("alchemy.time.admin")
 public class TimeExchangeCommand extends BaseCommand {
 
