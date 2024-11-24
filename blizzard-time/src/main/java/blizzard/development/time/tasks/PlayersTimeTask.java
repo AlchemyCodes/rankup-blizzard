@@ -38,7 +38,7 @@ public class PlayersTimeTask extends BukkitRunnable {
 
                     Component message = TextAPI.parse(
                             """ 
-                             <bold><#55FF55>Mis<#55FF55><#9cff9c>são coc<#9cff9c><#55FF55>luída!<#55FF55></bold> §7[Tempo online]
+                             <bold><#55FF55>Mis<#55FF55><#9cff9c>são conc<#9cff9c><#55FF55>luída!<#55FF55></bold> §7[Tempo online]
                              §7Digite §7´§f/tempo§7´ para resgatar a sua §lrecompensa §8#%s
                             """.formatted(missionId)
                     );
