@@ -13,6 +13,7 @@ public class TpCommand extends BaseCommand {
 
     @Default
     @CommandPermission("alchemy.essentials.staff")
+    @CommandCompletion("@players")
     @Syntax("<jogador> <x> <y> <z>")
     public void onCommand(CommandSender commandSender, String playerTarget) {
         if (!(commandSender instanceof Player)) {
@@ -24,6 +25,11 @@ public class TpCommand extends BaseCommand {
 
         if (target == null) {
             player.sendActionBar("§c§lEI! §cO jogador é inexistente ou está offline.");
+            return;
+        }
+
+        if (target.getName().equalsIgnoreCase(player.getName())) {
+            player.sendActionBar("§c§lEI! §cVocê não pode teletransportar para si mesmo.");
             return;
         }
 
