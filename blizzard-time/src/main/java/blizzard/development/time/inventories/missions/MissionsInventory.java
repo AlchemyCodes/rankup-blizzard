@@ -126,7 +126,7 @@ public class MissionsInventory {
         List<String> lore = new ArrayList<>();
 
         lore.add("");
-        lore.add("§7 Tempo: §7" + TimeConverter.convertSecondsToTimeFormat(handler.getMissionTime(missionId)));
+        lore.add("§7 Tempo: §f" + TimeConverter.convertSecondsToTimeFormat(handler.getMissionTime(missionId)));
         lore.add("§7 Recompensas:");
         for (int rewardId : rewards) {
             lore.add(" §8■ " + handler.getRewardDisplay(rewardId));
