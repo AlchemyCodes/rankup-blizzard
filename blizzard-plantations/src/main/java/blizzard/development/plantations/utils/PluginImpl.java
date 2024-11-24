@@ -15,6 +15,8 @@ import blizzard.development.plantations.tasks.ToolSaveTask;
 import blizzard.development.plantations.utils.config.ConfigUtils;
 import co.aikar.commands.Locales;
 import co.aikar.commands.PaperCommandManager;
+import com.github.retrooper.packetevents.PacketEvents;
+import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -55,6 +57,9 @@ public class PluginImpl {
         registerListeners();
         registerCommands();
         BatchManager.initialize(Main.getInstance());
+        PacketEvents.setAPI(SpigotPacketEventsBuilder.build(plugin));
+        PacketEvents.getAPI().load();
+        PacketEvents.getAPI().init();
 
         try {
             List<PlayerData> allPlayers = playerDAO.getAllPlayersData();
@@ -76,6 +81,8 @@ public class PluginImpl {
     }
 
     public void onDisable() {
+        PacketEvents.getAPI().terminate();
+
         playerCacheManager.playerCache.forEach((player, playerData) -> {
             try {
                 playerDAO.updatePlayerData(playerData);
@@ -97,6 +104,7 @@ public class PluginImpl {
     private void registerListeners() {
         ListenerRegistry listenerRegistry = new ListenerRegistry(playerDAO);
         listenerRegistry.register();
+        listenerRegistry.registerPacket();
     }
 
     private void registerTasks() {

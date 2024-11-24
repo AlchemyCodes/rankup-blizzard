@@ -1,4 +1,4 @@
-package blizzard.development.plantations.api.cuboid;
+package blizzard.development.plantations.api;
 
 import org.bukkit.Location;
 import org.bukkit.World;
