@@ -1,6 +1,6 @@
 package blizzard.development.plantations.managers.upgrades.explosion;
 
-import blizzard.development.plantations.api.cuboid.CuboidAPI;
+import blizzard.development.plantations.api.CuboidAPI;
 import blizzard.development.plantations.database.cache.methods.PlayerCacheMethod;
 import blizzard.development.plantations.tasks.PlantationRegenTask;
 import org.bukkit.Location;

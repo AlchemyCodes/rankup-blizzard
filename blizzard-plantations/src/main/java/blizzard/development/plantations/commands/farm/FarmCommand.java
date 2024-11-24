@@ -1,6 +1,7 @@
 package blizzard.development.plantations.commands.farm;
 
-import blizzard.development.plantations.api.WorldAPI;
+import blizzard.development.plantations.Main;
+import blizzard.development.plantations.database.cache.methods.PlayerCacheMethod;
 import blizzard.development.plantations.inventories.FarmInventory;
 import blizzard.development.plantations.plantations.adapters.SeedAdapter;
 import blizzard.development.plantations.plantations.adapters.ToolAdapter;
@@ -14,11 +15,14 @@ import co.aikar.commands.annotation.Subcommand;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 import java.util.concurrent.TimeUnit;
 
 @CommandAlias("estufa|plantar")
 public class FarmCommand extends BaseCommand {
+
+    private final PlayerCacheMethod playerCacheMethod = new PlayerCacheMethod();
 
     @Default
     public void onCommand(CommandSender commandSender) {
@@ -64,28 +68,6 @@ public class FarmCommand extends BaseCommand {
                 player.sendMessage(" §cDisponíveis: §7[batata, cenoura, tomate e milho]");
                 player.sendMessage("");
         }
-    }
-
-    @Subcommand("criar")
-    public void onCreate(CommandSender commandSender) {
-        Player player = (Player) commandSender;
-
-
-        WorldAPI worldAPI = new WorldAPI();
-        worldAPI.createWorld(
-                player
-        );
-    }
-
-    @Subcommand("ir")
-    public void onGo(CommandSender commandSender) {
-        Player player = (Player) commandSender;
-
-
-        WorldAPI worldAPI = new WorldAPI();
-        worldAPI.teleportToWorld(
-                player
-        );
     }
 
     @Subcommand("aradora")
@@ -144,5 +126,39 @@ public class FarmCommand extends BaseCommand {
                 70,
                 20
         );
+    }
+
+    @Subcommand("mostrar")
+    public void onShow(CommandSender commandSender) {
+        Player player = (Player) commandSender;
+
+
+        boolean isInPlantation = playerCacheMethod.isInPlantation(player);
+
+        if (isInPlantation) {
+            for (Player players : Bukkit.getOnlinePlayers()) {
+                player.showPlayer(Main.getInstance(), players);
+            }
+
+            player.sendActionBar("§a§lEI! §aVocê agora vê outros jogadores na estufa!");
+        } else player.sendActionBar("§c§lEI! §cVocê não está na estufa!");
+
+    }
+
+    @Subcommand("esconder")
+    public void onHide(CommandSender commandSender) {
+        Player player = (Player) commandSender;
+
+
+        boolean isInPlantation = playerCacheMethod.isInPlantation(player);
+
+        if (isInPlantation) {
+            for (Player players : Bukkit.getOnlinePlayers()) {
+                player.hidePlayer(Main.getInstance(), players);
+            }
+
+            player.sendActionBar("§c§lEI! §cVocê desabilitou a visibilidade de outros jogadores na estufa!");
+        } else player.sendActionBar("§c§lEI! §cVocê não está na estufa!");
+
     }
 }

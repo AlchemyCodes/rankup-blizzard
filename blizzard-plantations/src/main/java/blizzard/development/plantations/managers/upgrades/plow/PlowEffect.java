@@ -1,6 +1,6 @@
 package blizzard.development.plantations.managers.upgrades.plow;
 
-import blizzard.development.plantations.api.cuboid.CuboidAPI;
+import blizzard.development.plantations.api.CuboidAPI;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
