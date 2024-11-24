@@ -26,7 +26,6 @@ public class SpeedCommand extends BaseCommand {
                 case 0:
                     player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, PotionEffect.INFINITE_DURATION, level));
                     player.sendActionBar("§b§lYAY! §bVocê agora está com o efeito SPEED por tempo ilimitado.");
-
                     break;
                 default:
                     player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, seconds * 20, level));
