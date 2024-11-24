@@ -8,11 +8,11 @@ import blizzard.development.spawners.utils.items.TextAPI;
 import org.bukkit.entity.Player;
 
 public class SpawnersMethods {
-    public static Boolean createSpawner(Player player, String id, String location, String mob_location, Spawners spawner, Double amount, String plotId) {
+    public static Boolean createSpawner(Player player, String id, String location, String mob_location, Spawners spawner, Double amount, Double mobAmount, String plotId) {
         String type = spawner.getType();
         String nickname = player.getName();
         SpawnersData spawnersData = new SpawnersData(
-                id, type, amount, location, mob_location, nickname, plotId
+                id, type, amount, mobAmount, location, mob_location, nickname, plotId, 5, 1, 1
         );
         try {
             new SpawnersDAO().createSpawnerData(spawnersData);

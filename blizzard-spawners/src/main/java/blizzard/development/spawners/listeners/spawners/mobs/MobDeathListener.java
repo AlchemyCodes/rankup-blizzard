@@ -1,6 +1,5 @@
 package blizzard.development.spawners.listeners.spawners.mobs;
 
-import blizzard.development.spawners.utils.items.TextAPI;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -21,7 +20,6 @@ public class MobDeathListener implements Listener {
 
         if (mob.hasMetadata("blizzard_spawners-mob")) {
             event.getDrops().clear();
-            event.setDroppedExp(0);
 
             String value = mob.getMetadata("blizzard_spawners-mob").get(0).asString();
 
