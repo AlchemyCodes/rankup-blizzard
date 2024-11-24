@@ -4,6 +4,7 @@ import blizzard.development.spawners.builders.DisplayBuilder;
 import blizzard.development.spawners.builders.EffectsBuilder;
 import blizzard.development.spawners.database.dao.SpawnersDAO;
 import blizzard.development.spawners.database.storage.SpawnersData;
+import blizzard.development.spawners.tasks.spawners.mobs.SpawnersMobsTaskManager;
 import blizzard.development.spawners.utils.LocationUtil;
 import com.google.common.eventbus.Subscribe;
 import com.plotsquared.core.PlotAPI;
@@ -43,6 +44,7 @@ public class PlotClearListener {
                     if (player.getWorld().equals(spawnerLocation.getWorld())) {
                         DisplayBuilder.removeSpawnerDisplay(spawnerLocation);
                         EffectsBuilder.removeSpawnerEffect(spawnerLocation);
+                        SpawnersMobsTaskManager.getInstance().stopTask(spawnersData.getId());
                     }
                 }
 

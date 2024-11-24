@@ -17,13 +17,10 @@ public class MobHitListener implements Listener {
             Entity mob = event.getEntity();
 
             if (mob.hasMetadata("blizzard_spawners-mob")) {
-                ng++;
-                mob.customName(TextAPI.parse("teste (" + ng + ")"));
+                String value = mob.getMetadata("blizzard_spawners-mob").get(0).asString();
+                player.sendMessage("vose bateu em um " + value);
             }
 
-            String value = mob.getMetadata("blizzard_spawners-mob").get(0).asString();
-
-            player.sendMessage("vose bateu em um " + value);
         }
     }
 }

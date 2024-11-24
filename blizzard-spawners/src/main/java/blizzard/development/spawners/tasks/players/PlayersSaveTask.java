@@ -1,4 +1,4 @@
-package blizzard.development.spawners.tasks;
+package blizzard.development.spawners.tasks.players;
 
 import blizzard.development.spawners.database.cache.managers.PlayersCacheManager;
 import blizzard.development.spawners.database.dao.PlayersDAO;

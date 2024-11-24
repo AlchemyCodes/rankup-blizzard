@@ -7,6 +7,8 @@ import blizzard.development.spawners.database.dao.SpawnersDAO;
 import blizzard.development.spawners.database.storage.SpawnersData;
 import blizzard.development.spawners.handlers.mobs.CowMob;
 import blizzard.development.spawners.handlers.mobs.PigMob;
+import blizzard.development.spawners.tasks.spawners.mobs.SpawnersMobsTask;
+import blizzard.development.spawners.tasks.spawners.mobs.SpawnersMobsTaskManager;
 import blizzard.development.spawners.utils.*;
 import blizzard.development.spawners.utils.items.TextAPI;
 import org.bukkit.GameMode;
@@ -33,8 +35,8 @@ public class SpawnerBreakListener implements Listener {
         String cooldownName = "blizzard.spawners.break-cooldown";
 
         if (spawnerBlock.getType().equals(Material.SPAWNER)) {
-
             event.setExpToDrop(0);
+
             String serializedLocation = LocationUtil.getSerializedLocation(spawnerBlock.getLocation());
 
             SpawnersData data = null;
@@ -78,6 +80,7 @@ public class SpawnerBreakListener implements Listener {
             }
 
             removeSpawner(player, data.getId(), data.getType(), data.getAmount());
+            SpawnersMobsTaskManager.getInstance().stopTask(data.getId());
 
             cooldown.createCountdown(player, cooldownName, 500, TimeUnit.MILLISECONDS);
         }

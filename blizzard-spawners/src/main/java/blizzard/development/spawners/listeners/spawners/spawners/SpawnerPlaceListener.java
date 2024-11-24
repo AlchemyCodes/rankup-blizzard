@@ -2,10 +2,13 @@ package blizzard.development.spawners.listeners.spawners.spawners;
 
 import blizzard.development.spawners.builders.DisplayBuilder;
 import blizzard.development.spawners.builders.EffectsBuilder;
+import blizzard.development.spawners.database.cache.managers.SpawnersCacheManager;
+import blizzard.development.spawners.database.storage.SpawnersData;
 import blizzard.development.spawners.handlers.StaticMobs;
 import blizzard.development.spawners.handlers.StaticSpawners;
 import blizzard.development.spawners.handlers.enums.Spawners;
 import blizzard.development.spawners.methods.SpawnersMethods;
+import blizzard.development.spawners.tasks.spawners.mobs.SpawnersMobsTaskManager;
 import blizzard.development.spawners.utils.CooldownUtils;
 import blizzard.development.spawners.utils.LocationUtil;
 import blizzard.development.spawners.utils.NumberFormat;
@@ -15,7 +18,6 @@ import blizzard.development.spawners.utils.items.TextAPI;
 import com.plotsquared.core.PlotSquared;
 import com.plotsquared.core.plot.Plot;
 import com.plotsquared.core.plot.PlotArea;
-import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -26,6 +28,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
+import java.util.Timer;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -97,6 +100,7 @@ public class SpawnerPlaceListener implements Listener {
         mobLocation.setX(mobLocation.getBlockX() + 0.5);
         mobLocation.setZ(mobLocation.getBlockZ() + 0.5);
         mobLocation.setY(spawnerLocation.getBlockY());
+        mobLocation.setWorld(spawnerLocation.getWorld());
 
         Vector playerDirection = player.getLocation().toVector().subtract(spawnerLocation.toVector());
         playerDirection.setY(0);
@@ -115,11 +119,15 @@ public class SpawnerPlaceListener implements Listener {
                 LocationUtil.getSerializedLocation(mobLocation),
                 spawner,
                 amount,
+                0.0,
                 String.valueOf(plot.getId()))) {
             return false;
         }
 
         StaticMobs.spawn(spawner, amount, mobLocation);
+
+        SpawnersData spawnerData = SpawnersCacheManager.getInstance().getSpawnerData(id);
+        SpawnersMobsTaskManager.getInstance().startTask(spawnerData);
 
         DisplayBuilder.createSpawnerDisplay(spawnerLocation, spawner.getType(), amount, player);
         EffectsBuilder.createSpawnerEffect(player, spawnerLocation, spawner.getType());

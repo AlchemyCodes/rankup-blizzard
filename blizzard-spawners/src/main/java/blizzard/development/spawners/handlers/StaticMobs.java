@@ -21,16 +21,25 @@ public class StaticMobs {
 
         mob.setAI(false);
         mob.setGravity(false);
-        mob.customName(TextAPI.parse("§7" + spawnerType + " (x" + NumberFormat.getInstance().formatNumber(amount) + ")"));
+        mob.customName(TextAPI.parse("§7" + getMobNameByEntity(entityType) + " (x" + NumberFormat.getInstance().formatNumber(amount) + ")"));
         mob.setMetadata("blizzard_spawners-mob", new FixedMetadataValue(PluginImpl.getInstance().plugin, spawnerType));
         mob.setCustomNameVisible(true);
     }
 
-    private static EntityType getEntityTypeFromSpawner(Spawners spawnerType) {
+    public static EntityType getEntityTypeFromSpawner(Spawners spawnerType) {
         return switch (spawnerType.getType().toLowerCase()) {
             case "porco" -> EntityType.PIG;
             case "vaca" -> EntityType.COW;
             default -> null;
         };
+    }
+
+    public static String getMobNameByEntity(EntityType entityType) {
+        if (entityType.equals(EntityType.PIG)) {
+            return "Porco";
+        } else if (entityType.equals(EntityType.COW)) {
+            return "Vaca";
+        }
+        return null;
     }
 }

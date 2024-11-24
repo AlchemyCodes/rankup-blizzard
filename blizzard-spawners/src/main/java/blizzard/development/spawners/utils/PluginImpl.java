@@ -9,8 +9,9 @@ import blizzard.development.spawners.database.storage.SpawnersData;
 import blizzard.development.spawners.listeners.ListenerRegistry;
 import blizzard.development.spawners.listeners.plots.PlotClearListener;
 import blizzard.development.spawners.listeners.plots.PlotDeleteListener;
-import blizzard.development.spawners.tasks.PlayersSaveTask;
-import blizzard.development.spawners.tasks.SpawnersSaveTask;
+import blizzard.development.spawners.tasks.players.PlayersSaveTask;
+import blizzard.development.spawners.tasks.spawners.SpawnersSaveTask;
+import blizzard.development.spawners.tasks.spawners.mobs.SpawnersMobsTaskManager;
 import blizzard.development.spawners.utils.config.ConfigUtils;
 import co.aikar.commands.Locales;
 import co.aikar.commands.PaperCommandManager;
@@ -53,6 +54,7 @@ public class PluginImpl {
 
     public void onDisable() {
         DatabaseConnection.getInstance().close();
+        SpawnersMobsTaskManager.getInstance().stopAllTasks();
     }
 
     public void registerDatabase() {
@@ -69,6 +71,7 @@ public class PluginImpl {
             List<SpawnersData> allSpawners = spawnersDAO.getAllSpawnersData();
             for (SpawnersData spawner : allSpawners) {
                 SpawnersCacheManager.getInstance().cacheSpawnerData(spawner.getId(), spawner);
+                SpawnersMobsTaskManager.getInstance().startTask(spawner);
             }
         } catch (SQLException exception) {
             throw new RuntimeException(exception);
