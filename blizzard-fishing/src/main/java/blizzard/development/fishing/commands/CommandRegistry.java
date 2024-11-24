@@ -13,7 +13,8 @@ public class CommandRegistry {
 
         Arrays.asList(
                 new FishingCommand(),
-                new SetCommands()
+                new SetCommands(),
+                new GiveItemsCommand()
         ).forEach(paperCommandManager::registerCommand);
     }
 }

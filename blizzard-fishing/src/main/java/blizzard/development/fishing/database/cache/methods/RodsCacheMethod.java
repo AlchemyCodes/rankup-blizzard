@@ -5,6 +5,7 @@ import blizzard.development.fishing.database.storage.RodsData;
 import blizzard.development.fishing.enums.RodMaterials;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class RodsCacheMethod {
     public void setXp(Player player, double xp) {
         RodsData data = RodsCacheManager.getInstance().getPlayerData(player);
         if (data != null) {
-            data.setXp(xp);
+            data.setXp(data.getXp() + xp);
             cache.cachePlayerData(player, data);
         }
     }
@@ -70,13 +71,31 @@ public class RodsCacheMethod {
         return (data != null) ? data.getRodMaterials() : Arrays.asList();
     }
 
-    public void setMaterials(Player player, List<RodMaterials> materials) {
+    public void addMaterial(Player player, RodMaterials material) {
         RodsData data = RodsCacheManager.getInstance().getPlayerData(player);
         if (data != null) {
-            data.setRodMaterials(materials);
-            cache.cachePlayerData(player, data);
+            List<RodMaterials> materials = new ArrayList<>(data.getRodMaterials()); // Cria uma cópia mutável
+            if (!materials.contains(material)) {
+                materials.add(material); // Modifica a lista mutável
+                data.setRodMaterials(materials); // Define a lista atualizada em data
+                cache.cachePlayerData(player, data); // Atualiza os dados no cache
+            }
         }
     }
+
+    public RodMaterials getBestMaterial(Player player) {
+        List<RodMaterials> materials = RodsCacheMethod.getInstance().getMaterials(player);
+        List<RodMaterials> materialPriority = Arrays.asList(RodMaterials.CARBON, RodMaterials.IRON, RodMaterials.WOOD, RodMaterials.BAMBOO);
+
+        for (RodMaterials material : materialPriority) {
+            if (materials.contains(material)) {
+                return material;
+            }
+        }
+
+        return RodMaterials.BAMBOO;
+    }
+
 
     public static RodsCacheMethod getInstance() {
         if (instance == null) {

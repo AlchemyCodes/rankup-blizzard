@@ -11,6 +11,7 @@ import blizzard.development.fishing.enums.RodMaterials;
 import blizzard.development.fishing.handlers.FishBucketHandler;
 import blizzard.development.fishing.handlers.FishingNetHandler;
 import blizzard.development.fishing.handlers.FishingRodHandler;
+import blizzard.development.fishing.handlers.FurnaceItemHandler;
 import blizzard.development.fishing.listeners.items.FishBucketListener;
 import blizzard.development.fishing.utils.PluginImpl;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -42,13 +43,6 @@ public class TrafficListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        YamlConfiguration enchantmentsConfig = PluginImpl.getInstance().Enchantments.getConfig();
-
-        int storage = enchantmentsConfig.getInt("bucket.storage.initial");
-
-        FishBucketHandler.setBucket(player, 8);
-        FishingNetHandler.setNet(player, 4);
-        FishingRodHandler.setRod(player, 0);
 
         PlayersData playersData = playersDAO.findPlayerData(player.getUniqueId().toString());
         RodsData rodsData = rodsDAO.findRodsData(player.getUniqueId().toString());

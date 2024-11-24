@@ -2,6 +2,7 @@ package blizzard.development.fishing.commands.subcommands;
 
 import blizzard.development.fishing.database.cache.methods.PlayersCacheMethod;
 import blizzard.development.fishing.database.cache.methods.RodsCacheMethod;
+import blizzard.development.fishing.enums.RodMaterials;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.CommandPermission;
@@ -17,7 +18,7 @@ public class SetCommands extends BaseCommand {
     private final RodsCacheMethod rodsMethod = RodsCacheMethod.getInstance();
 
     @Subcommand("darpeixe")
-    @Syntax("<jogador> <quantidade>")
+    @Syntax("<jogador> <peixe> <quantidade>")
     @CommandPermission("pesca.admin")
     public void setFishes(String targetName, String fish, int amount) {
         Player target = Bukkit.getPlayer(targetName);
@@ -117,7 +118,22 @@ public class SetCommands extends BaseCommand {
         }
     }
 
-    public void setMaterial() {
+    @Subcommand("giveskin")
+    @Syntax("<player> <skin>")
+    @CommandPermission("pesca.admin")
+    public void onGiveSkin(Player player, String target, RodMaterials material) {
+        Player playerTarget = Bukkit.getPlayer(target);
 
+        if (playerTarget == null) {
+            player.sendMessage("§cO jogador especificado não está online ou não existe.");
+            return;
+        }
+
+        if (rodsMethod.getMaterials(playerTarget).contains(material)) {
+            player.sendMessage("§cO jogador já possui este material.");
+        } else {
+            rodsMethod.addMaterial(playerTarget, material);
+            player.sendMessage("§fVocê deu o material " + material.name() + " para o jogador: " + playerTarget.getName() + "!");
+        }
     }
 }
