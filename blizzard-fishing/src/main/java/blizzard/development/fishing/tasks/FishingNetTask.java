@@ -1,11 +1,7 @@
 package blizzard.development.fishing.tasks;
 
-import blizzard.development.fishing.database.cache.PlayersCacheManager;
-import blizzard.development.fishing.database.cache.RodsCacheManager;
 import blizzard.development.fishing.database.cache.methods.PlayersCacheMethod;
 import blizzard.development.fishing.database.cache.methods.RodsCacheMethod;
-import blizzard.development.fishing.database.storage.PlayersData;
-import blizzard.development.fishing.database.storage.RodsData;
 import blizzard.development.fishing.handlers.FishingNetHandler;
 import blizzard.development.fishing.utils.Countdown;
 import blizzard.development.fishing.utils.PluginImpl;
@@ -56,7 +52,7 @@ public class FishingNetTask implements Runnable {
             player.sendActionBar("§b§lYAY! §bVocê achou 1 lixo.");
             cacheMethod.setTrash(player, cacheMethod.getTrash(player) + 1);
 
-            FishingNetHandler.setNet(player, 4);
+            FishingNetHandler.setNet(player, 3);
         }
     }
 

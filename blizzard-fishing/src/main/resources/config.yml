@@ -1,38 +1,43 @@
 fishes:
   bacalhau:
     rarity: "common"
-    price: 1
 
   salmao:
     rarity: "common"
-    price: 2
 
   caranguejo:
     rarity: "rare"
-    price: 3
 
   lagosta:
     rarity: "rare"
-    price: 4
 
   lula:
     rarity: "legendary"
-    price: 5
 
   lula_brilhante:
     rarity: "legendary"
-    price: 6
 
   tubarao:
     rarity: "mystic"
-    price: 7
 
   baleia:
     rarity: "mystic"
-    price: 8
 
 strengthNeeded:
   common: 1
   rare: 2
   legendary: 3
   mystic: 4
+
+valueByRarity:
+  common: 1
+  rare: 2
+  legendary: 3
+  mystic: 4
+
+xpByRarity:
+  common: 1
+  rare: 2
+  legendary: 3
+  mystic: 4
+

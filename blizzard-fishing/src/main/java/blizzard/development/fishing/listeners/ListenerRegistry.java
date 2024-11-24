@@ -7,6 +7,7 @@ import blizzard.development.fishing.listeners.fishing.FishingListener;
 import blizzard.development.fishing.listeners.items.FishBucketListener;
 import blizzard.development.fishing.listeners.items.FishingNetListener;
 import blizzard.development.fishing.listeners.items.FishingRodListener;
+import blizzard.development.fishing.listeners.items.FurnaceListener;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 
@@ -25,7 +26,8 @@ public class ListenerRegistry {
                 new TrafficListener(playersDAO, rodsDAO),
                 new FishBucketListener(),
                 new FishingNetListener(),
-                new FishingRodListener()
+                new FishingRodListener(),
+                new FurnaceListener()
         ).forEach(listener -> pluginManager.registerEvents(listener, Main.getInstance()));
     }
 }

@@ -38,7 +38,6 @@ public class FishingRodInventory {
     }
 
     public static ItemStack explanation() {
-
         ItemStack back = new ItemStack(Material.GREEN_DYE);
         ItemMeta meta = back.getItemMeta();
         meta.setDisplayName("§aEncantamentos");
@@ -53,7 +52,6 @@ public class FishingRodInventory {
     }
 
     public static ItemStack lucky(Player player) {
-
         ItemStack back = new ItemStack(Material.BOOK);
         ItemMeta meta = back.getItemMeta();
         meta.setDisplayName("§6Sortudo §7[§l" + RodsCacheMethod.getInstance().getLucky(player) + "§7]");
@@ -68,7 +66,6 @@ public class FishingRodInventory {
     }
 
     public static ItemStack experienced(Player player) {
-
         ItemStack back = new ItemStack(Material.BOOK);
         ItemMeta meta = back.getItemMeta();
         meta.setDisplayName("§6Experiente §7[§l" + RodsCacheMethod.getInstance().getExperienced(player) + "§7]");

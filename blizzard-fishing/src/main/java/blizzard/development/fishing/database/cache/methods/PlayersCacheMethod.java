@@ -171,6 +171,19 @@ public class PlayersCacheMethod {
         };
     }
 
+    public void setFishAmount(Player player, String fishType, int amount) {
+         switch (fishType.toLowerCase()) {
+            case "bacalhau" -> setBacalhau(player, amount);
+            case "salmao" -> setSalmao(player, amount);
+            case "caranguejo" -> setCaranguejo(player, amount);
+            case "lagosta" -> setLagosta(player, amount);
+            case "lula" -> setLula(player, amount);
+            case "lula_brilhante" -> setLulaBrilhante(player, amount);
+            case "tubarao" -> setTubarao(player, amount);
+            case "baleia" -> setBaleia(player, amount);
+        };
+    }
+
     public static PlayersCacheMethod getInstance() {
         if (instance == null) {
             instance = new PlayersCacheMethod();

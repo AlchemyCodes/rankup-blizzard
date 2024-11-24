@@ -1,19 +1,24 @@
 package blizzard.development.fishing.utils.fish;
 
 import blizzard.development.fishing.database.cache.methods.PlayersCacheMethod;
+import blizzard.development.fishing.database.cache.methods.RodsCacheMethod;
+import blizzard.development.fishing.enums.RodMaterials;
 import blizzard.development.fishing.utils.PluginImpl;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
 public class FishesUtils {
 
-    public static int getStrengthNecessary(String rarity) {
-        YamlConfiguration config = PluginImpl.getInstance().Config.getConfig();
+    private static FishesUtils instance;
+    private final Random random = new Random();
+    private final YamlConfiguration config = PluginImpl.getInstance().Config.getConfig();
 
+    public int getStrengthNecessary(String rarity) {
         return switch (rarity.toLowerCase()) {
             case "common" -> config.getInt("strengthNeeded.common");
             case "rare" -> config.getInt("strengthNeeded.rare");
@@ -23,7 +28,27 @@ public class FishesUtils {
         };
     }
 
-    public static String getRarity(int playerStrength) {
+    public int getFishXp(String rarity) {
+        return switch (rarity.toLowerCase()) {
+            case "common" -> config.getInt("xpByRarity.common");
+            case "rare" -> config.getInt("xpByRarity.rare");
+            case "legendary" -> config.getInt("xpByRarity.legendary");
+            case "mystic" -> config.getInt("xpByRarity.mystic");
+            default -> 0;
+        };
+    }
+
+    public int getFishValue(String rarity) {
+        return switch (rarity.toLowerCase()) {
+            case "common" -> config.getInt("valueByRarity.common");
+            case "rare" -> config.getInt("valueByRarity.rare");
+            case "legendary" -> config.getInt("valueByRarity.legendary");
+            case "mystic" -> config.getInt("valueByRarity.mystic");
+            default -> 0;
+        };
+    }
+
+    public String getRarity(int playerStrength) {
         Random random = new Random();
         int chance = random.nextInt(101);
 
@@ -47,8 +72,7 @@ public class FishesUtils {
         }
     }
 
-    public static List<String> getFishes(String rarity) {
-        YamlConfiguration config = PluginImpl.getInstance().Config.getConfig();
+    public List<String> getFishes(String rarity) {
         List<String> fishes = new ArrayList<>();
 
         for (String fish : config.getConfigurationSection("fishes").getKeys(false)) {
@@ -62,8 +86,7 @@ public class FishesUtils {
         return fishes;
     }
 
-    public static void giveFish(Player player, String fish) {
-        PlayersCacheMethod cacheMethod = PlayersCacheMethod.getInstance();
+    public void giveFish(Player player, String fish, PlayersCacheMethod cacheMethod) {
             switch (fish) {
                 case "bacalhau" -> cacheMethod.setBacalhau(player, cacheMethod.getBacalhau(player) + 1);
                 case "salmao" ->  cacheMethod.setSalmao(player, cacheMethod.getSalmao(player) + 1);
@@ -74,5 +97,41 @@ public class FishesUtils {
                 case "tubarao" -> cacheMethod.setTubarao(player, cacheMethod.getTubarao(player) + 1);
                 case "baleia" -> cacheMethod.setBaleia(player, cacheMethod.getBaleia(player) + 1);
             }
+    }
+
+    public String getRandomFish() {
+        String[] fishes = {"bacalhau", "salmao", "caranguejo", "lagosta", "lula", "lula_brilhante", "tubarao", "baleia"};
+
+        int index = random.nextInt(fishes.length);
+        return fishes[index];
+    }
+
+    public void giveXp(Player player, String rarity, RodsCacheMethod rodsCacheMethod) {
+        double xp = FishesUtils.getInstance().getFishXp(rarity);
+
+        rodsCacheMethod.setXp(player, xp);
+
+        xp = xp * rodsCacheMethod.getBestMaterial(player).getBonus();
+
+        player.sendMessage("§aVocê ganhou " + xp + " de xp");
+    }
+
+    public boolean giveFrozenFish(Player player, PlayersCacheMethod cacheMethod) {;
+        int chance = random.nextInt(101);
+
+        if (chance >= 50) {
+            player.sendMessage("ganhou peixe congelado");
+            cacheMethod.setFrozenFish(player,cacheMethod.getFrozenFish(player) + 1);
+            return true;
+        }
+
+        return false;
+    }
+
+    public static FishesUtils getInstance() {
+        if (instance == null) {
+            instance = new FishesUtils();
+        }
+        return instance;
     }
 }

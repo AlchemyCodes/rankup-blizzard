@@ -2,6 +2,7 @@ package blizzard.development.fishing.handlers;
 
 import blizzard.development.fishing.database.cache.methods.RodsCacheMethod;
 import blizzard.development.fishing.utils.PluginImpl;
+import blizzard.development.fishing.utils.fish.FishesUtils;
 import blizzard.development.fishing.utils.items.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -31,7 +32,7 @@ public class FishingRodHandler {
                         "  §7Sortudo §l" + instance.getLucky(player),
                         "",
                         "  §8▶ §fForça: §7" + instance.getStrength(player),
-                        "  §8■ §fMaterial: §7" + instance.getMaterials(player),
+                        "  §8■ §fMaterial: §7" + instance.getBestMaterial(player).getFancyName(),
                         ""))
                 .addPersistentData(plugin, key, 1)
                 .build();
@@ -39,7 +40,7 @@ public class FishingRodHandler {
         player.getInventory().setItem(slot, rod);
     }
 
-    public static boolean isRod (Player player) {
+    public static boolean isRod(Player player) {
         ItemStack itemInMainHand = player.getInventory().getItemInMainHand();
 
         return ItemBuilder.hasPersistentData(plugin, itemInMainHand, key);
