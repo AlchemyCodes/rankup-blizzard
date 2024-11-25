@@ -1,0 +1,16 @@
+enchantments:
+
+  speed:
+    initial-level: 10
+    per-level: 1 # decrease by level in seconds
+    max-level: 10
+
+  lucky:
+    initial-level: 1
+    per-level: 1 # increase per level
+    max-level: 10
+
+  experience:
+    initial-level: 1
+    per-level: 1 # increase per level
+    max-level: 10

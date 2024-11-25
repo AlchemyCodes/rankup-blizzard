@@ -31,6 +31,8 @@ public class PluginImpl {
 
     public ConfigUtils Config;
     public ConfigUtils Database;
+    public ConfigUtils Enchantments;
+    public ConfigUtils Rewards;
 
     public PluginImpl(Plugin plugin) {
         this.plugin = plugin;
@@ -38,11 +40,15 @@ public class PluginImpl {
         plotAPI = new PlotAPI();
         Config = new ConfigUtils((JavaPlugin) plugin, "config.yml");
         Database = new ConfigUtils((JavaPlugin) plugin, "database.yml");
+        Enchantments = new ConfigUtils((JavaPlugin) plugin, "enchantments.yml");
+        Rewards = new ConfigUtils((JavaPlugin) plugin, "rewards.yml");
     }
 
     public void onEnable() {
         Config.saveDefaultConfig();
         Database.saveDefaultConfig();
+        Enchantments.saveDefaultConfig();
+        Rewards.saveDefaultConfig();
 
         PaperCommandManager commandManager = new PaperCommandManager(plugin);
         commandManager.getLocales().setDefaultLocale(Locales.PORTUGUESE);

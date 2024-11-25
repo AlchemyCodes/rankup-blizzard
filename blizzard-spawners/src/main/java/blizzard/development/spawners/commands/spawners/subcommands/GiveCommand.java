@@ -1,7 +1,7 @@
 package blizzard.development.spawners.commands.spawners.subcommands;
 
-import blizzard.development.spawners.handlers.mobs.CowMob;
-import blizzard.development.spawners.handlers.mobs.PigMob;
+import blizzard.development.spawners.handlers.enums.Spawners;
+import blizzard.development.spawners.handlers.mobs.MobsHandler;
 import blizzard.development.spawners.utils.NumberFormat;
 import blizzard.development.spawners.utils.items.TextAPI;
 import co.aikar.commands.BaseCommand;
@@ -34,11 +34,11 @@ public class GiveCommand extends BaseCommand {
 
         switch (type) {
             case "pigs", "pig", "porcos", "porco" -> {
-                PigMob.give(player, amount, stack);
+                MobsHandler.giveMobSpawner(player, Spawners.PIG, amount, stack);
                 sender.sendActionBar(TextAPI.parse(successMessage(player, type, amount, stack)));
             }
             case "cows", "cow", "vacas", "vaca" -> {
-                CowMob.give(player, amount, stack);
+                MobsHandler.giveMobSpawner(player, Spawners.COW, amount, stack);
                 sender.sendActionBar(TextAPI.parse(successMessage(player, type, amount, stack)));
             }
             default -> {

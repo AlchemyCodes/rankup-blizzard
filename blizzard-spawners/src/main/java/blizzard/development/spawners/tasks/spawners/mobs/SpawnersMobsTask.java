@@ -2,7 +2,7 @@ package blizzard.development.spawners.tasks.spawners.mobs;
 
 import blizzard.development.spawners.database.cache.setters.SpawnersCacheSetters;
 import blizzard.development.spawners.database.storage.SpawnersData;
-import blizzard.development.spawners.handlers.StaticMobs;
+import blizzard.development.spawners.handlers.spawners.SpawnersHandler;
 import blizzard.development.spawners.utils.LocationUtil;
 import blizzard.development.spawners.utils.NumberFormat;
 import blizzard.development.spawners.utils.PluginImpl;
@@ -23,7 +23,7 @@ public class SpawnersMobsTask extends BukkitRunnable {
 
     public SpawnersMobsTask(SpawnersData spawnerData) {
         this.spawnerData = spawnerData;
-        this.currentMobAmount = spawnerData.getMob_amount();
+        this.currentMobAmount = spawnerData.getMobAmount();
         spawnMob();
     }
 
@@ -36,19 +36,20 @@ public class SpawnersMobsTask extends BukkitRunnable {
     }
 
     private void spawnMob() {
-        Location mobLocation = LocationUtil.deserializeLocation(spawnerData.getMob_location());
+        Location mobLocation = LocationUtil.deserializeLocation(spawnerData.getMobLocation());
+        SpawnersHandler handler = SpawnersHandler.getInstance();
         if (mobLocation != null) {
             if (displayMob != null && displayMob.isValid()) {
                 displayMob.remove();
             }
-            StaticMobs.spawn(SpawnersUtils.getInstance().getSpawnerFromName(spawnerData.getType()), currentMobAmount, mobLocation);
+            handler.spawnStaticMob(SpawnersUtils.getInstance().getSpawnerFromName(spawnerData.getType()), currentMobAmount, mobLocation);
             this.displayMob = findDisplayMob(mobLocation);
         }
     }
 
     @Override
     public void run() {
-        Location mobLocation = LocationUtil.deserializeLocation(spawnerData.getMob_location());
+        Location mobLocation = LocationUtil.deserializeLocation(spawnerData.getMobLocation());
         if (mobLocation == null) {
             this.cancel();
             return;
@@ -70,7 +71,7 @@ public class SpawnersMobsTask extends BukkitRunnable {
             ));
             displayMob.setMetadata("blizzard_spawners-mob", new FixedMetadataValue(PluginImpl.getInstance().plugin, spawnerData.getType()));
             displayMob.setMetadata("blizzard_spawners-id", new FixedMetadataValue(PluginImpl.getInstance().plugin, spawnerData.getId()));
-            SpawnersCacheSetters.getInstance().setMobAmout(spawnerData.getId(), currentMobAmount);
+            SpawnersCacheSetters.getInstance().setSpawnerMobAmout(spawnerData.getId(), currentMobAmount);
         }
     }
 

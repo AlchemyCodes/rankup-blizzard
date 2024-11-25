@@ -4,9 +4,9 @@ import blizzard.development.spawners.builders.DisplayBuilder;
 import blizzard.development.spawners.builders.EffectsBuilder;
 import blizzard.development.spawners.database.cache.managers.SpawnersCacheManager;
 import blizzard.development.spawners.database.storage.SpawnersData;
-import blizzard.development.spawners.handlers.StaticMobs;
-import blizzard.development.spawners.handlers.StaticSpawners;
+import blizzard.development.spawners.handlers.enchantments.EnchantmentsHandler;
 import blizzard.development.spawners.handlers.enums.Spawners;
+import blizzard.development.spawners.handlers.spawners.SpawnersHandler;
 import blizzard.development.spawners.methods.SpawnersMethods;
 import blizzard.development.spawners.tasks.spawners.mobs.SpawnersMobsTaskManager;
 import blizzard.development.spawners.utils.CooldownUtils;
@@ -34,6 +34,9 @@ import java.util.concurrent.TimeUnit;
 public class SpawnerPlaceListener implements Listener {
 
     private final CooldownUtils cooldown = CooldownUtils.getInstance();
+    private final SpawnersHandler spawnersHandler = SpawnersHandler.getInstance();
+    private final EnchantmentsHandler enchantmentsHandler = EnchantmentsHandler.getInstance();
+
 
     @EventHandler
     private void onSpawnerPlace(BlockPlaceEvent event) {
@@ -89,7 +92,7 @@ public class SpawnerPlaceListener implements Listener {
     }
 
     private Boolean setupSpawner(Player player, String id, Location spawnerLocation, Spawners spawner, Double amount) {
-        StaticSpawners.create(spawnerLocation, spawner);
+        spawnersHandler.createStaticSpawner(spawnerLocation, spawner);
 
         PlotArea plotArea = PlotSquared.get().getPlotAreaManager().getPlotArea(LocationUtil.getPlotLocation(spawnerLocation.getBlock()));
         if (plotArea == null) return false;
@@ -109,13 +112,17 @@ public class SpawnerPlaceListener implements Listener {
 
         if (!SpawnersMethods.createSpawner(
                 player,
+                spawner,
                 id,
                 LocationUtil.getSerializedLocation(spawnerLocation),
                 LocationUtil.getSerializedLocation(mobLocation),
-                spawner,
+                String.valueOf(plot.getId()),
                 amount,
                 0.0,
-                String.valueOf(plot.getId()))) {
+                enchantmentsHandler.getInitialLevel("speed"),
+                enchantmentsHandler.getInitialLevel("lucky"),
+                enchantmentsHandler.getInitialLevel("experience")))
+        {
             return false;
         }
 
