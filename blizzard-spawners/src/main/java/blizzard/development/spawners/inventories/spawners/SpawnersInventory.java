@@ -2,6 +2,7 @@ package blizzard.development.spawners.inventories.spawners;
 
 import blizzard.development.spawners.database.cache.managers.SpawnersCacheManager;
 import blizzard.development.spawners.database.storage.SpawnersData;
+import blizzard.development.spawners.inventories.enchantments.EnchantmentsInventory;
 import blizzard.development.spawners.utils.NumberFormat;
 import blizzard.development.spawners.utils.items.TextAPI;
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
@@ -30,6 +31,11 @@ public class SpawnersInventory {
         });
 
         GuiItem enchantmentsItem = new GuiItem(enchantments(), event -> {
+            EnchantmentsInventory.getInstance().open(player, id);
+            event.setCancelled(true);
+        });
+
+        GuiItem dropsItem = new GuiItem(drops(id), event -> {
             event.setCancelled(true);
         });
 
@@ -42,8 +48,9 @@ public class SpawnersInventory {
         });
 
         pane.addItem(infoItem, Slot.fromIndex(10));
-        pane.addItem(enchantmentsItem, Slot.fromIndex(12));
-        pane.addItem(friendsItem, Slot.fromIndex(14));
+        pane.addItem(enchantmentsItem, Slot.fromIndex(11));
+        pane.addItem(dropsItem, Slot.fromIndex(13));
+        pane.addItem(friendsItem, Slot.fromIndex(15));
         pane.addItem(rankingItem, Slot.fromIndex(16));
 
         inventory.addPane(pane);
@@ -63,7 +70,7 @@ public class SpawnersInventory {
                 "§8 ■ §7Dono§8:§7 " + data.getNickname(),
                 "§8 ■ §7Spawners§8:§7 " + format.formatNumber(data.getAmount()),
                 "§8 ■ §7Mobs§8:§7 " + format.formatNumber(data.getMobAmount()),
-                "§8 ■ §7Drops§8:§7 " + format.formatNumber(1),
+                "§8 ■ §7Drops§8:§7 " + format.formatNumber(data.getDrops()),
                 "",
                 "§f Encantamentos:",
                 "§8 ■ §7Velocidade§8:§7 " + data.getSpeedLevel(),
@@ -83,9 +90,31 @@ public class SpawnersInventory {
         meta.displayName(TextAPI.parse("§5Encantamentos"));
         meta.setLore(Arrays.asList(
                 "§7Verifique os encantamentos",
-                "§7disponíveis para o spawners",
+                "§7disponíveis para o spawner",
                 "",
                 "§5Clique para verificar."
+        ));
+
+        meta.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS, ItemFlag.HIDE_ATTRIBUTES);
+        item.setItemMeta(meta);
+        return item;
+    }
+
+    public ItemStack drops(String id) {
+        final SpawnersData data = manager.getSpawnerData(id);
+        final NumberFormat format = NumberFormat.getInstance();
+
+        ItemStack item = new ItemStack(Material.CHEST);
+        ItemMeta meta = item.getItemMeta();
+        meta.displayName(TextAPI.parse("§bDrops"));
+        meta.setLore(Arrays.asList(
+                "§7Gerencie os drops",
+                "§7do seu spawner",
+                "",
+                "§f Armazenados:",
+                "§8 ▶ §7" + format.formatNumber(data.getDrops()),
+                "",
+                "§bClique para gerenciar."
         ));
 
         meta.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS, ItemFlag.HIDE_ATTRIBUTES);

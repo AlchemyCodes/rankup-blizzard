@@ -8,7 +8,7 @@ import blizzard.development.spawners.utils.items.TextAPI;
 import org.bukkit.entity.Player;
 
 public class SpawnersMethods {
-    public static Boolean createSpawner(Player player, Spawners spawner, String id, String location, String mobLocation, String plotId, Double amount, Double mobAmount, Integer speedLevel, Integer luckyLevel, Integer experienceLevel) {
+    public static Boolean createSpawner(Player player, Spawners spawner, String id, String location, String mobLocation, String plotId, Double amount, Double mobAmount, Double drops, Integer speedLevel, Integer luckyLevel, Integer experienceLevel) {
         String type = spawner.getType();
         String nickname = player.getName();
         SpawnersData spawnersData = new SpawnersData(
@@ -20,6 +20,7 @@ public class SpawnersMethods {
                 plotId,
                 amount,
                 mobAmount,
+                drops,
                 speedLevel,
                 luckyLevel,
                 experienceLevel

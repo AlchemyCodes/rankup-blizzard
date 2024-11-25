@@ -7,10 +7,10 @@ public class SpawnersData {
     private String mobLocation;
     private String nickname;
     private String plotId;
-    private Double amount, mobAmount;
+    private Double amount, mobAmount, drops;
     private Integer speedLevel, luckyLevel, experienceLevel;
 
-    public SpawnersData(String id, String type, String location, String mobLocation, String nickname, String plotId, Double amount, Double mobAmount, Integer speedLevel, Integer luckyLevel, Integer experienceLevel) {
+    public SpawnersData(String id, String type, String location, String mobLocation, String nickname, String plotId, Double amount, Double mobAmount, Double drops, Integer speedLevel, Integer luckyLevel, Integer experienceLevel) {
         this.id = id;
         this.type = type;
         this.location = location;
@@ -19,6 +19,7 @@ public class SpawnersData {
         this.plotId = plotId;
         this.amount = amount;
         this.mobAmount = mobAmount;
+        this.drops = drops;
         this.speedLevel = speedLevel;
         this.luckyLevel = luckyLevel;
         this.experienceLevel = experienceLevel;
@@ -86,6 +87,14 @@ public class SpawnersData {
 
     public void setMobAmount(Double mobAmount) {
         this.mobAmount = mobAmount;
+    }
+
+    public Double getDrops() {
+        return drops;
+    }
+
+    public void setDrops(Double drops) {
+        this.drops = drops;
     }
 
     public Integer getSpeedLevel() {

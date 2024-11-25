@@ -16,6 +16,22 @@ public class SpawnersCacheSetters {
         }
     }
 
+    public void addSpawnerDrops(String id, double amount) {
+        SpawnersData data = cache.getSpawnerData(id);
+        if (data != null) {
+            data.setDrops(data.getDrops() + amount);
+            cache.cacheSpawnerData(id, data);
+        }
+    }
+
+    public void removeSpawnerDrops(String id, double amount) {
+        SpawnersData data = cache.getSpawnerData(id);
+        if (data != null) {
+            data.setDrops(data.getDrops() - amount);
+            cache.cacheSpawnerData(id, data);
+        }
+    }
+
     public void addSpawnerSpeedLevel(String id, int amount) {
         SpawnersData data = cache.getSpawnerData(id);
         if (data != null) {

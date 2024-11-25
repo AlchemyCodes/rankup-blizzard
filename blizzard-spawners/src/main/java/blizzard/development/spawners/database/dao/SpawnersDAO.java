@@ -17,6 +17,7 @@ public class SpawnersDAO {
                     "type VARCHAR(50), " +
                     "amount DOUBLE, " +
                     "mob_amount DOUBLE, " +
+                    "drops DOUBLE, " +
                     "location VARCHAR(255), " +
                     "mob_location VARCHAR(255), " +
                     "nickname VARCHAR(36), " +
@@ -25,6 +26,7 @@ public class SpawnersDAO {
                     "lucky_level INTEGER, " +
                     "experience_level INTEGER)";
             stat.execute(sql);
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -54,6 +56,7 @@ public class SpawnersDAO {
                             resultSet.getString("plotId"),
                             resultSet.getDouble("amount"),
                             resultSet.getDouble("mob_amount"),
+                            resultSet.getDouble("drops"),
                             resultSet.getInt("speed_level"),
                             resultSet.getInt("lucky_level"),
                             resultSet.getInt("experience_level")
@@ -83,6 +86,7 @@ public class SpawnersDAO {
                             resultSet.getString("plotId"),
                             resultSet.getDouble("amount"),
                             resultSet.getDouble("mob_amount"),
+                            resultSet.getDouble("drops"),
                             resultSet.getInt("speed_level"),
                             resultSet.getInt("lucky_level"),
                             resultSet.getInt("experience_level")
@@ -96,7 +100,7 @@ public class SpawnersDAO {
     }
 
     public void createSpawnerData(SpawnersData spawnerData) throws SQLException {
-        String sql = "INSERT INTO spawners (id, type, location, mob_location, nickname, plotId, amount, mob_amount, speed_level, lucky_level, experience_level) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO spawners (id, type, location, mob_location, nickname, plotId, amount, mob_amount, drops, speed_level, lucky_level, experience_level) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         executeUpdate(sql, statement -> {
             try {
                 statement.setString(1, spawnerData.getId());
@@ -107,9 +111,10 @@ public class SpawnersDAO {
                 statement.setString(6, spawnerData.getPlotId());
                 statement.setDouble(7, spawnerData.getAmount());
                 statement.setDouble(8, spawnerData.getMobAmount());
-                statement.setInt(9, spawnerData.getSpeedLevel());
-                statement.setInt(10, spawnerData.getLuckyLevel());
-                statement.setInt(11, spawnerData.getExperienceLevel());
+                statement.setDouble(9, spawnerData.getDrops());
+                statement.setInt(10, spawnerData.getSpeedLevel());
+                statement.setInt(11, spawnerData.getLuckyLevel());
+                statement.setInt(12, spawnerData.getExperienceLevel());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -128,7 +133,7 @@ public class SpawnersDAO {
     }
 
     public void updateSpawnerData(SpawnersData spawnerData) throws SQLException {
-        String sql = "UPDATE spawners SET type = ?, location = ?, mob_location = ?, nickname = ?, plotId = ?, amount = ?, mob_amount = ?, speed_level = ?, lucky_level = ?, experience_level = ? WHERE id = ?";
+        String sql = "UPDATE spawners SET type = ?, location = ?, mob_location = ?, nickname = ?, plotId = ?, amount = ?, mob_amount = ?, drops = ?, speed_level = ?, lucky_level = ?, experience_level = ? WHERE id = ?";
         executeUpdate(sql, statement -> {
             try {
                 statement.setString(1, spawnerData.getType());
@@ -138,10 +143,11 @@ public class SpawnersDAO {
                 statement.setString(5, spawnerData.getPlotId());
                 statement.setDouble(6, spawnerData.getAmount());
                 statement.setDouble(7, spawnerData.getMobAmount());
-                statement.setDouble(8, spawnerData.getSpeedLevel());
-                statement.setInt(9, spawnerData.getLuckyLevel());
-                statement.setInt(10, spawnerData.getExperienceLevel());
-                statement.setString(11, spawnerData.getId());
+                statement.setDouble(8, spawnerData.getDrops());
+                statement.setInt(9, spawnerData.getSpeedLevel());
+                statement.setInt(10, spawnerData.getLuckyLevel());
+                statement.setInt(11, spawnerData.getExperienceLevel());
+                statement.setString(12, spawnerData.getId());
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -164,6 +170,7 @@ public class SpawnersDAO {
                         resultSet.getString("plotId"),
                         resultSet.getDouble("amount"),
                         resultSet.getDouble("mob_amount"),
+                        resultSet.getDouble("drops"),
                         resultSet.getInt("speed_level"),
                         resultSet.getInt("lucky_level"),
                         resultSet.getInt("experience_level")

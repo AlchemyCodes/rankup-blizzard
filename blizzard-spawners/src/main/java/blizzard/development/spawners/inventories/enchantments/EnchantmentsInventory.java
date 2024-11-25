@@ -22,70 +22,47 @@ public class EnchantmentsInventory {
     private final SpawnersCacheManager manager = SpawnersCacheManager.getInstance();
 
     public void open(Player player, String id) {
-        ChestGui inventory = new ChestGui(3, "§8Spawner");
+        ChestGui inventory = new ChestGui(3, "§8Encantamentos");
         StaticPane pane = new StaticPane(0, 0, 9, 3);
 
-        GuiItem infoItem = new GuiItem(info(id), event -> {
+        GuiItem speedItem = new GuiItem(speed(player, id), event -> {
             event.setCancelled(true);
         });
 
-        GuiItem enchantmentsItem = new GuiItem(enchantments(), event -> {
+        GuiItem luckyItem = new GuiItem(lucky(player, id), event -> {
             event.setCancelled(true);
         });
 
-        GuiItem friendsItem = new GuiItem(friends(), event -> {
+        GuiItem experienceItem = new GuiItem(experience(player, id), event -> {
             event.setCancelled(true);
         });
 
-        GuiItem rankingItem = new GuiItem(ranking(), event -> {
+        GuiItem backItem = new GuiItem(back(), event -> {
+            SpawnersInventory.getInstance().open(player, id);
             event.setCancelled(true);
         });
 
-        pane.addItem(infoItem, Slot.fromIndex(10));
-        pane.addItem(enchantmentsItem, Slot.fromIndex(12));
-        pane.addItem(friendsItem, Slot.fromIndex(14));
-        pane.addItem(rankingItem, Slot.fromIndex(16));
+        pane.addItem(speedItem, Slot.fromIndex(11));
+        pane.addItem(luckyItem, Slot.fromIndex(13));
+        pane.addItem(experienceItem, Slot.fromIndex(15));
+        pane.addItem(backItem, Slot.fromIndex(18));
 
         inventory.addPane(pane);
         inventory.show(player);
     }
 
-    public ItemStack info(String id) {
-        final SpawnersData data = manager.getSpawnerData(id);
-
-        ItemStack item = new ItemStack(Material.SPAWNER);
+    public ItemStack speed(Player player, String id) {
+        ItemStack item = new ItemStack(Material.HOPPER);
         ItemMeta meta = item.getItemMeta();
-        meta.displayName(TextAPI.parse("§aInformações"));
+        meta.displayName(TextAPI.parse("§bVelocidade §l" + 1));
         meta.setLore(Arrays.asList(
+                "§7Diminua a velocidade de",
+                "§7geração do seu spawner.",
                 "",
-                "§fGerais:",
-                "§8■ §7Dono:" + data.getNickname(),
-                "§8■ §7Spawners:" + data.getAmount(),
-                "§8■ §7Mobs:" + data.getMobAmount(),
-                "§8■ §7Drops:" + 1,
+                "§f Nível: §b" + 1 + "/" + "X",
+                "§f Tempo: §b" + 1 + "§ls",
                 "",
-                "§fEncantamentos:",
-                "§8■ §7Velocidade:" + data.getSpeedLevel(),
-                "§8■ §7Sortudo:" + data.getLuckyLevel(),
-                "§8■ §7Experiente:" + data.getExperienceLevel(),
-                ""
-        ));
-        meta.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS, ItemFlag.HIDE_ATTRIBUTES);
-
-        item.setItemMeta(meta);
-        return item;
-    }
-
-    public ItemStack enchantments() {
-        ItemStack item = new ItemStack(Material.ENCHANTING_TABLE);
-        ItemMeta meta = item.getItemMeta();
-        meta.displayName(TextAPI.parse("§5Encantamentos"));
-        meta.setLore(Arrays.asList(
-                "",
-                "§7Verifique os encantamentos",
-                "§7disponíveis para o spawners",
-                "",
-                "§5Clique para verificar."
+                "§bClique para melhorar."
         ));
 
         meta.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS, ItemFlag.HIDE_ATTRIBUTES);
@@ -93,16 +70,19 @@ public class EnchantmentsInventory {
         return item;
     }
 
-    public ItemStack friends() {
-        ItemStack item = new ItemStack(Material.OAK_SIGN);
+    public ItemStack lucky(Player player, String id) {
+        ItemStack item = new ItemStack(Material.DIAMOND);
         ItemMeta meta = item.getItemMeta();
-        meta.displayName(TextAPI.parse("§eAmigos"));
+        meta.displayName(TextAPI.parse("§6Sortudo §l" + 1));
         meta.setLore(Arrays.asList(
+                "§7Aumente suas chances",
+                "§7de ganhar recompensas.",
+                "§7ao matar mobs do spawner",
                 "",
-                "§7Gerencie suas amizades e",
-                "§7suas respectivas permissões",
+                "§f Nível: §6" + 1 + "/" + "X",
+                "§f Chance: §6" + 1 + "§l%",
                 "",
-                "§eClique para gerenciar."
+                "§6Clique para melhorar."
         ));
 
         meta.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS, ItemFlag.HIDE_ATTRIBUTES);
@@ -110,16 +90,33 @@ public class EnchantmentsInventory {
         return item;
     }
 
-    public ItemStack ranking() {
-        ItemStack item = new ItemStack(Material.GOLD_INGOT);
+    public ItemStack experience(Player player, String id) {
+        ItemStack item = new ItemStack(Material.EXPERIENCE_BOTTLE);
         ItemMeta meta = item.getItemMeta();
-        meta.displayName(TextAPI.parse("§6Destaques"));
+        meta.displayName(TextAPI.parse("§aExperiente §l" + 1));
         meta.setLore(Arrays.asList(
+                "§7Aumente o ganho de",
+                "§7experiência ao matar",
+                "§7os mobs do spawner.",
                 "",
-                "§7Visualize os jogadores",
-                "§7que mais se destacam",
+                "§f Nível: §a" + 1 + "/" + "X",
+                "§f Ganho: §a" + 1 + "§l%",
                 "",
-                "§6Clique para visualizar."
+                "§aClique para melhorar."
+        ));
+
+        meta.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS, ItemFlag.HIDE_ATTRIBUTES);
+        item.setItemMeta(meta);
+        return item;
+    }
+
+    public ItemStack back() {
+        ItemStack item = new ItemStack(Material.RED_DYE);
+        ItemMeta meta = item.getItemMeta();
+        meta.displayName(TextAPI.parse("§cVoltar"));
+        meta.setLore(Arrays.asList(
+                "§7Clique aqui para voltar",
+                "§7ao menu anterior."
         ));
 
         meta.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS, ItemFlag.HIDE_ATTRIBUTES);
