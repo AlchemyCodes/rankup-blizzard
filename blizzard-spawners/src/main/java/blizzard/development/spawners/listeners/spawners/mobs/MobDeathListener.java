@@ -1,5 +1,8 @@
 package blizzard.development.spawners.listeners.spawners.mobs;
 
+import blizzard.development.spawners.database.cache.managers.SpawnersCacheManager;
+import blizzard.development.spawners.database.storage.SpawnersData;
+import blizzard.development.spawners.tasks.spawners.mobs.SpawnersMobsTaskManager;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -15,16 +18,24 @@ public class MobDeathListener implements Listener {
         if (event.getEntity().getKiller() == null) return;
 
         Player player = event.getEntity().getKiller();
-
         Entity mob = event.getEntity();
 
-        if (mob.hasMetadata("blizzard_spawners-mob")) {
+        if (mob.hasMetadata("blizzard_spawners-mob") && mob.hasMetadata("blizzard_spawners-id")) {
             event.getDrops().clear();
 
-            String value = mob.getMetadata("blizzard_spawners-mob").get(0).asString();
+            String mobType = mob.getMetadata("blizzard_spawners-mob").get(0).asString();
+            String spawnerId = mob.getMetadata("blizzard_spawners-id").get(0).asString();
 
-            player.getInventory().addItem(new ItemStack(Material.DIAMOND));
-            player.sendMessage("vose matou um " + value + "e ganhou bosta nenhuma");
+            SpawnersData spawnerData = SpawnersCacheManager.getInstance().getSpawnerData(spawnerId);
+
+            if (spawnerData != null) {
+                spawnerData.setMob_amount(0.0);
+                SpawnersCacheManager.getInstance().cacheSpawnerData(spawnerId, spawnerData);
+                SpawnersMobsTaskManager.getInstance().syncMobAmount(spawnerId, 0.0);
+
+                player.getInventory().addItem(new ItemStack(Material.DIAMOND));
+                player.sendMessage("Você matou um " + mobType + " e fodase.");
+            }
         }
     }
 }

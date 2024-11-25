@@ -28,7 +28,6 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
-import java.util.Timer;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -97,20 +96,16 @@ public class SpawnerPlaceListener implements Listener {
         Plot plot = plotArea.getPlot(LocationUtil.getPlotLocation(spawnerLocation.getBlock()));
 
         Location mobLocation = spawnerLocation.clone();
+
         mobLocation.setX(mobLocation.getBlockX() + 0.5);
         mobLocation.setZ(mobLocation.getBlockZ() + 0.5);
-        mobLocation.setY(spawnerLocation.getBlockY());
-        mobLocation.setWorld(spawnerLocation.getWorld());
 
-        Vector playerDirection = player.getLocation().toVector().subtract(spawnerLocation.toVector());
-        playerDirection.setY(0);
-        playerDirection = playerDirection.normalize();
+        Vector direction = spawnerLocation.getDirection().normalize();
+        direction.multiply(-1);
 
-        mobLocation.add(playerDirection.multiply(1.5));
+        mobLocation.add(direction.multiply(1.0));
 
-        Vector lookDirection = player.getLocation().toVector().subtract(mobLocation.toVector());
-        lookDirection.setY(0);
-        mobLocation.setDirection(lookDirection.normalize());
+        mobLocation.setDirection(direction);
 
         if (!SpawnersMethods.createSpawner(
                 player,
@@ -123,8 +118,6 @@ public class SpawnerPlaceListener implements Listener {
                 String.valueOf(plot.getId()))) {
             return false;
         }
-
-        StaticMobs.spawn(spawner, amount, mobLocation);
 
         SpawnersData spawnerData = SpawnersCacheManager.getInstance().getSpawnerData(id);
         SpawnersMobsTaskManager.getInstance().startTask(spawnerData);

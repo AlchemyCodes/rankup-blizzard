@@ -1,52 +1,77 @@
 package blizzard.development.spawners.tasks.spawners.mobs;
 
-import blizzard.development.spawners.database.cache.managers.SpawnersCacheManager;
+import blizzard.development.spawners.database.cache.setters.SpawnersCacheSetters;
 import blizzard.development.spawners.database.storage.SpawnersData;
 import blizzard.development.spawners.handlers.StaticMobs;
 import blizzard.development.spawners.utils.LocationUtil;
 import blizzard.development.spawners.utils.NumberFormat;
+import blizzard.development.spawners.utils.PluginImpl;
+import blizzard.development.spawners.utils.SpawnersUtils;
 import blizzard.development.spawners.utils.items.TextAPI;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.scheduler.BukkitTask;
 
 public class SpawnersMobsTask extends BukkitRunnable {
     private final SpawnersData spawnerData;
     private Entity displayMob;
     private double currentMobAmount;
+    private BukkitTask bukkitTask;
 
     public SpawnersMobsTask(SpawnersData spawnerData) {
         this.spawnerData = spawnerData;
         this.currentMobAmount = spawnerData.getMob_amount();
+        spawnMob();
+    }
 
-        Location mobLocation = LocationUtil.deserializeLocation(spawnerData.getLocation());
+    public void setBukkitTask(BukkitTask bukkitTask) {
+        this.bukkitTask = bukkitTask;
+    }
+
+    public void setCurrentMobAmount(double currentMobAmount) {
+        this.currentMobAmount = currentMobAmount;
+    }
+
+    private void spawnMob() {
+        Location mobLocation = LocationUtil.deserializeLocation(spawnerData.getMob_location());
         if (mobLocation != null) {
-            this.displayMob = findDisplayMob(mobLocation);
-            if (this.displayMob == null) {
-                this.displayMob = findDisplayMob(mobLocation);
+            if (displayMob != null && displayMob.isValid()) {
+                displayMob.remove();
             }
+            StaticMobs.spawn(SpawnersUtils.getInstance().getSpawnerFromName(spawnerData.getType()), currentMobAmount, mobLocation);
+            this.displayMob = findDisplayMob(mobLocation);
         }
     }
 
     @Override
     public void run() {
-        if (displayMob == null || !displayMob.isValid()) {
+        Location mobLocation = LocationUtil.deserializeLocation(spawnerData.getMob_location());
+        if (mobLocation == null) {
             this.cancel();
             return;
+        }
+
+        if (displayMob == null || !displayMob.isValid() || !displayMob.hasMetadata("blizzard_spawners-mob")) {
+            spawnMob();
+            if (displayMob == null) {
+                return;
+            }
         }
 
         currentMobAmount += spawnerData.getAmount();
 
         if (displayMob instanceof LivingEntity) {
             displayMob.customName(TextAPI.parse(
-                    "§7" + StaticMobs.getMobNameByEntity(displayMob.getType()) +
+                    "§7" + SpawnersUtils.getInstance().getMobNameByEntity(displayMob.getType()) +
                             " (x" + NumberFormat.getInstance().formatNumber(currentMobAmount) + ")"
             ));
+            displayMob.setMetadata("blizzard_spawners-mob", new FixedMetadataValue(PluginImpl.getInstance().plugin, spawnerData.getType()));
+            displayMob.setMetadata("blizzard_spawners-id", new FixedMetadataValue(PluginImpl.getInstance().plugin, spawnerData.getId()));
+            SpawnersCacheSetters.getInstance().setMobAmout(spawnerData.getId(), currentMobAmount);
         }
-
-        spawnerData.setMob_amount(currentMobAmount);
-        SpawnersCacheManager.getInstance().cacheSpawnerData(spawnerData.getId(), spawnerData);
     }
 
     private Entity findDisplayMob(Location location) {
