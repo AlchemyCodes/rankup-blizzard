@@ -1,0 +1,7 @@
+rewards:
+
+  lucky-enchantment-rewards:
+    - "clans give {player} 1"
+    - "clans give {player} 2"
+
+

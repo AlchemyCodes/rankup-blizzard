@@ -5,9 +5,8 @@ import blizzard.development.spawners.builders.EffectsBuilder;
 import blizzard.development.spawners.database.cache.managers.SpawnersCacheManager;
 import blizzard.development.spawners.database.dao.SpawnersDAO;
 import blizzard.development.spawners.database.storage.SpawnersData;
-import blizzard.development.spawners.handlers.mobs.CowMob;
-import blizzard.development.spawners.handlers.mobs.PigMob;
-import blizzard.development.spawners.tasks.spawners.mobs.SpawnersMobsTask;
+import blizzard.development.spawners.handlers.enums.Spawners;
+import blizzard.development.spawners.handlers.mobs.MobsHandler;
 import blizzard.development.spawners.tasks.spawners.mobs.SpawnersMobsTaskManager;
 import blizzard.development.spawners.utils.*;
 import blizzard.development.spawners.utils.items.TextAPI;
@@ -99,8 +98,8 @@ public class SpawnerBreakListener implements Listener {
             cache.removeSpawnerData(id);
 
             switch (type.toLowerCase()) {
-                case "pigs", "pig", "porcos", "porco" -> PigMob.give(player, amount, 1);
-                case "cows", "cow", "vacas", "vaca" -> CowMob.give(player, amount, 1);
+                case "pigs", "pig", "porcos", "porco" -> MobsHandler.giveMobSpawner(player, Spawners.PIG, amount, 1);
+                case "cows", "cow", "vacas", "vaca" -> MobsHandler.giveMobSpawner(player, Spawners.COW, amount, 1);
             }
 
             String formattedAmount = NumberFormat.getInstance().formatNumber(amount);

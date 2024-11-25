@@ -24,9 +24,9 @@ public class SpawnersMobsTaskManager {
         cleanupOldMobs(spawnerData);
 
         SpawnersMobsTask task = new SpawnersMobsTask(spawnerData);
-        long interval = spawnerData.getSpeed_level() * 20L;
+        double interval = spawnerData.getSpeedLevel() * 20L;
 
-        BukkitTask bukkitTask = task.runTaskTimer(PluginImpl.getInstance().plugin, 1L, interval);
+        BukkitTask bukkitTask = task.runTaskTimer(PluginImpl.getInstance().plugin, 1L, (long) interval);
         task.setBukkitTask(bukkitTask);
         spawnerTasks.put(spawnerData.getId(), task);
     }
@@ -39,7 +39,7 @@ public class SpawnersMobsTaskManager {
     }
 
     private void cleanupOldMobs(SpawnersData spawnerData) {
-        Location location = LocationUtil.deserializeLocation(spawnerData.getMob_location());
+        Location location = LocationUtil.deserializeLocation(spawnerData.getMobLocation());
         if (location != null && location.getWorld() != null) {
             location.getWorld().getNearbyEntities(location, 1, 1, 1).stream()
                     .filter(entity -> entity.hasMetadata("blizzard_spawners-mob"))

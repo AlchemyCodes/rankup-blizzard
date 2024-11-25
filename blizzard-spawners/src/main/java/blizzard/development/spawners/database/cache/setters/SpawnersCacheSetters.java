@@ -8,10 +8,34 @@ public class SpawnersCacheSetters {
 
     private final SpawnersCacheManager cache = SpawnersCacheManager.getInstance();
 
-    public void setMobAmout(String id, double amount) {
+    public void setSpawnerMobAmout(String id, double amount) {
         SpawnersData data = cache.getSpawnerData(id);
         if (data != null) {
-            data.setMob_amount(amount);
+            data.setMobAmount(amount);
+            cache.cacheSpawnerData(id, data);
+        }
+    }
+
+    public void addSpawnerSpeedLevel(String id, int amount) {
+        SpawnersData data = cache.getSpawnerData(id);
+        if (data != null) {
+            data.setSpeedLevel(data.getSpeedLevel() - amount);
+            cache.cacheSpawnerData(id, data);
+        }
+    }
+
+    public void addSpawnerLuckyLevel(String id, int amount) {
+        SpawnersData data = cache.getSpawnerData(id);
+        if (data != null) {
+            data.setLuckyLevel(data.getLuckyLevel() + amount);
+            cache.cacheSpawnerData(id, data);
+        }
+    }
+
+    public void addSpawnerExperienceLevel(String id, int amount) {
+        SpawnersData data = cache.getSpawnerData(id);
+        if (data != null) {
+            data.setExperienceLevel(data.getExperienceLevel() + amount);
             cache.cacheSpawnerData(id, data);
         }
     }

@@ -21,9 +21,9 @@ public class SpawnersDAO {
                     "mob_location VARCHAR(255), " +
                     "nickname VARCHAR(36), " +
                     "plotId VARCHAR(36), " +
-                    "speed_level INT, " +
-                    "lucky_level INT, " +
-                    "experience_level INT)";
+                    "speed_level INTEGER, " +
+                    "lucky_level INTEGER, " +
+                    "experience_level INTEGER)";
             stat.execute(sql);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -35,9 +35,6 @@ public class SpawnersDAO {
              PreparedStatement statement = conn.prepareStatement(sql)) {
             setter.accept(statement);
             statement.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println("Database error: " + e.getMessage());
-            throw e;
         }
     }
 
@@ -46,18 +43,17 @@ public class SpawnersDAO {
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement statement = conn.prepareStatement(sql)) {
             statement.setString(1, id);
-
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     return new SpawnersData(
                             resultSet.getString("id"),
                             resultSet.getString("type"),
-                            resultSet.getDouble("amount"),
-                            resultSet.getDouble("mob_amount"),
                             resultSet.getString("location"),
                             resultSet.getString("mob_location"),
                             resultSet.getString("nickname"),
                             resultSet.getString("plotId"),
+                            resultSet.getDouble("amount"),
+                            resultSet.getDouble("mob_amount"),
                             resultSet.getInt("speed_level"),
                             resultSet.getInt("lucky_level"),
                             resultSet.getInt("experience_level")
@@ -65,7 +61,7 @@ public class SpawnersDAO {
                 }
             }
         } catch (SQLException e) {
-            System.out.println("Failed to find spawner data: " + e);
+            e.printStackTrace();
         }
         return null;
     }
@@ -81,12 +77,12 @@ public class SpawnersDAO {
                     spawnersData.add(new SpawnersData(
                             resultSet.getString("id"),
                             resultSet.getString("type"),
-                            resultSet.getDouble("amount"),
-                            resultSet.getDouble("mob_amount"),
                             resultSet.getString("location"),
                             resultSet.getString("mob_location"),
                             resultSet.getString("nickname"),
                             resultSet.getString("plotId"),
+                            resultSet.getDouble("amount"),
+                            resultSet.getDouble("mob_amount"),
                             resultSet.getInt("speed_level"),
                             resultSet.getInt("lucky_level"),
                             resultSet.getInt("experience_level")
@@ -100,20 +96,20 @@ public class SpawnersDAO {
     }
 
     public void createSpawnerData(SpawnersData spawnerData) throws SQLException {
-        String sql = "INSERT INTO spawners (id, type, amount, mob_amount, location, mob_location, nickname, plotId, speed_level, lucky_level, experience_level) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO spawners (id, type, location, mob_location, nickname, plotId, amount, mob_amount, speed_level, lucky_level, experience_level) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         executeUpdate(sql, statement -> {
             try {
                 statement.setString(1, spawnerData.getId());
                 statement.setString(2, spawnerData.getType());
-                statement.setDouble(3, spawnerData.getAmount());
-                statement.setDouble(4, spawnerData.getMob_amount());
-                statement.setString(5, spawnerData.getLocation());
-                statement.setString(6, spawnerData.getMob_location());
-                statement.setString(7, spawnerData.getNickname());
-                statement.setString(8, spawnerData.getPlotId());
-                statement.setInt(9, spawnerData.getSpeed_level());
-                statement.setInt(10, spawnerData.getLucky_level());
-                statement.setInt(11, spawnerData.getExperience_level());
+                statement.setString(3, spawnerData.getLocation());
+                statement.setString(4, spawnerData.getMobLocation());
+                statement.setString(5, spawnerData.getNickname());
+                statement.setString(6, spawnerData.getPlotId());
+                statement.setDouble(7, spawnerData.getAmount());
+                statement.setDouble(8, spawnerData.getMobAmount());
+                statement.setInt(9, spawnerData.getSpeedLevel());
+                statement.setInt(10, spawnerData.getLuckyLevel());
+                statement.setInt(11, spawnerData.getExperienceLevel());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -132,19 +128,19 @@ public class SpawnersDAO {
     }
 
     public void updateSpawnerData(SpawnersData spawnerData) throws SQLException {
-        String sql = "UPDATE spawners SET type = ?, amount = ?, mob_amount = ?, location = ?, mob_location = ?, nickname = ?, plotId = ?, speed_level = ?, lucky_level = ?, experience_level = ? WHERE id = ?";
+        String sql = "UPDATE spawners SET type = ?, location = ?, mob_location = ?, nickname = ?, plotId = ?, amount = ?, mob_amount = ?, speed_level = ?, lucky_level = ?, experience_level = ? WHERE id = ?";
         executeUpdate(sql, statement -> {
             try {
                 statement.setString(1, spawnerData.getType());
-                statement.setDouble(2, spawnerData.getAmount());
-                statement.setDouble(3, spawnerData.getMob_amount());
-                statement.setString(4, spawnerData.getLocation());
-                statement.setString(5, spawnerData.getMob_location());
-                statement.setString(6, spawnerData.getNickname());
-                statement.setString(7, spawnerData.getPlotId());
-                statement.setInt(8, spawnerData.getSpeed_level());
-                statement.setInt(9, spawnerData.getLucky_level());
-                statement.setInt(10, spawnerData.getExperience_level());
+                statement.setString(2, spawnerData.getLocation());
+                statement.setString(3, spawnerData.getMobLocation());
+                statement.setString(4, spawnerData.getNickname());
+                statement.setString(5, spawnerData.getPlotId());
+                statement.setDouble(6, spawnerData.getAmount());
+                statement.setDouble(7, spawnerData.getMobAmount());
+                statement.setDouble(8, spawnerData.getSpeedLevel());
+                statement.setInt(9, spawnerData.getLuckyLevel());
+                statement.setInt(10, spawnerData.getExperienceLevel());
                 statement.setString(11, spawnerData.getId());
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -155,30 +151,27 @@ public class SpawnersDAO {
     public List<SpawnersData> getAllSpawnersData() throws SQLException {
         String sql = "SELECT * FROM spawners";
         List<SpawnersData> spawnersDataList = new ArrayList<>();
-
         try (Connection connection = DatabaseConnection.getInstance().getConnection();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
-
             while (resultSet.next()) {
                 spawnersDataList.add(new SpawnersData(
                         resultSet.getString("id"),
                         resultSet.getString("type"),
-                        resultSet.getDouble("amount"),
-                        resultSet.getDouble("mob_amount"),
                         resultSet.getString("location"),
                         resultSet.getString("mob_location"),
                         resultSet.getString("nickname"),
                         resultSet.getString("plotId"),
+                        resultSet.getDouble("amount"),
+                        resultSet.getDouble("mob_amount"),
                         resultSet.getInt("speed_level"),
                         resultSet.getInt("lucky_level"),
                         resultSet.getInt("experience_level")
                 ));
             }
         } catch (SQLException e) {
-            System.out.println("Failed to retrieve spawners data: " + e.getMessage());
+            e.printStackTrace();
         }
-
         return spawnersDataList;
     }
 }

@@ -22,10 +22,19 @@ public class SpawnersUtils {
         };
     }
 
-    public static String getMobNameByEntity(EntityType entityType) {
+    public String getMobNameByEntity(EntityType entityType) {
         if (entityType.equals(EntityType.PIG)) {
             return "Porco";
         } else if (entityType.equals(EntityType.COW)) {
+            return "Vaca";
+        }
+        return null;
+    }
+
+    public String getMobNameBySpawner(Spawners spawner) {
+        if (spawner.equals(Spawners.PIG)) {
+            return "Porco";
+        } else if (spawner.equals(Spawners.COW)) {
             return "Vaca";
         }
         return null;
