@@ -17,7 +17,7 @@ public class ClansGlobalTag implements GlobalTag {
     public String replaceTag(Player player, String tag) {
         String clan = ClansMethods.getUserClan(player);
         if (clan != null) {
-            return ClansMethods.getClan(clan).getTag();
+            return "[" + ClansMethods.getClan(clan).getTag() + "]";
         }
         return "";
     }
