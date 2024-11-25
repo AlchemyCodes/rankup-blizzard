@@ -2,7 +2,6 @@ package blizzard.development.spawners.inventories.friends;
 
 import blizzard.development.spawners.database.cache.managers.SpawnersCacheManager;
 import blizzard.development.spawners.database.storage.SpawnersData;
-import blizzard.development.spawners.inventories.spawners.SpawnersInventory;
 import blizzard.development.spawners.utils.items.TextAPI;
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;

@@ -33,6 +33,14 @@ public class SpawnersCacheGetters {
         return 0;
     }
 
+    public double getSpawnerDrops(String id) {
+        SpawnersData data = cache.getSpawnerData(id);
+        if (data != null) {
+            return data.getDrops();
+        }
+        return 0;
+    }
+
     public String getSpawnerLocation(String id) {
         SpawnersData data = cache.getSpawnerData(id);
         if (data != null) {

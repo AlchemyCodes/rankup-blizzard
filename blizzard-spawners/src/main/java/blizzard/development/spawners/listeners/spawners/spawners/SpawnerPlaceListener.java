@@ -119,6 +119,7 @@ public class SpawnerPlaceListener implements Listener {
                 String.valueOf(plot.getId()),
                 amount,
                 0.0,
+                0.0,
                 enchantmentsHandler.getInitialLevel("speed"),
                 enchantmentsHandler.getInitialLevel("lucky"),
                 enchantmentsHandler.getInitialLevel("experience")))
