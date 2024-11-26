@@ -7,6 +7,11 @@ import blizzard.development.core.listener.clothing.ClothingActivatorInteractEven
 import blizzard.development.core.listener.clothing.ClothingInventoryEvent;
 import blizzard.development.core.listener.geral.TrafficListener;
 import java.util.Arrays;
+
+import blizzard.development.core.listener.packets.PacketListener;
+import com.github.retrooper.packetevents.PacketEvents;
+import com.github.retrooper.packetevents.event.EventManager;
+import com.github.retrooper.packetevents.event.PacketListenerPriority;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
@@ -29,4 +34,16 @@ public class ListenerRegistry {
                 new CampfirePlace()
         ).forEach(listener -> pluginManager.registerEvents(listener, Main.getInstance()));
     }
+
+    public void registerPacket() {
+
+        EventManager eventManager = PacketEvents.getAPI().getEventManager();
+
+        Arrays.asList(
+                new PacketListener(PacketListenerPriority.HIGHEST)
+        ).forEach(eventManager::registerListener);
+
+    }
+
+    // igual o outro, só instanciar uma classe que registrar! entendi muito obrigaod dwag agora eu vou fazer aquilo queo  snow manddou fazer viu muito obrigadio pela ajuda
 }

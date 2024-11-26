@@ -1,5 +1,6 @@
 package blizzard.development.core.tasks;
 
+import blizzard.development.core.api.CoreAPI;
 import blizzard.development.core.clothing.ClothingType;
 import blizzard.development.core.database.cache.PlayersCacheManager;
 import blizzard.development.core.managers.CampfireManager;
@@ -34,16 +35,18 @@ public class TemperatureDecayTask {
         double playerTemperature = PlayersCacheManager.getTemperature(player);
         int freezing = config.getInt("temperature.freezingTemperature");
 
-        if (!BlizzardTask.isSnowing && playerTemperature <= 5.0)
+        CoreAPI instance = CoreAPI.getInstance();
+
+        if (!instance.isIsBlizzard() && playerTemperature <= 5.0)
             return;
         if (CampfireManager.hasCampfire(player)) {
-            if (!BlizzardTask.isSnowing && playerTemperature >= 5.0)
+            if (!instance.isIsBlizzard() && playerTemperature >= 5.0)
                 return;
             PlayersCacheManager.setTemperature(player, playerTemperature + temperatureDecay);
             return;
         }
 
-        if (BlizzardTask.isSnowing && playerTemperature <= freezing) {
+        if (instance.isIsBlizzard() && playerTemperature <= freezing) {
             PlayersCacheManager.setTemperature(player, freezing);
             player.damage(config.getDouble("temperature.damage"));
             return;
@@ -67,7 +70,7 @@ public class TemperatureDecayTask {
                 break;
         }
 
-        if (BlizzardTask.isSnowing) {
+        if (CoreAPI.getInstance().isIsBlizzard()) {
             time /= 2L;
         }
 
