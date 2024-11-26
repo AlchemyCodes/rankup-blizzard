@@ -1,7 +1,6 @@
 package blizzard.development.core;
 
 import blizzard.development.core.utils.PluginImpl;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin {
@@ -10,12 +9,13 @@ public class Main extends JavaPlugin {
 
     public void onEnable() {
         instance = this;
-        this.pluginImpl = new PluginImpl((Plugin)this);
+        this.pluginImpl = new PluginImpl(this);
         this.pluginImpl.onLoad();
     }
 
     public void onDisable() {
         this.pluginImpl.onUnload();
+
     }
 
     public static Main getInstance() {
