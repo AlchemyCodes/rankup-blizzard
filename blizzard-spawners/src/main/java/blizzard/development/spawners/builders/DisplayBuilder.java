@@ -1,6 +1,7 @@
 package blizzard.development.spawners.builders;
 
 import blizzard.development.spawners.handlers.enums.Spawners;
+import blizzard.development.spawners.handlers.enums.States;
 import blizzard.development.spawners.utils.NumberFormat;
 import blizzard.development.spawners.utils.items.TextAPI;
 import org.bukkit.Color;
@@ -11,7 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.TextDisplay;
 
 public class DisplayBuilder {
-    public static void createSpawnerDisplay(Location location, String spawnerType, Double amount, Player player) {
+    public static void createSpawnerDisplay(Location location, String spawnerType, Double amount, String state, Player player) {
         Location displayLoc = location.clone().add(0.5, 1, 0.5);
         TextDisplay display = (TextDisplay) location.getWorld().spawnEntity(displayLoc, EntityType.TEXT_DISPLAY);
 
@@ -29,6 +30,12 @@ public class DisplayBuilder {
             spawner = "§dGerador de §lPorco";
         } else if (spawnerType.equals(Spawners.COW.getType())) {
             spawner = "§8Gerador de §lVaca";
+        } else if (spawnerType.equals(Spawners.MOOSHROOM.getType())) {
+            spawner = "§cGerador de §lCoguvaca";
+        } else if (spawnerType.equals(Spawners.SHEEP.getType())) {
+            spawner = "§fGerador de §lOvelha";
+        } else if (spawnerType.equals(Spawners.ZOMBIE.getType())) {
+            spawner = "§2Gerador de §lZumbi";
         } else {
             spawner = spawnerType;
         }
@@ -38,6 +45,7 @@ public class DisplayBuilder {
                 spawner,
                 "§7Quantidade: §f§l" + formattedAmount + "§fx",
                 "§7Dono: §f" + player.getName(),
+                "§7Estado: " + state,
                 ""
         );
 

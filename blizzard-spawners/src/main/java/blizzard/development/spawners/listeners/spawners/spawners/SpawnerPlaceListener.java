@@ -6,14 +6,12 @@ import blizzard.development.spawners.database.cache.managers.SpawnersCacheManage
 import blizzard.development.spawners.database.storage.SpawnersData;
 import blizzard.development.spawners.handlers.enchantments.EnchantmentsHandler;
 import blizzard.development.spawners.handlers.enums.Spawners;
+import blizzard.development.spawners.handlers.enums.States;
 import blizzard.development.spawners.handlers.spawners.SpawnersHandler;
 import blizzard.development.spawners.methods.SpawnersMethods;
 import blizzard.development.spawners.tasks.spawners.mobs.SpawnersMobsTaskManager;
-import blizzard.development.spawners.utils.CooldownUtils;
-import blizzard.development.spawners.utils.LocationUtil;
-import blizzard.development.spawners.utils.NumberFormat;
+import blizzard.development.spawners.utils.*;
 import blizzard.development.spawners.builders.ItemBuilder;
-import blizzard.development.spawners.utils.PluginImpl;
 import blizzard.development.spawners.utils.items.TextAPI;
 import com.plotsquared.core.PlotSquared;
 import com.plotsquared.core.plot.Plot;
@@ -116,6 +114,7 @@ public class SpawnerPlaceListener implements Listener {
                 id,
                 LocationUtil.getSerializedLocation(spawnerLocation),
                 LocationUtil.getSerializedLocation(mobLocation),
+                States.PRIVATE.getState(),
                 String.valueOf(plot.getId()),
                 amount,
                 0.0,
@@ -130,7 +129,12 @@ public class SpawnerPlaceListener implements Listener {
         SpawnersData spawnerData = SpawnersCacheManager.getInstance().getSpawnerData(id);
         SpawnersMobsTaskManager.getInstance().startTask(spawnerData);
 
-        DisplayBuilder.createSpawnerDisplay(spawnerLocation, spawner.getType(), amount, player);
+        DisplayBuilder.createSpawnerDisplay(
+                spawnerLocation,
+                spawner.getType(),
+                amount,
+                SpawnersUtils.getInstance().getSpawnerState(States.PRIVATE),
+                player);
         EffectsBuilder.createSpawnerEffect(player, spawnerLocation, spawner.getType());
 
         String formattedAmount = NumberFormat.getInstance().formatNumber(amount);

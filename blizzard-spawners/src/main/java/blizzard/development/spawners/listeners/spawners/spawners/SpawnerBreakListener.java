@@ -101,6 +101,9 @@ public class SpawnerBreakListener implements Listener {
             switch (type.toLowerCase()) {
                 case "pigs", "pig", "porcos", "porco" -> MobsHandler.giveMobSpawner(player, Spawners.PIG, amount, 1);
                 case "cows", "cow", "vacas", "vaca" -> MobsHandler.giveMobSpawner(player, Spawners.COW, amount, 1);
+                case "mooshrooms", "mooshroom", "coguvacas", "coguvaca" -> MobsHandler.giveMobSpawner(player, Spawners.MOOSHROOM, amount, 1);
+                case "sheeps", "sheep", "ovelhas", "ovelha" -> MobsHandler.giveMobSpawner(player, Spawners.SHEEP, amount, 1);
+                case "zombies", "zombie", "zumbis", "zumbi" -> MobsHandler.giveMobSpawner(player, Spawners.ZOMBIE, amount, 1);
             }
 
             String formattedAmount = NumberFormat.getInstance().formatNumber(amount);

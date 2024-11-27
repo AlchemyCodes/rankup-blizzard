@@ -17,6 +17,14 @@ public class SpawnersCacheGetters {
         return null;
     }
 
+    public String getSpawnerState(String id) {
+        SpawnersData data = cache.getSpawnerData(id);
+        if (data != null) {
+            return data.getState();
+        }
+        return null;
+    }
+
     public double getSpawnerAmount(String id) {
         SpawnersData data = cache.getSpawnerData(id);
         if (data != null) {

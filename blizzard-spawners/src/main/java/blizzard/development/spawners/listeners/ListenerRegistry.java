@@ -3,6 +3,8 @@ package blizzard.development.spawners.listeners;
 import blizzard.development.spawners.database.dao.PlayersDAO;
 import blizzard.development.spawners.listeners.commons.PlayersJoinListener;
 import blizzard.development.spawners.listeners.commons.PlayersQuitListener;
+import blizzard.development.spawners.listeners.spawners.mobs.MobCommonListener;
+import blizzard.development.spawners.listeners.spawners.mobs.MobDamageListener;
 import blizzard.development.spawners.listeners.spawners.mobs.MobDeathListener;
 import blizzard.development.spawners.listeners.spawners.spawners.SpawnerBreakListener;
 import blizzard.development.spawners.listeners.spawners.spawners.SpawnerInteractListener;
@@ -31,7 +33,9 @@ public class ListenerRegistry {
                 new SpawnerInteractListener(),
                 new SpawnersJoinListener(),
                 // mobs
-                new MobDeathListener()
+                new MobDeathListener(),
+                new MobDamageListener(),
+                new MobCommonListener()
         ).forEach(listener -> pluginManager.registerEvents(listener, PluginImpl.getInstance().plugin));
     }
 
