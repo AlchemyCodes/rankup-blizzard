@@ -1,43 +1,45 @@
 package blizzard.development.spawners.inventories.enchantments;
 
+import blizzard.development.spawners.database.cache.getters.SpawnersCacheGetters;
 import blizzard.development.spawners.database.cache.managers.SpawnersCacheManager;
-import blizzard.development.spawners.database.storage.SpawnersData;
+import blizzard.development.spawners.database.cache.setters.SpawnersCacheSetters;
+import blizzard.development.spawners.handlers.enchantments.EnchantmentsHandler;
+import blizzard.development.spawners.inventories.enchantments.items.EnchantmentItems;
 import blizzard.development.spawners.inventories.spawners.SpawnersInventory;
+import blizzard.development.spawners.tasks.spawners.mobs.SpawnersMobsTaskManager;
 import blizzard.development.spawners.utils.items.TextAPI;
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
 import com.github.stefvanschie.inventoryframework.pane.util.Slot;
-import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemFlag;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-
-import java.util.Arrays;
 
 public class EnchantmentsInventory {
     private static EnchantmentsInventory instance;
 
-    private final SpawnersCacheManager manager = SpawnersCacheManager.getInstance();
+    private final EnchantmentItems items = EnchantmentItems.getInstance();
 
     public void open(Player player, String id) {
         ChestGui inventory = new ChestGui(3, "§8Encantamentos");
         StaticPane pane = new StaticPane(0, 0, 9, 3);
 
-        GuiItem speedItem = new GuiItem(speed(player, id), event -> {
+        GuiItem speedItem = new GuiItem(items.speed(player, id, "speed"), event -> {
+            upgradeEnchantment(player, id, "speed", 1);
             event.setCancelled(true);
         });
 
-        GuiItem luckyItem = new GuiItem(lucky(player, id), event -> {
+        GuiItem luckyItem = new GuiItem(items.lucky(player, id, "lucky"), event -> {
+            upgradeEnchantment(player, id, "lucky", 1);
             event.setCancelled(true);
         });
 
-        GuiItem experienceItem = new GuiItem(experience(player, id), event -> {
+        GuiItem experienceItem = new GuiItem(items.experience(player, id, "experience"), event -> {
+            upgradeEnchantment(player, id, "experience", 1);
             event.setCancelled(true);
         });
 
-        GuiItem backItem = new GuiItem(back(), event -> {
+        GuiItem backItem = new GuiItem(items.back(), event -> {
             SpawnersInventory.getInstance().open(player, id);
             event.setCancelled(true);
         });
@@ -51,77 +53,50 @@ public class EnchantmentsInventory {
         inventory.show(player);
     }
 
-    public ItemStack speed(Player player, String id) {
-        ItemStack item = new ItemStack(Material.HOPPER);
-        ItemMeta meta = item.getItemMeta();
-        meta.displayName(TextAPI.parse("§bVelocidade §l" + 1));
-        meta.setLore(Arrays.asList(
-                "§7Diminua a velocidade de",
-                "§7geração do seu spawner.",
-                "",
-                "§f Nível: §b" + 1 + "/" + "X",
-                "§f Tempo: §b" + 1 + "§ls",
-                "",
-                "§bClique para melhorar."
-        ));
+    public void upgradeEnchantment(Player player, String id, String enchantment, int level) {
+        final SpawnersCacheManager manager = SpawnersCacheManager.getInstance();
+        final SpawnersCacheGetters getters = SpawnersCacheGetters.getInstance();
+        final SpawnersCacheSetters setters = SpawnersCacheSetters.getInstance();
+        final EnchantmentsHandler handler = EnchantmentsHandler.getInstance();
 
-        meta.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS, ItemFlag.HIDE_ATTRIBUTES);
-        item.setItemMeta(meta);
-        return item;
+        switch (enchantment) {
+            case "speed" -> {
+                if ((getters.getSpawnerSpeedLevel(id) - level) < handler.getMaxLevel(enchantment)) {
+                    upgradeUnsuccessfully(player);
+                } else {
+                    setters.addSpawnerSpeedLevel(id, (handler.getPerLevel(enchantment) * level));
+                    upgradeSuccessfully(player, id, "Velocidade");
+                    SpawnersMobsTaskManager.getInstance().startTask(manager.getSpawnerData(id));
+                }
+            }
+            case "lucky" -> {
+                if ((getters.getSpawnerLuckyLevel(id) + level) > handler.getMaxLevel(enchantment)) {
+                    upgradeUnsuccessfully(player);
+                } else {
+                    setters.addSpawnerLuckyLevel(id, (handler.getPerLevel(enchantment) * level));
+                    upgradeSuccessfully(player, id, "Sortudo");
+                }
+            }
+            case "experience" -> {
+                if ((getters.getSpawnerExperienceLevel(id) + level) > handler.getMaxLevel(enchantment)) {
+                    upgradeUnsuccessfully(player);
+                } else {
+                    setters.addSpawnerExperienceLevel(id, (handler.getPerLevel(enchantment) * level));
+                    upgradeSuccessfully(player, id, "Experiente");
+                }
+            }
+        }
     }
 
-    public ItemStack lucky(Player player, String id) {
-        ItemStack item = new ItemStack(Material.DIAMOND);
-        ItemMeta meta = item.getItemMeta();
-        meta.displayName(TextAPI.parse("§6Sortudo §l" + 1));
-        meta.setLore(Arrays.asList(
-                "§7Aumente suas chances",
-                "§7de ganhar recompensas.",
-                "§7ao matar mobs do spawner",
-                "",
-                "§f Nível: §6" + 1 + "/" + "X",
-                "§f Chance: §6" + 1 + "§l%",
-                "",
-                "§6Clique para melhorar."
-        ));
-
-        meta.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS, ItemFlag.HIDE_ATTRIBUTES);
-        item.setItemMeta(meta);
-        return item;
+    private void upgradeSuccessfully(Player player, String id, String enchantment) {
+        player.sendActionBar(TextAPI.parse("§a§lYAY! §aVocê melhorou o encantamento §7" + enchantment +"§a do seu spawner."));
+        player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_YES, 1.0f, 1.0f);
+        open(player, id);
     }
 
-    public ItemStack experience(Player player, String id) {
-        ItemStack item = new ItemStack(Material.EXPERIENCE_BOTTLE);
-        ItemMeta meta = item.getItemMeta();
-        meta.displayName(TextAPI.parse("§aExperiente §l" + 1));
-        meta.setLore(Arrays.asList(
-                "§7Aumente o ganho de",
-                "§7experiência ao matar",
-                "§7os mobs do spawner.",
-                "",
-                "§f Nível: §a" + 1 + "/" + "X",
-                "§f Ganho: §a" + 1 + "§l%",
-                "",
-                "§aClique para melhorar."
-        ));
-
-        meta.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS, ItemFlag.HIDE_ATTRIBUTES);
-        item.setItemMeta(meta);
-        return item;
-    }
-
-    public ItemStack back() {
-        ItemStack item = new ItemStack(Material.RED_DYE);
-        ItemMeta meta = item.getItemMeta();
-        meta.displayName(TextAPI.parse("§cVoltar"));
-        meta.setLore(Arrays.asList(
-                "§7Clique aqui para voltar",
-                "§7ao menu anterior."
-        ));
-
-        meta.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS, ItemFlag.HIDE_ATTRIBUTES);
-        item.setItemMeta(meta);
-        return item;
+    private void upgradeUnsuccessfully(Player player) {
+        player.sendActionBar(TextAPI.parse("§c§lEI! §cEste encantamento já está em seu nível máximo."));
+        player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 0.5f, 0.5f);
     }
 
     public static EnchantmentsInventory getInstance() {

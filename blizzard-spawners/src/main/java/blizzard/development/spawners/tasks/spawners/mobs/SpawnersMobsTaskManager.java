@@ -8,26 +8,32 @@ import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class SpawnersMobsTaskManager {
     private static SpawnersMobsTaskManager instance;
     private final Map<String, SpawnersMobsTask> spawnerTasks;
 
     private SpawnersMobsTaskManager() {
-        this.spawnerTasks = new HashMap<>();
+        this.spawnerTasks = new ConcurrentHashMap<>();
     }
 
-    public void startTask(SpawnersData spawnerData) {
+    public synchronized void startTask(SpawnersData spawnerData) {
         stopTask(spawnerData.getId());
+
         cleanupOldMobs(spawnerData);
 
         SpawnersMobsTask task = new SpawnersMobsTask(spawnerData);
-        double interval = spawnerData.getSpeedLevel() * 20L;
+        long interval = (spawnerData.getSpeedLevel() * 20L);
 
-        BukkitTask bukkitTask = task.runTaskTimer(PluginImpl.getInstance().plugin, 1L, (long) interval);
+        BukkitTask bukkitTask = task.runTaskTimer(
+                PluginImpl.getInstance().plugin,
+                0L,
+                Math.max(20L, interval)
+        );
         task.setBukkitTask(bukkitTask);
+
         spawnerTasks.put(spawnerData.getId(), task);
     }
 
@@ -68,7 +74,7 @@ public class SpawnersMobsTaskManager {
         }
     }
 
-    public static SpawnersMobsTaskManager getInstance() {
+    public static synchronized SpawnersMobsTaskManager getInstance() {
         if (instance == null) {
             instance = new SpawnersMobsTaskManager();
         }

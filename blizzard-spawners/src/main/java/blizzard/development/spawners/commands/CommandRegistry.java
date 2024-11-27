@@ -1,6 +1,7 @@
 package blizzard.development.spawners.commands;
 
 import blizzard.development.spawners.commands.spawners.subcommands.GiveCommand;
+import blizzard.development.spawners.commands.spawners.subcommands.ReloadCommand;
 import blizzard.development.spawners.handlers.enums.Spawners;
 import blizzard.development.spawners.utils.PluginImpl;
 import co.aikar.commands.PaperCommandManager;
@@ -16,7 +17,8 @@ public class CommandRegistry {
         PaperCommandManager paperCommandManager = new PaperCommandManager(PluginImpl.getInstance().plugin);
 
         Arrays.asList(
-                new GiveCommand()
+                new GiveCommand(),
+                new ReloadCommand()
         ).forEach(paperCommandManager::registerCommand);
 
         paperCommandManager.getCommandCompletions().registerCompletion("spawners", c -> Spawners.getAllTypes());

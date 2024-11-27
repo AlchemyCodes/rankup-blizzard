@@ -1,6 +1,9 @@
 package blizzard.development.spawners.utils;
 
+import blizzard.development.spawners.database.cache.getters.SpawnersCacheGetters;
+import blizzard.development.spawners.handlers.enchantments.EnchantmentsHandler;
 import blizzard.development.spawners.handlers.enums.Spawners;
+import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 
 public class SpawnersUtils {
@@ -38,6 +41,15 @@ public class SpawnersUtils {
             return "Vaca";
         }
         return null;
+    }
+
+    public boolean isPickaxe(Material material) {
+        return material == Material.WOODEN_PICKAXE
+                || material == Material.STONE_PICKAXE
+                || material == Material.IRON_PICKAXE
+                || material == Material.GOLDEN_PICKAXE
+                || material == Material.DIAMOND_PICKAXE
+                || material == Material.NETHERITE_PICKAXE;
     }
 
     public static SpawnersUtils getInstance() {

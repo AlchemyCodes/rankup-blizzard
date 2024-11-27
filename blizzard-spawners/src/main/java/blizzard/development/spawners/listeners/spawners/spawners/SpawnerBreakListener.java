@@ -46,8 +46,9 @@ public class SpawnerBreakListener implements Listener {
                 }
             }
 
-            if (!player.getGameMode().equals(GameMode.SURVIVAL) && !player.hasPermission("blizzard.spawners.admin")) {
-                player.sendActionBar(TextAPI.parse("§c§lEI! §cVocê precisa estar no modo sobrevivência para quebrar."));
+            Material itemInHand = player.getInventory().getItemInMainHand().getType();
+            if (player.getGameMode().equals(GameMode.CREATIVE) && itemInHand != Material.AIR && !SpawnersUtils.getInstance().isPickaxe(itemInHand)) {
+                player.sendActionBar(TextAPI.parse("§c§lEI! §cVocê só pode quebrar spawners com a mão ou uma picareta."));
                 event.setCancelled(true);
                 return;
             }
