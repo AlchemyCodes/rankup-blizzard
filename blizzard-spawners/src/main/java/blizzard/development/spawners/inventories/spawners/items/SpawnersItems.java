@@ -2,7 +2,10 @@ package blizzard.development.spawners.inventories.spawners.items;
 
 import blizzard.development.spawners.database.cache.managers.SpawnersCacheManager;
 import blizzard.development.spawners.database.storage.SpawnersData;
+import blizzard.development.spawners.handlers.enums.Spawners;
+import blizzard.development.spawners.handlers.enums.States;
 import blizzard.development.spawners.utils.NumberFormat;
+import blizzard.development.spawners.utils.SpawnersUtils;
 import blizzard.development.spawners.utils.items.TextAPI;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
@@ -22,11 +25,14 @@ public class SpawnersItems {
 
         ItemStack item = new ItemStack(Material.SPAWNER);
         ItemMeta meta = item.getItemMeta();
+
         meta.displayName(TextAPI.parse("§aInformações"));
         meta.setLore(Arrays.asList(
                 "",
                 "§f Gerais:",
+                "§8 ■ §7Estado§8:§7 " + SpawnersUtils.getInstance().getSpawnerState(States.valueOf(data.getState().toUpperCase())),
                 "§8 ■ §7Dono§8:§7 " + data.getNickname(),
+                "§8 ■ §7Tipo§8:§7 " + SpawnersUtils.getInstance().getMobNameByData(data),
                 "§8 ■ §7Spawners§8:§7 " + format.formatNumber(data.getAmount()),
                 "§8 ■ §7Mobs§8:§7 " + format.formatNumber(data.getMobAmount()),
                 "§8 ■ §7Drops§8:§7 " + format.formatNumber(data.getDrops()),
@@ -35,7 +41,8 @@ public class SpawnersItems {
                 "§8 ■ §7Velocidade§8:§7 " + data.getSpeedLevel(),
                 "§8 ■ §7Sortudo§8:§7 " + data.getLuckyLevel(),
                 "§8 ■ §7Experiente§8:§7 " + data.getExperienceLevel(),
-                ""
+                "",
+                "§aClique aqui para alterar o estado."
         ));
         meta.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS, ItemFlag.HIDE_ATTRIBUTES);
 

@@ -92,6 +92,31 @@ public class LocationUtil {
         return true;
     }
 
+    public static Boolean interactVerify(Player player, Block block) {
+        com.plotsquared.core.location.Location blockLocation = getPlotLocation(block);
+
+        UUID playerUUID = player.getUniqueId();
+        PlotArea plotArea = PlotSquared.get().getPlotAreaManager().getPlotArea(blockLocation);
+
+        if (plotArea == null) {
+            player.sendActionBar(TextAPI.parse("§c§lEI! §cVocê não pode interagir com esse spawner."));
+            return false;
+        }
+
+        Plot plot = plotArea.getPlot(blockLocation);
+
+        if (plot == null) {
+            player.sendActionBar(TextAPI.parse("§c§lEI! §cVocê não pode interagir com esse spawner."));
+            return false;
+        }
+
+        if (!(Objects.equals(plot.getOwner(), playerUUID) || plot.isAdded(playerUUID) || player.hasPermission("blizzard.spawners.admin"))) {
+            player.sendActionBar(TextAPI.parse("§c§lEI! §cVocê não pode interagir com esse spawner."));
+            return false;
+        }
+        return true;
+    }
+
     public static com.plotsquared.core.location.Location getPlotLocation(Block block) {
         return com.plotsquared.core.location.Location.at(
                 block.getLocation().getWorld().getName(),

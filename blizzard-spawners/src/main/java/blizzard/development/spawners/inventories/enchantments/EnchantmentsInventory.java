@@ -4,9 +4,11 @@ import blizzard.development.spawners.database.cache.getters.SpawnersCacheGetters
 import blizzard.development.spawners.database.cache.managers.SpawnersCacheManager;
 import blizzard.development.spawners.database.cache.setters.SpawnersCacheSetters;
 import blizzard.development.spawners.handlers.enchantments.EnchantmentsHandler;
+import blizzard.development.spawners.handlers.enums.Enchantments;
 import blizzard.development.spawners.inventories.enchantments.items.EnchantmentItems;
 import blizzard.development.spawners.inventories.spawners.SpawnersInventory;
 import blizzard.development.spawners.tasks.spawners.mobs.SpawnersMobsTaskManager;
+import blizzard.development.spawners.utils.SpawnersUtils;
 import blizzard.development.spawners.utils.items.TextAPI;
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
@@ -24,18 +26,18 @@ public class EnchantmentsInventory {
         ChestGui inventory = new ChestGui(3, "§8Encantamentos");
         StaticPane pane = new StaticPane(0, 0, 9, 3);
 
-        GuiItem speedItem = new GuiItem(items.speed(player, id, "speed"), event -> {
-            upgradeEnchantment(player, id, "speed", 1);
+        GuiItem speedItem = new GuiItem(items.speed(player, id, Enchantments.SPEED), event -> {
+            upgradeEnchantment(player, id, Enchantments.SPEED, 1);
             event.setCancelled(true);
         });
 
-        GuiItem luckyItem = new GuiItem(items.lucky(player, id, "lucky"), event -> {
-            upgradeEnchantment(player, id, "lucky", 1);
+        GuiItem luckyItem = new GuiItem(items.lucky(player, id, Enchantments.LUCKY), event -> {
+            upgradeEnchantment(player, id, Enchantments.LUCKY, 1);
             event.setCancelled(true);
         });
 
-        GuiItem experienceItem = new GuiItem(items.experience(player, id, "experience"), event -> {
-            upgradeEnchantment(player, id, "experience", 1);
+        GuiItem experienceItem = new GuiItem(items.experience(player, id, Enchantments.EXPERIENCE), event -> {
+            upgradeEnchantment(player, id, Enchantments.EXPERIENCE, 1);
             event.setCancelled(true);
         });
 
@@ -53,43 +55,45 @@ public class EnchantmentsInventory {
         inventory.show(player);
     }
 
-    public void upgradeEnchantment(Player player, String id, String enchantment, int level) {
+    public void upgradeEnchantment(Player player, String id, Enchantments enchantment, int level) {
         final SpawnersCacheManager manager = SpawnersCacheManager.getInstance();
         final SpawnersCacheGetters getters = SpawnersCacheGetters.getInstance();
         final SpawnersCacheSetters setters = SpawnersCacheSetters.getInstance();
         final EnchantmentsHandler handler = EnchantmentsHandler.getInstance();
 
         switch (enchantment) {
-            case "speed" -> {
-                if ((getters.getSpawnerSpeedLevel(id) - level) < handler.getMaxLevel(enchantment)) {
+            case SPEED -> {
+                if ((getters.getSpawnerSpeedLevel(id) - level) < handler.getMaxLevel(enchantment.getName())) {
                     upgradeUnsuccessfully(player);
                 } else {
-                    setters.addSpawnerSpeedLevel(id, (handler.getPerLevel(enchantment) * level));
-                    upgradeSuccessfully(player, id, "Velocidade");
+                    setters.addSpawnerSpeedLevel(id, (handler.getPerLevel(enchantment.getName()) * level));
+                    upgradeSuccessfully(player, id, Enchantments.SPEED);
                     SpawnersMobsTaskManager.getInstance().startTask(manager.getSpawnerData(id));
                 }
             }
-            case "lucky" -> {
-                if ((getters.getSpawnerLuckyLevel(id) + level) > handler.getMaxLevel(enchantment)) {
+            case LUCKY -> {
+                if ((getters.getSpawnerLuckyLevel(id) + level) > handler.getMaxLevel(enchantment.getName())) {
                     upgradeUnsuccessfully(player);
                 } else {
-                    setters.addSpawnerLuckyLevel(id, (handler.getPerLevel(enchantment) * level));
-                    upgradeSuccessfully(player, id, "Sortudo");
+                    setters.addSpawnerLuckyLevel(id, (handler.getPerLevel(enchantment.getName()) * level));
+                    upgradeSuccessfully(player, id, Enchantments.LUCKY);
                 }
             }
-            case "experience" -> {
-                if ((getters.getSpawnerExperienceLevel(id) + level) > handler.getMaxLevel(enchantment)) {
+            case EXPERIENCE -> {
+                if ((getters.getSpawnerExperienceLevel(id) + level) > handler.getMaxLevel(enchantment.getName())) {
                     upgradeUnsuccessfully(player);
                 } else {
-                    setters.addSpawnerExperienceLevel(id, (handler.getPerLevel(enchantment) * level));
-                    upgradeSuccessfully(player, id, "Experiente");
+                    setters.addSpawnerExperienceLevel(id, (handler.getPerLevel(enchantment.getName()) * level));
+                    upgradeSuccessfully(player, id, Enchantments.EXPERIENCE);
                 }
             }
         }
     }
 
-    private void upgradeSuccessfully(Player player, String id, String enchantment) {
-        player.sendActionBar(TextAPI.parse("§a§lYAY! §aVocê melhorou o encantamento §7" + enchantment +"§a do seu spawner."));
+    private void upgradeSuccessfully(Player player, String id, Enchantments enchantment) {
+        player.sendActionBar(TextAPI.parse(
+                "§a§lYAY! §aVocê melhorou o encantamento §7" + SpawnersUtils.getInstance().getEnchantmentName(enchantment) +"§a do seu spawner."
+        ));
         player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_YES, 1.0f, 1.0f);
         open(player, id);
     }

@@ -6,16 +6,18 @@ public class SpawnersData {
     private String location;
     private String mobLocation;
     private String nickname;
+    private String state;
     private String plotId;
     private Double amount, mobAmount, drops;
     private Integer speedLevel, luckyLevel, experienceLevel;
 
-    public SpawnersData(String id, String type, String location, String mobLocation, String nickname, String plotId, Double amount, Double mobAmount, Double drops, Integer speedLevel, Integer luckyLevel, Integer experienceLevel) {
+    public SpawnersData(String id, String type, String location, String mobLocation, String nickname, String state, String plotId, Double amount, Double mobAmount, Double drops, Integer speedLevel, Integer luckyLevel, Integer experienceLevel) {
         this.id = id;
         this.type = type;
         this.location = location;
         this.mobLocation = mobLocation;
         this.nickname = nickname;
+        this.state = state;
         this.plotId = plotId;
         this.amount = amount;
         this.mobAmount = mobAmount;
@@ -63,6 +65,14 @@ public class SpawnersData {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 
     public String getPlotId() {

@@ -31,6 +31,25 @@ public class EffectsBuilder {
             1.5f
     );
 
+    private static final Particle.DustTransition MOOSHROOM_PARTICLE = new Particle.DustTransition(
+            Color.fromRGB(255, 0, 0),
+            Color.fromRGB(139, 0, 0),
+            1.5f
+    );
+
+    private static final Particle.DustTransition SHEEP_PARTICLE = new Particle.DustTransition(
+            Color.fromRGB(255, 255, 255),
+            Color.fromRGB(255, 255, 255),
+            1.5f
+    );
+
+    private static final Particle.DustTransition ZOMBIE_PARTICLE = new Particle.DustTransition(
+            Color.fromRGB(0, 100, 0),
+            Color.fromRGB(0, 50, 0),
+            1.5f
+    );
+
+
     private static String serializeLocation(Location location) {
         return location.getWorld().getName() + ":" + location.getBlockX() + ":" + location.getBlockY() + ":" + location.getBlockZ();
     }
@@ -77,6 +96,27 @@ public class EffectsBuilder {
                                     3,
                                     0, 0, 0, 0,
                                     COW_PARTICLE
+                            );
+                        } else if (spawnerType.equalsIgnoreCase(Spawners.MOOSHROOM.getType())) {
+                            player.spawnParticle(Particle.DUST_COLOR_TRANSITION,
+                                    particleLoc,
+                                    3,
+                                    0, 0, 0, 0,
+                                    MOOSHROOM_PARTICLE
+                            );
+                        } else if (spawnerType.equalsIgnoreCase(Spawners.SHEEP.getType())) {
+                            player.spawnParticle(Particle.DUST_COLOR_TRANSITION,
+                                    particleLoc,
+                                    3,
+                                    0, 0, 0, 0,
+                                    SHEEP_PARTICLE
+                            );
+                        } else if (spawnerType.equalsIgnoreCase(Spawners.ZOMBIE.getType())) {
+                            player.spawnParticle(Particle.DUST_COLOR_TRANSITION,
+                                    particleLoc,
+                                    3,
+                                    0, 0, 0, 0,
+                                    ZOMBIE_PARTICLE
                             );
                         }
                     }

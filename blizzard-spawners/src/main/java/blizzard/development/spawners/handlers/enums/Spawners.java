@@ -6,7 +6,16 @@ import java.util.stream.Stream;
 
 public enum Spawners {
     PIG("porco"),
-    COW("vaca");
+    COW("vaca"),
+    MOOSHROOM("coguvaca"),
+    SHEEP("ovelha"),
+    ZOMBIE("zumbi");
+    //
+//    SKELETON("esqueleto"),
+//    CREEPER("creeper"),
+//    PIGMAN("pigman"),
+//    BLAZE("blaze"),
+//    WITCH("bruxa");
 
     private final String type;
 

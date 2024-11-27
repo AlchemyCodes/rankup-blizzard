@@ -2,6 +2,7 @@ package blizzard.development.spawners.listeners.spawners.spawners;
 
 import blizzard.development.spawners.database.cache.managers.SpawnersCacheManager;
 import blizzard.development.spawners.database.storage.SpawnersData;
+import blizzard.development.spawners.handlers.enums.States;
 import blizzard.development.spawners.inventories.spawners.SpawnersInventory;
 import blizzard.development.spawners.utils.LocationUtil;
 import blizzard.development.spawners.utils.items.TextAPI;
@@ -36,14 +37,24 @@ public class SpawnerInteractListener implements Listener {
                     }
                 }
 
+                if (!LocationUtil.interactVerify(player, spawnerBlock)) {
+                    event.setCancelled(true);
+                    return;
+                }
+
                 if (data == null) {
                     player.sendActionBar(TextAPI.parse("§c§lEI! §cEste é um spawner sem dados."));
                     event.setCancelled(true);
                     return;
                 }
 
-                if (!player.getName().equals(data.getNickname()) && !player.hasPermission("blizzard.spawners.admin")) {
-                    player.sendActionBar(TextAPI.parse("§c§lEI! §cVocê não é dono desse spawner."));
+                if (data.getState().equals(States.PRIVATE.getState())
+                        && !player.getName().equals(data.getNickname())
+                        && !player.hasPermission("blizzard.spawners.admin")
+                ) {
+                    player.sendActionBar(TextAPI.parse(
+                            "§c§lEI! §cVocê não pode interagir com esse spawner.")
+                    );
                     event.setCancelled(true);
                     return;
                 }

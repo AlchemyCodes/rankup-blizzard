@@ -1,8 +1,9 @@
 package blizzard.development.spawners.utils;
 
-import blizzard.development.spawners.database.cache.getters.SpawnersCacheGetters;
-import blizzard.development.spawners.handlers.enchantments.EnchantmentsHandler;
+import blizzard.development.spawners.database.storage.SpawnersData;
+import blizzard.development.spawners.handlers.enums.Enchantments;
 import blizzard.development.spawners.handlers.enums.Spawners;
+import blizzard.development.spawners.handlers.enums.States;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 
@@ -13,6 +14,9 @@ public class SpawnersUtils {
         return switch (spawnerType.getType().toLowerCase()) {
             case "porco" -> EntityType.PIG;
             case "vaca" -> EntityType.COW;
+            case "coguvaca" -> EntityType.MUSHROOM_COW;
+            case "ovelha" -> EntityType.SHEEP;
+            case "zumbi" -> EntityType.ZOMBIE;
             default -> null;
         };
     }
@@ -21,6 +25,9 @@ public class SpawnersUtils {
         return switch (name.toLowerCase()) {
             case "porco" -> Spawners.PIG;
             case "vaca" -> Spawners.COW;
+            case "coguvaca" -> Spawners.MOOSHROOM;
+            case "ovelha" -> Spawners.SHEEP;
+            case "zumbi" -> Spawners.ZOMBIE;
             default -> null;
         };
     }
@@ -30,6 +37,12 @@ public class SpawnersUtils {
             return "Porco";
         } else if (entityType.equals(EntityType.COW)) {
             return "Vaca";
+        } else if (entityType.equals(EntityType.MUSHROOM_COW)) {
+            return "Coguvaca";
+        } else if (entityType.equals(EntityType.SHEEP)) {
+            return "Ovelha";
+        } else if (entityType.equals(EntityType.ZOMBIE)) {
+            return "Zumbi";
         }
         return null;
     }
@@ -39,6 +52,47 @@ public class SpawnersUtils {
             return "Porco";
         } else if (spawner.equals(Spawners.COW)) {
             return "Vaca";
+        } else if (spawner.equals(Spawners.MOOSHROOM)) {
+            return "Coguvaca";
+        } else if (spawner.equals(Spawners.SHEEP)) {
+            return "Ovelha";
+        } else if (spawner.equals(Spawners.ZOMBIE)) {
+            return "Zumbi";
+        }
+        return null;
+    }
+
+    public String getMobNameByData(SpawnersData data) {
+        if (data.getType().equalsIgnoreCase("porco")) {
+            return "Porco";
+        } else if (data.getType().equalsIgnoreCase("vaca")) {
+            return "Vaca";
+        } else if (data.getType().equalsIgnoreCase("coguvaca")) {
+            return "Coguvaca";
+        } else if (data.getType().equalsIgnoreCase("ovelha")) {
+            return "Ovelha";
+        } else if (data.getType().equalsIgnoreCase("zumbi")) {
+            return "Zumbi";
+        }
+        return null;
+    }
+
+    public String getEnchantmentName(Enchantments enchantment) {
+        if (enchantment.getName().equalsIgnoreCase(Enchantments.SPEED.getName())) {
+            return "Velocidade";
+        } else if (enchantment.getName().equalsIgnoreCase(Enchantments.LUCKY.getName())) {
+            return "Sortudo";
+        } else if (enchantment.getName().equalsIgnoreCase(Enchantments.EXPERIENCE.getName())) {
+            return "Experiente";
+        }
+        return null;
+    }
+
+    public String getSpawnerState(States state) {
+        if (state.getState().equalsIgnoreCase(States.PUBLIC.getState())) {
+            return "§aPúblico";
+        } else if (state.getState().equalsIgnoreCase(States.PRIVATE.getState())) {
+            return "§cPrivado";
         }
         return null;
     }

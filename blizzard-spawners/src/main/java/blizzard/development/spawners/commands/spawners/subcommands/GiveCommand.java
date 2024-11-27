@@ -41,11 +41,23 @@ public class GiveCommand extends BaseCommand {
                 MobsHandler.giveMobSpawner(player, Spawners.COW, amount, stack);
                 sender.sendActionBar(TextAPI.parse(successMessage(player, type, amount, stack)));
             }
+            case "mooshrooms", "mooshroom", "coguvacas", "coguvaca" -> {
+                MobsHandler.giveMobSpawner(player, Spawners.MOOSHROOM, amount, stack);
+                sender.sendActionBar(TextAPI.parse(successMessage(player, type, amount, stack)));
+            }
+            case "sheeps", "sheep", "ovelhas", "ovelha" -> {
+                MobsHandler.giveMobSpawner(player, Spawners.SHEEP, amount, stack);
+                sender.sendActionBar(TextAPI.parse(successMessage(player, type, amount, stack)));
+            }
+            case "zombies", "zombie", "zumbis", "zumbi" -> {
+                MobsHandler.giveMobSpawner(player, Spawners.ZOMBIE, amount, stack);
+                sender.sendActionBar(TextAPI.parse(successMessage(player, type, amount, stack)));
+            }
             default -> {
                 List<String> messages = Arrays.asList(
                         "",
                         " §c§lEI §cO spawner §7" + type + "§c não existe.",
-                        " §cDisponíveis: §7[porco, vaca]",
+                        " §cDisponíveis: §7[porco, vaca, covugaca, ovelha e zumbi]",
                         ""
                 );
                 for (String message : messages) {
