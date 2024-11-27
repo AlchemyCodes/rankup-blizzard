@@ -14,10 +14,10 @@ import java.util.Arrays;
 import java.util.List;
 
 @CommandAlias("spawners|spawner|geradores|gerador")
+@CommandPermission("blizzard.spawners.admin")
 public class GiveCommand extends BaseCommand {
 
     @Subcommand("give")
-    @CommandPermission("blizzard.spawners.admin")
     @CommandCompletion("@players @spawners @amount @amount")
     @Syntax("<player> <spawner> <quantia> <stack>")
     public void onCommand(CommandSender sender, String target, String type, Double amount, Integer stack) {

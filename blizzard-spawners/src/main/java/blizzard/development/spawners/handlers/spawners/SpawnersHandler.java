@@ -27,15 +27,14 @@ public class SpawnersHandler {
         EntityType entityType = utils.getEntityTypeFromSpawner(spawnerType);
         if (entityType == null) return;
 
-        Location spawnLocation = location.clone();
-
-        LivingEntity mob = (LivingEntity) spawnLocation.getWorld().spawnEntity(spawnLocation, entityType);
+        LivingEntity mob = (LivingEntity) location.getWorld().spawnEntity(location, entityType);
 
         mob.setAI(false);
         mob.setGravity(false);
-        mob.teleport(spawnLocation);
+        mob.teleport(location);
         mob.customName(TextAPI.parse("§7" + utils.getMobNameByEntity(entityType) + " (x" + NumberFormat.getInstance().formatNumber(amount) + ")"));
         mob.setMetadata("blizzard_spawners-mob", new FixedMetadataValue(PluginImpl.getInstance().plugin, spawnerType));
+        mob.setMetadata("blizzard_spawners-id", new FixedMetadataValue(PluginImpl.getInstance().plugin, spawnerType));
         mob.setCustomNameVisible(true);
     }
 

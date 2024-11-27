@@ -10,17 +10,19 @@ import blizzard.development.spawners.utils.SpawnersUtils;
 import blizzard.development.spawners.utils.items.TextAPI;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.scheduler.BukkitTask;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class SpawnersMobsTask extends BukkitRunnable {
     private final SpawnersData spawnerData;
     private Entity displayMob;
     private double currentMobAmount;
     private BukkitTask bukkitTask;
-    private int consecutiveZeroSpawns = 0;
 
     public SpawnersMobsTask(SpawnersData spawnerData) {
         this.spawnerData = spawnerData;
@@ -39,10 +41,9 @@ public class SpawnersMobsTask extends BukkitRunnable {
     private void spawnMob() {
         Location mobLocation = LocationUtil.deserializeLocation(spawnerData.getMobLocation());
         SpawnersHandler handler = SpawnersHandler.getInstance();
+
         if (mobLocation != null) {
-            if (displayMob != null && displayMob.isValid()) {
-                displayMob.remove();
-            }
+            removeExistingSpawnerMobs(mobLocation);
 
             handler.spawnStaticMob(
                     SpawnersUtils.getInstance().getSpawnerFromName(spawnerData.getType()),
@@ -51,13 +52,15 @@ public class SpawnersMobsTask extends BukkitRunnable {
             );
 
             this.displayMob = findDisplayMob(mobLocation);
-
-            if (currentMobAmount <= 0) {
-                consecutiveZeroSpawns++;
-            } else {
-                consecutiveZeroSpawns = 0;
-            }
         }
+    }
+
+    private void removeExistingSpawnerMobs(Location location) {
+        List<Entity> existingMobs = location.getWorld().getNearbyEntities(location, 1, 1, 1).stream()
+                .filter(entity -> entity.hasMetadata("blizzard_spawners-mob"))
+                .collect(Collectors.toList());
+
+        existingMobs.forEach(Entity::remove);
     }
 
     @Override
@@ -91,16 +94,6 @@ public class SpawnersMobsTask extends BukkitRunnable {
 
             SpawnersCacheSetters.getInstance().setSpawnerMobAmout(spawnerData.getId(), currentMobAmount);
         }
-
-        if (consecutiveZeroSpawns > 5) {
-            PluginImpl.getInstance().plugin.getLogger().severe(
-                    "Spawner " + spawnerData.getId() + " has repeatedly failed to spawn mobs. " +
-                            "Resetting to initial amount: " + spawnerData.getMobAmount()
-            );
-            currentMobAmount = spawnerData.getMobAmount();
-            consecutiveZeroSpawns = 0;
-            spawnMob();
-        }
     }
 
     private Entity findDisplayMob(Location location) {
@@ -114,6 +107,9 @@ public class SpawnersMobsTask extends BukkitRunnable {
         super.cancel();
         if (displayMob != null) {
             displayMob.remove();
+        }
+        if (bukkitTask != null) {
+            bukkitTask.cancel();
         }
     }
 }
