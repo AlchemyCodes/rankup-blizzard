@@ -1,7 +1,16 @@
 rewards:
 
   lucky-enchantment-rewards:
-    - "clans give {player} 1"
-    - "clans give {player} 2"
-
+    1:
+      material: "CAULDRON"
+      display: "§8§l+1 §aRecompensa§l!"
+      command: "clans give limite {player} 1 1"
+    2:
+      material: "DIAMOND_BLOCK"
+      display: "§b§l+1 §aRecompensa§l!"
+      command: "clans give limite {player} 5 1"
+    3:
+      material: "TNT"
+      display: "§c§l+1 §aRecompensa§l!"
+      command: "clans give limite {player} 10 1"
 
