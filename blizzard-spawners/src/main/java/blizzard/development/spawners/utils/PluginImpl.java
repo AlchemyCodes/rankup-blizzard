@@ -31,6 +31,7 @@ public class PluginImpl {
 
     public ConfigUtils Config;
     public ConfigUtils Database;
+    public ConfigUtils Spawners;
     public ConfigUtils Enchantments;
     public ConfigUtils Rewards;
     public ConfigUtils Bonus;
@@ -41,6 +42,7 @@ public class PluginImpl {
         plotAPI = new PlotAPI();
         Config = new ConfigUtils((JavaPlugin) plugin, "config.yml");
         Database = new ConfigUtils((JavaPlugin) plugin, "database.yml");
+        Spawners = new ConfigUtils((JavaPlugin) plugin, "spawners.yml");
         Enchantments = new ConfigUtils((JavaPlugin) plugin, "enchantments.yml");
         Rewards = new ConfigUtils((JavaPlugin) plugin, "rewards.yml");
         Bonus = new ConfigUtils((JavaPlugin) plugin, "bonus.yml");
@@ -49,6 +51,7 @@ public class PluginImpl {
     public void onEnable() {
         Config.saveDefaultConfig();
         Database.saveDefaultConfig();
+        Spawners.saveDefaultConfig();
         Enchantments.saveDefaultConfig();
         Rewards.saveDefaultConfig();
         Bonus.saveDefaultConfig();

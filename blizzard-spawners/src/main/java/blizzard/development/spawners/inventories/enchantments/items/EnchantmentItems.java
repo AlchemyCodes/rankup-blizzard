@@ -1,9 +1,11 @@
 package blizzard.development.spawners.inventories.enchantments.items;
 
 import blizzard.development.spawners.database.cache.getters.SpawnersCacheGetters;
+import blizzard.development.spawners.database.cache.managers.SpawnersCacheManager;
 import blizzard.development.spawners.handlers.enchantments.EnchantmentsHandler;
 import blizzard.development.spawners.handlers.enums.Enchantments;
 import blizzard.development.spawners.utils.NumberFormat;
+import blizzard.development.spawners.utils.SpawnersUtils;
 import blizzard.development.spawners.utils.items.TextAPI;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -124,7 +126,11 @@ public class EnchantmentItems {
                     "§7os mobs do spawner.",
                     "",
                     "§f Nível: §c" + format.formatNumber(getters.getSpawnerExperienceLevel(id)) + "/" + format.formatNumber(handler.getMaxLevel(enchantment.getName())),
-                    "§f Ganho: §c" + format.formatNumber((handler.getPerLevel(enchantment.getName()) * getters.getSpawnerExperienceLevel(id))) + "§lXP",
+                    "§f Ganho: §c" + format.formatNumber((
+                            handler.getPerLevel(enchantment.getName())
+                                    * getters.getSpawnerExperienceLevel(id)
+                                    * SpawnersUtils.getInstance().getSpawnerDroppedXP(
+                                    SpawnersCacheManager.getInstance().getSpawnerData(id)))) + "§lXP",
                     "",
                     "§cJá está no máximo."
             );
@@ -135,7 +141,11 @@ public class EnchantmentItems {
                     "§7os mobs do spawner.",
                     "",
                     "§f Nível: §a" + format.formatNumber(getters.getSpawnerExperienceLevel(id)) + "/" + format.formatNumber(handler.getMaxLevel(enchantment.getName())),
-                    "§f Ganho: §a" + format.formatNumber((handler.getPerLevel(enchantment.getName()) * getters.getSpawnerExperienceLevel(id))) + "§lXP",
+                    "§f Ganho: §a" + format.formatNumber((
+                            handler.getPerLevel(enchantment.getName())
+                                    * getters.getSpawnerExperienceLevel(id)
+                                    * SpawnersUtils.getInstance().getSpawnerDroppedXP(
+                                    SpawnersCacheManager.getInstance().getSpawnerData(id)))) + "§lXP",
                     "",
                     "§aClique para melhorar."
             );

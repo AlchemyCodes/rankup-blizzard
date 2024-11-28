@@ -97,6 +97,21 @@ public class SpawnersUtils {
         return null;
     }
 
+    public int getSpawnerDroppedXP(SpawnersData data) {
+        if (data.getType().equalsIgnoreCase("porco")) {
+            return 1;
+        } else if (data.getType().equalsIgnoreCase("vaca")) {
+            return 2;
+        } else if (data.getType().equalsIgnoreCase("coguvaca")) {
+            return 3;
+        } else if (data.getType().equalsIgnoreCase("ovelha")) {
+            return 4;
+        } else if (data.getType().equalsIgnoreCase("zumbi")) {
+            return 5;
+        }
+        return 0;
+    }
+
     public boolean isPickaxe(Material material) {
         return material == Material.WOODEN_PICKAXE
                 || material == Material.STONE_PICKAXE

@@ -45,7 +45,7 @@ public class DisplayBuilder {
                 spawner,
                 "§7Quantidade: §f§l" + formattedAmount + "§fx",
                 "§7Dono: §f" + player.getName(),
-                "§7Estado: " + state,
+                state,
                 ""
         );
 
