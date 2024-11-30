@@ -4,15 +4,16 @@ import blizzard.development.plantations.database.cache.PlayerCacheManager;
 import blizzard.development.plantations.database.dao.PlayerDAO;
 import blizzard.development.plantations.database.storage.PlayerData;
 import blizzard.development.plantations.plantations.adapters.ToolAdapter;
+import io.papermc.paper.event.player.PlayerFailMoveEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import java.sql.SQLException;
 
-public class PlayerListener implements Listener {
+public class PlayerListener implements Listener{
 
     private final PlayerDAO playerDAO;
     private final PlayerCacheManager playerCacheManager = PlayerCacheManager.getInstance();
@@ -54,6 +55,13 @@ public class PlayerListener implements Listener {
             toolAdapter.givePlowingTool(player);
             toolAdapter.giveTool(player);
             event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onFailMove(PlayerFailMoveEvent event) {
+        if(event.getFailReason() == PlayerFailMoveEvent.FailReason.CLIPPED_INTO_BLOCK) {
+            event.setAllowed(true);
         }
     }
 }

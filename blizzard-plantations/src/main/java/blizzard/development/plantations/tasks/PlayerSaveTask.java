@@ -25,7 +25,5 @@ public class PlayerSaveTask extends BukkitRunnable {
                 throw new RuntimeException("Erro ao atualizar dados do jogador " + playerData.getNickname(), exception);
             }
         });
-
-        Bukkit.getConsoleSender().sendMessage("§a[Estufa] §aSalvando " + Bukkit.getOnlinePlayers().size() + " jogadores do cache na database.");
     }
 }

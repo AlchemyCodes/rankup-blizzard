@@ -1,80 +1,113 @@
 package blizzard.development.plantations.listeners.packets;
 
 import blizzard.development.plantations.Main;
-import com.github.retrooper.packetevents.PacketEvents;
-import com.github.retrooper.packetevents.event.*;
-import com.github.retrooper.packetevents.protocol.packettype.PacketType;
-import com.github.retrooper.packetevents.protocol.world.states.WrappedBlockState;
-import com.github.retrooper.packetevents.util.Vector3i;
-import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPlayerBlockPlacement;
-import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerBlockChange;
-import org.bukkit.Location;
+import blizzard.development.plantations.api.CuboidAPI;
+import blizzard.development.plantations.database.cache.methods.PlayerCacheMethod;
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.events.PacketAdapter;
+import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.events.PacketEvent;
+import com.comphenix.protocol.wrappers.BlockPosition;
+import com.comphenix.protocol.wrappers.WrappedBlockData;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.block.data.Ageable;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 
-public class PacketListener extends PacketListenerAbstract implements com.github.retrooper.packetevents.event.PacketListener {
+import java.util.Iterator;
+import java.util.Optional;
 
-    public PacketListener(PacketListenerPriority priority) {
-        super(priority);
+
+public class PacketListener extends PacketAdapter implements Listener {
+
+
+    public PacketListener() {
+        super(PacketAdapter.params(
+            Main.getInstance(),
+            PacketType.Play.Server.BLOCK_CHANGE
+        ).optionAsync());
     }
+
+    public PlayerCacheMethod playerCacheMethod = new PlayerCacheMethod();
 
     @Override
-    public void onPacketReceive(PacketReceiveEvent event) {
-        if (event.getPacketType() == PacketType.Play.Client.PLAYER_BLOCK_PLACEMENT) {
-            WrapperPlayClientPlayerBlockPlacement packet = new WrapperPlayClientPlayerBlockPlacement(event);
+    public void onPacketSending(PacketEvent event) {
+        PacketContainer packet = event.getPacket();
 
-            Main.getInstance().getServer().getScheduler().runTask(Main.getInstance(), () -> {
-                Player player = event.getPlayer();
+        Optional<Object> packetMeta = packet.getMeta("farmland");
+        Optional<Object> packetCropsMeta = packet.getMeta("crops");
 
-                ItemStack item = player.getInventory().getItemInMainHand();
+        if (playerCacheMethod.isInPlantation(event.getPlayer()) && packet.getType() == PacketType.Play.Server.BLOCK_CHANGE) {
+            if (packetMeta.isPresent()) {
+                packet.getBlockData().write(0, WrappedBlockData.createData(Material.FARMLAND));
+            }
 
-                if (item.getType() != Material.COAL) {
-                    return;
+            if (packetCropsMeta.isPresent()) {
+                packet.getBlockData().write(0, WrappedBlockData.createData(Material.WHEAT));
+            }
+        }
+
+    }
+
+
+    @EventHandler
+    public void onInteract(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
+        Block block = event.getClickedBlock();
+        Action action = event.getAction();
+        EquipmentSlot equipmentSlot = event.getHand();
+
+        if (block == null) return;
+
+        if (action == Action.RIGHT_CLICK_BLOCK) {
+            if (equipmentSlot == EquipmentSlot.HAND) {
+                if (block.getType() == Material.CRYING_OBSIDIAN) {
+                    sendPacket(player, block);
                 }
+            }
+        }
 
-                BlockData blockData = Material.WHEAT.createBlockData();
+    }
 
-                if (blockData instanceof Ageable) {
-                    ((Ageable) blockData).setAge(0);
-                } else {
-                    return;
-                }
+    @EventHandler
+    public void onChat(AsyncPlayerChatEvent event) {
+        Player player = event.getPlayer();
+        String message = event.getMessage();
 
-                Vector3i blockPosition = new Vector3i(
-                    packet.getBlockPosition().getX(),
-                    packet.getBlockPosition().getY() + 1,
-                    packet.getBlockPosition().getZ()
-                );
 
-                WrappedBlockState wheatState = WrappedBlockState.getByString("minecraft:wheat[age=0]");
+        if (message.equalsIgnoreCase("swagviper")) {
 
-                WrapperPlayServerBlockChange blockChangePacket = new WrapperPlayServerBlockChange(blockPosition, wheatState.getGlobalId());
-                PacketEvents.getAPI().getPlayerManager().sendPacket(player, blockChangePacket);
+            CuboidAPI cuboidAPI = new CuboidAPI(
+                player.getLocation().add(10, 10, 10),
+                player.getLocation().add(-10, 0, -10)
+            );
 
-                growth(player, blockPosition);
-            });
+            Iterator<Block> block = cuboidAPI.blockList();
+
+            while (block.hasNext()) {
+                sendPacket(player, block.next());
+            }
+
         }
     }
 
-    private void growth(Player player, Vector3i position) {
+    private void sendPacket(Player player, Block block) {
+        PacketContainer packet = new PacketContainer(PacketType.Play.Server.BLOCK_CHANGE);
+        packet.getBlockData().write(0, WrappedBlockData.createData(Material.DIAMOND_BLOCK));
+        packet.getBlockPositionModifier().write(0, new BlockPosition(
+            block.getLocation().getBlockX(),
+            block.getLocation().getBlockY(),
+            block.getLocation().getBlockZ()
+        ));
 
-        for (int age = 1; age <= 7; age++) {
-            final int currentAge = age;
+        packet.setMeta("farmland", true);
 
-
-            Main.getInstance().getServer().getScheduler().runTaskLater(Main.getInstance(), () -> {
-                if (player.isOnline()) {
-                    WrappedBlockState wheatState = WrappedBlockState.getByString("minecraft:wheat[age=" + currentAge + "]");
-
-                    WrapperPlayServerBlockChange blockChangePacket = new WrapperPlayServerBlockChange(position, wheatState.getGlobalId());
-                    PacketEvents.getAPI().getPlayerManager().sendPacket(player, blockChangePacket);
-                }
-            }, age * 20L);
-        }
+        ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet);
     }
 }

@@ -3,13 +3,13 @@ package blizzard.development.plantations.listeners;
 import blizzard.development.plantations.Main;
 import blizzard.development.plantations.database.dao.PlayerDAO;
 import blizzard.development.plantations.listeners.geral.PlayerListener;
+import blizzard.development.plantations.listeners.packets.BlockPlowListener;
 import blizzard.development.plantations.listeners.packets.PacketListener;
 import blizzard.development.plantations.listeners.plantation.PlantationBlockListener;
 import blizzard.development.plantations.listeners.plantation.PlantationBreakListener;
 import blizzard.development.plantations.listeners.plantation.PlantationPlaceListener;
-import com.github.retrooper.packetevents.PacketEvents;
-import com.github.retrooper.packetevents.event.EventManager;
-import com.github.retrooper.packetevents.event.PacketListenerPriority;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 
@@ -27,18 +27,20 @@ public class ListenerRegistry {
         PluginManager pluginManager = Bukkit.getPluginManager();
 
         Arrays.asList(
-                new PlantationBreakListener(),
-                new PlantationPlaceListener(),
+//                new PlantationBreakListener(),
                 new PlayerListener(playerDAO),
-                new PlantationBlockListener()
+//                new PlantationBlockListener(),
+                new PacketListener()
         ).forEach(listener -> pluginManager.registerEvents(listener, Main.getInstance()));
     }
 
     public void registerPacket() {
-        EventManager eventManager = PacketEvents.getAPI().getEventManager();
+        ProtocolManager manager = ProtocolLibrary.getProtocolManager();
 
         Arrays.asList(
-            new PacketListener(PacketListenerPriority.HIGHEST)
-        ).forEach(eventManager::registerListener);
+            new PacketListener(),
+            new BlockPlowListener(),
+            new blizzard.development.plantations.listeners.packets.plantation.PlantationPlaceListener()
+        ).forEach(manager::addPacketListener);
     }
 }

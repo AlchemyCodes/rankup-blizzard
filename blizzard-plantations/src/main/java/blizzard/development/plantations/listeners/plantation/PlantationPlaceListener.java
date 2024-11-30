@@ -2,13 +2,20 @@ package blizzard.development.plantations.listeners.plantation;
 
 import blizzard.development.plantations.Main;
 import blizzard.development.plantations.database.cache.methods.PlayerCacheMethod;
-import blizzard.development.plantations.plantations.enums.SeedEnum;
 import blizzard.development.plantations.plantations.events.PlantationPlaceEvent;
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.events.PacketAdapter;
+import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.events.PacketEvent;
+import com.comphenix.protocol.wrappers.BlockPosition;
+import com.comphenix.protocol.wrappers.WrappedBlockData;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Ageable;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,13 +23,16 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import static blizzard.development.plantations.builder.ItemBuilder.*;
 
-public class PlantationPlaceListener implements Listener {
+public class PlantationPlaceListener extends PacketAdapter implements Listener {
+
+    public PlantationPlaceListener() {
+        super(PacketAdapter.params(
+            Main.getInstance(),
+            PacketType.Play.Client.USE_ITEM
+        ).optionAsync());
+    }
 
     private final PlayerCacheMethod playerCacheMethod = new PlayerCacheMethod();
 
@@ -76,7 +86,7 @@ public class PlantationPlaceListener implements Listener {
                 if (blockState instanceof Ageable ageable) {
                     ageable.setAge(0);
                 }
-                
+
             }
         }
     }
