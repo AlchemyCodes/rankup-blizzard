@@ -22,7 +22,6 @@ public class ToolSaveTask extends BukkitRunnable {
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
-            Bukkit.getConsoleSender().sendMessage("§a[Estufa] §aSalvando ferramenta " + toolData.getType() + " do jogador " + toolData.getNickname() + " na database.");
         });
     }
 }
