@@ -1,16 +1,22 @@
 enchantments:
 
   speed:
-    initial-level: 10
+    initial-level: 1
     per-level: 1 # decrease by level in seconds
     max-level: 10
+    initial-price: 100000
+    per-level-price: 50000 # increase per level
 
   lucky:
     initial-level: 1
     per-level: 1 # increase per level
-    max-level: 10
+    max-level: 20
+    initial-price: 100000
+    per-level-price: 50000 # increase per level
 
   experience:
     initial-level: 1
     per-level: 1 # increase per level
     max-level: 10
+    initial-price: 100000
+    per-level-price: 50000 # increase per level

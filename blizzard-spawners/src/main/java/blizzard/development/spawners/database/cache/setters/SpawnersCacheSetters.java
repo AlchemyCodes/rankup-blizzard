@@ -43,7 +43,7 @@ public class SpawnersCacheSetters {
     public void addSpawnerSpeedLevel(String id, int amount) {
         SpawnersData data = cache.getSpawnerData(id);
         if (data != null) {
-            data.setSpeedLevel(data.getSpeedLevel() - amount);
+            data.setSpeedLevel(data.getSpeedLevel() + amount);
             cache.cacheSpawnerData(id, data);
         }
     }

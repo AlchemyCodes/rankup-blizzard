@@ -3,12 +3,11 @@ package blizzard.development.spawners.inventories.spawners;
 import blizzard.development.spawners.builders.DisplayBuilder;
 import blizzard.development.spawners.database.cache.getters.SpawnersCacheGetters;
 import blizzard.development.spawners.database.cache.setters.SpawnersCacheSetters;
-import blizzard.development.spawners.handlers.enchantments.EnchantmentsHandler;
 import blizzard.development.spawners.handlers.enums.States;
 import blizzard.development.spawners.inventories.enchantments.EnchantmentsInventory;
 import blizzard.development.spawners.inventories.spawners.items.SpawnersItems;
+import blizzard.development.spawners.managers.SpawnerAccessManager;
 import blizzard.development.spawners.utils.LocationUtil;
-import blizzard.development.spawners.utils.NumberFormat;
 import blizzard.development.spawners.utils.SpawnersUtils;
 import blizzard.development.spawners.utils.items.TextAPI;
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
@@ -27,6 +26,10 @@ public class SpawnersInventory {
     private final SpawnersCacheGetters getters = SpawnersCacheGetters.getInstance();
 
     public void open(Player player, String id) {
+        final SpawnerAccessManager accessManager = SpawnerAccessManager.getInstance();
+
+        accessManager.addInventoryUser(id, player.getName());
+
         ChestGui inventory = new ChestGui(3, "§8Gerenciar Gerador");
         StaticPane pane = new StaticPane(0, 0, 9, 3);
 
@@ -67,6 +70,9 @@ public class SpawnersInventory {
         pane.addItem(rankingItem, Slot.fromIndex(16));
 
         inventory.addPane(pane);
+        inventory.setOnClose(event -> {
+            accessManager.removeInventoryUser(id, player.getName());
+        });
         inventory.show(player);
     }
 
@@ -84,7 +90,7 @@ public class SpawnersInventory {
     }
 
     public void changeState(Player player, String id) {
-        if (!player.getName().equals(getters.getSpawnerOwner(id))) {
+        if (!player.getName().equals(getters.getSpawnerOwner(id)) && !player.hasPermission("blizzard.spawners.admin")) {
             player.sendActionBar(TextAPI.parse("§c§lEI! §cVocê não é dono desse spawner."));
             player.getInventory().close();
             return;
@@ -107,7 +113,7 @@ public class SpawnersInventory {
                 SpawnersUtils.getInstance().getSpawnerFromName(getters.getSpawnerType(id)).getType(),
                 getters.getSpawnerAmount(id),
                 SpawnersUtils.getInstance().getSpawnerState(States.valueOf(getters.getSpawnerState(id).toUpperCase())),
-                player
+                getters.getSpawnerOwner(id)
                 );
 
         player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_YES, 1.0f, 1.0f);

@@ -1,6 +1,8 @@
 package blizzard.development.spawners.inventories.ranking;
 
 import blizzard.development.spawners.inventories.ranking.items.RankingItems;
+import blizzard.development.spawners.managers.SpawnerAccessManager;
+import blizzard.development.spawners.utils.items.TextAPI;
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
@@ -13,6 +15,8 @@ public class RankingInventory {
     private final RankingItems items = RankingItems.getInstance();
 
     public void open(Player player, String id) {
+        final SpawnerAccessManager accessManager = SpawnerAccessManager.getInstance();
+
         ChestGui inventory = new ChestGui(3, "§8Spawner");
         StaticPane pane = new StaticPane(0, 0, 9, 3);
 

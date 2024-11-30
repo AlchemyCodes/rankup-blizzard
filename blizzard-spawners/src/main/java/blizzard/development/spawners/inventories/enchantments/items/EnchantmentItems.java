@@ -8,7 +8,6 @@ import blizzard.development.spawners.utils.NumberFormat;
 import blizzard.development.spawners.utils.SpawnersUtils;
 import blizzard.development.spawners.utils.items.TextAPI;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -23,25 +22,30 @@ public class EnchantmentItems {
     private final EnchantmentsHandler handler = EnchantmentsHandler.getInstance();
     private final NumberFormat format = NumberFormat.getInstance();
 
-    public ItemStack speed(Player player, String id, Enchantments enchantment) {
+    public ItemStack speed(String id, Enchantments enchantment) {
         ItemStack item = new ItemStack(Material.HOPPER);
         ItemMeta meta = item.getItemMeta();
 
+        int currentLevel = (int) getters.getSpawnerSpeedLevel(id);
+        int totalCost = handler.getInitialPrice(enchantment.getName()) + (currentLevel * handler.getPerLevelPrice(enchantment.getName()));
+
+        int totalTime = Math.max(0, (handler.getMaxLevel(enchantment.getName()) - currentLevel)) + 1;
+
         String display;
-        if (getters.getSpawnerSpeedLevel(id) <= handler.getMaxLevel(enchantment.getName())) {
+        if (getters.getSpawnerSpeedLevel(id) >= handler.getMaxLevel(enchantment.getName())) {
             display = "§cVelocidade §l" + format.formatNumber(getters.getSpawnerSpeedLevel(id));
         } else {
             display = "§bVelocidade §l" + format.formatNumber(getters.getSpawnerSpeedLevel(id));
         }
 
         List<String> lore;
-        if (getters.getSpawnerSpeedLevel(id) <= handler.getMaxLevel(enchantment.getName())) {
+        if (getters.getSpawnerSpeedLevel(id) >= handler.getMaxLevel(enchantment.getName())) {
             lore = Arrays.asList(
                     "§7Diminua a velocidade de",
                     "§7geração do seu spawner.",
                     "",
-                    "§f Nível: §c" + format.formatNumber(getters.getSpawnerSpeedLevel(id)) + "/" + format.formatNumber(handler.getInitialLevel(enchantment.getName())),
-                    "§f Tempo: §c" + format.formatNumber(handler.getPerLevel(enchantment.getName()) * getters.getSpawnerSpeedLevel(id)) + "§ls",
+                    "§f Nível: §c" + format.formatNumber(getters.getSpawnerSpeedLevel(id)) + "/" + format.formatNumber(handler.getMaxLevel(enchantment.getName())),
+                    "§f Tempo: §c" + format.formatNumber(totalTime) + "§ls",
                     "",
                     "§cJá está no máximo."
             );
@@ -50,8 +54,9 @@ public class EnchantmentItems {
                     "§7Diminua a velocidade de",
                     "§7geração do seu spawner.",
                     "",
-                    "§f Nível: §b" + format.formatNumber(getters.getSpawnerSpeedLevel(id)) + "/" + format.formatNumber(handler.getInitialLevel(enchantment.getName())),
-                    "§f Tempo: §b" + format.formatNumber((handler.getPerLevel(enchantment.getName()) * getters.getSpawnerSpeedLevel(id))) + "§ls",
+                    "§f Nível: §b" + format.formatNumber(getters.getSpawnerSpeedLevel(id)) + "/" + format.formatNumber(handler.getMaxLevel(enchantment.getName())),
+                    "§f Tempo: §b" + format.formatNumber(totalTime) + "§ls",
+                    "§f Preço: §b" + format.formatNumber(totalCost),
                     "",
                     "§bClique para melhorar."
             );
@@ -64,9 +69,12 @@ public class EnchantmentItems {
         return item;
     }
 
-    public ItemStack lucky(Player player, String id, Enchantments enchantment) {
+    public ItemStack lucky(String id, Enchantments enchantment) {
         ItemStack item = new ItemStack(Material.DIAMOND);
         ItemMeta meta = item.getItemMeta();
+
+        int currentLevel = (int) getters.getSpawnerLuckyLevel(id);
+        int totalCost = handler.getInitialPrice(enchantment.getName()) + (currentLevel * handler.getPerLevelPrice(enchantment.getName()));
 
         String display;
         if (getters.getSpawnerLuckyLevel(id) >= handler.getMaxLevel(enchantment.getName())) {
@@ -95,6 +103,7 @@ public class EnchantmentItems {
                     "",
                     "§f Nível: §6" + format.formatNumber(getters.getSpawnerLuckyLevel(id)) + "/" + format.formatNumber(handler.getMaxLevel(enchantment.getName())),
                     "§f Chance: §6" + format.formatNumber((handler.getPerLevel(enchantment.getName()) * getters.getSpawnerLuckyLevel(id))) + "§l%",
+                    "§f Preço: §6" + format.formatNumber(totalCost),
                     "",
                     "§6Clique para melhorar."
             );
@@ -107,9 +116,13 @@ public class EnchantmentItems {
         return item;
     }
 
-    public ItemStack experience(Player player, String id, Enchantments enchantment) {
+    public ItemStack experience(String id, Enchantments enchantment) {
         ItemStack item = new ItemStack(Material.EXPERIENCE_BOTTLE);
         ItemMeta meta = item.getItemMeta();
+
+        int currentLevel = (int) getters.getSpawnerExperienceLevel(id);
+        int totalCost = handler.getInitialPrice(enchantment.getName()) + (currentLevel * handler.getPerLevelPrice(enchantment.getName()));
+
 
         String display;
         if (getters.getSpawnerExperienceLevel(id) >= handler.getMaxLevel(enchantment.getName())) {
@@ -146,6 +159,7 @@ public class EnchantmentItems {
                                     * getters.getSpawnerExperienceLevel(id)
                                     * SpawnersUtils.getInstance().getSpawnerDroppedXP(
                                     SpawnersCacheManager.getInstance().getSpawnerData(id)))) + "§lXP",
+                    "§f Preço: §a" + format.formatNumber(totalCost),
                     "",
                     "§aClique para melhorar."
             );
