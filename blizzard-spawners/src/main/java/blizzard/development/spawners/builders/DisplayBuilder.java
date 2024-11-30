@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.TextDisplay;
 
 public class DisplayBuilder {
-    public static void createSpawnerDisplay(Location location, String spawnerType, Double amount, String state, Player player) {
+    public static void createSpawnerDisplay(Location location, String spawnerType, Double amount, String state, String name) {
         Location displayLoc = location.clone().add(0.5, 1, 0.5);
         TextDisplay display = (TextDisplay) location.getWorld().spawnEntity(displayLoc, EntityType.TEXT_DISPLAY);
 
@@ -44,7 +44,7 @@ public class DisplayBuilder {
                 "",
                 spawner,
                 "§7Quantidade: §f§l" + formattedAmount + "§fx",
-                "§7Dono: §f" + player.getName(),
+                "§7Dono: §f" + name,
                 state,
                 ""
         );

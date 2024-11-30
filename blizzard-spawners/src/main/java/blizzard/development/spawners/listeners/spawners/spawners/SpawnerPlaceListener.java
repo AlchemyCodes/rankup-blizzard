@@ -5,6 +5,7 @@ import blizzard.development.spawners.builders.EffectsBuilder;
 import blizzard.development.spawners.database.cache.managers.SpawnersCacheManager;
 import blizzard.development.spawners.database.storage.SpawnersData;
 import blizzard.development.spawners.handlers.enchantments.EnchantmentsHandler;
+import blizzard.development.spawners.handlers.enums.Enchantments;
 import blizzard.development.spawners.handlers.enums.Spawners;
 import blizzard.development.spawners.handlers.enums.States;
 import blizzard.development.spawners.handlers.spawners.SpawnersHandler;
@@ -119,9 +120,9 @@ public class SpawnerPlaceListener implements Listener {
                 amount,
                 0.0,
                 0.0,
-                enchantmentsHandler.getInitialLevel("speed"),
-                enchantmentsHandler.getInitialLevel("lucky"),
-                enchantmentsHandler.getInitialLevel("experience")))
+                enchantmentsHandler.getInitialLevel(Enchantments.SPEED.getName()),
+                enchantmentsHandler.getInitialLevel(Enchantments.LUCKY.getName()),
+                enchantmentsHandler.getInitialLevel(Enchantments.EXPERIENCE.getName())))
         {
             return false;
         }
@@ -134,7 +135,7 @@ public class SpawnerPlaceListener implements Listener {
                 spawner.getType(),
                 amount,
                 SpawnersUtils.getInstance().getSpawnerState(States.PRIVATE),
-                player);
+                player.getName());
         EffectsBuilder.createSpawnerEffect(player, spawnerLocation, spawner.getType());
 
         String formattedAmount = NumberFormat.getInstance().formatNumber(amount);

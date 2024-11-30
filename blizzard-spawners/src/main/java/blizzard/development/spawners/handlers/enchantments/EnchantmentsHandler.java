@@ -35,6 +35,14 @@ public class EnchantmentsHandler {
         return PluginImpl.getInstance().Enchantments.getConfig().getInt("enchantments." + enchantmentKey + ".max-level", 0);
     }
 
+    public int getInitialPrice(String enchantmentKey) {
+        return PluginImpl.getInstance().Enchantments.getConfig().getInt("enchantments." + enchantmentKey + ".initial-price", 0);
+    }
+
+    public int getPerLevelPrice(String enchantmentKey) {
+        return PluginImpl.getInstance().Enchantments.getConfig().getInt("enchantments." + enchantmentKey + ".per-level-price", 0);
+    }
+
     public boolean isEnchantmentValid(String enchantmentKey) {
         return PluginImpl.getInstance().Enchantments.getConfig().contains("enchantments." + enchantmentKey);
     }

@@ -7,9 +7,11 @@ import blizzard.development.spawners.database.dao.SpawnersDAO;
 import blizzard.development.spawners.database.storage.SpawnersData;
 import blizzard.development.spawners.handlers.enums.Spawners;
 import blizzard.development.spawners.handlers.mobs.MobsHandler;
+import blizzard.development.spawners.managers.SpawnerAccessManager;
 import blizzard.development.spawners.tasks.spawners.mobs.SpawnersMobsTaskManager;
 import blizzard.development.spawners.utils.*;
 import blizzard.development.spawners.utils.items.TextAPI;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -19,6 +21,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class SpawnerBreakListener implements Listener {
@@ -95,6 +99,19 @@ public class SpawnerBreakListener implements Listener {
                 EffectsBuilder.removeSpawnerEffect(location);
             }
 
+            final SpawnerAccessManager accessManager = SpawnerAccessManager.getInstance();
+
+            List<String> inventoryUsers = accessManager.getInventoryUsers(id);
+            if (inventoryUsers != null) {
+                for (String userId : inventoryUsers) {
+                    Player openUser = Bukkit.getPlayer(userId);
+                    if (openUser != null) {
+                        Bukkit.getScheduler().runTask(PluginImpl.getInstance().plugin, () -> openUser.getOpenInventory().close());
+                    }
+                    accessManager.removeInventoryUser(id, userId);
+                }
+            }
+
             spawnersDAO.deleteSpawnerData(id);
             cache.removeSpawnerData(id);
 
@@ -109,7 +126,7 @@ public class SpawnerBreakListener implements Listener {
             String formattedAmount = NumberFormat.getInstance().formatNumber(amount);
             player.sendActionBar(TextAPI.parse("§a§lYAY! §aVocê removeu §fx" + formattedAmount + " §aspawner(s) de " + type + "§a!"));
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 }

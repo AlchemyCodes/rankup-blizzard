@@ -1,6 +1,8 @@
 package blizzard.development.spawners.tasks.spawners.mobs;
 
 import blizzard.development.spawners.database.storage.SpawnersData;
+import blizzard.development.spawners.handlers.enchantments.EnchantmentsHandler;
+import blizzard.development.spawners.handlers.enums.Enchantments;
 import blizzard.development.spawners.utils.LocationUtil;
 import blizzard.development.spawners.utils.PluginImpl;
 import org.bukkit.Location;
@@ -21,16 +23,20 @@ public class SpawnersMobsTaskManager {
 
     public synchronized void startTask(SpawnersData spawnerData) {
         stopTask(spawnerData.getId());
-
         cleanupOldMobs(spawnerData);
 
         SpawnersMobsTask task = new SpawnersMobsTask(spawnerData);
-        long interval = (spawnerData.getSpeedLevel() * 20L);
+
+        final EnchantmentsHandler handler = EnchantmentsHandler.getInstance();
+
+        int currentLevel = spawnerData.getSpeedLevel();
+
+        long interval = Math.max(0, (handler.getMaxLevel(Enchantments.SPEED.getName()) - currentLevel) + 1)  * 20L;
 
         BukkitTask bukkitTask = task.runTaskTimer(
                 PluginImpl.getInstance().plugin,
                 0L,
-                Math.max(20L, interval)
+                interval
         );
         task.setBukkitTask(bukkitTask);
 
