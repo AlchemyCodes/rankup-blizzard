@@ -2,6 +2,9 @@ package blizzard.development.tops.inventories;
 
 import blizzard.development.currencies.enums.Currencies;
 import blizzard.development.tops.builders.ItemBuilder;
+import blizzard.development.tops.inventories.coins.CoinsInventory;
+import blizzard.development.tops.inventories.currencies.CurrenciesInventory;
+import blizzard.development.tops.inventories.time.TimeInventory;
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
@@ -23,8 +26,7 @@ public class TopsInventory {
         StaticPane pane = new StaticPane(0, 0, 9, 4);
 
         GuiItem coinsItem = new GuiItem(coins(), event -> {
-            // CurrenciesInventory.getInstance().open(player, "Almas");
-            player.getInventory().close();
+            CoinsInventory.getInstance().open(player, "Coins");
             event.setCancelled(true);
         });
 
@@ -69,8 +71,7 @@ public class TopsInventory {
         });
 
         GuiItem timeItem = new GuiItem(time(), event -> {
-            // CurrenciesInventory.getInstance().open(player, "Almas");
-            player.getInventory().close();
+            TimeInventory.getInstance().open(player, "Tempo");
             event.setCancelled(true);
         });
 

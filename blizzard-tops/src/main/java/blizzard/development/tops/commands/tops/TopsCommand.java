@@ -1,7 +1,7 @@
 package blizzard.development.tops.commands.tops;
 
 import blizzard.development.currencies.enums.Currencies;
-import blizzard.development.tops.inventories.CurrenciesInventory;
+import blizzard.development.tops.inventories.currencies.CurrenciesInventory;
 import blizzard.development.tops.inventories.TopsInventory;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
