@@ -21,28 +21,25 @@ public class SpawnersItems {
 
     public ItemStack info(String id) {
         final SpawnersData data = manager.getSpawnerData(id);
-        final NumberFormat format = NumberFormat.getInstance();
 
         ItemStack item = new ItemStack(Material.SPAWNER);
         ItemMeta meta = item.getItemMeta();
 
         meta.displayName(TextAPI.parse("§aInformações"));
         meta.setLore(Arrays.asList(
+                "§7Confira de antemão algumas",
+                "§7informações sobre o seu gerador.",
                 "",
-                "§f Gerais:",
-                "§8 ■ §7Estado§8:§7 " + SpawnersUtils.getInstance().getSpawnerState(States.valueOf(data.getState().toUpperCase())),
-                "§8 ■ §7Dono§8:§7 " + data.getNickname(),
-                "§8 ■ §7Tipo§8:§7 " + SpawnersUtils.getInstance().getMobNameByData(data),
-                "§8 ■ §7Spawners§8:§7 " + format.formatNumber(data.getAmount()),
-                "§8 ■ §7Mobs§8:§7 " + format.formatNumber(data.getMobAmount()),
-                "§8 ■ §7Drops§8:§7 " + format.formatNumber(data.getDrops()),
+                "§f Estado: " + SpawnersUtils.getInstance().getSpawnerState(States.valueOf(data.getState().toUpperCase())),
+                "§f Dono: §7" + data.getNickname(),
+                "§f Tipo: §7" + SpawnersUtils.getInstance().getMobNameByData(data),
                 "",
-                "§f Encantamentos:",
-                "§8 ■ §7Velocidade§8:§7 " + data.getSpeedLevel(),
-                "§8 ■ §7Sortudo§8:§7 " + data.getLuckyLevel(),
-                "§8 ■ §7Experiente§8:§7 " + data.getExperienceLevel(),
+                "§a Encantamentos:",
+                " §7 Velocidade §l" + data.getSpeedLevel(),
+                " §7 Sortudo §l" + data.getLuckyLevel(),
+                " §7 Experiente §l" + data.getExperienceLevel(),
                 "",
-                "§aClique aqui para alterar o estado."
+                "§aClique para alterar o estado."
         ));
         meta.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS, ItemFlag.HIDE_ATTRIBUTES);
 
@@ -53,12 +50,12 @@ public class SpawnersItems {
     public ItemStack enchantments() {
         ItemStack item = new ItemStack(Material.ENCHANTING_TABLE);
         ItemMeta meta = item.getItemMeta();
-        meta.displayName(TextAPI.parse("§5Encantamentos"));
+        meta.displayName(TextAPI.parse("§dEncantamentos"));
         meta.setLore(Arrays.asList(
                 "§7Verifique os encantamentos",
-                "§7disponíveis para o spawner",
+                "§7disponíveis para o gerador",
                 "",
-                "§5Clique para verificar."
+                "§dClique para verificar."
         ));
 
         meta.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS, ItemFlag.HIDE_ATTRIBUTES);
@@ -75,10 +72,10 @@ public class SpawnersItems {
         meta.displayName(TextAPI.parse("§bDrops"));
         meta.setLore(Arrays.asList(
                 "§7Gerencie os drops",
-                "§7do seu spawner",
+                "§7do seu gerador",
                 "",
-                "§f Armazenados:",
-                "§8 ▶ §7" + format.formatNumber(data.getDrops()),
+                "§b Armazenados:",
+                "§8  ▶ §7" + format.formatNumber(data.getDrops()) + " §fDrop(s).",
                 "",
                 "§bClique para gerenciar."
         ));

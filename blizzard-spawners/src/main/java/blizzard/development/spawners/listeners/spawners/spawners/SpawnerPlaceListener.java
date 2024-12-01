@@ -34,8 +34,6 @@ public class SpawnerPlaceListener implements Listener {
 
     private final CooldownUtils cooldown = CooldownUtils.getInstance();
     private final SpawnersHandler spawnersHandler = SpawnersHandler.getInstance();
-    private final EnchantmentsHandler enchantmentsHandler = EnchantmentsHandler.getInstance();
-
 
     @EventHandler
     private void onSpawnerPlace(BlockPlaceEvent event) {
@@ -71,7 +69,22 @@ public class SpawnerPlaceListener implements Listener {
 
                 if (ItemBuilder.hasPersistentData(PluginImpl.getInstance().plugin, spawnerItem, key)) {
                     String value = ItemBuilder.getPersistentData(PluginImpl.getInstance().plugin, spawnerItem, key);
-                    if (!setupSpawner(player, id, spawnerBlock.getLocation(), spawnerType, Double.valueOf(value))) {
+                    String speed = ItemBuilder.getPersistentData(PluginImpl.getInstance().plugin, spawnerItem, "speed");
+                    String lucky = ItemBuilder.getPersistentData(PluginImpl.getInstance().plugin, spawnerItem, "lucky");
+                    String experience = ItemBuilder.getPersistentData(PluginImpl.getInstance().plugin, spawnerItem, "experience");
+
+                    if (value == null || speed == null || lucky == null || experience == null) return;
+
+                    if (!setupSpawner(
+                            player,
+                            id,
+                            spawnerBlock.getLocation(),
+                            spawnerType,
+                            Double.valueOf(value),
+                            Integer.parseInt(speed),
+                            Integer.parseInt(lucky),
+                            Integer.parseInt(experience)
+                    )) {
                         event.setCancelled(true);
                         return;
                     }
@@ -90,7 +103,7 @@ public class SpawnerPlaceListener implements Listener {
         }
     }
 
-    private Boolean setupSpawner(Player player, String id, Location spawnerLocation, Spawners spawner, Double amount) {
+    private Boolean setupSpawner(Player player, String id, Location spawnerLocation, Spawners spawner, Double amount, Integer speed, Integer lucky, Integer experience) {
         spawnersHandler.createStaticSpawner(spawnerLocation, spawner);
 
         PlotArea plotArea = PlotSquared.get().getPlotAreaManager().getPlotArea(LocationUtil.getPlotLocation(spawnerLocation.getBlock()));
@@ -120,9 +133,9 @@ public class SpawnerPlaceListener implements Listener {
                 amount,
                 0.0,
                 0.0,
-                enchantmentsHandler.getInitialLevel(Enchantments.SPEED.getName()),
-                enchantmentsHandler.getInitialLevel(Enchantments.LUCKY.getName()),
-                enchantmentsHandler.getInitialLevel(Enchantments.EXPERIENCE.getName())))
+                speed,
+                lucky,
+                experience))
         {
             return false;
         }

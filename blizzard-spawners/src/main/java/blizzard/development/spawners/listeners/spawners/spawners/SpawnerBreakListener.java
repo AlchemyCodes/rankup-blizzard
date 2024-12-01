@@ -99,6 +99,14 @@ public class SpawnerBreakListener implements Listener {
                 EffectsBuilder.removeSpawnerEffect(location);
             }
 
+            switch (type.toLowerCase()) {
+                case "pigs", "pig", "porcos", "porco" -> MobsHandler.giveMobSpawner(player, Spawners.PIG, amount, 1, spawnerData.getSpeedLevel(), spawnerData.getLuckyLevel(), spawnerData.getExperienceLevel());
+                case "cows", "cow", "vacas", "vaca" -> MobsHandler.giveMobSpawner(player, Spawners.COW, amount, 1, spawnerData.getSpeedLevel(), spawnerData.getLuckyLevel(), spawnerData.getExperienceLevel());
+                case "mooshrooms", "mooshroom", "coguvacas", "coguvaca" -> MobsHandler.giveMobSpawner(player, Spawners.MOOSHROOM, amount, 1, spawnerData.getSpeedLevel(), spawnerData.getLuckyLevel(), spawnerData.getExperienceLevel());
+                case "sheeps", "sheep", "ovelhas", "ovelha" -> MobsHandler.giveMobSpawner(player, Spawners.SHEEP, amount, 1, spawnerData.getSpeedLevel(), spawnerData.getLuckyLevel(), spawnerData.getExperienceLevel());
+                case "zombies", "zombie", "zumbis", "zumbi" -> MobsHandler.giveMobSpawner(player, Spawners.ZOMBIE, amount, 1, spawnerData.getSpeedLevel(), spawnerData.getLuckyLevel(), spawnerData.getExperienceLevel());
+            }
+
             final SpawnerAccessManager accessManager = SpawnerAccessManager.getInstance();
 
             List<String> inventoryUsers = accessManager.getInventoryUsers(id);
@@ -114,14 +122,6 @@ public class SpawnerBreakListener implements Listener {
 
             spawnersDAO.deleteSpawnerData(id);
             cache.removeSpawnerData(id);
-
-            switch (type.toLowerCase()) {
-                case "pigs", "pig", "porcos", "porco" -> MobsHandler.giveMobSpawner(player, Spawners.PIG, amount, 1);
-                case "cows", "cow", "vacas", "vaca" -> MobsHandler.giveMobSpawner(player, Spawners.COW, amount, 1);
-                case "mooshrooms", "mooshroom", "coguvacas", "coguvaca" -> MobsHandler.giveMobSpawner(player, Spawners.MOOSHROOM, amount, 1);
-                case "sheeps", "sheep", "ovelhas", "ovelha" -> MobsHandler.giveMobSpawner(player, Spawners.SHEEP, amount, 1);
-                case "zombies", "zombie", "zumbis", "zumbi" -> MobsHandler.giveMobSpawner(player, Spawners.ZOMBIE, amount, 1);
-            }
 
             String formattedAmount = NumberFormat.getInstance().formatNumber(amount);
             player.sendActionBar(TextAPI.parse("§a§lYAY! §aVocê removeu §fx" + formattedAmount + " §aspawner(s) de " + type + "§a!"));
