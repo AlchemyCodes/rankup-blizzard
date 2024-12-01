@@ -30,7 +30,7 @@ public class SpawnersInventory {
 
         accessManager.addInventoryUser(id, player.getName());
 
-        ChestGui inventory = new ChestGui(3, "§8Gerenciar Gerador");
+        ChestGui inventory = new ChestGui(3, "§8Gerenciar gerador");
         StaticPane pane = new StaticPane(0, 0, 9, 3);
 
         GuiItem infoItem = new GuiItem(items.info(id), event -> {

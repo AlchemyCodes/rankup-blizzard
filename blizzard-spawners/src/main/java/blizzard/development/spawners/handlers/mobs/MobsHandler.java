@@ -17,22 +17,29 @@ public class MobsHandler {
     final static Plugin plugin = PluginImpl.getInstance().plugin;
     final static SpawnersUtils utils = SpawnersUtils.getInstance();
 
-    public static void giveMobSpawner(Player player, Spawners type, Double amount, Integer stack) {
+    public static void giveMobSpawner(Player player, Spawners type, Double amount, Integer stack, int speed, int lucky, int experience) {
         final String spawner = utils.getMobNameBySpawner(type);
         final String key = "blizzard.spawners-" + spawner;
 
         String formattedAmount = NumberFormat.getInstance().formatNumber(amount);
         final ItemStack item = new ItemBuilder(Material.SPAWNER)
-                .setDisplayName("&aSpawner de " + spawner + " &7(x" + formattedAmount + ")")
+                .setDisplayName("&aGerador de §l" + spawner + " &7(x" + formattedAmount + ")")
                 .setLore(Arrays.asList(
-                        "&7Utilizar este spawner",
-                        "§7pode te tornar o melhor",
-                        "§7de todo o servidor",
+                        "&7Use este gerador para",
+                        "§7conseguir recursos.",
+                        "",
+                        " §aEncantamentos:",
+                        "  §7Velocidade §l" + speed,
+                        "  §7Sortudo §l" + lucky,
+                        "  §7Experiente §l" + experience,
                         "",
                         "&aClique no chão para colocar."
                 ))
                 .addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS)
                 .addPersistentData(plugin, key, String.valueOf(amount))
+                .addPersistentData(plugin, "speed", String.valueOf(speed))
+                .addPersistentData(plugin, "lucky", String.valueOf(lucky))
+                .addPersistentData(plugin, "experience", String.valueOf(experience))
                 .setAmount(stack)
                 .build();
 

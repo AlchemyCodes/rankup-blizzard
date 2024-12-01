@@ -1,5 +1,7 @@
 package blizzard.development.spawners.commands.spawners.subcommands;
 
+import blizzard.development.spawners.handlers.enchantments.EnchantmentsHandler;
+import blizzard.development.spawners.handlers.enums.Enchantments;
 import blizzard.development.spawners.handlers.enums.Spawners;
 import blizzard.development.spawners.handlers.mobs.MobsHandler;
 import blizzard.development.spawners.utils.NumberFormat;
@@ -32,25 +34,67 @@ public class GiveCommand extends BaseCommand {
             return;
         }
 
+        final EnchantmentsHandler handler = EnchantmentsHandler.getInstance();
+
         switch (type) {
             case "pigs", "pig", "porcos", "porco" -> {
-                MobsHandler.giveMobSpawner(player, Spawners.PIG, amount, stack);
+                MobsHandler.giveMobSpawner(
+                        player,
+                        Spawners.PIG,
+                        amount,
+                        stack,
+                        handler.getInitialLevel(Enchantments.SPEED.getName()),
+                        handler.getInitialLevel(Enchantments.LUCKY.getName()),
+                        handler.getInitialLevel(Enchantments.EXPERIENCE.getName())
+                );
                 sender.sendActionBar(TextAPI.parse(successMessage(player, type, amount, stack)));
             }
             case "cows", "cow", "vacas", "vaca" -> {
-                MobsHandler.giveMobSpawner(player, Spawners.COW, amount, stack);
+                MobsHandler.giveMobSpawner(
+                        player,
+                        Spawners.COW,
+                        amount,
+                        stack,
+                        handler.getInitialLevel(Enchantments.SPEED.getName()),
+                        handler.getInitialLevel(Enchantments.LUCKY.getName()),
+                        handler.getInitialLevel(Enchantments.EXPERIENCE.getName())
+                );
                 sender.sendActionBar(TextAPI.parse(successMessage(player, type, amount, stack)));
             }
             case "mooshrooms", "mooshroom", "coguvacas", "coguvaca" -> {
-                MobsHandler.giveMobSpawner(player, Spawners.MOOSHROOM, amount, stack);
+                MobsHandler.giveMobSpawner(
+                        player,
+                        Spawners.MOOSHROOM,
+                        amount,
+                        stack,
+                        handler.getInitialLevel(Enchantments.SPEED.getName()),
+                        handler.getInitialLevel(Enchantments.LUCKY.getName()),
+                        handler.getInitialLevel(Enchantments.EXPERIENCE.getName())
+                );
                 sender.sendActionBar(TextAPI.parse(successMessage(player, type, amount, stack)));
             }
             case "sheeps", "sheep", "ovelhas", "ovelha" -> {
-                MobsHandler.giveMobSpawner(player, Spawners.SHEEP, amount, stack);
+                MobsHandler.giveMobSpawner(
+                        player,
+                        Spawners.SHEEP,
+                        amount,
+                        stack,
+                        handler.getInitialLevel(Enchantments.SPEED.getName()),
+                        handler.getInitialLevel(Enchantments.LUCKY.getName()),
+                        handler.getInitialLevel(Enchantments.EXPERIENCE.getName())
+                );
                 sender.sendActionBar(TextAPI.parse(successMessage(player, type, amount, stack)));
             }
             case "zombies", "zombie", "zumbis", "zumbi" -> {
-                MobsHandler.giveMobSpawner(player, Spawners.ZOMBIE, amount, stack);
+                MobsHandler.giveMobSpawner(
+                        player,
+                        Spawners.ZOMBIE,
+                        amount,
+                        stack,
+                        handler.getInitialLevel(Enchantments.SPEED.getName()),
+                        handler.getInitialLevel(Enchantments.LUCKY.getName()),
+                        handler.getInitialLevel(Enchantments.EXPERIENCE.getName())
+                );
                 sender.sendActionBar(TextAPI.parse(successMessage(player, type, amount, stack)));
             }
             default -> {

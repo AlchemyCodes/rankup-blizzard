@@ -56,7 +56,7 @@ public class EnchantmentItems {
                     "",
                     "§f Nível: §b" + format.formatNumber(getters.getSpawnerSpeedLevel(id)) + "/" + format.formatNumber(handler.getMaxLevel(enchantment.getName())),
                     "§f Tempo: §b" + format.formatNumber(totalTime) + "§ls",
-                    "§f Preço: §b" + format.formatNumber(totalCost),
+                    "§f Preço: §2§l$§a" + format.formatNumber(totalCost),
                     "",
                     "§bClique para melhorar."
             );
@@ -103,7 +103,7 @@ public class EnchantmentItems {
                     "",
                     "§f Nível: §6" + format.formatNumber(getters.getSpawnerLuckyLevel(id)) + "/" + format.formatNumber(handler.getMaxLevel(enchantment.getName())),
                     "§f Chance: §6" + format.formatNumber((handler.getPerLevel(enchantment.getName()) * getters.getSpawnerLuckyLevel(id))) + "§l%",
-                    "§f Preço: §6" + format.formatNumber(totalCost),
+                    "§f Preço: §2§l$§a" + format.formatNumber(totalCost),
                     "",
                     "§6Clique para melhorar."
             );
@@ -159,7 +159,7 @@ public class EnchantmentItems {
                                     * getters.getSpawnerExperienceLevel(id)
                                     * SpawnersUtils.getInstance().getSpawnerDroppedXP(
                                     SpawnersCacheManager.getInstance().getSpawnerData(id)))) + "§lXP",
-                    "§f Preço: §a" + format.formatNumber(totalCost),
+                    "§f Preço: §2§l$§a" + format.formatNumber(totalCost),
                     "",
                     "§aClique para melhorar."
             );
