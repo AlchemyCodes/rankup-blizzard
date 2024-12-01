@@ -1,9 +1,11 @@
-package blizzard.development.tops.inventories;
+package blizzard.development.tops.inventories.time;
 
-import blizzard.development.currencies.api.CurrenciesAPI;
-import blizzard.development.currencies.database.storage.PlayersData;
 import blizzard.development.currencies.enums.Currencies;
-import blizzard.development.tops.builders.ItemBuilder;
+import blizzard.development.time.api.TimeAPI;
+import blizzard.development.time.database.storage.PlayersData;
+import blizzard.development.time.utils.TimeConverter;
+import blizzard.development.tops.inventories.TopsInventory;
+import blizzard.development.tops.inventories.currencies.CurrenciesInventory;
 import blizzard.development.tops.utils.NumberFormat;
 import blizzard.development.tops.utils.items.SkullAPI;
 import blizzard.development.tops.utils.items.TextAPI;
@@ -20,25 +22,17 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.Arrays;
 import java.util.List;
 
-public class CurrenciesInventory {
-    private static CurrenciesInventory instance;
+public class TimeInventory {
+    private static TimeInventory instance;
+
     public void open(Player player, String currency) {
-        ChestGui inventory = new ChestGui(4, "§8Destaques - " + getCurrencyName(currency));
+        ChestGui inventory = new ChestGui(4, "§8Destaques - " + currency);
 
         StaticPane pane = new StaticPane(0, 0, 9, 4);
 
-        CurrenciesAPI api = CurrenciesAPI.getInstance();
+        TimeAPI timeAPI = new TimeAPI();
 
-        List<PlayersData> topPlayers;
-        if (currency.equalsIgnoreCase(Currencies.FLAKES.getName())) {
-            topPlayers = api.getTopPlayers(Currencies.FLAKES);
-        } else if (currency.equalsIgnoreCase(Currencies.FOSSILS.getName())) {
-            topPlayers = api.getTopPlayers(Currencies.FOSSILS);
-        } else if (currency.equalsIgnoreCase(Currencies.SOULS.getName())) {
-            topPlayers = api.getTopPlayers(Currencies.SOULS);
-        } else {
-            topPlayers = null;
-        }
+        List<PlayersData> topPlayers = timeAPI.getTopPlayers();
 
         String[] slots = {"10", "11", "12", "13", "14", "15", "16", "21", "22", "23"};
 
@@ -47,18 +41,9 @@ public class CurrenciesInventory {
                 PlayersData playerData = topPlayers.get(i);
                 String name = playerData.getNickname();
 
-                double amount;
-                if (currency.equalsIgnoreCase(Currencies.FLAKES.getName())) {
-                    amount = playerData.getFlakes();
-                } else if (currency.equalsIgnoreCase(Currencies.FOSSILS.getName())) {
-                    amount = playerData.getFossils();
-                } else if (currency.equalsIgnoreCase(Currencies.SOULS.getName())) {
-                    amount = playerData.getSouls();
-                } else {
-                    amount = 0;
-                }
+                long amount = playerData.getPlayTime();
 
-                GuiItem currencyItem = new GuiItem(currency(name, i, getCurrencyName(currency), amount), event -> event.setCancelled(true));
+                GuiItem currencyItem = new GuiItem(currency(name, i, currency, amount), event -> event.setCancelled(true));
                 pane.addItem(currencyItem, Slot.fromIndex(Integer.parseInt(slots[i])));
             } else {
                 GuiItem placeholderItem = new GuiItem(nothing(i), event -> event.setCancelled(true));
@@ -80,7 +65,7 @@ public class CurrenciesInventory {
         inventory.show(player);
     }
 
-    public ItemStack currency(String player, int position, String currency, double amount) {
+    public ItemStack currency(String player, int position, String currency, long amount) {
         ItemStack item = SkullAPI.withName(new ItemStack(Material.PLAYER_HEAD), player);
         ItemMeta meta = item.getItemMeta();
 
@@ -88,7 +73,7 @@ public class CurrenciesInventory {
         List<String> lore = Arrays.asList(
                 "",
                 " §7Nome: §f" + player,
-                " §7" + currency + ": §f" + NumberFormat.getInstance().formatNumber(amount),
+                " §7" + currency + ": §f" + TimeConverter.convertSecondsToTimeFormat(amount),
                 ""
         );
 
@@ -116,20 +101,8 @@ public class CurrenciesInventory {
         return item;
     }
 
-    public String getCurrencyName(String currency) {
-        if (currency.equalsIgnoreCase(Currencies.FLAKES.getName())) {
-            return "Flocos";
-        } else if (currency.equalsIgnoreCase(Currencies.FOSSILS.getName())) {
-            return "Fósseis";
-        } else if (currency.equalsIgnoreCase(Currencies.SOULS.getName())) {
-            return "Almas";
-        } else {
-            return null;
-        }
-    }
-
-    public static CurrenciesInventory getInstance() {
-        if (instance == null) instance = new CurrenciesInventory();
+    public static TimeInventory getInstance() {
+        if (instance == null) instance = new TimeInventory();
         return instance;
     }
 }

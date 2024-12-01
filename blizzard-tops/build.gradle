@@ -3,7 +3,9 @@ dependencies {
     compileOnly 'me.clip:placeholderapi:2.11.1'
     compileOnly("net.luckperms:api:5.4")
     compileOnly('com.nickuc.chat:api:5.6')
+    compileOnly files('src/main/java/blizzard/development/tops/libs/MiyukiEconomy-1.0.2-BETA.jar')
     compileOnly project(":blizzard-currencies")
+    compileOnly project(":blizzard-time")
 }
 
 def targetJavaVersion = 17
