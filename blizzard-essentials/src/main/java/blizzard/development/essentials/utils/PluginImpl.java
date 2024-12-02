@@ -2,8 +2,11 @@ package blizzard.development.essentials.utils;
 
 import blizzard.development.essentials.Main;
 import blizzard.development.essentials.commands.CommandRegistry;
+import blizzard.development.essentials.database.DatabaseConnection;
+import blizzard.development.essentials.database.dao.HomeDAO;
 import blizzard.development.essentials.listeners.ListenerRegistry;
 import blizzard.development.essentials.tasks.AnnounceTask;
+import blizzard.development.essentials.tasks.HomeSaveTask;
 import blizzard.development.essentials.utils.config.ConfigUtils;
 import co.aikar.commands.Locales;
 import co.aikar.commands.PaperCommandManager;
@@ -17,6 +20,8 @@ public class PluginImpl {
     public ConfigUtils Config;
     public ConfigUtils Locations;
     public ConfigUtils Database;
+
+    public HomeDAO homeDAO;
 
     public PluginImpl(Plugin plugin) {
         this.plugin = plugin;
@@ -43,6 +48,12 @@ public class PluginImpl {
     }
 
     public void registerDatabase() {
+        DatabaseConnection.getInstance();
+        homeDAO = new HomeDAO();
+        homeDAO.initializeDatabase();
+
+        HomeSaveTask homeSaveTask = new HomeSaveTask(homeDAO);
+        homeSaveTask.runTaskTimerAsynchronously(Main.getInstance(), 0L, 20 * 5);
     }
 
     private void registerListeners() {

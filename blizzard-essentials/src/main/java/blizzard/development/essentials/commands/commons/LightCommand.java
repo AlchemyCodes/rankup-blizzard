@@ -8,9 +8,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @CommandAlias("luz|light|acender")
 public class LightCommand extends BaseCommand {
 
+    private final List<Player> lightPlayers = new ArrayList<>();
     @Default
     public void onCommand(CommandSender commandSender) {
         if (!(commandSender instanceof Player)) {
@@ -19,7 +23,13 @@ public class LightCommand extends BaseCommand {
 
         Player player = (Player) commandSender;
 
-        player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, PotionEffect.INFINITE_DURATION, 1));
-        player.sendActionBar("§b§lYAY! §bVocê ativou o modo visão noturna.");
+        if (lightPlayers.contains(player)) {
+            player.removePotionEffect(PotionEffectType.NIGHT_VISION);
+            lightPlayers.remove(player);
+        } else {
+            player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, PotionEffect.INFINITE_DURATION, 1));
+            player.sendActionBar("§b§lYAY! §bVocê ativou o modo visão noturna.");
+            lightPlayers.add(player);
+        }
     }
 }

@@ -1,5 +1,5 @@
 mysql:
-  host: 127.0.0.1:3306
-  db_name: space
-  password:
-  user: root
+  host: us9.urubuhost.com:3306
+  db_name: s1761_alchemy-plugins
+  password: UeA1ViT@ZdOFH96E!ybBX.0T
+  user: u1761_gBngrkl2CD

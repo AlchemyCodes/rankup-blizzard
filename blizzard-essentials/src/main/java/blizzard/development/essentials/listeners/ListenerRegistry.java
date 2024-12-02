@@ -1,6 +1,7 @@
 package blizzard.development.essentials.listeners;
 
 import blizzard.development.essentials.Main;
+import blizzard.development.essentials.listeners.geral.GeralListener;
 import blizzard.development.essentials.listeners.player.PlayerEvents;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
@@ -12,7 +13,8 @@ public class ListenerRegistry {
     public void register() {
         PluginManager manager = Bukkit.getPluginManager();
         Arrays.asList(
-                new PlayerEvents()
+                new PlayerEvents(),
+                new GeralListener()
         ).forEach(listener -> manager.registerEvents(listener, Main.getInstance()));
     }
 
