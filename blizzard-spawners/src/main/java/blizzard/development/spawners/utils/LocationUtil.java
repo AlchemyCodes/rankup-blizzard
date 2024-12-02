@@ -1,5 +1,7 @@
 package blizzard.development.spawners.utils;
 
+import blizzard.development.spawners.database.cache.managers.SpawnersCacheManager;
+import blizzard.development.spawners.database.storage.SpawnersData;
 import blizzard.development.spawners.utils.items.TextAPI;
 import com.plotsquared.core.PlotSquared;
 import com.plotsquared.core.plot.Plot;
@@ -10,9 +12,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
-import java.util.Objects;
-import java.util.UUID;
-import java.util.logging.Logger;
+import java.util.*;
 
 public class LocationUtil {
 
@@ -66,6 +66,46 @@ public class LocationUtil {
         }
         return false;
     }
+
+    public static List<SpawnersData> getNearbySpawners(Location location, int radius) {
+        final SpawnersCacheManager cache = SpawnersCacheManager.getInstance();
+        List<SpawnersData> spawnersData = new ArrayList<>();
+
+        int x = location.getBlockX();
+        int y = location.getBlockY();
+        int z = location.getBlockZ();
+
+        for (int i = -radius; i <= radius; i++) {
+            for (int j = -radius; j <= radius; j++) {
+                for (int k = -radius; k <= radius; k++) {
+                    Location checkLoc = new Location(location.getWorld(), x + i, y + j, z + k);
+
+                    if (i == 0 && j == 0 && k == 0) continue;
+
+                    if (checkLoc.getBlock().getType() == Material.SPAWNER && checkLoc.distance(location) <= radius) {
+                        String serializedLocation = LocationUtil.getSerializedLocation(checkLoc);
+
+                        for (SpawnersData spawner : cache.spawnersCache.values()) {
+                            if (spawner.getLocation().equals(serializedLocation)) {
+                                spawnersData.add(spawner);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        spawnersData.sort((data1, data2) -> {
+            Location loc1 = deserializeLocation(data1.getLocation());
+            Location loc2 = deserializeLocation(data2.getLocation());
+            return Double.compare(loc1.distance(location), loc2.distance(location));
+        });
+
+        return spawnersData;
+    }
+
+
 
     public static Boolean terrainVerify(Player player, Block block) {
         com.plotsquared.core.location.Location blockLocation = getPlotLocation(block);

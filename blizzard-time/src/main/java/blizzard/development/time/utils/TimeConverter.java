@@ -13,15 +13,15 @@ public class TimeConverter {
             timeFormat.append(days).append(" dia").append(days > 1 ? "s" : "");
         }
         if (hours > 0) {
-            if (timeFormat.length() > 0) timeFormat.append(", ");
+            if (!timeFormat.isEmpty()) timeFormat.append(", ");
             timeFormat.append(hours).append(" hora").append(hours > 1 ? "s" : "");
         }
         if (minutes > 0) {
-            if (timeFormat.length() > 0) timeFormat.append(", ");
+            if (!timeFormat.isEmpty()) timeFormat.append(", ");
             timeFormat.append(minutes).append(" minuto").append(minutes > 1 ? "s" : "");
         }
-        if (remainingSeconds > 0 || timeFormat.length() == 0) {
-            if (timeFormat.length() > 0) timeFormat.append(" e ");
+        if (remainingSeconds > 0 || timeFormat.isEmpty()) {
+            if (!timeFormat.isEmpty()) timeFormat.append(" e ");
             timeFormat.append(remainingSeconds).append(" segundo").append(remainingSeconds > 1 ? "s" : "");
         }
 

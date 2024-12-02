@@ -37,6 +37,7 @@ public class MobsHandler {
                 ))
                 .addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS)
                 .addPersistentData(plugin, key, String.valueOf(amount))
+                .addPersistentData(plugin, "type", String.valueOf(type.getType()))
                 .addPersistentData(plugin, "speed", String.valueOf(speed))
                 .addPersistentData(plugin, "lucky", String.valueOf(lucky))
                 .addPersistentData(plugin, "experience", String.valueOf(experience))

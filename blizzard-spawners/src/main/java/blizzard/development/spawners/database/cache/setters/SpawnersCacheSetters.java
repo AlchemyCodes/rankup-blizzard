@@ -40,6 +40,14 @@ public class SpawnersCacheSetters {
         }
     }
 
+    public void addSpawnerAmout(String id, double amount) {
+        SpawnersData data = cache.getSpawnerData(id);
+        if (data != null) {
+            data.setAmount(data.getAmount() + amount);
+            cache.cacheSpawnerData(id, data);
+        }
+    }
+
     public void addSpawnerSpeedLevel(String id, int amount) {
         SpawnersData data = cache.getSpawnerData(id);
         if (data != null) {
