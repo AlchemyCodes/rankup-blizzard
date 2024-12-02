@@ -1,12 +1,11 @@
 package blizzard.development.core.builder;
 
-import blizzard.development.core.utils.items.SkullAPI;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import blizzard.development.core.utils.items.TextUtil;
+import blizzard.development.core.utils.items.skulls.SkullAPI;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;

@@ -8,20 +8,18 @@ import blizzard.development.core.listener.clothing.ClothingInventoryEvent;
 import blizzard.development.core.listener.geral.TrafficListener;
 import java.util.Arrays;
 
-import blizzard.development.core.listener.packets.PacketListener;
-import com.github.retrooper.packetevents.PacketEvents;
-import com.github.retrooper.packetevents.event.EventManager;
-import com.github.retrooper.packetevents.event.PacketListenerPriority;
+import blizzard.development.core.listener.packet.PacketListener;
+import com.comphenix.protocol.ProtocolManager;
 import org.bukkit.Bukkit;
-import org.bukkit.event.Listener;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
 public class ListenerRegistry {
     private final PlayersDAO playersDAO;
+    private final ProtocolManager protocolManager;
 
-    public ListenerRegistry(PlayersDAO playersDAO) {
+    public ListenerRegistry(PlayersDAO playersDAO, ProtocolManager protocolManager) {
         this.playersDAO = playersDAO;
+        this.protocolManager = protocolManager;
     }
 
     public void register() {
@@ -36,13 +34,7 @@ public class ListenerRegistry {
     }
 
     public void registerPacket() {
-
-        EventManager eventManager = PacketEvents.getAPI().getEventManager();
-
-        Arrays.asList(
-                new PacketListener(PacketListenerPriority.HIGHEST)
-        ).forEach(eventManager::registerListener);
-
+        protocolManager.addPacketListener(new PacketListener());
     }
 
     // igual o outro, só instanciar uma classe que registrar! entendi muito obrigaod dwag agora eu vou fazer aquilo queo  snow manddou fazer viu muito obrigadio pela ajuda

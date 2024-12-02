@@ -1,37 +1,31 @@
 package blizzard.development.core.managers;
 
+import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import org.bukkit.Location;
-import org.bukkit.block.Block;
+import com.comphenix.protocol.wrappers.BlockPosition;
 import org.bukkit.entity.Player;
 
 public class CampfireManager {
-    private static final Map<Player, Location> playerCampfireMap = new ConcurrentHashMap<>();
+    private static final Map<Player, BlockPosition> virtualCampfires = new HashMap<>();
 
-    public static void placeCampfire(Player player, Location location) {
-        playerCampfireMap.put(player, location);
+    public static boolean hasCampfire(Player player) {
+        return virtualCampfires.containsKey(player);
+    }
+
+    public static void placeCampfire(Player player, BlockPosition position) {
+        virtualCampfires.put(player, position);
+    }
+
+    public static boolean isPacketCampfire(int x, int y, int z) {
+        return virtualCampfires.values().stream()
+                .anyMatch(pos -> pos.getX() == x && pos.getY() == y && pos.getZ() == z);
     }
 
     public static void removeCampfire(Player player) {
-        playerCampfireMap.remove(player);
-    }
-
-    public static boolean hasCampfire(Player player) {
-        return playerCampfireMap.containsKey(player);
-    }
-
-    public static Location getCampfireLocation(Player player) {
-        return playerCampfireMap.get(player);
-    }
-
-    public static boolean isCampfireAtLocation(Location location) {
-        for (Location campfireLocation : playerCampfireMap.values()) {
-            if (campfireLocation.equals(location)) {
-                return true;
-            }
-        }
-        return false;
+        virtualCampfires.remove(player);
     }
 }
+
+
+
+

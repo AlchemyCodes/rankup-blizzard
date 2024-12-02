@@ -22,3 +22,6 @@ clothes:
 
 campfires:
   spawnCampfire:
+
+schem:
+  name: "core.schem"

@@ -1,4 +1,4 @@
-package blizzard.development.core.utils.items;
+package blizzard.development.core.utils.items.skulls;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
