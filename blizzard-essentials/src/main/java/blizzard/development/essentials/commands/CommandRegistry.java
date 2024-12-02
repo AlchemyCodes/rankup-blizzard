@@ -35,7 +35,15 @@ public class CommandRegistry {
                 new FlyCommand(),
                 new AnnounceCommand(),
                 new SudoCommand(),
-                new CrashCommand()
+                new CrashCommand(),
+                new InvseeCommand(),
+                new BackCommand(),
+                new HomeCommand(),
+                new SetHomeCommand(),
+                new DelHomeCommand(),
+                new TpaCommand(),
+                new TpaDenyCommand(),
+                new TpaAcceptCommand()
         ).forEach(commandManager::registerCommand);
     }
 }
