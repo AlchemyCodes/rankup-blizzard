@@ -6,52 +6,42 @@ import blizzard.development.core.database.dao.PlayersDAO;
 import blizzard.development.core.listener.ListenerRegistry;
 import blizzard.development.core.tasks.PlayerSaveTask;
 import blizzard.development.core.utils.config.ConfigUtils;
-import co.aikar.commands.Locales;
-import co.aikar.commands.PaperCommandManager;
-import com.github.retrooper.packetevents.PacketEvents;
-import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
-import org.bukkit.Bukkit;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class PluginImpl {
     public final Plugin plugin;
     private static PluginImpl instance;
     private static PlayersDAO playersDAO;
+    private static ProtocolManager protocolManager;
     public ConfigUtils Config;
     public ConfigUtils Database;
+    public ConfigUtils Coordinates;
 
     public PluginImpl(Plugin plugin) {
         this.plugin = plugin;
         instance = this;
         playersDAO = new PlayersDAO();
+        protocolManager = ProtocolLibrary.getProtocolManager();
         this.Config = new ConfigUtils((JavaPlugin)plugin, "config.yml");
         this.Database = new ConfigUtils((JavaPlugin)plugin, "database.yml");
+        this.Coordinates = new ConfigUtils((JavaPlugin)plugin, "coordinates.yml");
     }
 
     public void onLoad() {
         this.Config.saveDefaultConfig();
         this.Database.saveDefaultConfig();
+        this.Coordinates.saveDefaultConfig();
         registerDatabase();
         registerListeners();
         registerTasks();
         registerCommands();
-
-        PacketEvents.setAPI(SpigotPacketEventsBuilder.build(plugin));
-        PacketEvents.getAPI().getSettings()
-                .reEncodeByDefault(false)
-                .checkForUpdates(true)
-                .bStats(false);
-
-
-        PacketEvents.getAPI().load();
-        PacketEvents.getAPI().init();
-        PacketEvents.getAPI().init();
     }
 
     public void onUnload() {
-        PacketEvents.getAPI().terminate();
+
     }
 
     public void registerDatabase() {
@@ -62,7 +52,7 @@ public class PluginImpl {
     }
 
     private void registerListeners() {
-        ListenerRegistry listenerRegistry = new ListenerRegistry(playersDAO);
+        ListenerRegistry listenerRegistry = new ListenerRegistry(playersDAO, protocolManager);
         listenerRegistry.register();
         listenerRegistry.registerPacket();
     }
