@@ -28,7 +28,7 @@ public class SpawnersItems {
         meta.displayName(TextAPI.parse("§aInformações"));
         meta.setLore(Arrays.asList(
                 "§7Confira de antemão algumas",
-                "§7informações sobre o seu gerador.",
+                "§7informações sobre o seu gerador",
                 "",
                 "§f Estado: " + SpawnersUtils.getInstance().getSpawnerState(States.valueOf(data.getState().toUpperCase())),
                 "§f Dono: §7" + data.getNickname(),
