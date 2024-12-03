@@ -40,6 +40,8 @@ public class SpawnersHandler {
         mob.setMetadata("blizzard_spawners-mob", new FixedMetadataValue(PluginImpl.getInstance().plugin, spawnerType));
         mob.setMetadata("blizzard_spawners-id", new FixedMetadataValue(PluginImpl.getInstance().plugin, spawnerType));
         mob.setCustomNameVisible(true);
+        mob.hasMetadata("blizzard_spawners-mob");
+
     }
 
     public Map<String, Double> getSpawnerInfo(String spawnerKey) {

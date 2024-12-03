@@ -6,6 +6,7 @@ import blizzard.development.spawners.handlers.enums.Spawners;
 import blizzard.development.spawners.handlers.enums.States;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
+import org.bukkit.inventory.ItemStack;
 
 public class SpawnersUtils {
     private static SpawnersUtils instance;
@@ -110,6 +111,36 @@ public class SpawnersUtils {
             return 5;
         }
         return 0;
+    }
+
+    public String getSpawnerColor(Spawners spawner) {
+        if (spawner.equals(Spawners.PIG)) {
+            return "§d";
+        } else if (spawner.equals(Spawners.COW)) {
+            return "§8";
+        } else if (spawner.equals(Spawners.MOOSHROOM)) {
+            return "§c";
+        } else if (spawner.equals(Spawners.SHEEP)) {
+            return "§f";
+        } else if (spawner.equals(Spawners.ZOMBIE)) {
+            return "§2";
+        }
+        return null;
+    }
+
+    public ItemStack getDropsItem(Spawners spawner) {
+        if (spawner.equals(Spawners.PIG)) {
+            return new ItemStack(Material.PORKCHOP);
+        } else if (spawner.equals(Spawners.COW)) {
+            return new ItemStack(Material.BEEF);
+        } else if (spawner.equals(Spawners.MOOSHROOM)) {
+            return new ItemStack(Material.RED_MUSHROOM);
+        } else if (spawner.equals(Spawners.SHEEP)) {
+            return new ItemStack(Material.MUTTON);
+        } else if (spawner.equals(Spawners.ZOMBIE)) {
+            return new ItemStack(Material.ROTTEN_FLESH);
+        }
+        return null;
     }
 
     public boolean isPickaxe(Material material) {
