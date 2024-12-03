@@ -147,6 +147,7 @@ public class EffectsBuilder {
         for (SpawnersData spawnerData : cache.spawnersCache.values()) {
             if (spawnerData.getNickname().equals(playerName)) {
                 Location location = LocationUtil.deserializeLocation(spawnerData.getLocation());
+                if (location == null) return;
                 if (location.getWorld() != null) {
                     String spawnerType = spawnerData.getType();
                     createSpawnerEffect(player, location, spawnerType);

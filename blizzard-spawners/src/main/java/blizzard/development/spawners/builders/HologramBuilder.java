@@ -22,7 +22,7 @@ public class HologramBuilder {
         Hologram hologram = DHAPI.createHologram(uuid.toString(), location.add(0.5, 0 ,0.5));
         HologramBuilder.hologram.put(uuid, hologram);
 
-        hologram.setDefaultVisibleState(true);
+        hologram.setDefaultVisibleState(false);
         hologram.setShowPlayer(player);
 
         return uuid;

@@ -1,7 +1,7 @@
 package blizzard.development.spawners.inventories.drops;
 
-import blizzard.development.spawners.database.cache.getters.SpawnersCacheGetters;
 import blizzard.development.spawners.inventories.drops.items.DropsItems;
+import blizzard.development.spawners.inventories.spawners.SpawnersInventory;
 import blizzard.development.spawners.managers.SpawnerAccessManager;
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
@@ -13,8 +13,6 @@ public class DropsInventory {
     private static DropsInventory instance;
 
     private final DropsItems items = DropsItems.getInstance();
-
-    private final SpawnersCacheGetters getters = SpawnersCacheGetters.getInstance();
 
     public void open(Player player, String id) {
         final SpawnerAccessManager accessManager = SpawnerAccessManager.getInstance();
@@ -38,6 +36,7 @@ public class DropsInventory {
 
 
         GuiItem backItem = new GuiItem(items.back(), event -> {
+            SpawnersInventory.getInstance().open(player, id);
             event.setCancelled(true);
         });
 
