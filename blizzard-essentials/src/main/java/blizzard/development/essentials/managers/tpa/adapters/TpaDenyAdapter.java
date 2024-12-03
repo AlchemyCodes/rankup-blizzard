@@ -12,16 +12,17 @@ public class TpaDenyAdapter implements TpaDenyFactory {
     public void tpaDeny(Player requester, Player target) {
         TpaManager tpaManager = TpaManager.getInstance();
 
-        if (!tpaManager.contains(requester) || tpaManager.get(requester) != target) {
-            requester.sendActionBar("§c§lEI! §cVocê não tem um pedido de teletransporte pendente para " + target.getName() + "!");
+        if (!tpaManager.contains(target)) {
+            requester.sendActionBar("§c§lEI! §cVocê não tem um pedido de teletransporte pendente de " + target.getName() + "!");
             return;
         }
 
-        requester.sendActionBar("§c§lEI! §cSeu pedido de teletransporte para " + target.getName() + " foi negado!");
-        target.sendActionBar("§c§lEI! §cVocê negou o pedido de teletransporte de " + requester.getName() + "!");
+        target.sendActionBar("§c§lEI! §cSeu pedido de teletransporte para " + requester.getName() + " foi negado!");
+        requester.sendActionBar("§c§lEI! §cO jogador " + target.getName() + " teve seu pedido de teletransporte negado!");
 
-        tpaManager.remove(requester);
+        tpaManager.remove(target);
     }
+
 
     public static TpaDenyAdapter getInstance() {
         if (instance == null) {

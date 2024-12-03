@@ -12,8 +12,8 @@ public class TpaAcceptAdapter implements TpaAcceptFactory {
     public void tpaAccept(Player requester, Player target) {
         TpaManager tpaManager = TpaManager.getInstance();
 
-        if (!tpaManager.contains(requester) || tpaManager.get(requester) != target) {
-            requester.sendActionBar("§c§lEI! §cVocê não tem um pedido de teletransporte pendente para " + target.getName() + "!");
+        if (!tpaManager.contains(requester)) {
+            target.sendActionBar("§c§lEI! §cVocê não tem um pedido de teletransporte pendente de " + requester.getName() + "!");
             return;
         }
 
@@ -24,6 +24,7 @@ public class TpaAcceptAdapter implements TpaAcceptFactory {
 
         tpaManager.remove(requester);
     }
+
 
     public static TpaAcceptAdapter getInstance() {
         if (instance == null) {
