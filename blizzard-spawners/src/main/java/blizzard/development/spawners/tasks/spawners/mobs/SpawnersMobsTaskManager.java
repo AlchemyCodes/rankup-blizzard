@@ -66,6 +66,11 @@ public class SpawnersMobsTaskManager {
         }
     }
 
+    public void restartTask(SpawnersData spawnerData) {
+        stopTask(spawnerData.getId());
+        startTask(spawnerData);
+    }
+
     public void stopAllTasks() {
         spawnerTasks.values().forEach(SpawnersMobsTask::cancel);
         spawnerTasks.clear();

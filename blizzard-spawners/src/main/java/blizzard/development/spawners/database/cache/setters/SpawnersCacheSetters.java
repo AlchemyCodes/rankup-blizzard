@@ -40,10 +40,10 @@ public class SpawnersCacheSetters {
         }
     }
 
-    public void addSpawnerAmout(String id, double amount) {
+    public void setSpawnerAmout(String id, double amount) {
         SpawnersData data = cache.getSpawnerData(id);
         if (data != null) {
-            data.setAmount(data.getAmount() + amount);
+            data.setAmount(amount);
             cache.cacheSpawnerData(id, data);
         }
     }

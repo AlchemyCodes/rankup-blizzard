@@ -4,6 +4,7 @@ import blizzard.development.spawners.builders.DisplayBuilder;
 import blizzard.development.spawners.database.cache.getters.SpawnersCacheGetters;
 import blizzard.development.spawners.database.cache.setters.SpawnersCacheSetters;
 import blizzard.development.spawners.handlers.enums.States;
+import blizzard.development.spawners.inventories.drops.DropsInventory;
 import blizzard.development.spawners.inventories.enchantments.EnchantmentsInventory;
 import blizzard.development.spawners.inventories.spawners.items.SpawnersItems;
 import blizzard.development.spawners.managers.SpawnerAccessManager;
@@ -46,6 +47,7 @@ public class SpawnersInventory {
 
         GuiItem dropsItem = new GuiItem(items.drops(id), event -> {
             if (!checkPermission(player, id)) return;
+            DropsInventory.getInstance().open(player, id);
             event.setCancelled(true);
         });
 

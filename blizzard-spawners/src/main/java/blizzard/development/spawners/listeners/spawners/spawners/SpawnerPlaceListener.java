@@ -126,7 +126,12 @@ public class SpawnerPlaceListener implements Listener {
         SpawnersData spawnerData = SpawnersCacheManager.getInstance().getSpawnerData(id);
         SpawnersMobsTaskManager.getInstance().startTask(spawnerData);
 
-        DisplayBuilder.createSpawnerDisplay(spawnerLocation, spawner.getType(), amount, SpawnersUtils.getInstance().getSpawnerState(States.PRIVATE), player.getName());
+        DisplayBuilder.createSpawnerDisplay(spawnerLocation,
+                spawner.getType(),
+                amount,
+                SpawnersUtils.getInstance().getSpawnerState(States.PRIVATE),
+                player.getName()
+        );
         EffectsBuilder.createSpawnerEffect(player, spawnerLocation, spawner.getType());
 
         String formattedAmount = NumberFormat.getInstance().formatNumber(amount);
@@ -181,14 +186,15 @@ public class SpawnerPlaceListener implements Listener {
                     amount = Double.parseDouble(spawnersAmount);
                 }
 
-                setters.addSpawnerAmout(closestSpawner.getId(), amount);
+                setters.setSpawnerAmout(closestSpawner.getId(), closestSpawner.getAmount() + amount);
+                SpawnersMobsTaskManager.getInstance().syncMobAmount(closestSpawner.getId(), closestSpawner.getMobAmount());
 
                 DisplayBuilder.removeSpawnerDisplay(Objects.requireNonNull(LocationUtil.deserializeLocation(closestSpawner.getLocation())));
                 DisplayBuilder.createSpawnerDisplay(
                         Objects.requireNonNull(LocationUtil.deserializeLocation(closestSpawner.getLocation())),
                         closestSpawner.getType(),
                         closestSpawner.getAmount(),
-                        closestSpawner.getState(),
+                        SpawnersUtils.getInstance().getSpawnerState(States.valueOf(closestSpawner.getState().toUpperCase())),
                         closestSpawner.getNickname());
                 return true;
             }
