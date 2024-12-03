@@ -43,7 +43,8 @@ public class CommandRegistry {
                 new DelHomeCommand(),
                 new TpaCommand(),
                 new TpaDenyCommand(),
-                new TpaAcceptCommand()
+                new TpaAcceptCommand(),
+                new TpHereCommand()
         ).forEach(commandManager::registerCommand);
     }
 }
