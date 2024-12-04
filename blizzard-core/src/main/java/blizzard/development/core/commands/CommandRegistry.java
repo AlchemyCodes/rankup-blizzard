@@ -20,7 +20,8 @@ public class CommandRegistry {
                 new ClothingCommand(),
                         new TemperatureCommand(),
                 new SetBlizzard(),
-                new SchemCommand()})
+                new SchemCommand(),
+                new CampfireCommand()})
                 .forEach(paperCommandManager::registerCommand);
     }
 }

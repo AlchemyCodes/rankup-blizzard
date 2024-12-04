@@ -12,6 +12,6 @@ public class SchemCommand extends BaseCommand {
     @Default
     public void onCommand(Player player) {
         SchematicManager schematicManager = new SchematicManager();
-        schematicManager.pasteSchematicForPlayer(player, player.getWorld(), player.getLocation());
+        schematicManager.pasteSchematicForPlayer(player, player.getLocation());
     }
 }
