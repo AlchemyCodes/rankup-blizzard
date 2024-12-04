@@ -3,7 +3,6 @@ package blizzard.development.core.listener.packet;
 import blizzard.development.core.Main;
 import blizzard.development.core.managers.CampfireManager;
 import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.WrappedBlockData;
@@ -36,8 +35,6 @@ public class PacketListener extends PacketAdapter {
         final var material = Material.CAMPFIRE;
         packet.getBlockData().write(0, WrappedBlockData.createData(material));
     }
-
-
 
 
     @Override

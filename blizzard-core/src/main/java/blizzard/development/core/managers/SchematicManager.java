@@ -27,7 +27,7 @@ public class SchematicManager {
         this.protocolManager = ProtocolLibrary.getProtocolManager();
     }
 
-    public void pasteSchematicForPlayer(Player player, World world, Location location) {
+    public void pasteSchematicForPlayer(Player player, Location location) {
         File file = new File(Main.getInstance().getDataFolder(), PluginImpl.getInstance().Config.getString("schem.name"));
 
         if (!file.exists()) {

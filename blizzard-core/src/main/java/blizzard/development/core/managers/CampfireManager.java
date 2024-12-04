@@ -2,7 +2,13 @@ package blizzard.development.core.managers;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+
+import blizzard.development.core.utils.PluginImpl;
 import com.comphenix.protocol.wrappers.BlockPosition;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 public class CampfireManager {
@@ -24,6 +30,34 @@ public class CampfireManager {
     public static void removeCampfire(Player player) {
         virtualCampfires.remove(player);
     }
+
+    public static boolean isBlockLegit(String world, int x, int y, int z) {
+        YamlConfiguration config = PluginImpl.getInstance().Coordinates.getConfig();
+        ConfigurationSection campfireSection = config.getConfigurationSection("campfire");
+
+        if (campfireSection == null) {
+            return false;
+        }
+
+        Set<String> locations = campfireSection.getKeys(false);
+
+        for (String location : locations) {
+            ConfigurationSection locationSection = campfireSection.getConfigurationSection(location);
+            if (locationSection == null) continue;
+
+            String locationWorld = locationSection.getString("world");
+            int locationX = locationSection.getInt("x");
+            int locationY = locationSection.getInt("y");
+            int locationZ = locationSection.getInt("z");
+
+            if (world.equals(locationWorld) && x == locationX && y == locationY && z == locationZ) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 }
 
 

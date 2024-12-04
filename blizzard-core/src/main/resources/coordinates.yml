@@ -1,1 +1,6 @@
 campfire:
+  location1:
+    world: "spawn2"
+    x: 997
+    y: 61
+    z: 980
