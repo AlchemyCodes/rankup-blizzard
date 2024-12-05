@@ -24,18 +24,19 @@ public class SpawnersCacheSetters {
         }
     }
 
-    public void addSpawnerDrops(String id, double amount) {
+    public void setSpawnerDrops(String id, double amount) {
         SpawnersData data = cache.getSpawnerData(id);
         if (data != null) {
-            data.setDrops(data.getDrops() + amount);
+            data.setDrops(amount);
             cache.cacheSpawnerData(id, data);
         }
     }
 
-    public void removeSpawnerDrops(String id, double amount) {
+
+    public void addSpawnerDrops(String id, double amount) {
         SpawnersData data = cache.getSpawnerData(id);
         if (data != null) {
-            data.setDrops(data.getDrops() - amount);
+            data.setDrops(data.getDrops() + amount);
             cache.cacheSpawnerData(id, data);
         }
     }
