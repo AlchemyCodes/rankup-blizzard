@@ -2,6 +2,8 @@ package blizzard.development.spawners.inventories.drops.items;
 
 import blizzard.development.spawners.database.cache.managers.SpawnersCacheManager;
 import blizzard.development.spawners.database.storage.SpawnersData;
+import blizzard.development.spawners.handlers.spawners.SpawnersHandler;
+import blizzard.development.spawners.utils.NumberFormat;
 import blizzard.development.spawners.utils.SpawnersUtils;
 import blizzard.development.spawners.utils.items.TextAPI;
 import org.bukkit.Material;
@@ -39,6 +41,8 @@ public class DropsItems {
 
     public ItemStack drops(String id) {
         final SpawnersUtils utils = SpawnersUtils.getInstance();
+        final SpawnersHandler handler = SpawnersHandler.getInstance();
+        final NumberFormat format = NumberFormat.getInstance();
 
         SpawnersData data = manager.getSpawnerData(id);
 
@@ -48,13 +52,22 @@ public class DropsItems {
         String color = utils.getSpawnerColor(utils.getSpawnerFromName(data.getType()));
 
         meta.displayName(TextAPI.parse(color + "Drops"));
+
+        String unitValue = format.formatNumber(
+                handler.getSellDropPrice(utils.getSpawnerFromName(data.getType()).toString().toLowerCase())
+        );
+        String totalValue = (format.formatNumber
+                (data.getDrops() * handler.getSellDropPrice(utils.getSpawnerFromName(data.getType()).toString().toLowerCase()))
+        );
+
         meta.setLore(Arrays.asList(
                 "§7Verifique os drops do gerador",
                 "",
                 color + " Informações:",
-                "§7 Armazenados §l" + 100  ,
-                "§7 Valor Unitário §l" + 1 ,
-                "§7 Valor Total §l" + 100 ,
+                "§7 Armazenados §l" +  format.formatNumber(data.getDrops()),
+                "§7 Valor Unitário §l" + unitValue,
+                "§7 Valor Total §l" + totalValue,
+                "§7 Seu Bônus §l" + 0 + "%",
                 "",
                 color + "Clique para vender os drops."
         ));
