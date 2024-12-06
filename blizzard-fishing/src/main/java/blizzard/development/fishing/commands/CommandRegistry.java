@@ -14,7 +14,8 @@ public class CommandRegistry {
         Arrays.asList(
                 new FishingCommand(),
                 new SetCommands(),
-                new GiveItemsCommand()
+                new GiveItemsCommand(),
+                new Geyser()
         ).forEach(paperCommandManager::registerCommand);
     }
 }

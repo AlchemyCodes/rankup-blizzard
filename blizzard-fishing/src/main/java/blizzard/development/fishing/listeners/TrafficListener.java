@@ -14,10 +14,12 @@ import blizzard.development.fishing.handlers.FishingRodHandler;
 import blizzard.development.fishing.handlers.FurnaceItemHandler;
 import blizzard.development.fishing.listeners.items.FishBucketListener;
 import blizzard.development.fishing.utils.PluginImpl;
+import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -70,5 +72,14 @@ public class TrafficListener implements Listener {
         }
 
         RodsCacheManager.getInstance().cachePlayerData(player, rodsData);
+    }
+
+    @EventHandler
+    public void onChangeWorld(PlayerChangedWorldEvent event) {
+        World from = event.getFrom();
+        if (from.getName().equals("pesca")) {
+            Player player = event.getPlayer();
+            player.getInventory().clear();
+        }
     }
 }

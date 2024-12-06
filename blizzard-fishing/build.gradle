@@ -1,9 +1,12 @@
 dependencies {
     compileOnly "io.papermc.paper:paper-api:1.20.3-R0.1-SNAPSHOT"
     compileOnly project(":blizzard-currencies")
+    compileOnly project(":blizzard-core")
 
     compileOnly 'org.projectlombok:lombok:1.18.34'
     annotationProcessor 'org.projectlombok:lombok:1.18.34'
+
+    compileOnly 'com.sk89q.worldedit:worldedit-bukkit:7.2.12'
 }
 
 def targetJavaVersion = 17

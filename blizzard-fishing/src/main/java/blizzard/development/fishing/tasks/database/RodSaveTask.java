@@ -1,4 +1,4 @@
-package blizzard.development.fishing.tasks;
+package blizzard.development.fishing.tasks.database;
 
 import blizzard.development.fishing.database.cache.RodsCacheManager;
 import blizzard.development.fishing.database.dao.RodsDAO;

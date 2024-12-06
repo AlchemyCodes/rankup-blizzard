@@ -1,7 +1,7 @@
 package blizzard.development.fishing.inventories.items;
 
 import blizzard.development.fishing.database.cache.methods.PlayersCacheMethod;
-import blizzard.development.fishing.tasks.FurnaceTask;
+import blizzard.development.fishing.tasks.items.FurnaceTask;
 import blizzard.development.fishing.utils.items.ItemBuilder;
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;

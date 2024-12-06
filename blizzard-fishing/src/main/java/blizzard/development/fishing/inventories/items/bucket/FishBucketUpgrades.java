@@ -48,7 +48,9 @@ public class FishBucketUpgrades {
             player.sendMessage("§b§lYAY! §7Armazém aumentado em 50.");
             upgradesMenu(player);});
 
-        GuiItem back = new GuiItem(back(), event -> { event.setCancelled(true);
+        GuiItem back = new GuiItem(back(), event -> {
+            event.setCancelled(true);
+            FishBucketInventory.openBucket(player);
         });
 
         pane.addItem(capacity, Slot.fromIndex(13));
@@ -79,9 +81,9 @@ public class FishBucketUpgrades {
     }
 
     public static double capacityPrice(PlayersCacheMethod playersCacheMethod, Player player) {
-        double initial = PluginImpl.getInstance().Enchantments.getDouble("bucket.price.initial");
-        double perLevel = PluginImpl.getInstance().Enchantments.getDouble("bucket.price.perlevel");
-        double multiplier = PluginImpl.getInstance().Enchantments.getDouble("bucket.price.multiplier");
+        double initial = PluginImpl.getInstance().Enchantments.getDouble("enchantments.bucket.price.initial");
+        double perLevel = PluginImpl.getInstance().Enchantments.getDouble("enchantments.bucket.price.perlevel");
+        double multiplier = PluginImpl.getInstance().Enchantments.getDouble("enchantments.bucket.price.multiplier");
 
         int storage = playersCacheMethod.getStorage(player);
         int level = storage / 50;

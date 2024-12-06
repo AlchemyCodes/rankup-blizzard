@@ -1,9 +1,11 @@
-package blizzard.development.fishing.tasks;
+package blizzard.development.fishing.tasks.items;
 
+import blizzard.development.currencies.api.CurrenciesAPI;
+import blizzard.development.currencies.enums.Currencies;
 import blizzard.development.fishing.database.cache.methods.PlayersCacheMethod;
+import blizzard.development.fishing.utils.PluginImpl;
 import blizzard.development.fishing.utils.fish.FishesUtils;
 import blizzard.development.fishing.utils.items.ItemBuilder;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -43,6 +45,8 @@ public class FurnaceTask implements Runnable {
 
             PlayersCacheMethod playersCacheMethod = PlayersCacheMethod.getInstance();
 
+            int coins = PluginImpl.getInstance().Config.getConfig().getInt("unfreeze.value");
+
             if (playersCacheMethod.getFrozenFish(player) == 0) {
                 player.sendMessage("não teem peeixe congelado, cancelando desccongelamento!");
                 removePlayer(player);
@@ -80,7 +84,9 @@ public class FurnaceTask implements Runnable {
                     fishesUtils.giveFish(player, randomFish, PlayersCacheMethod.getInstance());
 
                     playersCacheMethod.setFrozenFish(player,playersCacheMethod.getFrozenFish(player) - 1);
+                    CurrenciesAPI.getInstance().addBalance(player, Currencies.COINS, coins);
                     player.sendMessage("§bSeu peixe descongelou e era um(a)" + randomFish + "!");
+                    player.sendMessage("§bvc ganhou §a$§f" + coins + "§bde coins por descongelar");
                 }
             }
         }

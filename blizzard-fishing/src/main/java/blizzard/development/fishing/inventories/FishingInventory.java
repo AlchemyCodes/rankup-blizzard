@@ -1,16 +1,23 @@
 package blizzard.development.fishing.inventories;
 
+import blizzard.development.fishing.handlers.FishBucketHandler;
+import blizzard.development.fishing.handlers.FishingNetHandler;
+import blizzard.development.fishing.handlers.FishingRodHandler;
+import blizzard.development.fishing.handlers.FurnaceItemHandler;
 import blizzard.development.fishing.utils.ProxyManager;
 import blizzard.development.fishing.utils.items.ItemBuilder;
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
 import com.github.stefvanschie.inventoryframework.pane.util.Slot;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 public class FishingInventory {
 
@@ -18,7 +25,12 @@ public class FishingInventory {
         ChestGui gui = new ChestGui(3, "Pesca");
         StaticPane pane = new StaticPane(0, 0, 9, 3);
 
-        pane.addItem(createReturnButton(player), Slot.fromIndex(13));
+        if (player.getWorld().getName().equals("pesca")) {
+            pane.addItem(createReturnButton(player), Slot.fromIndex(13));
+        } else {
+            pane.addItem(createGoButton(player), Slot.fromIndex(13));
+        }
+
         pane.addItem(createBoosterButton(player), Slot.fromIndex(16));
         pane.addItem(createMaterialsButton(player), Slot.fromIndex(10));
 
@@ -29,8 +41,25 @@ public class FishingInventory {
     private static GuiItem createReturnButton(Player player) {
         return new GuiItem(returnFishing(), event -> {
             event.setCancelled(true);
-            ProxyManager.sendServer(player, "Legacy");
             player.getInventory().clear();
+
+            player.teleport(Objects.requireNonNull(Bukkit.getWorld("spawn2")).getSpawnLocation());
+        });
+    }
+
+    private static GuiItem createGoButton(Player player) {
+        World world = Bukkit.getWorld("pesca");
+
+        return new GuiItem(goFishing(), event -> {
+            event.setCancelled(true);
+
+            assert world != null;
+            player.teleport(world.getSpawnLocation());
+
+            FishingRodHandler.setRod(player, 0);
+            FishingNetHandler.setNet(player, 3);
+            FurnaceItemHandler.setFurnace(player, 5);
+            FishBucketHandler.setBucket(player, 8);
         });
     }
 
@@ -52,6 +81,13 @@ public class FishingInventory {
         return new ItemBuilder(Material.BARRIER)
                 .setDisplayName("§cSair")
                 .setLore(Arrays.asList("§7Clique para sair da pesca!"))
+                .build();
+    }
+
+    public static ItemStack goFishing() {
+        return new ItemBuilder(Material.COMPASS)
+                .setDisplayName("§aEntrar")
+                .setLore(Arrays.asList("§7Clique para entrar na pesca!"))
                 .build();
     }
 

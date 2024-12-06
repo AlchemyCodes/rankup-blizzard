@@ -1,5 +1,6 @@
 package blizzard.development.fishing.utils.fish;
 
+import blizzard.development.core.api.CoreAPI;
 import blizzard.development.fishing.database.cache.methods.PlayersCacheMethod;
 import blizzard.development.fishing.database.cache.methods.RodsCacheMethod;
 import blizzard.development.fishing.enums.RodMaterials;
@@ -34,6 +35,7 @@ public class FishesUtils {
             case "rare" -> config.getInt("xpByRarity.rare");
             case "legendary" -> config.getInt("xpByRarity.legendary");
             case "mystic" -> config.getInt("xpByRarity.mystic");
+            case "frozen" -> config.getInt("xpByRarity.frozen");
             default -> 0;
         };
     }
@@ -44,6 +46,7 @@ public class FishesUtils {
             case "rare" -> config.getInt("valueByRarity.rare");
             case "legendary" -> config.getInt("valueByRarity.legendary");
             case "mystic" -> config.getInt("valueByRarity.mystic");
+            case "frozen" -> config.getInt("valueByRarity.frozen");
             default -> 0;
         };
     }
@@ -75,6 +78,11 @@ public class FishesUtils {
     public List<String> getFishes(String rarity) {
         List<String> fishes = new ArrayList<>();
 
+        if (CoreAPI.getInstance().isIsBlizzard()) {
+            fishes.add("congelado");
+            return fishes;
+        }
+
         for (String fish : config.getConfigurationSection("fishes").getKeys(false)) {
             String fishRarity = config.getString("fishes." + fish + ".rarity");
             assert fishRarity != null;
@@ -96,6 +104,7 @@ public class FishesUtils {
                 case "lula_brilhante" -> cacheMethod.setLulaBrilhante(player, cacheMethod.getLulaBrilhante(player) + 1);
                 case "tubarao" -> cacheMethod.setTubarao(player, cacheMethod.getTubarao(player) + 1);
                 case "baleia" -> cacheMethod.setBaleia(player, cacheMethod.getBaleia(player) + 1);
+                case "congelado" -> cacheMethod.setFrozenFish(player, cacheMethod.getFrozenFish(player) + 1);
             }
     }
 
@@ -116,11 +125,11 @@ public class FishesUtils {
         player.sendMessage("§aVocê ganhou " + xp + " de xp");
     }
 
-    public boolean giveFrozenFish(Player player, PlayersCacheMethod cacheMethod) {;
+    public boolean giveChanceFrozenFish(Player player, PlayersCacheMethod cacheMethod) {;
         int chance = random.nextInt(101);
 
         if (chance >= 50) {
-            player.sendMessage("ganhou peixe congelado");
+            player.sendMessage("tinha chance baixa e ganhou peixe congelado");
             cacheMethod.setFrozenFish(player,cacheMethod.getFrozenFish(player) + 1);
             return true;
         }
