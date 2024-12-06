@@ -2,9 +2,11 @@ package blizzard.development.spawners.utils;
 
 import blizzard.development.spawners.commands.CommandRegistry;
 import blizzard.development.spawners.database.DatabaseConnection;
+import blizzard.development.spawners.database.cache.managers.PlayersCacheManager;
 import blizzard.development.spawners.database.cache.managers.SpawnersCacheManager;
 import blizzard.development.spawners.database.dao.PlayersDAO;
 import blizzard.development.spawners.database.dao.SpawnersDAO;
+import blizzard.development.spawners.database.storage.PlayersData;
 import blizzard.development.spawners.database.storage.SpawnersData;
 import blizzard.development.spawners.listeners.ListenerRegistry;
 import blizzard.development.spawners.listeners.plots.PlotClearListener;
@@ -84,6 +86,15 @@ public class PluginImpl {
             for (SpawnersData spawner : allSpawners) {
                 SpawnersCacheManager.getInstance().cacheSpawnerData(spawner.getId(), spawner);
                 SpawnersMobsTaskManager.getInstance().startTask(spawner);
+            }
+        } catch (SQLException exception) {
+            throw new RuntimeException(exception);
+        }
+
+        try {
+            List<PlayersData> players = playersDAO.getAllPlayersData();
+            for (PlayersData player : players) {
+                PlayersCacheManager.getInstance().cachePlayerData(player.getNickname(), player);
             }
         } catch (SQLException exception) {
             throw new RuntimeException(exception);

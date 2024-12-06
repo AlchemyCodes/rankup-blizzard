@@ -103,6 +103,7 @@ public class DropsInventory {
         if (drops <= 0) {
             player.sendActionBar(TextAPI.parse("§c§lEI! §cA quantia de drops precisa ser maior que 0."));
             player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 0.5f, 0.5f);
+            player.getInventory().close();
             return;
         }
 
@@ -111,6 +112,7 @@ public class DropsInventory {
 
         utils.createCountdown(cooldownKey, 1, TimeUnit.SECONDS);
 
+        player.sendActionBar(TextAPI.parse("§a§lYAY! §aVocê vendeu os drops desse gerador com sucesso."));
         player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_YES, 1.0f, 1.0f);
         DropsInventory.getInstance().open(player, id);
     }

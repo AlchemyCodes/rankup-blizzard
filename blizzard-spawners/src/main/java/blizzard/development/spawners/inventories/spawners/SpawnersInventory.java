@@ -6,6 +6,7 @@ import blizzard.development.spawners.database.cache.setters.SpawnersCacheSetters
 import blizzard.development.spawners.handlers.enums.States;
 import blizzard.development.spawners.inventories.drops.DropsInventory;
 import blizzard.development.spawners.inventories.enchantments.EnchantmentsInventory;
+import blizzard.development.spawners.inventories.ranking.PurchasedInventory;
 import blizzard.development.spawners.inventories.spawners.items.SpawnersItems;
 import blizzard.development.spawners.managers.SpawnerAccessManager;
 import blizzard.development.spawners.utils.LocationUtil;
@@ -62,6 +63,7 @@ public class SpawnersInventory {
 
         GuiItem rankingItem = new GuiItem(items.ranking(), event -> {
             if (!checkPermission(player, id)) return;
+            PurchasedInventory.getInstance().open(player);
             event.setCancelled(true);
         });
 

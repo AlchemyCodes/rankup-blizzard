@@ -19,7 +19,7 @@ public class PlayersJoinListener implements Listener {
         Player player = event.getPlayer();
         PlayersData playersData = database.findPlayerData(player.getUniqueId().toString());
         if (playersData == null) {
-            playersData = new PlayersData(player.getUniqueId().toString(), player.getName());
+            playersData = new PlayersData(player.getUniqueId().toString(), player.getName(), 0.0, 0.0);
             try {
                 database.createPlayerData(playersData);
             } catch(Exception err) {

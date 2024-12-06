@@ -1,6 +1,7 @@
 package blizzard.development.spawners.commands;
 
 import blizzard.development.spawners.commands.spawners.subcommands.GiveCommand;
+import blizzard.development.spawners.commands.spawners.subcommands.RankingCommand;
 import blizzard.development.spawners.commands.spawners.subcommands.ReloadCommand;
 import blizzard.development.spawners.handlers.enums.Spawners;
 import blizzard.development.spawners.utils.PluginImpl;
@@ -18,7 +19,8 @@ public class CommandRegistry {
 
         Arrays.asList(
                 new GiveCommand(),
-                new ReloadCommand()
+                new ReloadCommand(),
+                new RankingCommand()
         ).forEach(paperCommandManager::registerCommand);
 
         paperCommandManager.getCommandCompletions().registerCompletion("spawners", c -> Spawners.getAllTypes());

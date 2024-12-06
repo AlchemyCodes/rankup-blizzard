@@ -2,7 +2,9 @@ package blizzard.development.spawners.listeners.spawners.spawners;
 
 import blizzard.development.spawners.builders.DisplayBuilder;
 import blizzard.development.spawners.builders.EffectsBuilder;
+import blizzard.development.spawners.database.cache.getters.PlayersCacheGetters;
 import blizzard.development.spawners.database.cache.managers.SpawnersCacheManager;
+import blizzard.development.spawners.database.cache.setters.PlayersCacheSetters;
 import blizzard.development.spawners.database.cache.setters.SpawnersCacheSetters;
 import blizzard.development.spawners.database.storage.SpawnersData;
 import blizzard.development.spawners.handlers.enums.Spawners;
@@ -105,6 +107,8 @@ public class SpawnerPlaceListener implements Listener {
     }
 
     private Boolean setupSpawner(Player player, String id, Location spawnerLocation, Spawners spawner, Double amount, Integer speed, Integer lucky, Integer experience) {
+        final PlayersCacheSetters setters = PlayersCacheSetters.getInstance();
+
         spawnersHandler.createStaticSpawner(spawnerLocation, spawner);
 
         PlotArea plotArea = PlotSquared.get().getPlotAreaManager().getPlotArea(LocationUtil.getPlotLocation(spawnerLocation.getBlock()));
@@ -126,6 +130,8 @@ public class SpawnerPlaceListener implements Listener {
         SpawnersData spawnerData = SpawnersCacheManager.getInstance().getSpawnerData(id);
         SpawnersMobsTaskManager.getInstance().startTask(spawnerData);
 
+        setters.addPlacedSpawners(player, amount);
+
         DisplayBuilder.createSpawnerDisplay(spawnerLocation,
                 spawner.getType(),
                 amount,
@@ -142,6 +148,7 @@ public class SpawnerPlaceListener implements Listener {
     public Boolean stackSpawners(Player player, Location location, boolean sneaking, int radius) {
         final SpawnersCacheSetters setters = SpawnersCacheSetters.getInstance();
         final SpawnersUtils utils = SpawnersUtils.getInstance();
+        final PlayersCacheSetters playersSetters = PlayersCacheSetters.getInstance();
 
         ItemStack spawnerItem = player.getInventory().getItemInMainHand();
 
@@ -185,6 +192,8 @@ public class SpawnerPlaceListener implements Listener {
                     }
                     amount = Double.parseDouble(spawnersAmount);
                 }
+
+                playersSetters.addPlacedSpawners(player, amount);
 
                 setters.setSpawnerAmout(closestSpawner.getId(), closestSpawner.getAmount() + amount);
                 SpawnersMobsTaskManager.getInstance().syncMobAmount(closestSpawner.getId(), closestSpawner.getMobAmount());
