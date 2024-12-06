@@ -1,9 +1,8 @@
 package blizzard.development.fishing.listeners.items;
 
 import blizzard.development.fishing.handlers.FishingNetHandler;
-import blizzard.development.fishing.handlers.FishingRodHandler;
 import blizzard.development.fishing.inventories.items.FishingNetInventory;
-import blizzard.development.fishing.tasks.FishingNetTask;
+import blizzard.development.fishing.tasks.items.FishingNetTask;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;

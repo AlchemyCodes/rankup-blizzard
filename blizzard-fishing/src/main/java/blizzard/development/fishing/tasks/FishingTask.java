@@ -1,9 +1,11 @@
 package blizzard.development.fishing.tasks;
 
+import blizzard.development.core.api.CoreAPI;
 import blizzard.development.fishing.database.cache.FishingCacheManager;
 import blizzard.development.fishing.database.cache.methods.PlayersCacheMethod;
 import blizzard.development.fishing.database.cache.methods.RodsCacheMethod;
 import blizzard.development.fishing.handlers.FishBucketHandler;
+import blizzard.development.fishing.utils.PluginImpl;
 import blizzard.development.fishing.utils.fish.FishesUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -26,10 +28,12 @@ public final class FishingTask implements Runnable {
     @Override
     public void run() {
         for (Map.Entry<UUID, Long> entry : FishingCacheManager.getFishermans().entrySet()) {
-
             final long lastFishTime = entry.getValue();
+            int baseTaskTime = PluginImpl.getInstance().Config.getConfig().getInt("fishing.taskTime");
 
-            if (lastFishTime + TimeUnit.SECONDS.toMillis(2) > System.currentTimeMillis()) {
+            int geyserTaskTime = EventsTask.isGeyserEventOn ? baseTaskTime / 2 : baseTaskTime;
+
+            if (lastFishTime + TimeUnit.SECONDS.toMillis(geyserTaskTime) > System.currentTimeMillis()) {
                 continue;
             }
 
@@ -56,13 +60,9 @@ public final class FishingTask implements Runnable {
             return;
         }
 
-        if (fishesUtils.giveFrozenFish(player, cacheMethod)) {
+        if (fishesUtils.giveChanceFrozenFish(player, cacheMethod)) {
             return;
         }
-
-//        if (isSnowing) {
-//            cacheMethod.setFrozenFish(player,cacheMethod.getFrozenFish(player) + 1);
-//        }
 
         List<String> availableFishes = fishesUtils.getFishes(rarity);
 

@@ -66,10 +66,16 @@ public class FishBucketInventory {
             int requiredStrength = fishesUtils.getStrengthNecessary(rarity);
 
             GuiItem item = new GuiItem(createFishItem(fishData, fishPrice, fishAmount, strength, requiredStrength), event -> {
+                event.setCancelled(true);
+
+                if (strength < requiredStrength) {
+                    player.sendMessage("vc nao tem força para lidar com esse peixe!");
+                    return;
+                }
+
                 int quantity = cacheMethod.getFishAmount(player, fishName);
                 if (quantity == 0) {
                     player.sendMessage("vc nao tem " + fishName + " para vender");
-                    event.setCancelled(true);
                     return;
                 }
                 int fishValue = fishesUtils.getFishValue(fishData.getRarity());
@@ -78,21 +84,19 @@ public class FishBucketInventory {
                 currenciesAPI.addBalance(player, coins, totalValue);
                 player.sendMessage("vc vendeu " + quantity + " " + fishName + " por " + totalValue + " moedas.");
                 cacheMethod.setFishAmount(player, fishName, 0);
-
-                event.setCancelled(true);
             });
 
             pane.addItem(item, Slot.fromIndex(fishData.getSlot()));
         });
 
-        GuiItem backButton = new GuiItem(new ItemBuilder(Material.RED_DYE)
-                .setDisplayName("§cVoltar")
-                .setLore(List.of("§7Volte ao menu anterior."))
-                .build(),
-
-                event -> {
-                    event.setCancelled(true);
-                });
+//        GuiItem backButton = new GuiItem(new ItemBuilder(Material.RED_DYE)
+//                .setDisplayName("§cVoltar")
+//                .setLore(List.of("§7Volte ao menu anterior."))
+//                .build(),
+//
+//                event -> {
+//                    event.setCancelled(true);
+//                });
 
         GuiItem upgradesButton = new GuiItem(new ItemBuilder(Material.LIME_DYE)
                 .setDisplayName("§aMelhorias")
@@ -129,8 +133,8 @@ public class FishBucketInventory {
         }
 
         pane.addItem(frozenFish, Slot.fromIndex(25));
-        pane.addItem(backButton, Slot.fromIndex(46));
-        pane.addItem(upgradesButton, Slot.fromIndex(49));
+//        pane.addItem(backButton, Slot.fromIndex(46));
+        pane.addItem(upgradesButton, Slot.fromIndex(48));
 
         inventory.addPane(pane);
         inventory.show(player);

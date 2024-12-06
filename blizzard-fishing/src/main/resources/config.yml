@@ -1,3 +1,6 @@
+fishing:
+  taskTime: 3
+
 fishes:
   bacalhau:
     rarity: "common"
@@ -34,10 +37,20 @@ valueByRarity:
   rare: 2
   legendary: 3
   mystic: 4
+  frozen: 3
 
 xpByRarity:
   common: 1
   rare: 2
   legendary: 3
   mystic: 4
+  frozen: 3
+
+unfreeze:
+  value: 10
+
+events:
+  time: 20
+  geyser:
+    duration: 5
 

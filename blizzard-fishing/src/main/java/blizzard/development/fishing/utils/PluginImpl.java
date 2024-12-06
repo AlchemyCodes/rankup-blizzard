@@ -7,6 +7,10 @@ import blizzard.development.fishing.database.dao.PlayersDAO;
 import blizzard.development.fishing.database.dao.RodsDAO;
 import blizzard.development.fishing.listeners.ListenerRegistry;
 import blizzard.development.fishing.tasks.*;
+import blizzard.development.fishing.tasks.database.PlayerSaveTask;
+import blizzard.development.fishing.tasks.database.RodSaveTask;
+import blizzard.development.fishing.tasks.items.FishingNetTask;
+import blizzard.development.fishing.tasks.items.FurnaceTask;
 import co.aikar.commands.Locales;
 import co.aikar.commands.PaperCommandManager;
 import lombok.Getter;
@@ -92,6 +96,7 @@ public class PluginImpl {
         new FishingTask(plugin);
         new FishingNetTask(plugin);
         new FurnaceTask(plugin);
+        new EventsTask(plugin);
     }
 
     private void registerListeners() {

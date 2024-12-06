@@ -1,4 +1,4 @@
-package blizzard.development.fishing.tasks;
+package blizzard.development.fishing.tasks.items;
 
 import blizzard.development.fishing.database.cache.methods.PlayersCacheMethod;
 import blizzard.development.fishing.database.cache.methods.RodsCacheMethod;
