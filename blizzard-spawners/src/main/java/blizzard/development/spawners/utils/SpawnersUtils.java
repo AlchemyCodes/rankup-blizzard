@@ -113,6 +113,21 @@ public class SpawnersUtils {
         return 0;
     }
 
+    public String getSpawnerDrops(Spawners spawner) {
+        if (spawner.equals(Spawners.PIG)) {
+            return "Bacon(s)";
+        } else if (spawner.equals(Spawners.COW)) {
+            return "Picanha(s)";
+        } else if (spawner.equals(Spawners.MOOSHROOM)) {
+            return "Cogumelo(s)";
+        } else if (spawner.equals(Spawners.SHEEP)) {
+            return "Cordeiro(s)";
+        } else if (spawner.equals(Spawners.ZOMBIE)) {
+            return "Carniça(s)";
+        }
+        return null;
+    }
+
     public String getSpawnerColor(Spawners spawner) {
         if (spawner.equals(Spawners.PIG)) {
             return "§d";

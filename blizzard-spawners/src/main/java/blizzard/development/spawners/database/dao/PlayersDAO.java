@@ -4,6 +4,8 @@ import blizzard.development.spawners.database.DatabaseConnection;
 import blizzard.development.spawners.database.storage.PlayersData;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class PlayersDAO {
@@ -13,8 +15,12 @@ public class PlayersDAO {
 
             String sql_player = "CREATE TABLE IF NOT EXISTS spawners_users (" +
                     "uuid VARCHAR(36) PRIMARY KEY, " +
-                    "nickname VARCHAR(36)" +
+                    "nickname VARCHAR(36), " +
+                    "purchasedSpawners DOUBLE DEFAULT 0, " +
+                    "placedSpawners DOUBLE DEFAULT 0" +
                     ")";
+            stat.execute(sql_player);
+
             stat.execute(sql_player);
 
         } catch (SQLException e) {
@@ -43,7 +49,9 @@ public class PlayersDAO {
                 if (resultSet.next()) {
                     return new PlayersData(
                             resultSet.getString("uuid"),
-                            resultSet.getString("nickname")
+                            resultSet.getString("nickname"),
+                            resultSet.getDouble("purchasedSpawners"),
+                            resultSet.getDouble("placedSpawners")
                     );
                 }
             }
@@ -54,11 +62,13 @@ public class PlayersDAO {
     }
 
     public void createPlayerData(PlayersData playerData) throws SQLException {
-        String sql = "INSERT INTO spawners_users (uuid, nickname) VALUES (?, ?)";
+        String sql = "INSERT INTO spawners_users (uuid, nickname, purchasedSpawners, placedSpawners) VALUES (?, ?, ?, ?)";
         executeUpdate(sql, statement -> {
             try {
                 statement.setString(1, playerData.getUuid());
                 statement.setString(2, playerData.getNickname());
+                statement.setDouble(3, playerData.getPurchasedSpawners());
+                statement.setDouble(4, playerData.getPlacedSpawners());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -77,14 +87,39 @@ public class PlayersDAO {
     }
 
     public void updatePlayerData(PlayersData playerData) throws SQLException {
-        String sql = "UPDATE spawners_users SET nickname = ? WHERE uuid = ?";
+        String sql = "UPDATE spawners_users SET nickname = ?, purchasedSpawners = ?, placedSpawners = ? WHERE uuid = ?";
         executeUpdate(sql, statement -> {
             try {
                 statement.setString(1, playerData.getNickname());
-                statement.setString(2, playerData.getUuid());
+                statement.setDouble(2, playerData.getPurchasedSpawners());
+                statement.setDouble(3, playerData.getPlacedSpawners());
+                statement.setString(4, playerData.getUuid());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         });
+    }
+
+    public List<PlayersData> getAllPlayersData() throws SQLException {
+        String sql = "SELECT * FROM spawners_users";
+        List<PlayersData> playersDataList = new ArrayList<>();
+
+        try (Connection connection = DatabaseConnection.getInstance().getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(sql)) {
+
+            while (resultSet.next()) {
+                playersDataList.add(new PlayersData(
+                        resultSet.getString("uuid"),
+                        resultSet.getString("nickname"),
+                        resultSet.getDouble("purchasedSpawners"),
+                        resultSet.getDouble("placedSpawners")
+                ));
+            }
+        } catch (SQLException e) {
+            System.out.println("Failed to retrieve players data: " + e.getMessage());
+        }
+
+        return playersDataList;
     }
 }

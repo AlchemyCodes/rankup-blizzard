@@ -1,0 +1,48 @@
+package blizzard.development.spawners.database.cache.setters;
+
+import blizzard.development.spawners.database.cache.managers.PlayersCacheManager;
+import blizzard.development.spawners.database.storage.PlayersData;
+import org.bukkit.entity.Player;
+
+public class PlayersCacheSetters {
+    private static PlayersCacheSetters instance;
+
+    private final PlayersCacheManager cache = PlayersCacheManager.getInstance();
+
+    public void addPlacedSpawners(Player player, double amount) {
+        PlayersData data = cache.getPlayerData(player);
+        if (data != null) {
+            data.setPlacedSpawners(data.getPlacedSpawners() + amount);
+            cache.cachePlayerData(player, data);
+        }
+    }
+
+    public void removePlacedSpawners(Player player, double amount) {
+        PlayersData data = cache.getPlayerData(player);
+        if (data != null) {
+            data.setPlacedSpawners(data.getPlacedSpawners() - amount);
+            cache.cachePlayerData(player, data);
+        }
+    }
+
+    public void addePurchasedSpawners(Player player, double amount) {
+        PlayersData data = cache.getPlayerData(player);
+        if (data != null) {
+            data.setPurchasedSpawners(data.getPurchasedSpawners() + amount);
+            cache.cachePlayerData(player, data);
+        }
+    }
+
+    public void removePurchasedSpawners(Player player, double amount) {
+        PlayersData data = cache.getPlayerData(player);
+        if (data != null) {
+            data.setPurchasedSpawners(data.getPurchasedSpawners() - amount);
+            cache.cachePlayerData(player, data);
+        }
+    }
+
+    public static PlayersCacheSetters getInstance() {
+        if (instance == null) instance = new PlayersCacheSetters();
+        return instance;
+    }
+}
