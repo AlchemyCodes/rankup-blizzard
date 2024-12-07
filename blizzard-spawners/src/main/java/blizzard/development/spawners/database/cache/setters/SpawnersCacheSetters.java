@@ -3,6 +3,8 @@ package blizzard.development.spawners.database.cache.setters;
 import blizzard.development.spawners.database.cache.managers.SpawnersCacheManager;
 import blizzard.development.spawners.database.storage.SpawnersData;
 
+import java.util.List;
+
 public class SpawnersCacheSetters {
     private static SpawnersCacheSetters instance;
 
@@ -69,6 +71,34 @@ public class SpawnersCacheSetters {
         SpawnersData data = cache.getSpawnerData(id);
         if (data != null) {
             data.setExperienceLevel(data.getExperienceLevel() + amount);
+            cache.cacheSpawnerData(id, data);
+        }
+    }
+
+    public void addSpawnerFriend(String id, List<String> friend) {
+        SpawnersData data = cache.getSpawnerData(id);
+        if (data != null) {
+            List<String> friends = data.getFriends();
+            friends.addAll(friend);
+            data.setFriends(friends);
+            cache.cacheSpawnerData(id, data);
+        }
+    }
+
+    public void removeSpawnerFriend(String id, List<String> friend) {
+        SpawnersData data = cache.getSpawnerData(id);
+        if (data != null) {
+            List<String> friends = data.getFriends();
+            friends.removeAll(friend);
+            data.setFriends(friends);
+            cache.cacheSpawnerData(id, data);
+        }
+    }
+
+    public void addSpawnerFriendsLimit(String id, int amount) {
+        SpawnersData data = cache.getSpawnerData(id);
+        if (data != null) {
+            data.setFriendsLimit(data.getFriendsLimit() + amount);
             cache.cacheSpawnerData(id, data);
         }
     }

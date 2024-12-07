@@ -1,5 +1,7 @@
 package blizzard.development.spawners.database.storage;
 
+import java.util.List;
+
 public class SpawnersData {
     private String id;
     private String type;
@@ -10,8 +12,10 @@ public class SpawnersData {
     private String plotId;
     private Double amount, mobAmount, drops;
     private Integer speedLevel, luckyLevel, experienceLevel;
+    private List<String> friends;
+    private Integer friendsLimit;
 
-    public SpawnersData(String id, String type, String location, String mobLocation, String nickname, String state, String plotId, Double amount, Double mobAmount, Double drops, Integer speedLevel, Integer luckyLevel, Integer experienceLevel) {
+    public SpawnersData(String id, String type, String location, String mobLocation, String nickname, String state, String plotId, Double amount, Double mobAmount, Double drops, Integer speedLevel, Integer luckyLevel, Integer experienceLevel, List<String> friends, Integer friendsLimit) {
         this.id = id;
         this.type = type;
         this.location = location;
@@ -25,6 +29,8 @@ public class SpawnersData {
         this.speedLevel = speedLevel;
         this.luckyLevel = luckyLevel;
         this.experienceLevel = experienceLevel;
+        this.friends = friends;
+        this.friendsLimit = friendsLimit;
     }
 
     public String getId() {
@@ -129,5 +135,21 @@ public class SpawnersData {
 
     public void setExperienceLevel(Integer experienceLevel) {
         this.experienceLevel = experienceLevel;
+    }
+
+    public List<String> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(List<String> friends) {
+        this.friends = friends;
+    }
+
+    public Integer getFriendsLimit() {
+        return friendsLimit;
+    }
+
+    public void setFriendsLimit(Integer friendsLimit) {
+        this.friendsLimit = friendsLimit;
     }
 }

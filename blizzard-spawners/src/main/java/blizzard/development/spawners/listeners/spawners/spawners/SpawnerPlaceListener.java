@@ -58,6 +58,7 @@ public class SpawnerPlaceListener implements Listener {
 
             if (stackSpawners(player, spawnerBlock.getLocation(), player.isSneaking(), 4)) {
                 player.sendActionBar(TextAPI.parse("§a§lYAY! §aVocê agrupou esses spawners com sucesso."));
+                cooldown.createCountdown(player, cooldownName, 1000, TimeUnit.MILLISECONDS);
                 event.setCancelled(true);
                 return;
             }
@@ -69,7 +70,7 @@ public class SpawnerPlaceListener implements Listener {
             }
 
             ItemStack spawnerItem = player.getInventory().getItemInMainHand();
-            final String id = UUID.randomUUID().toString().substring(0, 8);
+            final String id = UUID.randomUUID().toString().substring(0, 10);
             boolean found = false;
 
             for (Spawners spawnerType : Spawners.values()) {
@@ -102,7 +103,7 @@ public class SpawnerPlaceListener implements Listener {
                 return;
             }
 
-            cooldown.createCountdown(player, cooldownName, 500, TimeUnit.MILLISECONDS);
+            cooldown.createCountdown(player, cooldownName, 1000, TimeUnit.MILLISECONDS);
         }
     }
 
@@ -123,7 +124,22 @@ public class SpawnerPlaceListener implements Listener {
         mobLocation.add(direction.multiply(1.0));
         mobLocation.setDirection(direction);
 
-        if (!SpawnersMethods.createSpawner(player, spawner, id, LocationUtil.getSerializedLocation(spawnerLocation), LocationUtil.getSerializedLocation(mobLocation), States.PRIVATE.getState(), String.valueOf(plot.getId()), amount, 0.0, 0.0, speed, lucky, experience)) {
+        if (!SpawnersMethods.createSpawner(
+                player,
+                spawner,
+                id,
+                LocationUtil.getSerializedLocation(spawnerLocation),
+                LocationUtil.getSerializedLocation(mobLocation),
+                States.PRIVATE.getState(),
+                String.valueOf(plot.getId()),
+                amount,
+                0.0,
+                0.0,
+                speed,
+                lucky,
+                experience,
+                5
+        )) {
             return false;
         }
 
@@ -180,6 +196,13 @@ public class SpawnerPlaceListener implements Listener {
 
                 int spawnerItemAmount = player.getInventory().getItemInMainHand().getAmount();
                 double amount;
+
+                if (closestSpawner.getState().equals(States.PRIVATE.getState())
+                        && !player.getName().equals(closestSpawner.getNickname())
+                        && !player.hasPermission("blizzard.spawners.admin")
+                ) {
+                    return false;
+                }
 
                 if (sneaking) {
                     player.getInventory().setItemInMainHand(null);
