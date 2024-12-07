@@ -88,7 +88,7 @@ public class SpawnerBreakListener implements Listener {
             removeSpawner(player, data.getId(), data.getType(), data.getAmount());
             SpawnersMobsTaskManager.getInstance().stopTask(data.getId());
 
-            cooldown.createCountdown(player, cooldownName, 500, TimeUnit.MILLISECONDS);
+            cooldown.createCountdown(player, cooldownName, 1000, TimeUnit.MILLISECONDS);
         }
     }
 

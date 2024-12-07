@@ -4,6 +4,8 @@ package blizzard.development.spawners.database.cache.getters;
 import blizzard.development.spawners.database.cache.managers.SpawnersCacheManager;
 import blizzard.development.spawners.database.storage.SpawnersData;
 
+import java.util.List;
+
 public class SpawnersCacheGetters {
     private static SpawnersCacheGetters instance;
 
@@ -101,6 +103,22 @@ public class SpawnersCacheGetters {
         SpawnersData data = cache.getSpawnerData(id);
         if (data != null) {
             return data.getExperienceLevel();
+        }
+        return 0;
+    }
+
+    public List<String> getSpawnerFriends(String id) {
+        SpawnersData data = cache.getSpawnerData(id);
+        if (data != null) {
+            return data.getFriends();
+        }
+        return null;
+    }
+
+    public int getSpawnerFriendsLimit(String id) {
+        SpawnersData data = cache.getSpawnerData(id);
+        if (data != null) {
+            return data.getFriendsLimit();
         }
         return 0;
     }

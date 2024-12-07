@@ -9,13 +9,13 @@ import blizzard.development.spawners.inventories.drops.items.DropsItems;
 import blizzard.development.spawners.inventories.spawners.SpawnersInventory;
 import blizzard.development.spawners.managers.SpawnerAccessManager;
 import blizzard.development.spawners.utils.CooldownUtils;
+import blizzard.development.spawners.utils.NumberFormat;
 import blizzard.development.spawners.utils.SpawnersUtils;
 import blizzard.development.spawners.utils.items.TextAPI;
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
 import com.github.stefvanschie.inventoryframework.pane.util.Slot;
-import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Sound;
@@ -112,9 +112,14 @@ public class DropsInventory {
 
         utils.createCountdown(cooldownKey, 1, TimeUnit.SECONDS);
 
-        player.sendActionBar(TextAPI.parse("§a§lYAY! §aVocê vendeu os drops desse gerador com sucesso."));
+        String formattedValue = NumberFormat.getInstance().formatNumber(drops * unitValue);
+
+        player.sendActionBar(TextAPI.parse(
+                "§a§lYAY! §aVocê vendeu os drops desse gerador por §2§l$§a§l" + formattedValue + "§7 (0% de bônus)§a."
+        ));
         player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_YES, 1.0f, 1.0f);
-        DropsInventory.getInstance().open(player, id);
+        player.getOpenInventory().close();
+
     }
 
     public static DropsInventory getInstance() {

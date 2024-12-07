@@ -6,6 +6,8 @@ import blizzard.development.spawners.database.cache.setters.SpawnersCacheSetters
 import blizzard.development.spawners.handlers.enums.States;
 import blizzard.development.spawners.inventories.drops.DropsInventory;
 import blizzard.development.spawners.inventories.enchantments.EnchantmentsInventory;
+import blizzard.development.spawners.inventories.friends.FriendsInventory;
+import blizzard.development.spawners.inventories.friends.items.FriendsItems;
 import blizzard.development.spawners.inventories.ranking.PurchasedInventory;
 import blizzard.development.spawners.inventories.spawners.items.SpawnersItems;
 import blizzard.development.spawners.managers.SpawnerAccessManager;
@@ -19,6 +21,9 @@ import com.github.stefvanschie.inventoryframework.pane.util.Slot;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SpawnersInventory {
     private static SpawnersInventory instance;
@@ -58,6 +63,7 @@ public class SpawnersInventory {
                 player.getInventory().close();
                 return;
             }
+            FriendsInventory.getInstance().open(player, id);
             event.setCancelled(true);
         });
 
