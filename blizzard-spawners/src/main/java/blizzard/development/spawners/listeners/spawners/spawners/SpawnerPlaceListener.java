@@ -3,6 +3,7 @@ package blizzard.development.spawners.listeners.spawners.spawners;
 import blizzard.development.spawners.builders.DisplayBuilder;
 import blizzard.development.spawners.builders.EffectsBuilder;
 import blizzard.development.spawners.database.cache.getters.PlayersCacheGetters;
+import blizzard.development.spawners.database.cache.getters.SpawnersCacheGetters;
 import blizzard.development.spawners.database.cache.managers.SpawnersCacheManager;
 import blizzard.development.spawners.database.cache.setters.PlayersCacheSetters;
 import blizzard.development.spawners.database.cache.setters.SpawnersCacheSetters;
@@ -200,6 +201,7 @@ public class SpawnerPlaceListener implements Listener {
                 if (closestSpawner.getState().equals(States.PRIVATE.getState())
                         && !player.getName().equals(closestSpawner.getNickname())
                         && !player.hasPermission("blizzard.spawners.admin")
+                        && !SpawnersCacheGetters.getInstance().getSpawnerFriends(closestSpawner.getId()).contains(player.getName())
                 ) {
                     return false;
                 }

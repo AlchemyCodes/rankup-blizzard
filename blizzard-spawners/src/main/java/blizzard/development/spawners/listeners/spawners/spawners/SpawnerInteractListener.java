@@ -1,5 +1,6 @@
 package blizzard.development.spawners.listeners.spawners.spawners;
 
+import blizzard.development.spawners.database.cache.getters.SpawnersCacheGetters;
 import blizzard.development.spawners.database.cache.managers.SpawnersCacheManager;
 import blizzard.development.spawners.database.storage.SpawnersData;
 import blizzard.development.spawners.handlers.enums.States;
@@ -51,6 +52,7 @@ public class SpawnerInteractListener implements Listener {
                 if (data.getState().equals(States.PRIVATE.getState())
                         && !player.getName().equals(data.getNickname())
                         && !player.hasPermission("blizzard.spawners.admin")
+                        && !SpawnersCacheGetters.getInstance().getSpawnerFriends(data.getId()).contains(player.getName())
                 ) {
                     player.sendActionBar(TextAPI.parse(
                             "§c§lEI! §cVocê não pode interagir com esse spawner.")

@@ -1,5 +1,6 @@
 package blizzard.development.spawners.utils;
 
+import blizzard.development.spawners.builders.DisplayBuilder;
 import blizzard.development.spawners.commands.CommandRegistry;
 import blizzard.development.spawners.database.DatabaseConnection;
 import blizzard.development.spawners.database.cache.managers.PlayersCacheManager;
@@ -64,11 +65,14 @@ public class PluginImpl {
         registerDatabase();
         registerListeners();
         registerCommands();
+
+        DisplayBuilder.createAllSpawnerDisplay();
     }
 
     public void onDisable() {
         DatabaseConnection.getInstance().close();
         SpawnersMobsTaskManager.getInstance().stopAllTasks();
+        DisplayBuilder.removeAllSpawnerDisplay();
     }
 
     public void registerDatabase() {

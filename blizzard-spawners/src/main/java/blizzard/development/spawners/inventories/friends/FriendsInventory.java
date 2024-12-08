@@ -80,6 +80,7 @@ public class FriendsInventory {
         }
 
         player.sendActionBar("§a§lYAY! §aO jogador §7" + friend + "§a foi removido como amigo do gerador.");
+        player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_YES, 1.0f, 1.0f);
         setters.removeSpawnerFriend(id, List.of(friend));
         open(player, id);
     }
@@ -96,13 +97,11 @@ public class FriendsInventory {
         List<String> messages = Arrays.asList(
                 "",
                 "§a Digite no chat o nome do jogador que deseja adicionar!",
-                "",
                 "§7 Digite 'cancelar' para cancelar a adição.",
                 ""
         );
         messages.forEach(player::sendMessage);
 
-        player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_YES, 1.0f, 1.0f);
         player.getOpenInventory().close();
     }
 
