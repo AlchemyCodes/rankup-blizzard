@@ -91,6 +91,7 @@ public class SpawnersInventory {
                 !player.getName().equals(getters.getSpawnerOwner(id))
                 && !player.hasPermission("blizzard.spawners.admin")
                 && getters.getSpawnerState(id).equalsIgnoreCase(States.PRIVATE.getState())
+                && !SpawnersCacheGetters.getInstance().getSpawnerFriends(id).contains(player.getName())
         ) {
             player.sendActionBar(TextAPI.parse("§c§lEI! §cVocê não é dono desse spawner."));
             player.getInventory().close();

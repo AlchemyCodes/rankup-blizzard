@@ -7,6 +7,7 @@ import blizzard.development.spawners.utils.PluginImpl;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -75,23 +76,33 @@ public class SpawnerFriendsListener implements Listener {
             return;
         }
 
-        if (getters.getSpawnerFriends(spawnerId).contains(player.getName())) {
+        if (getters.getSpawnerFriends(spawnerId).contains(friend.getName())) {
             player.sendActionBar("§c§lEI! §cEste jogador já tem acesso ao gerador.");
+            player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 0.5f, 0.5f);
             return;
         }
 
         if (friend.getName().equalsIgnoreCase(player.getName())) {
             player.sendActionBar("§c§lEI! §cVocê não pode se adicionar ao gerador.");
+            player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 0.5f, 0.5f);
+            return;
+        }
+
+        if (friend.getName().equalsIgnoreCase(getters.getSpawnerOwner(spawnerId))) {
+            player.sendActionBar("§c§lEI! §cVocê não pode adicionar o dono do gerador como amigo.");
+            player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 0.5f, 0.5f);
             return;
         }
 
         if (getters.getSpawnerFriends(spawnerId).size() >= getters.getSpawnerFriendsLimit(spawnerId)) {
             player.sendActionBar("§c§lEI! §cO gerador já atingiu o limite máximo de amigos.");
+            player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 0.5f, 0.5f);
             return;
         }
 
         setters.addSpawnerFriend(spawnerId, List.of(friend.getName()));
         player.sendActionBar("§a§lYAY! §aO jogador §7" + message + "§a foi adicionado como amigo ao gerador.");
+        player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_YES, 1.0f, 1.0f);
 
         removePendingInvite(player);
     }

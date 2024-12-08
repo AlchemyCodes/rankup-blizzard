@@ -1,7 +1,6 @@
 package blizzard.development.spawners.inventories.friends.items;
 
 import blizzard.development.spawners.database.cache.getters.SpawnersCacheGetters;
-import blizzard.development.spawners.database.cache.managers.SpawnersCacheManager;
 import blizzard.development.spawners.utils.items.SkullAPI;
 import blizzard.development.spawners.utils.items.TextAPI;
 import org.bukkit.Material;
@@ -20,10 +19,15 @@ public class FriendsItems {
 
         String display = "§eAmigo #§l" + (position + 1);
         List<String> lore = Arrays.asList(
+                "§7O jogador ´§f" + player + "§7´ está",
+                "§7adicionado como amigo.",
                 "",
-                "§7Nome: §f" + player,
+                "§f Permissões:",
+                "§8  §7Matar mobs;",
+                "§8  §7Gerenciar drops;",
+                "§8  §7Gerenciar encantentos.",
                 "",
-                "§cClique aqui para remover."
+                "§eClique aqui para remover."
         );
 
         meta.displayName(TextAPI.parse(display));

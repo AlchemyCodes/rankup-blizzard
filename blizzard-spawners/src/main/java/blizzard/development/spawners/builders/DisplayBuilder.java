@@ -1,27 +1,32 @@
 package blizzard.development.spawners.builders;
 
-import blizzard.development.spawners.handlers.enums.Spawners;
+import blizzard.development.spawners.database.cache.managers.SpawnersCacheManager;
+import blizzard.development.spawners.database.storage.SpawnersData;
 import blizzard.development.spawners.handlers.enums.States;
-import blizzard.development.spawners.utils.NumberFormat;
-import blizzard.development.spawners.utils.items.TextAPI;
-import org.bukkit.Color;
+import blizzard.development.spawners.utils.LocationUtil;
+import blizzard.development.spawners.utils.SpawnersUtils;
+import eu.decentsoftware.holograms.api.DHAPI;
+import eu.decentsoftware.holograms.api.holograms.Hologram;
 import org.bukkit.Location;
-import org.bukkit.entity.Display;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.TextDisplay;
+import blizzard.development.spawners.handlers.enums.Spawners;
+import blizzard.development.spawners.utils.NumberFormat;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public class DisplayBuilder {
+    private static final Map<Location, Hologram> holograms = new HashMap<>();
+    private static final SpawnersCacheManager cache = SpawnersCacheManager.getInstance();
+
     public static void createSpawnerDisplay(Location location, String spawnerType, Double amount, String state, String name) {
-        Location displayLoc = location.clone().add(0.5, 1, 0.5);
-        TextDisplay display = (TextDisplay) location.getWorld().spawnEntity(displayLoc, EntityType.TEXT_DISPLAY);
+        Location hologramLocation = location.clone().add(0.5, 2.4, 0.5);
 
-        display.setInvulnerable(true);
-        display.setPersistent(true);
+        final String id = UUID.randomUUID().toString().substring(0, 5);
 
-        display.setAlignment(TextDisplay.TextAlignment.CENTER);
-        display.setBillboard(Display.Billboard.CENTER);
-        display.setBackgroundColor(Color.fromARGB(0,0,0,0));
+        if (holograms.containsKey(hologramLocation)) {
+            removeSpawnerDisplay(hologramLocation);
+        }
 
         String formattedAmount = NumberFormat.getInstance().formatNumber(amount);
 
@@ -40,30 +45,62 @@ public class DisplayBuilder {
             spawner = spawnerType;
         }
 
-        String displayText = String.join("\n",
-                "",
+        String[] displayLines = {
                 spawner,
                 "§7Quantidade: §f§l" + formattedAmount + "§fx",
                 "§7Dono: §f" + name,
-                state,
-                ""
+                state
+        };
+
+        Hologram hologram = DHAPI.createHologram(
+                "holo_" + id,
+                hologramLocation
         );
 
-        display.text(TextAPI.parse(displayText));
 
-        display.setCustomName(null);
-        display.setCustomNameVisible(false);
+        for (String line : displayLines) {
+            DHAPI.addHologramLine(hologram, line);
+        }
 
-        display.setPersistent(true);
-        display.setDefaultBackground(false);
+        holograms.put(hologramLocation, hologram);
+    }
 
+    public static void createAllSpawnerDisplay() {
+        for (SpawnersData spawnerData : cache.spawnersCache.values()) {
+            if (spawnerData != null) {
+                Location location = LocationUtil.deserializeLocation(spawnerData.getLocation());
+                if (location == null) return;
+                if (location.getWorld() != null) {
+                    createSpawnerDisplay(
+                            location,
+                            SpawnersUtils.getInstance().getSpawnerFromName(spawnerData.getType()).getType(),
+                            spawnerData.getAmount(),
+                            SpawnersUtils.getInstance().getSpawnerState(States.valueOf(spawnerData.getState().toUpperCase())),
+                            spawnerData.getNickname()
+                    );
+                }
+            }
+        }
     }
 
     public static void removeSpawnerDisplay(Location location) {
-        location.getWorld().getNearbyEntities(location.clone().add(0.5, 1, 0.5), 1, 1, 1).forEach(entity -> {
-            if (entity instanceof TextDisplay) {
-                entity.remove();
+        Location hologramLocation = location.clone().add(0.5, 2.4, 0.5);
+
+        Hologram hologram = holograms.remove(hologramLocation);
+        if (hologram != null) {
+            DHAPI.removeHologram(hologram.getName());
+        }
+    }
+
+    public static void removeAllSpawnerDisplay() {
+        for (SpawnersData spawnerData : cache.spawnersCache.values()) {
+            if (spawnerData != null) {
+                Location location = LocationUtil.deserializeLocation(spawnerData.getLocation());
+                if (location == null) return;
+                if (location.getWorld() != null) {
+                    removeSpawnerDisplay(location);
+                }
             }
-        });
+        }
     }
 }
