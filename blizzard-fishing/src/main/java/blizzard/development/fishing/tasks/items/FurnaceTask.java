@@ -7,11 +7,13 @@ import blizzard.development.fishing.utils.PluginImpl;
 import blizzard.development.fishing.utils.fish.FishesUtils;
 import blizzard.development.fishing.utils.items.ItemBuilder;
 import org.bukkit.Material;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class FurnaceTask implements Runnable {
 
@@ -44,11 +46,12 @@ public class FurnaceTask implements Runnable {
             Integer progress = unfreezing.get(player);
 
             PlayersCacheMethod playersCacheMethod = PlayersCacheMethod.getInstance();
+            YamlConfiguration config = PluginImpl.getInstance().Messages.getConfig();
 
-            int coins = PluginImpl.getInstance().Config.getConfig().getInt("unfreeze.value");
+            int coins = config.getInt("unfreeze.value");
 
             if (playersCacheMethod.getFrozenFish(player) == 0) {
-                player.sendMessage("não teem peeixe congelado, cancelando desccongelamento!");
+                player.sendActionBar(config.getString("fornalha.naoTemPeixeCongelado"));
                 removePlayer(player);
                 return;
             }
@@ -83,11 +86,18 @@ public class FurnaceTask implements Runnable {
                     String randomFish = fishesUtils.getRandomFish();
                     fishesUtils.giveFish(player, randomFish, PlayersCacheMethod.getInstance());
 
-                    playersCacheMethod.setFrozenFish(player,playersCacheMethod.getFrozenFish(player) - 1);
+                    playersCacheMethod.setFrozenFish(player, playersCacheMethod.getFrozenFish(player) - 1);
                     CurrenciesAPI.getInstance().addBalance(player, Currencies.COINS, coins);
-                    player.sendMessage("§bSeu peixe descongelou e era um(a)" + randomFish + "!");
-                    player.sendMessage("§bvc ganhou §a$§f" + coins + "§bde coins por descongelar");
+
+                    String fishMessage = Objects.requireNonNull(config.getString("rede.descongelouPeixe"))
+                            .replace("{fishname}", randomFish);
+                    String moneyMessage = Objects.requireNonNull(config.getString("rede.descongelouPeixeMoney"))
+                            .replace("{coins}", String.valueOf(coins));
+
+                    player.sendMessage(fishMessage);
+                    player.sendMessage(moneyMessage);
                 }
+
             }
         }
     }

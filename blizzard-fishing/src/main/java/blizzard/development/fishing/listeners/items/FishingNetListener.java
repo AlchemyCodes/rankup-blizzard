@@ -1,10 +1,11 @@
 package blizzard.development.fishing.listeners.items;
 
 import blizzard.development.fishing.handlers.FishingNetHandler;
-import blizzard.development.fishing.inventories.items.FishingNetInventory;
 import blizzard.development.fishing.tasks.items.FishingNetTask;
+import blizzard.development.fishing.utils.PluginImpl;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -20,6 +21,8 @@ public class FishingNetListener implements Listener {
         Player player = event.getPlayer();
         Action action = event.getAction();
 
+        YamlConfiguration config = PluginImpl.getInstance().Messages.getConfig();
+
         if (event.getItem() == null) return;
 
         if (!(FishingNetHandler.isNet(player))) return;
@@ -30,18 +33,14 @@ public class FishingNetListener implements Listener {
                     if (b.getType() == Material.WATER) {
                         if (FishingNetTask.isCatchingTrash) {
                             FishingNetTask.isCatchingTrash = false;
-                            player.sendTitle("§cParou de coletar.", "");
+                            player.sendTitle(config.getString("rede.pararPegarLixo.title"), config.getString("rede.pararPegarLixo.sub-title"));
                         } else {
                             FishingNetTask.isCatchingTrash = true;
-                            player.sendTitle("§bColetando lixo!", "");
+                            player.sendTitle(config.getString("rede.comecarPegarLixo.title"), config.getString("rede.comecarPegarLixo.sub-title"));
                         }
                     }
                     event.setCancelled(true);
             }
-        } else {
-            FishingNetInventory.openNet(player);
-            event.setCancelled(true);
-            return;
         }
 
         event.setCancelled(true);

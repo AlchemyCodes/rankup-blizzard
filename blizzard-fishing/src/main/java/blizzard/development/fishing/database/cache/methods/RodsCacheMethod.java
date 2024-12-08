@@ -74,11 +74,11 @@ public class RodsCacheMethod {
     public void addMaterial(Player player, RodMaterials material) {
         RodsData data = RodsCacheManager.getInstance().getPlayerData(player);
         if (data != null) {
-            List<RodMaterials> materials = new ArrayList<>(data.getRodMaterials()); // Cria uma cópia mutável
+            List<RodMaterials> materials = new ArrayList<>(data.getRodMaterials());
             if (!materials.contains(material)) {
-                materials.add(material); // Modifica a lista mutável
-                data.setRodMaterials(materials); // Define a lista atualizada em data
-                cache.cachePlayerData(player, data); // Atualiza os dados no cache
+                materials.add(material);
+                data.setRodMaterials(materials);
+                cache.cachePlayerData(player, data);
             }
         }
     }

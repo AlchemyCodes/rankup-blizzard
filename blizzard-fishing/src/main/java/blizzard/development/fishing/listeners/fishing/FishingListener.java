@@ -1,14 +1,17 @@
 package blizzard.development.fishing.listeners.fishing;
 
 import blizzard.development.fishing.database.cache.FishingCacheManager;
+import blizzard.development.fishing.utils.PluginImpl;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.EquipmentSlot;
@@ -42,7 +45,8 @@ public final class FishingListener implements Listener {
         }
 
         FishingCacheManager.addFisherman(player);
-        player.sendMessage("§aVocê começou a pescar!");
+        YamlConfiguration config = PluginImpl.getInstance().Messages.getConfig();
+        player.sendTitle(config.getString("pesca.comecaPescar.title"), config.getString("pesca.comecaPescar.sub-title"));
     }
 
     @EventHandler
@@ -71,7 +75,8 @@ public final class FishingListener implements Listener {
         }
 
         FishingCacheManager.removeFisherman(player.getUniqueId());
-        player.sendMessage("§cVocê parou de pescar!");
+        YamlConfiguration config = PluginImpl.getInstance().Messages.getConfig();
+        player.sendTitle(config.getString("pesca.pararPescar.title"), config.getString("pesca.pararPescar.sub-title"));
     }
 
     @EventHandler

@@ -13,6 +13,7 @@ import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
 import com.github.stefvanschie.inventoryframework.pane.util.Slot;
 import org.bukkit.Material;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -31,21 +32,23 @@ public class FishBucketUpgrades {
 
         StaticPane pane = new StaticPane(0, 0, 9, 3);
 
+        YamlConfiguration messagesConfig = PluginImpl.getInstance().Messages.getConfig();
+
         GuiItem capacity = new GuiItem(capacity(cacheMethod, player), event -> { event.setCancelled(true);
             if (currenciesAPI.getBalance(player, coins) < capacityPrice(cacheMethod, player)) {
-                player.sendMessage("§cVocê não possue dinheiro suficiente!");
+                player.sendActionBar(messagesConfig.getString("balde.melhorias.naoTemMoney"));
                 return;
             }
 
             if (storage >= enchantments.getInt("enchantments.bucket.storage.maxstorage")) {
-                player.sendMessage("§cSeu armazém já possui a capacidade máxima.");
+                player.sendActionBar(messagesConfig.getString("balde.melhorias.naoDaMais"));
                 return;
             }
 
             currenciesAPI.removeBalance(player, coins, capacityPrice(cacheMethod, player));
             cacheMethod.setStorage(player, storage + enchantments.getInt("enchantments.bucket.storage.perupgrade"));
             FishBucketHandler.setBucket(player, player.getInventory().getHeldItemSlot());
-            player.sendMessage("§b§lYAY! §7Armazém aumentado em 50.");
+            player.sendActionBar(messagesConfig.getString("balde.melhorias.melhorou"));
             upgradesMenu(player);});
 
         GuiItem back = new GuiItem(back(), event -> {

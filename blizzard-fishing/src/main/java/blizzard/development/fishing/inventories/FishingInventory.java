@@ -1,9 +1,11 @@
 package blizzard.development.fishing.inventories;
 
+import blizzard.development.fishing.database.cache.methods.RodsCacheMethod;
 import blizzard.development.fishing.handlers.FishBucketHandler;
 import blizzard.development.fishing.handlers.FishingNetHandler;
 import blizzard.development.fishing.handlers.FishingRodHandler;
 import blizzard.development.fishing.handlers.FurnaceItemHandler;
+import blizzard.development.fishing.inventories.items.bucket.FishBucketInventory;
 import blizzard.development.fishing.utils.ProxyManager;
 import blizzard.development.fishing.utils.items.ItemBuilder;
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
@@ -26,11 +28,12 @@ public class FishingInventory {
         StaticPane pane = new StaticPane(0, 0, 9, 3);
 
         if (player.getWorld().getName().equals("pesca")) {
-            pane.addItem(createReturnButton(player), Slot.fromIndex(13));
+            pane.addItem(createReturnButton(player), Slot.fromIndex(12));
         } else {
-            pane.addItem(createGoButton(player), Slot.fromIndex(13));
+            pane.addItem(createGoButton(player), Slot.fromIndex(12));
         }
 
+        pane.addItem(createBucketItem(player), Slot.fromIndex(14));
         pane.addItem(createBoosterButton(player), Slot.fromIndex(16));
         pane.addItem(createMaterialsButton(player), Slot.fromIndex(10));
 
@@ -44,6 +47,13 @@ public class FishingInventory {
             player.getInventory().clear();
 
             player.teleport(Objects.requireNonNull(Bukkit.getWorld("spawn2")).getSpawnLocation());
+        });
+    }
+
+    private static GuiItem createBucketItem(Player player) {
+        return new GuiItem(openBucket(), event -> {
+            event.setCancelled(true);
+            FishBucketInventory.openBucket(player);
         });
     }
 
@@ -73,7 +83,7 @@ public class FishingInventory {
     private static GuiItem createMaterialsButton(Player player) {
         return new GuiItem(materials(), event -> {
             event.setCancelled(true);
-            MaterialsInventory.openMaterials(player);
+            MaterialsInventory.materialsMenu(player);
         });
     }
 
@@ -81,6 +91,13 @@ public class FishingInventory {
         return new ItemBuilder(Material.BARRIER)
                 .setDisplayName("§cSair")
                 .setLore(Arrays.asList("§7Clique para sair da pesca!"))
+                .build();
+    }
+
+    public static ItemStack openBucket() {
+        return new ItemBuilder(Material.PUFFERFISH_BUCKET)
+                .setDisplayName("§6Balde")
+                .setLore(Arrays.asList("§7Clique para ver seu balde!"))
                 .build();
     }
 

@@ -8,6 +8,7 @@ import blizzard.development.fishing.handlers.FishBucketHandler;
 import blizzard.development.fishing.utils.PluginImpl;
 import blizzard.development.fishing.utils.fish.FishesUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -31,7 +32,7 @@ public final class FishingTask implements Runnable {
             final long lastFishTime = entry.getValue();
             int baseTaskTime = PluginImpl.getInstance().Config.getConfig().getInt("fishing.taskTime");
 
-            int geyserTaskTime = EventsTask.isGeyserEventOn ? baseTaskTime / 2 : baseTaskTime;
+            int geyserTaskTime = EventsTask.isGeyserActive ? baseTaskTime / 2 : baseTaskTime;
 
             if (lastFishTime + TimeUnit.SECONDS.toMillis(geyserTaskTime) > System.currentTimeMillis()) {
                 continue;
@@ -52,6 +53,8 @@ public final class FishingTask implements Runnable {
         RodsCacheMethod rodsCacheMethod = RodsCacheMethod.getInstance();
         FishesUtils fishesUtils = FishesUtils.getInstance();
 
+        YamlConfiguration config = PluginImpl.getInstance().Messages.getConfig();
+
         int playerStrength = RodsCacheMethod.getInstance().getStrength(player);
         String rarity = fishesUtils.getRarity(playerStrength);
 
@@ -71,8 +74,16 @@ public final class FishingTask implements Runnable {
 
             fishesUtils.giveFish(player, caughtFish, cacheMethod);
             fishesUtils.giveXp(player, rarity, rodsCacheMethod);
+            double xp = fishesUtils.getXp(player, rarity, rodsCacheMethod);
             FishBucketHandler.setBucket(player, 8);
-            player.sendMessage("§bVocê pescou um " + caughtFish + " de raridade " + rarity + "!");
+
+            String message = config.getString("pesca.action");
+            if (message != null) {
+                player.sendActionBar(message
+                        .replace("{fishname}", caughtFish)
+                        .replace("{xp}", String.valueOf(xp)));
+            }
+
         }
     }
 }

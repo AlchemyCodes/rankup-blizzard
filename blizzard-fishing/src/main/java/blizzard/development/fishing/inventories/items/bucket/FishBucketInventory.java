@@ -50,6 +50,7 @@ public class FishBucketInventory {
         StaticPane pane = new StaticPane(0, 0, 9, 6);
 
         YamlConfiguration config = PluginImpl.getInstance().Config.getConfig();
+        YamlConfiguration configMessages = PluginImpl.getInstance().Messages.getConfig();
 
         FishesUtils fishesUtils = FishesUtils.getInstance();
         PlayersCacheMethod cacheMethod = PlayersCacheMethod.getInstance();
@@ -69,20 +70,38 @@ public class FishBucketInventory {
                 event.setCancelled(true);
 
                 if (strength < requiredStrength) {
-                    player.sendMessage("vc nao tem força para lidar com esse peixe!");
+                    String noStrengthMessage = configMessages.getString("balde.naoTemForca");
+                    if (noStrengthMessage != null) {
+                        player.sendActionBar(noStrengthMessage);
+                    }
                     return;
                 }
 
                 int quantity = cacheMethod.getFishAmount(player, fishName);
+
                 if (quantity == 0) {
-                    player.sendMessage("vc nao tem " + fishName + " para vender");
+                    String noFishMessage = configMessages.getString("balde.naoTemPeixe");
+                    if (noFishMessage != null) {
+                        player.sendActionBar(noFishMessage.replace("{fishname}", fishName));
+                    }
                     return;
                 }
+
                 int fishValue = fishesUtils.getFishValue(fishData.getRarity());
                 int totalValue = fishValue * quantity;
 
                 currenciesAPI.addBalance(player, coins, totalValue);
-                player.sendMessage("vc vendeu " + quantity + " " + fishName + " por " + totalValue + " moedas.");
+
+                String soldFishMessage = configMessages.getString("balde.vendeuPeixe");
+                if (soldFishMessage != null) {
+                    player.sendActionBar(
+                            soldFishMessage
+                                    .replace("{quantity}", String.valueOf(quantity))
+                                    .replace("{fishname}", fishName)
+                                    .replace("{coins}", String.valueOf(totalValue))
+                    );
+                }
+
                 cacheMethod.setFishAmount(player, fishName, 0);
             });
 
