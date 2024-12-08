@@ -118,11 +118,17 @@ public class FishesUtils {
     public void giveXp(Player player, String rarity, RodsCacheMethod rodsCacheMethod) {
         double xp = FishesUtils.getInstance().getFishXp(rarity);
 
+        xp = xp * rodsCacheMethod.getBestMaterial(player).getBonus();
+
         rodsCacheMethod.setXp(player, xp);
+    }
+
+    public double getXp(Player player, String rarity, RodsCacheMethod rodsCacheMethod) {
+        double xp = FishesUtils.getInstance().getFishXp(rarity);
 
         xp = xp * rodsCacheMethod.getBestMaterial(player).getBonus();
 
-        player.sendMessage("§aVocê ganhou " + xp + " de xp");
+        return xp;
     }
 
     public boolean giveChanceFrozenFish(Player player, PlayersCacheMethod cacheMethod) {;

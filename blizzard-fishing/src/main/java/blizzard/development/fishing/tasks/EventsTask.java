@@ -2,10 +2,13 @@ package blizzard.development.fishing.tasks;
 
 import blizzard.development.fishing.utils.PluginImpl;
 import org.bukkit.*;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+
+import java.util.List;
 
 public class EventsTask implements Runnable {
 
@@ -16,7 +19,7 @@ public class EventsTask implements Runnable {
     }
 
     private BukkitRunnable geyserRunnable;
-    public static Boolean isGeyserEventOn;
+    public static Boolean isGeyserActive = false;
 
     @Override
     public void run() {
@@ -27,17 +30,24 @@ public class EventsTask implements Runnable {
         PluginImpl instance = PluginImpl.getInstance();
         Plugin plugin = instance.plugin;
 
-        isGeyserEventOn = true;
+        YamlConfiguration config = PluginImpl.getInstance().Messages.getConfig();
+
+        isGeyserActive = true;
 
         for (Player player : Bukkit.getOnlinePlayers()) {
-            player.sendMessage("Os gêiseres estão em erupção! Aproveite para pescar mais rápido!");
+
+            List<String> messages = config.getStringList("eventos.começarEventoGeyser");
+            messages.forEach(player::sendMessage);
 
             new BukkitRunnable() {
                 @Override
                 public void run() {
                     cancelGeyserEvent();
-                    isGeyserEventOn = false;
-                    player.sendMessage("Os gêiseres não estão mais em erupção!");
+                    isGeyserActive = false;
+
+                    List<String> messages = config.getStringList("eventos.pararEventoGeyser");
+                    messages.forEach(player::sendMessage);
+
                 }
             }.runTaskLater(plugin, 20L * instance.Config.getConfig().getInt("events.geyser.duration"));
         }
@@ -57,6 +67,11 @@ public class EventsTask implements Runnable {
 
             @Override
             public void run() {
+                if (!isGeyserActive) {
+                    cancel();
+                    return;
+                }
+
                 World world = Bukkit.getWorld("pesca");
                 Location coneLocation = new Location(world, 3, -6, 21);
 
@@ -107,11 +122,12 @@ public class EventsTask implements Runnable {
             }
         };
 
-        geyserRunnable.runTaskTimer(plugin, 0L, 40L);
+        geyserRunnable.runTaskTimer(plugin, 0L, 2L);
     }
 
     public void cancelGeyserEvent() {
         if (geyserRunnable != null) {
+            Bukkit.getLogger().info("cancelando geyser");
             geyserRunnable.cancel();
             geyserRunnable = null;
         }

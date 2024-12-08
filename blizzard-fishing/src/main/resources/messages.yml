@@ -1,0 +1,49 @@
+eventos:
+  começarEventoGeyser:
+    - ""
+    - "§b§l PESCA! §b🐟 §bGêiseres."
+    - "§f Os gêiseres entraram em erupção."
+    - "§7 (Aproveite para pescar mais rápido)"
+    - ""
+  pararEventoGeyser:
+    - ""
+    - "§c§l PESCA! §c🐟 §7Gêiseres."
+    - "§c A erupção terminou, e a água se esfriou."
+    - ""
+
+pesca:
+  comecaPescar:
+    title: "§b§lPescaria!"
+    sub-title: "§bVocê agora está pescando."
+  pararPescar:
+    title: "§c§lPescaria!"
+    sub-title: "§cVocê parou de pescar."
+  action: "§b§l PESCA! §f+1 {fishname}§b🐟 §7/ §f+{xp} Xp"
+
+rede:
+  comecarPegarLixo:
+    title: "§3§lLixeira!"
+    sub-title: "§3🗑 §3Você agora está coletando lixos."
+  pararPegarLixo:
+    title: "§c§lLixeira!"
+    sub-title: "§c🗑 §cVocê parou de coletar lixos."
+  achouLixo: "§3§lYAY! §3Você coletou um lixo perdido nas águas."
+  melhorouEncantamento: "§3§lYAY! §3O encantamento '§f{enchant}§3' foi aprimorado."
+
+fornalha:
+  começouDescongelar:  "§3§lYAY! §3A sua fornalha começou a descongelar os seus peixes."
+  parouDescongelar:  "§c§lEI! §cA sua fornalha parou de descongelar os peixes."
+  estaDescongelando: "§c§lEI! §cVocê já está descongelando peixes."
+  naoTemPeixeCongelado: "§c§lEI! §cVocê não possui peixe(s) congelado(s), continue pescando."
+  descongelouPeixe: "§8[DEBUG] §bSeu peixe descongelou e era um(a) {fishname} !"               #só se quiser manter
+  descongelouPeixeMoney: "§8[DEBUG] §bvc ganhou §a$§f {coins} §b de coins por descongelar"  #só se quiser manter
+
+balde:
+  naoTemForca:  "§c§lEI! §cVocê não tem força para lidar com esse peixe."
+  naoTemPeixe: "vc nao tem {fishname} para vender"
+  vendeuPeixe: "vc vendeu {quantity} {fishname} por {coins} moedas."
+
+  melhorias:
+    melhorou: "§b§lGG! §bO seu armazém foi aumentado em §l+50§b."
+    naoDaMais: "§c§lEI! §cO seu armazém já possui a capacidade máxima."
+    naoTemMoney: "§c§lEI! §cVocê não possui dinheiro o suficiente."

@@ -7,6 +7,7 @@ import blizzard.development.fishing.utils.items.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
 import java.util.Arrays;
@@ -36,6 +37,10 @@ public class FishingRodHandler {
                         ""))
                 .addPersistentData(plugin, key, 1)
                 .build();
+
+        ItemMeta meta = rod.getItemMeta();
+        meta.setUnbreakable(true);
+        rod.setItemMeta(meta);
 
         player.getInventory().setItem(slot, rod);
     }

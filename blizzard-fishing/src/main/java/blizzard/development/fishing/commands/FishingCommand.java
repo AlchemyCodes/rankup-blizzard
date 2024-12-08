@@ -6,7 +6,7 @@ import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.Default;
 import org.bukkit.entity.Player;
 
-@CommandAlias("pesca|pescar")
+@CommandAlias("pesca|pescar|pescca|peesca")
 public class FishingCommand extends BaseCommand {
 
     @Default

@@ -2,6 +2,8 @@ package blizzard.development.fishing.inventories.items;
 
 import blizzard.development.fishing.database.cache.methods.RodsCacheMethod;
 import blizzard.development.fishing.database.storage.RodsData;
+import blizzard.development.fishing.inventories.MaterialsInventory;
+import blizzard.development.fishing.utils.items.ItemBuilder;
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
@@ -12,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class FishingRodInventory {
     public static void openRod(Player player) {
@@ -19,17 +22,25 @@ public class FishingRodInventory {
 
         StaticPane pane = new StaticPane(0, 0, 9, 5);
 
-        GuiItem enchant2 = new GuiItem(experienced(player), event -> { event.setCancelled(true);
+        GuiItem enchant2 = new GuiItem(experienced(player), event -> {
+            event.setCancelled(true);
         });
-        GuiItem enchant3 = new GuiItem(lucky(player), event -> { event.setCancelled(true);
+        GuiItem enchant3 = new GuiItem(lucky(player), event -> {
+            event.setCancelled(true);
+        });
+        GuiItem explanation = new GuiItem(explanation(), event -> {
+            event.setCancelled(true);
+        });
+        GuiItem goSkinInv = new GuiItem(goSkinInv(), event -> {
+           event.setCancelled(true);
+            MaterialsInventory.materialsMenu(player);
         });
 
-        GuiItem explanation = new GuiItem(explanation(), event -> { event.setCancelled(true);
-        });
 
         pane.addItem(enchant2, Slot.fromIndex(13));
         pane.addItem(enchant3, Slot.fromIndex(15));
-        pane.addItem(explanation, Slot.fromIndex(31));
+        pane.addItem(explanation, Slot.fromIndex(30));
+        pane.addItem(goSkinInv, Slot.fromIndex(32));
 
 
         gui.addPane(pane);
@@ -49,6 +60,13 @@ public class FishingRodInventory {
         back.setItemMeta(meta);
 
         return back;
+    }
+
+    public static ItemStack goSkinInv() {
+        return new ItemBuilder(Material.LIME_DYE)
+                .setDisplayName("§6Skins")
+                .setLore(List.of("§7Clique para ir ao",
+                        "inventário de skins!")).build();
     }
 
     public static ItemStack lucky(Player player) {
@@ -78,4 +96,6 @@ public class FishingRodInventory {
 
         return back;
     }
+
+
 }

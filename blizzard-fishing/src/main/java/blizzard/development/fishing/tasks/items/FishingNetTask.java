@@ -6,9 +6,11 @@ import blizzard.development.fishing.handlers.FishingNetHandler;
 import blizzard.development.fishing.utils.Countdown;
 import blizzard.development.fishing.utils.PluginImpl;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
+import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -31,12 +33,14 @@ public class FishingNetTask implements Runnable {
             PluginImpl instance = PluginImpl.getInstance();
             PlayersCacheMethod cacheMethod = PlayersCacheMethod.getInstance();
 
+            YamlConfiguration config = PluginImpl.getInstance().Messages.getConfig();
+
             Random random = new Random();
 
             int chance = random.nextInt(101);
 
             if (chance <= instance.Enchantments.getInt("enchantments.trash.chance")) {
-                player.sendMessage("§8[DEBUG] Não veio nada");
+                player.sendMessage("§8[DEBUG] §fNão veio nada");
                 Countdown.getInstance().createCountdown(player, "trash",
                         instance.Enchantments.getInt("enchantments.trash.cooldown"),
                         TimeUnit.SECONDS);
@@ -48,8 +52,8 @@ public class FishingNetTask implements Runnable {
                 cacheMethod.setTrash(player, 0);
             }
 
-            player.sendMessage("§8[DEBUG] Veio lixo");
-            player.sendActionBar("§b§lYAY! §bVocê achou 1 lixo.");
+            player.sendMessage("§8[DEBUG] §fVeio lixo");
+            player.sendActionBar(config.getString("rede.achouLixo"));
             cacheMethod.setTrash(player, cacheMethod.getTrash(player) + 1);
 
             FishingNetHandler.setNet(player, 3);
@@ -61,18 +65,24 @@ public class FishingNetTask implements Runnable {
         int eventIndex = random.nextInt(3);
 
         RodsCacheMethod instance = RodsCacheMethod.getInstance();
+        YamlConfiguration config = PluginImpl.getInstance().Messages.getConfig();
+
+        String baseMessage = Objects.requireNonNull(config.getString("rede.melhorouEncantamento"));
 
         switch (eventIndex) {
             case 0 -> {
-                player.sendMessage("§b§lYAY! §fO encantamento 'XXXXXXXX' foi melhorado.");
+                String message = baseMessage.replace("{enchant}", "x");
+                player.sendMessage(message);
             }
             case 1 -> {
                 instance.setExperienced(player, instance.getExperienced(player) + 1);
-                player.sendMessage("§b§lYAY! §fO encantamento 'Experiente' foi melhorado.");
+                String message = baseMessage.replace("{enchant}", "experiente");
+                player.sendMessage(message);
             }
             case 2 -> {
                 instance.setLucky(player, instance.getLucky(player) + 1);
-                player.sendMessage("§b§lYAY! §fO encantamento 'Sortudo' foi melhorado.");
+                String message = baseMessage.replace("{enchant}", "sortudo");
+                player.sendMessage(message);
             }
         }
     }

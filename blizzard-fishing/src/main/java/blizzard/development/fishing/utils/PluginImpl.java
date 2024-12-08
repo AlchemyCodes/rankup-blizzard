@@ -32,6 +32,7 @@ public class PluginImpl {
     public ConfigUtils Database;
     public ConfigUtils Config;
     public ConfigUtils Enchantments;
+    public ConfigUtils Messages;
 
     public PluginImpl(Plugin plugin) {
         this.plugin = plugin;
@@ -43,6 +44,7 @@ public class PluginImpl {
         this.Database = new ConfigUtils((JavaPlugin)plugin, "database.yml");
         this.Config = new ConfigUtils((JavaPlugin)plugin, "config.yml");
         this.Enchantments = new ConfigUtils((JavaPlugin)plugin, "enchantments.yml");
+        this.Messages = new ConfigUtils((JavaPlugin)plugin, "messages.yml");
     }
 
     public void onLoad() {
@@ -63,12 +65,15 @@ public class PluginImpl {
         if (!this.Enchantments.existsConfig()) {
             this.Enchantments.saveDefaultConfig();
         }
+        if (!this.Messages.existsConfig()) {
+            this.Messages.saveDefaultConfig();
+        }
 
 
         this.Database.reloadConfig();
         this.Config.reloadConfig();
         this.Enchantments.reloadConfig();
-
+        this.Messages.reloadConfig();
     }
 
     public void onUnload() {

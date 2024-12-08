@@ -2,12 +2,14 @@ package blizzard.development.fishing.inventories.items;
 
 import blizzard.development.fishing.database.cache.methods.PlayersCacheMethod;
 import blizzard.development.fishing.tasks.items.FurnaceTask;
+import blizzard.development.fishing.utils.PluginImpl;
 import blizzard.development.fishing.utils.items.ItemBuilder;
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
 import com.github.stefvanschie.inventoryframework.pane.util.Slot;
 import org.bukkit.Material;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -15,6 +17,8 @@ import java.util.Arrays;
 
 public class FurnaceInventory {
     public static void openFurnace(Player player) {
+        YamlConfiguration config = PluginImpl.getInstance().Messages.getConfig();
+
         ChestGui gui = new ChestGui(5, "Fornalha");
 
         StaticPane pane = new StaticPane(0, 0, 9, 5);
@@ -34,25 +38,27 @@ public class FurnaceInventory {
         GuiItem startUnfreezing = new GuiItem(startUnfreezing(), event -> {
             event.setCancelled(true);
 
+
+
             if (FurnaceTask.isUnfreezing(player)) {
-                player.sendMessage("§aVocê já está descongelando.");
+                player.sendActionBar(config.getString("fornalha.estaDescongelando"));
                 return;
             }
 
             FurnaceTask.addPlayer(player);
-            player.sendMessage("§bSua fornalha começou descongelar os peixes.");
+            player.sendActionBar(config.getString("fornalha.comecouDescongelar"));
         });
 
         GuiItem stopUnfreezing = new GuiItem(stopUnfreezing(), event -> {
             event.setCancelled(true);
 
             if (!(FurnaceTask.isUnfreezing(player))) {
-                player.sendMessage("§aVocê não está descongelando.");
+                player.sendActionBar(config.getString("fornalha.naoEstaDescongelando"));
                 return;
             }
 
             FurnaceTask.removePlayer(player);
-            player.sendMessage("§cSua fornalha parou de descongelar os peixes.");
+            player.sendActionBar(config.getString("fornalha.parouDescongelar"));
         });
 
         for (int i : new int[]{11,12,14,15}) {
