@@ -14,7 +14,7 @@ public class PlayersData {
     }
 
     public String getUuid() {
-        return this.uuid;
+        return uuid;
     }
 
     public void setUuid(String uuid) {
@@ -22,7 +22,7 @@ public class PlayersData {
     }
 
     public String getNickname() {
-        return this.nickname;
+        return nickname;
     }
 
     public void setNickname(String nickname) {
@@ -30,7 +30,7 @@ public class PlayersData {
     }
 
     public String getRank() {
-        return this.rank;
+        return rank;
     }
 
     public void setRank(String rank) {
@@ -38,7 +38,7 @@ public class PlayersData {
     }
 
     public int getPrestige() {
-        return this.prestige;
+        return prestige;
     }
 
     public void setPrestige(int prestige) {

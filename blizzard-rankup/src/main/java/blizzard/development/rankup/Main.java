@@ -1,7 +1,6 @@
 package blizzard.development.rankup;
 
 import blizzard.development.rankup.utils.PluginImpl;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin {
@@ -10,7 +9,7 @@ public class Main extends JavaPlugin {
 
     public void onEnable() {
         instance = this;
-        this.pluginImpl = new PluginImpl((Plugin)this);
+        this.pluginImpl = new PluginImpl(this);
         this.pluginImpl.onLoad();
     }
 

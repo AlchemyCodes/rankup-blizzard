@@ -7,7 +7,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 public class RanksUtils {
     public static ConfigurationSection getCurrentRankSection(YamlConfiguration ranksConfig, String currentRank) {
-        Set<String> ranks = ((ConfigurationSection) Objects.requireNonNull(ranksConfig.getConfigurationSection("ranks"))).getKeys(false);
+        Set<String> ranks = (Objects.requireNonNull(ranksConfig.getConfigurationSection("ranks"))).getKeys(false);
 
         for (String rankKey : ranks) {
             ConfigurationSection rankSection = ranksConfig.getConfigurationSection("ranks." + rankKey);
@@ -21,8 +21,8 @@ public class RanksUtils {
         return null;
     }
 
-    public static String getCurrentRank(YamlConfiguration ranksConfig, String currentRank) {
-        Set<String> ranks = ((ConfigurationSection) Objects.requireNonNull(ranksConfig.getConfigurationSection("ranks"))).getKeys(false);
+    public static String getCurrentRankName(YamlConfiguration ranksConfig, String currentRank) {
+        Set<String> ranks = (Objects.requireNonNull(ranksConfig.getConfigurationSection("ranks"))).getKeys(false);
 
         for (String rankKey : ranks) {
             ConfigurationSection rankSection = ranksConfig.getConfigurationSection("ranks." + rankKey);
@@ -36,8 +36,23 @@ public class RanksUtils {
         return null;
     }
 
+    public static String getCurrentRankTag(YamlConfiguration ranksConfig, String currentRank) {
+        Set<String> ranks = (Objects.requireNonNull(ranksConfig.getConfigurationSection("ranks"))).getKeys(false);
+
+        for (String rankKey : ranks) {
+            ConfigurationSection rankSection = ranksConfig.getConfigurationSection("ranks." + rankKey);
+            assert rankSection != null;
+            String rankName = rankSection.getString("tag");
+
+            if (Objects.equals(rankName, currentRank)) {
+                return rankSection.getString("tag");
+            }
+        }
+        return null;
+    }
+
     public static ConfigurationSection getNextRankSection(YamlConfiguration ranksConfig, ConfigurationSection currentRankSection) {
-        Set<String> ranks = ((ConfigurationSection) Objects.requireNonNull(ranksConfig.getConfigurationSection("ranks"))).getKeys(false);
+        Set<String> ranks = (Objects.requireNonNull(ranksConfig.getConfigurationSection("ranks"))).getKeys(false);
 
         int currentOrder = currentRankSection.getInt("order");
 
@@ -54,7 +69,7 @@ public class RanksUtils {
     }
 
     public static String getNextRank(YamlConfiguration ranksConfig, ConfigurationSection currentRankSection) {
-        Set<String> ranks = ((ConfigurationSection) Objects.requireNonNull(ranksConfig.getConfigurationSection("ranks"))).getKeys(false);
+        Set<String> ranks = (Objects.requireNonNull(ranksConfig.getConfigurationSection("ranks"))).getKeys(false);
 
         int currentOrder = currentRankSection.getInt("order");
 
@@ -71,7 +86,7 @@ public class RanksUtils {
     }
 
     public static int getCurrentOrder(YamlConfiguration ranksConfig, String currentRank) {
-        Set<String> ranks = ((ConfigurationSection) Objects.requireNonNull(ranksConfig.getConfigurationSection("ranks"))).getKeys(false);
+        Set<String> ranks = (Objects.requireNonNull(ranksConfig.getConfigurationSection("ranks"))).getKeys(false);
 
         for (String rankKey : ranks) {
             ConfigurationSection rankSection = ranksConfig.getConfigurationSection("ranks." + rankKey);

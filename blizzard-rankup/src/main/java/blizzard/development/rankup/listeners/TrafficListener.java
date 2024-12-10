@@ -4,7 +4,6 @@ import blizzard.development.rankup.database.cache.PlayersCacheManager;
 import blizzard.development.rankup.database.dao.PlayersDAO;
 import blizzard.development.rankup.database.storage.PlayersData;
 import blizzard.development.rankup.utils.RanksUtils;
-import java.sql.SQLException;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -22,7 +21,7 @@ public final class TrafficListener implements Listener {
     public void onQuit(PlayerQuitEvent event) {}
 
     @EventHandler
-    public void onJoin(PlayerJoinEvent event) throws SQLException {
+    public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         String name = player.getName();
         String uuid = player.getUniqueId().toString();
@@ -31,9 +30,13 @@ public final class TrafficListener implements Listener {
 
         if (playersData == null) {
             playersData = new PlayersData(uuid, name, RanksUtils.getRankWithMinOrder(), 0);
-            this.playersDAO.createPlayerData(playersData);
+            try {
+                this.playersDAO.createPlayerData(playersData);
+            } catch(Exception err) {
+                err.printStackTrace();
+            }
         }
 
-        PlayersCacheManager.cachePlayerData(player, playersData);
+        PlayersCacheManager.getInstance().cachePlayerData(player, playersData);
     }
 }
