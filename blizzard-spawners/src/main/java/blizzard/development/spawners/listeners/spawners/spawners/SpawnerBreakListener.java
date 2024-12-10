@@ -18,6 +18,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -69,6 +70,17 @@ public class SpawnerBreakListener implements Listener {
 
             if (!player.getName().equals(data.getNickname()) && !player.hasPermission("blizzard.spawners.admin")) {
                 player.sendActionBar(TextAPI.parse("§c§lEI! §cVocê não é dono desse spawner."));
+                event.setCancelled(true);
+                return;
+            }
+
+            FileConfiguration config = PluginImpl.getInstance().Spawners.getConfig();
+            boolean released = config.getBoolean("spawners." + getSpawnerType(data.getType()) + ".permitted-purchase", false);
+
+            if (!released && !player.hasPermission("blizzard.spawners.admin")) {
+                player.sendActionBar(TextAPI.parse(
+                        "§c§lEI! §cEste spawner não está liberado.")
+                );
                 event.setCancelled(true);
                 return;
             }
@@ -138,5 +150,16 @@ public class SpawnerBreakListener implements Listener {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public String getSpawnerType(String spawner) {
+        return switch (spawner) {
+            case "PIG", "pig", "PORCO", "porco" -> "pig";
+            case "COW", "cow", "VACA", "vaca" -> "cow";
+            case "MOOSHROOM", "mooshroom", "Coguvaca", "coguvaca" -> "mooshroom";
+            case "SHEEP", "sheep", "OVELHA", "ovelha" -> "sheep";
+            case "ZOMBIE", "zombie", "ZUMBI", "zumbi" -> "zombie";
+            default -> null;
+        };
     }
 }

@@ -19,6 +19,7 @@ import blizzard.development.spawners.utils.config.ConfigUtils;
 import co.aikar.commands.Locales;
 import co.aikar.commands.PaperCommandManager;
 import com.plotsquared.core.PlotAPI;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -66,7 +67,7 @@ public class PluginImpl {
         registerListeners();
         registerCommands();
 
-        DisplayBuilder.createAllSpawnerDisplay();
+        Bukkit.getScheduler().runTaskLater(PluginImpl.getInstance().plugin, DisplayBuilder::createAllSpawnerDisplay, 200L);
     }
 
     public void onDisable() {

@@ -22,6 +22,7 @@ import com.plotsquared.core.plot.PlotArea;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -79,11 +80,23 @@ public class SpawnerPlaceListener implements Listener {
 
                 if (ItemBuilder.hasPersistentData(PluginImpl.getInstance().plugin, spawnerItem, key)) {
                     String value = ItemBuilder.getPersistentData(PluginImpl.getInstance().plugin, spawnerItem, key);
+                    String type = ItemBuilder.getPersistentData(PluginImpl.getInstance().plugin, spawnerItem, "type");
                     String speed = ItemBuilder.getPersistentData(PluginImpl.getInstance().plugin, spawnerItem, "speed");
                     String lucky = ItemBuilder.getPersistentData(PluginImpl.getInstance().plugin, spawnerItem, "lucky");
                     String experience = ItemBuilder.getPersistentData(PluginImpl.getInstance().plugin, spawnerItem, "experience");
 
-                    if (value == null || speed == null || lucky == null || experience == null) {
+                    if (value == null || speed == null || type == null || lucky == null || experience == null) {
+                        event.setCancelled(true);
+                        return;
+                    }
+
+                    FileConfiguration config = PluginImpl.getInstance().Spawners.getConfig();
+                    boolean released = config.getBoolean("spawners." + getSpawnerType(type) + ".permitted-purchase", false);
+
+                    if (!released && !player.hasPermission("blizzard.spawners.admin")) {
+                        player.sendActionBar(TextAPI.parse(
+                                "§c§lEI! §cEste spawner não está liberado.")
+                        );
                         event.setCancelled(true);
                         return;
                     }
@@ -198,6 +211,16 @@ public class SpawnerPlaceListener implements Listener {
                 int spawnerItemAmount = player.getInventory().getItemInMainHand().getAmount();
                 double amount;
 
+                FileConfiguration config = PluginImpl.getInstance().Spawners.getConfig();
+                boolean released = config.getBoolean("spawners." + getSpawnerType(spawnersType) + ".permitted-purchase", false);
+
+                if (!released && !player.hasPermission("blizzard.spawners.admin")) {
+                    player.sendActionBar(TextAPI.parse(
+                            "§c§lEI! §cEste spawner não está liberado.")
+                    );
+                    return false;
+                }
+
                 if (closestSpawner.getState().equals(States.PRIVATE.getState())
                         && !player.getName().equals(closestSpawner.getNickname())
                         && !player.hasPermission("blizzard.spawners.admin")
@@ -234,5 +257,16 @@ public class SpawnerPlaceListener implements Listener {
             }
         }
         return false;
+    }
+
+    public String getSpawnerType(String spawner) {
+        return switch (spawner) {
+            case "PIG", "pig", "PORCO", "porco" -> "pig";
+            case "COW", "cow", "VACA", "vaca" -> "cow";
+            case "MOOSHROOM", "mooshroom", "Coguvaca", "coguvaca" -> "mooshroom";
+            case "SHEEP", "sheep", "OVELHA", "ovelha" -> "sheep";
+            case "ZOMBIE", "zombie", "ZUMBI", "zumbi" -> "zombie";
+            default -> null;
+        };
     }
 }

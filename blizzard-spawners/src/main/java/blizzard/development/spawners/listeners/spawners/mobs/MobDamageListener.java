@@ -4,7 +4,9 @@ import blizzard.development.spawners.database.cache.getters.SpawnersCacheGetters
 import blizzard.development.spawners.database.cache.managers.SpawnersCacheManager;
 import blizzard.development.spawners.database.storage.SpawnersData;
 import blizzard.development.spawners.handlers.enums.States;
+import blizzard.development.spawners.utils.PluginImpl;
 import blizzard.development.spawners.utils.items.TextAPI;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -33,6 +35,17 @@ public class MobDamageListener implements Listener {
                 return;
             }
 
+            FileConfiguration config = PluginImpl.getInstance().Spawners.getConfig();
+            boolean released = config.getBoolean("spawners." + getSpawnerType(data.getType()) + ".permitted-purchase", false);
+
+            if (!released && !player.hasPermission("blizzard.spawners.admin")) {
+                player.sendActionBar(TextAPI.parse(
+                        "§c§lEI! §cEste spawner não está liberado.")
+                );
+                event.setCancelled(true);
+                return;
+            }
+
             if (data.getState().equals(States.PRIVATE.getState())
                     && !damager.getName().equals(data.getNickname())
                     && !damager.hasPermission("blizzard.spawners.admin")
@@ -44,5 +57,16 @@ public class MobDamageListener implements Listener {
                 event.setCancelled(true);
             }
         }
+    }
+
+    public String getSpawnerType(String spawner) {
+        return switch (spawner) {
+            case "PIG", "pig", "PORCO", "porco" -> "pig";
+            case "COW", "cow", "VACA", "vaca" -> "cow";
+            case "MOOSHROOM", "mooshroom", "Coguvaca", "coguvaca" -> "mooshroom";
+            case "SHEEP", "sheep", "OVELHA", "ovelha" -> "sheep";
+            case "ZOMBIE", "zombie", "ZUMBI", "zumbi" -> "zombie";
+            default -> null;
+        };
     }
 }

@@ -18,6 +18,7 @@ public class ReloadCommand extends BaseCommand {
 
         plugin.Config.reloadConfig();
         plugin.Database.reloadConfig();
+        plugin.Spawners.reloadConfig();
         plugin.Enchantments.reloadConfig();
         plugin.Bonus.reloadConfig();
         plugin.Rewards.reloadConfig();
