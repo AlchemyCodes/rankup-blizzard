@@ -3,6 +3,7 @@ package blizzard.development.spawners.inventories.ranking;
 import blizzard.development.spawners.database.cache.getters.PlayersCacheGetters;
 import blizzard.development.spawners.database.storage.PlayersData;
 import blizzard.development.spawners.inventories.ranking.items.RankingItems;
+import blizzard.development.spawners.inventories.shop.ShopInventory;
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
@@ -43,7 +44,7 @@ public class PurchasedInventory {
         }
 
         GuiItem backItem = new GuiItem(items.back(), event -> {
-            player.getInventory().close();
+            ShopInventory.getInstance().open(player);
             event.setCancelled(true);
         });
 

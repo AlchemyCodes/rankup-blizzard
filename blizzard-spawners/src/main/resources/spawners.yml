@@ -1,41 +1,95 @@
 spawners:
-
   pig:
+    type: PIG
+    item: SPAWNER
+    display-name: §dSpawner de §lPorco
+    lore:
+      - ''
+      - ' §7■ §fTipo: §7Porco'
+      - ' §7▶ §fCusto: §2$§a{cost}'
+      - ' §7▶ §fDrop Unidade: §2$§a{drop-cost}'
+      - ''
+      - ' §fCompras disponíveis:'
+      - ' §8 ■ §fBotão esquerdo: §7Escolher quantia.'
+      - ' §8 ■ §fBotão direito: §71 unidade.'
+      - ' §8 ■ §fBotão Q: §7Comprar com todo o limite.'
+      - ''
+    permitted-purchase: true
     buy-price: 100000
     sell-drop-price: 100
 
   cow:
+    type: COW
+    item: SPAWNER
+    display-name: §8Spawner de §lVaca
+    lore:
+      - ''
+      - ' §7■ §fTipo: §7Vaca'
+      - ' §7▶ §fCusto: §2$§a{cost}'
+      - ' §7▶ §fDrop Unidade: §2$§a{drop-cost}'
+      - ''
+      - ' §fCompras disponíveis:'
+      - ' §8 ■ §fBotão esquerdo: §7Escolher quantia.'
+      - ' §8 ■ §fBotão direito: §71 unidade.'
+      - ' §8 ■ §fBotão Q: §7Comprar com todo o limite.'
+      - ''
+    permitted-purchase: false
     buy-price: 150000
     sell-drop-price: 150
 
   mooshroom:
+    type: MOOSHROOM
+    item: SPAWNER
+    display-name: §cSpawner de §lCoguvaca
+    lore:
+      - ''
+      - ' §7■ §fTipo: §7Coguvaca'
+      - ' §7▶ §fCusto: §2$§a{cost}'
+      - ' §7▶ §fDrop Unidade: §2$§a{drop-cost}'
+      - ''
+      - ' §fCompras disponíveis:'
+      - ' §8 ■ §fBotão esquerdo: §7Escolher quantia.'
+      - ' §8 ■ §fBotão direito: §71 unidade.'
+      - ' §8 ■ §fBotão Q: §7Comprar com todo o limite.'
+      - ''
+    permitted-purchase: false
     buy-price: 200000
     sell-drop-price: 200
 
   sheep:
+    type: SHEEP
+    item: SPAWNER
+    display-name: §fSpawner de §lOvelha
+    lore:
+      - ''
+      - ' §7■ §fTipo: §7Ovelha'
+      - ' §7▶ §fCusto: §2$§a{cost}'
+      - ' §7▶ §fDrop Unidade: §2$§a{drop-cost}'
+      - ''
+      - ' §fCompras disponíveis:'
+      - ' §8 ■ §fBotão esquerdo: §7Escolher quantia.'
+      - ' §8 ■ §fBotão direito: §71 unidade.'
+      - ' §8 ■ §fBotão Q: §7Comprar com todo o limite.'
+      - ''
+    permitted-purchase: false
     buy-price: 250000
     sell-drop-price: 250
 
   zombie:
+    type: ZOMBIE
+    item: SPAWNER
+    display-name: §2Spawner de §lZumbi
+    lore:
+      - ''
+      - ' §7■ §fTipo: §7Zumbi'
+      - ' §7▶ §fCusto: §2$§a{cost}'
+      - ' §7▶ §fDrop Unidade: §2$§a{drop-cost}'
+      - ''
+      - ' §fCompras disponíveis:'
+      - ' §8 ■ §fBotão esquerdo: §7Escolher quantia.'
+      - ' §8 ■ §fBotão direito: §71 unidade.'
+      - ' §8 ■ §fBotão Q: §7Comprar com todo o limite.'
+      - ''
+    permitted-purchase: false
     buy-price: 300000
     sell-drop-price: 300
-
-  skeleton:
-    buy-price: 350000
-    sell-drop-price: 350
-
-  creeper:
-    buy-price: 400000
-    sell-drop-price: 400
-
-  pigman:
-    buy-price: 450000
-    sell-drop-price: 450
-
-  blaze:
-    buy-price: 500000
-    sell-drop-price: 500
-
-  witch:
-    buy-price: 550000
-    sell-drop-price: 550

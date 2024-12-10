@@ -7,13 +7,11 @@ import blizzard.development.spawners.utils.SpawnersUtils;
 import blizzard.development.spawners.utils.items.TextAPI;
 import org.bukkit.Location;
 import org.bukkit.block.CreatureSpawner;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.metadata.FixedMetadataValue;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 public class SpawnersHandler {
     private static SpawnersHandler instance;
@@ -41,20 +39,6 @@ public class SpawnersHandler {
         mob.setMetadata("blizzard_spawners-id", new FixedMetadataValue(PluginImpl.getInstance().plugin, spawnerType));
         mob.setCustomNameVisible(true);
         mob.hasMetadata("blizzard_spawners-mob");
-
-    }
-
-    public Map<String, Double> getSpawnerInfo(String spawnerKey) {
-        ConfigurationSection section = PluginImpl.getInstance().Spawners.getConfig().getConfigurationSection("spawners." + spawnerKey);
-        if (section == null) {
-            return new HashMap<>();
-        }
-
-        Map<String, Double> spawnerData = new HashMap<>();
-        spawnerData.put("buy-price", section.getDouble("buy-price", 0.0));
-        spawnerData.put("sell-drop-price", section.getDouble("sell-drop-price", 0.0));
-
-        return spawnerData;
     }
 
     public double getBuyPrice(String spawnerKey) {
@@ -67,6 +51,26 @@ public class SpawnersHandler {
 
     public boolean isSpawnerValid(String spawnerKey) {
         return PluginImpl.getInstance().Spawners.getConfig().contains("spawners." + spawnerKey);
+    }
+
+    public String getItem(String spawnerKey) {
+        return PluginImpl.getInstance().Spawners.getConfig().getString("spawners." + spawnerKey + ".item", "SPAWNER");
+    }
+
+    public int getSlot(String spawnerKey) {
+        return PluginImpl.getInstance().Spawners.getConfig().getInt("spawners." + spawnerKey + ".slot", 0);
+    }
+
+    public String getDisplayName(String spawnerKey) {
+        return PluginImpl.getInstance().Spawners.getConfig().getString("spawners." + spawnerKey + ".display-name", "§cUnknown Spawner");
+    }
+
+    public List<String> getLore(String spawnerKey) {
+        return PluginImpl.getInstance().Spawners.getConfig().getStringList("spawners." + spawnerKey + ".lore");
+    }
+
+    public boolean isPermittedPurchase(String spawnerKey) {
+        return PluginImpl.getInstance().Spawners.getConfig().getBoolean("spawners." + spawnerKey + ".permitted-purchase", false);
     }
 
     public static SpawnersHandler getInstance() {
