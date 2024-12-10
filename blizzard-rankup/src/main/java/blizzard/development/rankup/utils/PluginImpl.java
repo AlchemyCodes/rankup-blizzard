@@ -1,5 +1,6 @@
 package blizzard.development.rankup.utils;
 
+import blizzard.development.rankup.Main;
 import blizzard.development.rankup.commands.PrestigeCommand;
 import blizzard.development.rankup.commands.RankCommand;
 import blizzard.development.rankup.commands.RankUpCommand;
@@ -9,6 +10,8 @@ import blizzard.development.rankup.database.cache.PlayersCacheManager;
 import blizzard.development.rankup.database.dao.PlayersDAO;
 import blizzard.development.rankup.database.storage.PlayersData;
 import blizzard.development.rankup.listeners.TrafficListener;
+import blizzard.development.rankup.placeholder.PlaceholderRegistry;
+import blizzard.development.rankup.tasks.AutoRankup;
 import blizzard.development.rankup.tasks.PlayerSaveTask;
 import java.io.File;
 import java.sql.SQLException;
@@ -53,6 +56,10 @@ public class PluginImpl {
     }
 
     public void onLoad() {
+        if (pluginManager.getPlugin("PlaceholderAPI") != null) {
+            new PlaceholderRegistry((Main) plugin).register();
+        }
+
         loadConfigs();
         registerDatabase();
         registerCommands();
@@ -89,7 +96,7 @@ public class PluginImpl {
     }
 
     public void onUnload() {
-        PlayersCacheManager.playerCache.forEach((player, playersData) -> {
+        PlayersCacheManager.getInstance().playerCache.forEach((player, playersData) -> {
             try {
                 this.playersDAO.updatePlayerData(playersData);
             } catch (SQLException exception) {
@@ -106,7 +113,9 @@ public class PluginImpl {
         (new PlayerSaveTask(this.playersDAO)).runTaskTimerAsynchronously(this.plugin, 0L, 60L);
     }
 
-    private void registerTasks() {}
+    private void registerTasks() {
+        new AutoRankup(plugin);
+    }
 
     private void registerListeners() {
         pluginManager.registerEvents((Listener)new TrafficListener(this.playersDAO), this.plugin);

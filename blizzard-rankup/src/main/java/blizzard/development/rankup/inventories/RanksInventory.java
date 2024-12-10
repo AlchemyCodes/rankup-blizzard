@@ -4,7 +4,6 @@ import blizzard.development.rankup.utils.NumberFormat;
 import blizzard.development.rankup.utils.PluginImpl;
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
-import com.github.stefvanschie.inventoryframework.pane.Pane;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
 import com.github.stefvanschie.inventoryframework.pane.util.Slot;
 
@@ -15,9 +14,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -86,12 +83,13 @@ public class RanksInventory {
             String displayName = config.getString("ranks." + rank + ".name");
             meta.setDisplayName("§6Rank §6§l" + displayName);
             List<String> lore = config.getStringList("ranks." + rank + ".lore").stream()
-                    .map(line -> line.replace("{price}", NumberFormat.formatNumber(config.getInt("ranks." + rank + ".price"))))
+                    .map(line -> line.replace("{price}", NumberFormat.formatNumber(config.getInt("ranks." + rank + ".coinsPrice"))))
+                    .map(line -> line.replace("{flakes}", NumberFormat.formatNumber(config.getInt("ranks." + rank + ".flakesPrice"))))
                     .collect(Collectors.toList());
             if (!lore.isEmpty()) {
                 meta.setLore(lore);
             } else {
-                meta.setLore(Collections.singletonList("§7No lore available."));
+                meta.setLore(Collections.singletonList("§7Sem lore na config."));
             }
             item.setItemMeta(meta);
         }

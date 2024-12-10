@@ -3,6 +3,7 @@ package blizzard.development.rankup.commands;
 import blizzard.development.currencies.api.CurrenciesAPI;
 import blizzard.development.currencies.enums.Currencies;
 import blizzard.development.rankup.database.cache.PlayersCacheManager;
+import blizzard.development.rankup.database.cache.method.PlayersCacheMethod;
 import blizzard.development.rankup.database.storage.PlayersData;
 import blizzard.development.rankup.utils.PluginImpl;
 import blizzard.development.rankup.utils.PrestigeUtils;
@@ -22,23 +23,24 @@ public class PrestigeCommand extends BaseCommand {
 
     @Default
     public void onCommand(Player player) {
-        PlayersData playersData = PlayersCacheManager.getPlayerData(player);
+        PlayersCacheMethod playersData = PlayersCacheMethod.getInstance();
+
         YamlConfiguration ranksConfig = (PluginImpl.getInstance()).Ranks.getConfig();
         YamlConfiguration prestigeConfig = (PluginImpl.getInstance()).Prestige.getConfig();
         YamlConfiguration messagesConfig = (PluginImpl.getInstance()).Messages.getConfig();
 
-        if (!hasRankForPrestige(playersData.getRank(), ranksConfig, prestigeConfig)) {
+        if (!hasRankForPrestige(playersData.getRank(player), ranksConfig, prestigeConfig)) {
             sendMessage(player, messagesConfig, "chat.no-rank-for-prestige");
             return;
         }
 
-        if (playersData.getPrestige() >= prestigeConfig.getInt("prestige.max")) {
+        if (playersData.getPrestige(player) >= prestigeConfig.getInt("prestige.max")) {
             sendMessage(player, messagesConfig, "chat.max-prestige");
             return;
         }
 
-        double prestigeCoinsPrice = PrestigeUtils.prestigeCoinsPrice(playersData.getPrestige());
-        double prestigeFlakesPrice = PrestigeUtils.prestigeFlakesPrice(playersData.getPrestige());
+        double prestigeCoinsPrice = PrestigeUtils.prestigeCoinsPrice(playersData.getPrestige(player));
+        double prestigeFlakesPrice = PrestigeUtils.prestigeFlakesPrice(playersData.getPrestige(player));
 
         if (!hasCoinsForPrestige(player, prestigeCoinsPrice)) {
             sendMessage(player, messagesConfig, "chat.no-money-for-prestige");
@@ -67,16 +69,16 @@ public class PrestigeCommand extends BaseCommand {
         return CurrenciesAPI.getInstance().getBalance(player, Currencies.FLAKES) >= requiredCoins;
     }
 
-    private void onPrestige(Player player, PlayersData playersData, YamlConfiguration ranksConfig, YamlConfiguration messagesConfig) {
-        Set<String> ranks = ((ConfigurationSection)Objects.requireNonNull(ranksConfig.getConfigurationSection("ranks"))).getKeys(false);
+    private void onPrestige(Player player, PlayersCacheMethod playersData, YamlConfiguration ranksConfig, YamlConfiguration messagesConfig) {
+        Set<String> ranks = (Objects.requireNonNull(ranksConfig.getConfigurationSection("ranks"))).getKeys(false);
         for (String rankKey : ranks) {
             ConfigurationSection rankSection = ranksConfig.getConfigurationSection("ranks." + rankKey);
             if (rankSection != null && rankSection.getInt("order") == 1) {
-                playersData.setRank(rankSection.getString("name"));
-                playersData.setPrestige(playersData.getPrestige() + 1);
+                playersData.setRank(player, rankSection.getString("name"));
+                playersData.setPrestige(player, playersData.getPrestige(player) + 1);
 
                 sendMessage(player, messagesConfig, "chat.prestige");
-                player.sendMessage("§7[DEBUG] §fSeu prestígio: " + playersData.getPrestige());
+                player.sendMessage("§7[DEBUG] §fSeu prestígio: " + playersData.getPrestige(player));
                 break;
             }
         }

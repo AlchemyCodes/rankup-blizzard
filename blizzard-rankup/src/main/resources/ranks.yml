@@ -1,7 +1,7 @@
 ranks:
   pig16:
     order: 1
-    tag: '§d[PorcoXVI]'
+    tag: '[PorcoXVI]'
     name: 'Porco XVI'
     coinsPrice: 5000
     flakesPrice: 2000
@@ -13,7 +13,8 @@ ranks:
       - '§7Para passar por este rank'
       - ''
       - ' §6Preço:'
-      - ' §7{price}'
+      - ' §7{price} §aCoins'
+      - ' §7{flakes} §bFlocos'
     rankup:
       command: ''
       messages:
@@ -34,7 +35,8 @@ ranks:
       - '§7Para passar por este rank'
       - ''
       - ' §6Preço:'
-      - ' §7{price}'
+      - ' §7{price} §aCoins'
+      - ' §7{flakes} §bFlocos'
     rankup:
       command: ''
       messages:
@@ -55,7 +57,8 @@ ranks:
       - '§7Para passar por este rank'
       - ''
       - ' §6Preço:'
-      - ' §7{price}'
+      - ' §7{price} §aCoins'
+      - ' §7{flakes} §bFlocos'
     rankup:
       command: ''
       messages:
@@ -76,7 +79,8 @@ ranks:
       - '§7Para passar por este rank'
       - ''
       - ' §6Preço:'
-      - ' §7{price}'
+      - ' §7{price} §aCoins'
+      - ' §7{flakes} §bFlocos'
     rankup:
       command: ''
       messages:
@@ -97,7 +101,8 @@ ranks:
       - '§7Para passar por este rank'
       - ''
       - ' §6Preço:'
-      - ' §7{price}'
+      - ' §7{price} §aCoins'
+      - ' §7{flakes} §bFlocos'
     rankup:
       command: ''
       messages:
@@ -118,7 +123,8 @@ ranks:
       - '§7Para passar por este rank'
       - ''
       - ' §6Preço:'
-      - ' §7{price}'
+      - ' §7{price} §aCoins'
+      - ' §7{flakes} §bFlocos'
     rankup:
       command: ''
       messages:
@@ -139,7 +145,8 @@ ranks:
       - '§7Para passar por este rank'
       - ''
       - ' §6Preço:'
-      - ' §7{price}'
+      - ' §7{price} §aCoins'
+      - ' §7{flakes} §bFlocos'
     rankup:
       command: ''
       messages:
@@ -160,7 +167,8 @@ ranks:
       - '§7Para passar por este rank'
       - ''
       - ' §6Preço:'
-      - ' §7{price}'
+      - ' §7{price} §aCoins'
+      - ' §7{flakes} §bFlocos'
     rankup:
       command: ''
       messages:
@@ -181,7 +189,8 @@ ranks:
       - '§7Para passar por este rank'
       - ''
       - ' §6Preço:'
-      - ' §7{price}'
+      - ' §7{price} §aCoins'
+      - ' §7{flakes} §bFlocos'
     rankup:
       command: ''
       messages:
@@ -202,7 +211,8 @@ ranks:
       - '§7Para passar por este rank'
       - ''
       - ' §6Preço:'
-      - ' §7{price}'
+      - ' §7{price} §aCoins'
+      - ' §7{flakes} §bFlocos'
     rankup:
       command: ''
       messages:
@@ -223,7 +233,8 @@ ranks:
       - '§7Para passar por este rank'
       - ''
       - ' §6Preço:'
-      - ' §7{price}'
+      - ' §7{price} §aCoins'
+      - ' §7{flakes} §bFlocos'
     rankup:
       command: ''
       messages:
@@ -244,7 +255,8 @@ ranks:
       - '§7Para passar por este rank'
       - ''
       - ' §6Preço:'
-      - ' §7{price}'
+      - ' §7{price} §aCoins'
+      - ' §7{flakes} §bFlocos'
     rankup:
       command: ''
       messages:
@@ -265,7 +277,8 @@ ranks:
       - '§7Para passar por este rank'
       - ''
       - ' §6Preço:'
-      - ' §7{price}'
+      - ' §7{price} §aCoins'
+      - ' §7{flakes} §bFlocos'
     rankup:
       command: ''
       messages:
@@ -286,7 +299,8 @@ ranks:
       - '§7Para passar por este rank'
       - ''
       - ' §6Preço:'
-      - ' §7{price}'
+      - ' §7{price} §aCoins'
+      - ' §7{flakes} §bFlocos'
     rankup:
       command: ''
       messages:
@@ -307,7 +321,8 @@ ranks:
       - '§7Para passar por este rank'
       - ''
       - ' §6Preço:'
-      - ' §7{price}'
+      - ' §7{price} §aCoins'
+      - ' §7{flakes} §bFlocos'
     rankup:
       command: ''
       messages:
@@ -328,7 +343,8 @@ ranks:
       - '§7Para passar por este rank'
       - ''
       - ' §6Preço:'
-      - ' §7{price}'
+      - ' §7{price} §aCoins'
+      - ' §7{flakes} §bFlocos'
     rankup:
       command: ''
       messages:

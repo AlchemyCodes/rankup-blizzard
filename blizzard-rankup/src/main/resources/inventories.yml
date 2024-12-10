@@ -4,7 +4,7 @@ rankInventory:
   items:
     information:
       material: "OAK_HANGING_SIGN"
-      slot: 10
+      slot: 9
       displayName: "§6Suas informações"
       lore:
         - ""
@@ -17,7 +17,7 @@ rankInventory:
         - ""
     ranks:
       material: "GREEN_DYE"
-      slot: 12
+      slot: 11
       displayName: "§6Ranks"
       lore:
         - "§7Clique para ver"
@@ -25,7 +25,7 @@ rankInventory:
         -
     tops:
       material: "BLACK_DYE"
-      slot: 14
+      slot: 13
       displayName: "§6Tops"
       lore:
         - "§7Clique para ver"
@@ -33,10 +33,16 @@ rankInventory:
         -
     rankup:
       material: "ORANGE_DYE"
-      slot: 16
+      slot: 15
       displayName: "§6RankUp"
       lore:
         - "§7Clique para"
+    auto-rankup:
+      material: "PINK_DYE"
+      slot: 17
+      displayName: "§6Auto RankUp"
+      lore:
+        - "§7Clique para ativar ou desativar"
 
 confirmationInventory:
   size: 3

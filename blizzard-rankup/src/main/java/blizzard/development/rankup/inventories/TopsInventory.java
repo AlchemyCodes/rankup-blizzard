@@ -1,11 +1,12 @@
 package blizzard.development.rankup.inventories;
 
-import blizzard.development.core.utils.items.SkullAPI;
 import blizzard.development.rankup.database.cache.PlayersCacheManager;
+import blizzard.development.rankup.database.cache.method.PlayersCacheMethod;
 import blizzard.development.rankup.database.storage.PlayersData;
 import blizzard.development.rankup.utils.PluginImpl;
 import blizzard.development.rankup.utils.PrestigeUtils;
 import blizzard.development.rankup.utils.RanksUtils;
+import blizzard.development.rankup.utils.items.skulls.SkullAPI;
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
@@ -20,6 +21,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class TopsInventory {
@@ -28,12 +30,13 @@ public class TopsInventory {
         int size = config.getInt("topsInventory.size");
         String title = config.getString("topsInventory.title");
 
+        assert title != null;
         ChestGui inventory = new ChestGui(size, title);
         StaticPane pane = new StaticPane(0, 0, 9, size);
 
-        List<PlayersData> topPlayers = PlayersCacheManager.getAllPlayersData().stream()
+        List<PlayersData> topPlayers = PlayersCacheManager.getInstance().getAllPlayersData().stream()
                 .sorted((p1, p2) -> Integer.compare(p2.getPrestige(), p1.getPrestige()))
-                .collect(Collectors.toList());
+                .toList();
 
         int numberOfItems = Math.min(topPlayers.size(), 10);
 
@@ -89,6 +92,7 @@ public class TopsInventory {
         YamlConfiguration config = PluginImpl.getInstance().Inventories.getConfig();
         ConfigurationSection backConfig = config.getConfigurationSection("topsInventory.items.back");
 
+        assert backConfig != null;
         Material material = Material.valueOf(backConfig.getString("material"));
         String displayName = backConfig.getString("displayName");
         List<String> lore = backConfig.getStringList("lore");
@@ -107,9 +111,9 @@ public class TopsInventory {
         YamlConfiguration config = PluginImpl.getInstance().Inventories.getConfig();
         YamlConfiguration ranksConfig = PluginImpl.getInstance().Ranks.getConfig();
 
-        PlayersData playersData = PlayersCacheManager.getPlayerData(player);
-        String currentRank = playersData.getRank();
-        int prestige = playersData.getPrestige();
+        PlayersCacheMethod playersData = PlayersCacheMethod.getInstance();
+        String currentRank = playersData.getRank(player);
+        int prestige = playersData.getPrestige(player);
 
         ConfigurationSection currentRankSection = RanksUtils.getCurrentRankSection(ranksConfig, currentRank);
         ConfigurationSection infoConfig = config.getConfigurationSection("topsInventory.items.information");
@@ -117,11 +121,14 @@ public class TopsInventory {
         Material material = Material.valueOf(infoConfig.getString("material"));
         String displayName = infoConfig.getString("displayName");
         List<String> lore = infoConfig.getStringList("lore").stream()
-                .map(line -> line.replace("{current_rank}", RanksUtils.getCurrentRank(ranksConfig, currentRank))
-                        .replace("{next_rank}", RanksUtils.getNextRank(ranksConfig, currentRankSection) != null ? RanksUtils.getNextRank(ranksConfig, currentRankSection) : "Nenhum")
-                        .replace("{prestige}", String.valueOf(prestige))
-                        .replace("{next_prestige}", String.valueOf(prestige + 1))
-                        .replace("{prestige_cost}", String.valueOf(PrestigeUtils.prestigeCoinsCostAdd(prestige))))
+                .map(line -> {
+                    assert currentRankSection != null;
+                    return line.replace("{current_rank}", Objects.requireNonNull(RanksUtils.getCurrentRankName(ranksConfig, currentRank)))
+                            .replace("{next_rank}", RanksUtils.getNextRank(ranksConfig, currentRankSection) != null ? Objects.requireNonNull(RanksUtils.getNextRank(ranksConfig, currentRankSection)) : "Nenhum")
+                            .replace("{prestige}", String.valueOf(prestige))
+                            .replace("{next_prestige}", String.valueOf(prestige + 1))
+                            .replace("{prestige_cost}", String.valueOf(PrestigeUtils.prestigeCoinsCostAdd(prestige)));
+                })
                 .collect(Collectors.toList());
 
         ItemStack info = new ItemStack(material);
