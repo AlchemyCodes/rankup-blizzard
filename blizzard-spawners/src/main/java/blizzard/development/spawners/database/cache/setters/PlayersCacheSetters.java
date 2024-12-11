@@ -9,23 +9,7 @@ public class PlayersCacheSetters {
 
     private final PlayersCacheManager cache = PlayersCacheManager.getInstance();
 
-    public void addPlacedSpawners(Player player, double amount) {
-        PlayersData data = cache.getPlayerData(player);
-        if (data != null) {
-            data.setPlacedSpawners(data.getPlacedSpawners() + amount);
-            cache.cachePlayerData(player, data);
-        }
-    }
-
-    public void removePlacedSpawners(Player player, double amount) {
-        PlayersData data = cache.getPlayerData(player);
-        if (data != null) {
-            data.setPlacedSpawners(data.getPlacedSpawners() - amount);
-            cache.cachePlayerData(player, data);
-        }
-    }
-
-    public void addePurchasedSpawners(Player player, double amount) {
+    public void addPurchasedSpawners(Player player, double amount) {
         PlayersData data = cache.getPlayerData(player);
         if (data != null) {
             data.setPurchasedSpawners(data.getPurchasedSpawners() + amount);

@@ -15,27 +15,12 @@ public class PlayersCacheGetters {
 
     private final PlayersCacheManager cache = PlayersCacheManager.getInstance();
 
-    public double getPlacedSpawners(Player player) {
-        PlayersData data = cache.getPlayerData(player);
-        if (data != null) {
-            return data.getPlacedSpawners();
-        }
-        return 0.0;
-    }
-
     public double getPurchasedSpawners(Player player) {
         PlayersData data = cache.getPlayerData(player);
         if (data != null) {
             return data.getPurchasedSpawners();
         }
         return 0.0;
-    }
-
-    public List<PlayersData> getTopPlacedSpawners() {
-        return PlayersCacheManager.getInstance().playersCache.values().stream()
-                .sorted((p1, p2) -> Double.compare(p2.getPlacedSpawners(), p1.getPlacedSpawners()))
-                .limit(10)
-                .collect(Collectors.toList());
     }
 
     public List<PlayersData> getTopPurchasedSpawners() {

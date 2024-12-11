@@ -152,15 +152,13 @@ public class SpawnerPlaceListener implements Listener {
                 speed,
                 lucky,
                 experience,
-                5
+                PluginImpl.getInstance().Config.getInt("spawners.initial-friends-limit")
         )) {
             return false;
         }
 
         SpawnersData spawnerData = SpawnersCacheManager.getInstance().getSpawnerData(id);
         SpawnersMobsTaskManager.getInstance().startTask(spawnerData);
-
-        setters.addPlacedSpawners(player, amount);
 
         DisplayBuilder.createSpawnerDisplay(spawnerLocation,
                 spawner.getType(),
@@ -178,7 +176,6 @@ public class SpawnerPlaceListener implements Listener {
     public Boolean stackSpawners(Player player, Location location, boolean sneaking, int radius) {
         final SpawnersCacheSetters setters = SpawnersCacheSetters.getInstance();
         final SpawnersUtils utils = SpawnersUtils.getInstance();
-        final PlayersCacheSetters playersSetters = PlayersCacheSetters.getInstance();
 
         ItemStack spawnerItem = player.getInventory().getItemInMainHand();
 
@@ -240,8 +237,6 @@ public class SpawnerPlaceListener implements Listener {
                     }
                     amount = Double.parseDouble(spawnersAmount);
                 }
-
-                playersSetters.addPlacedSpawners(player, amount);
 
                 setters.setSpawnerAmout(closestSpawner.getId(), closestSpawner.getAmount() + amount);
                 SpawnersMobsTaskManager.getInstance().syncMobAmount(closestSpawner.getId(), closestSpawner.getMobAmount());

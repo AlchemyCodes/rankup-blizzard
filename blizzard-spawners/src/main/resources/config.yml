@@ -1,0 +1,4 @@
+spawners:
+
+  # limits
+  initial-friends-limit: 5
