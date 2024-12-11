@@ -4,6 +4,7 @@ import blizzard.development.currencies.currencies.CoinsCurrency;
 import blizzard.development.currencies.currencies.FlakesCurrency;
 import blizzard.development.currencies.currencies.FossilsCurrency;
 import blizzard.development.currencies.currencies.SoulsCurrency;
+import blizzard.development.currencies.currencies.limits.SpawnersLimitCurrency;
 import blizzard.development.currencies.database.storage.PlayersData;
 import blizzard.development.currencies.enums.Currencies;
 import blizzard.development.currencies.utils.NumberFormat;
@@ -25,6 +26,8 @@ public class CurrenciesAPI {
     String flakes = Currencies.FLAKES.getName();
     FossilsCurrency fossilsCurrency = FossilsCurrency.getInstance();
     String fossils = Currencies.FOSSILS.getName();
+    SpawnersLimitCurrency spawnersLimitCurrency = SpawnersLimitCurrency.getInstance();
+    String spawnersLimit = Currencies.SPAWNERSLIMIT.getName();
 
     // API Methods
     public Double getBalance(Player player, Currencies currency) {
@@ -36,6 +39,8 @@ public class CurrenciesAPI {
             return flakesCurrency.getBalance(player);
         } else if (currency.getName().equals(fossils)) {
             return fossilsCurrency.getBalance(player);
+        } else if (currency.getName().equals(spawnersLimit)) {
+            return spawnersLimitCurrency.getBalance(player);
         }
         return 0.0;
     }
@@ -49,6 +54,8 @@ public class CurrenciesAPI {
             return format.formatNumber(flakesCurrency.getBalance(player));
         } else if (currency.getName().equals(fossils)) {
             return format.formatNumber(fossilsCurrency.getBalance(player));
+        } else if (currency.getName().equals(spawnersLimit)) {
+            return format.formatNumber(spawnersLimitCurrency.getBalance(player));
         }
         return "0";
     }
@@ -65,6 +72,8 @@ public class CurrenciesAPI {
             flakesCurrency.setBalance(player, balance);
         } else if (currency.getName().equals(fossils)) {
             fossilsCurrency.setBalance(player, balance);
+        } else if (currency.getName().equals(spawnersLimit)) {
+            spawnersLimitCurrency.setBalance(player, balance);
         }
         return true;
     }
@@ -81,6 +90,8 @@ public class CurrenciesAPI {
             flakesCurrency.addBalance(player, balance);
         } else if (currency.getName().equals(fossils)) {
             fossilsCurrency.addBalance(player, balance);
+        } else if (currency.getName().equals(spawnersLimit)) {
+            spawnersLimitCurrency.addBalance(player, balance);
         }
         return true;
     }
@@ -97,6 +108,8 @@ public class CurrenciesAPI {
             flakesCurrency.removeBalance(player, balance);
         } else if (currency.getName().equals(fossils)) {
             fossilsCurrency.removeBalance(player, balance);
+        } else if (currency.getName().equals(spawnersLimit)) {
+            spawnersLimitCurrency.removeBalance(player, balance);
         }
         return true;
     }
@@ -114,6 +127,9 @@ public class CurrenciesAPI {
         } else if (currency.getName().equals(fossils)) {
             fossilsCurrency.removeBalance(player, balance);
             fossilsCurrency.addBalance(target, balance);
+        } else if (currency.getName().equals(spawnersLimit)) {
+            spawnersLimitCurrency.removeBalance(player, balance);
+            spawnersLimitCurrency.addBalance(target, balance);
         }
         return true;
     }
@@ -125,6 +141,8 @@ public class CurrenciesAPI {
             return flakesCurrency.getTopPlayers();
         } else if (currency.getName().equals(fossils)) {
             return fossilsCurrency.getTopPlayers();
+        } else if (currency.getName().equals(spawnersLimit)) {
+            return spawnersLimitCurrency.getTopPlayers();
         }
         return null;
     }

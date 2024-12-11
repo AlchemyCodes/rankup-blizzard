@@ -20,7 +20,8 @@ public class PlayersDAO {
                     "nickname VARCHAR(36), " +
                     "souls DOUBLE, " +
                     "flakes DOUBLE, " +
-                    "fossils DOUBLE" +
+                    "fossils DOUBLE, " +
+                    "spawners_limit DOUBLE" +
                     ")";
             stat.execute(sql_player);
 
@@ -53,7 +54,8 @@ public class PlayersDAO {
                             resultSet.getString("nickname"),
                             resultSet.getDouble("souls"),
                             resultSet.getDouble("flakes"),
-                            resultSet.getDouble("fossils")
+                            resultSet.getDouble("fossils"),
+                            resultSet.getDouble("spawners_limit")
                     );
                 }
             }
@@ -64,7 +66,7 @@ public class PlayersDAO {
     }
 
     public void createPlayerData(PlayersData playerData) throws SQLException {
-        String sql = "INSERT INTO currencies_users (uuid, nickname, souls, flakes, fossils) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO currencies_users (uuid, nickname, souls, flakes, fossils, spawners_limit) VALUES (?, ?, ?, ?, ?, ?)";
         executeUpdate(sql, statement -> {
             try {
                 statement.setString(1, playerData.getUuid());
@@ -72,6 +74,7 @@ public class PlayersDAO {
                 statement.setDouble(3, playerData.getSouls());
                 statement.setDouble(4, playerData.getFlakes());
                 statement.setDouble(5, playerData.getFossils());
+                statement.setDouble(6, playerData.getSpawnersLimit());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -90,14 +93,15 @@ public class PlayersDAO {
     }
 
     public void updatePlayerData(PlayersData playerData) throws SQLException {
-        String sql = "UPDATE currencies_users SET nickname = ?, souls = ?, flakes = ?, fossils = ? WHERE uuid = ?";
+        String sql = "UPDATE currencies_users SET nickname = ?, souls = ?, flakes = ?, fossils = ?, spawners_limit = ? WHERE uuid = ?";
         executeUpdate(sql, statement -> {
             try {
                 statement.setString(1, playerData.getNickname());
                 statement.setDouble(2, playerData.getSouls());
                 statement.setDouble(3, playerData.getFlakes());
                 statement.setDouble(4, playerData.getFossils());
-                statement.setString(5, playerData.getUuid());
+                statement.setDouble(5, playerData.getSpawnersLimit());
+                statement.setString(6, playerData.getUuid());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -118,7 +122,8 @@ public class PlayersDAO {
                         resultSet.getString("nickname"),
                         resultSet.getDouble("souls"),
                         resultSet.getDouble("flakes"),
-                        resultSet.getDouble("fossils")
+                        resultSet.getDouble("fossils"),
+                        resultSet.getDouble("spawners_limit")
                 );
                 players.add(player);
             }

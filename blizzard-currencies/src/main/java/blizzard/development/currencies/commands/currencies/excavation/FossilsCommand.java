@@ -27,7 +27,7 @@ public class FossilsCommand extends BaseCommand {
     @CommandPermission("blizzard.currencies.basic")
     @CommandCompletion("@players")
     @Syntax("<jogador>")
-    public void onSoulsCommand(CommandSender sender, @Optional String nickname) {
+    public void onFossilsCommand(CommandSender sender, @Optional String nickname) {
         if (!(sender instanceof Player player)) {
             sender.sendMessage("§cEste comando só pode ser utilizado por jogadores!");
             return;

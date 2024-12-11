@@ -4,3 +4,4 @@ currencies:
     souls: true
     flakes: true
     fossils: true
+    spawners-limit: true
