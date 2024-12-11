@@ -49,7 +49,7 @@ public class PurchasedInventory {
         });
 
         GuiItem filterItem = new GuiItem(items.filter("Colocados"), event -> {
-            PlacedInventory.getInstance().open(player);
+            LimitsInventory.getInstance().open(player);
             player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.5f, 0.5f);
             event.setCancelled(true);
         });

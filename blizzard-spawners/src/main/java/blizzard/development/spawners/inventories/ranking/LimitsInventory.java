@@ -1,7 +1,8 @@
 package blizzard.development.spawners.inventories.ranking;
 
-import blizzard.development.spawners.database.cache.getters.PlayersCacheGetters;
-import blizzard.development.spawners.database.storage.PlayersData;
+import blizzard.development.currencies.api.CurrenciesAPI;
+import blizzard.development.currencies.database.storage.PlayersData;
+import blizzard.development.currencies.enums.Currencies;
 import blizzard.development.spawners.inventories.ranking.items.RankingItems;
 import blizzard.development.spawners.inventories.shop.ShopInventory;
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
@@ -13,18 +14,18 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public class PlacedInventory {
-    private static PlacedInventory instance;
+public class LimitsInventory {
+    private static LimitsInventory instance;
 
     public void open(Player player) {
         ChestGui inventory = new ChestGui(4, "§8Destaques - Spawners");
 
         final RankingItems items = RankingItems.getInstance();
-        final PlayersCacheGetters getters = PlayersCacheGetters.getInstance();
+        final CurrenciesAPI api = CurrenciesAPI.getInstance();
 
         StaticPane pane = new StaticPane(0, 0, 9, 4);
 
-        List<PlayersData> topPlayers = getters.getTopPlacedSpawners();
+        List<PlayersData> topPlayers = api.getTopPlayers(Currencies.SPAWNERSLIMIT);
 
         String[] slots = {"10", "11", "12", "13", "14", "15", "16", "21", "22", "23"};
 
@@ -33,9 +34,9 @@ public class PlacedInventory {
                 PlayersData playersData = topPlayers.get(i);
                 String name = playersData.getNickname();
 
-                double amount = playersData.getPlacedSpawners();
+                double amount = playersData.getSpawnersLimit();
 
-                GuiItem spawnersItem = new GuiItem(items.spawners(name, "Colocados", i, amount), event -> event.setCancelled(true));
+                GuiItem spawnersItem = new GuiItem(items.spawners(name, "Limites", i, amount), event -> event.setCancelled(true));
                 pane.addItem(spawnersItem, Slot.fromIndex(Integer.parseInt(slots[i])));
             } else {
                 GuiItem placeholderItem = new GuiItem(items.nothing(i), event -> event.setCancelled(true));
@@ -62,8 +63,8 @@ public class PlacedInventory {
         inventory.show(player);
     }
 
-    public static PlacedInventory getInstance() {
-        if (instance == null) instance = new PlacedInventory();
+    public static LimitsInventory getInstance() {
+        if (instance == null) instance = new LimitsInventory();
         return instance;
     }
 }

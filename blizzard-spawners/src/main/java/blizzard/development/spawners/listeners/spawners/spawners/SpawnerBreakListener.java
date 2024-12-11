@@ -105,9 +105,6 @@ public class SpawnerBreakListener implements Listener {
     }
 
     private void removeSpawner(Player player, String id, String type, Double amount) {
-        final PlayersCacheGetters getters = PlayersCacheGetters.getInstance();
-        final PlayersCacheSetters setters = PlayersCacheSetters.getInstance();
-
         try {
             SpawnersData spawnerData = cache.getSpawnerData(id);
             if (spawnerData != null) {
@@ -139,10 +136,6 @@ public class SpawnerBreakListener implements Listener {
 
             spawnersDAO.deleteSpawnerData(id);
             cache.removeSpawnerData(id);
-
-            if (!(amount > getters.getPlacedSpawners(player)) && spawnerData.getNickname().equalsIgnoreCase(player.getName())) {
-                setters.removePlacedSpawners(player, amount);
-            }
 
             String formattedAmount = NumberFormat.getInstance().formatNumber(amount);
             player.sendActionBar(TextAPI.parse("§a§lYAY! §aVocê removeu §fx" + formattedAmount + " §aspawner(s) de " + type + "§a!"));
