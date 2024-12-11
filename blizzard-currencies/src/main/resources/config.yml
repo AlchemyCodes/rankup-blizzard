@@ -1,5 +1,11 @@
 currencies:
 
+  initial-balance:
+    souls: 1.0
+    flakes: 1.0
+    fossils: 1.0
+    spawners-limit: 1.0
+
   can-pay:
     souls: true
     flakes: true
