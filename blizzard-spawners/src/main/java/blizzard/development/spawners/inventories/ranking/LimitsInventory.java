@@ -12,18 +12,19 @@ import com.github.stefvanschie.inventoryframework.pane.util.Slot;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class LimitsInventory {
     private static LimitsInventory instance;
 
     public void open(Player player) {
-        ChestGui inventory = new ChestGui(4, "§8Destaques - Spawners");
+        ChestGui inventory = new ChestGui(5, "§8Destaques - Spawners");
 
         final RankingItems items = RankingItems.getInstance();
         final CurrenciesAPI api = CurrenciesAPI.getInstance();
 
-        StaticPane pane = new StaticPane(0, 0, 9, 4);
+        StaticPane pane = new StaticPane(0, 0, 9, 5);
 
         List<PlayersData> topPlayers = api.getTopPlayers(Currencies.SPAWNERSLIMIT);
 
@@ -49,14 +50,24 @@ public class LimitsInventory {
             event.setCancelled(true);
         });
 
-        GuiItem filterItem = new GuiItem(items.filter("Comprados"), event -> {
-            PurchasedInventory.getInstance().open(player);
+        GuiItem filterItem = new GuiItem(items.filter(
+                Arrays.asList(
+                        "§7Mude a categoria de destaques",
+                        "",
+                        "§8 ▶ §7Comprados",
+                        "§8 ▶ §fLimites",
+                        "§8 ▶ §7Mobs Mortos",
+                        "",
+                        "§aClique aqui para mudar."
+                )
+        ), event -> {
+            KilledInventory.getInstance().open(player);
             player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.5f, 0.5f);
             event.setCancelled(true);
         });
 
-        pane.addItem(backItem, Slot.fromIndex(27));
-        pane.addItem(filterItem, Slot.fromIndex(35));
+        pane.addItem(backItem, Slot.fromIndex(36));
+        pane.addItem(filterItem, Slot.fromIndex(40));
 
         inventory.addPane(pane);
 

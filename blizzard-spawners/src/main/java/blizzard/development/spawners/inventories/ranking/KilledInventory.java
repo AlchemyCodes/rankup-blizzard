@@ -14,8 +14,8 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.List;
 
-public class PurchasedInventory {
-    private static PurchasedInventory instance;
+public class KilledInventory {
+    private static KilledInventory instance;
 
     public void open(Player player) {
         ChestGui inventory = new ChestGui(5, "§8Destaques - Spawners");
@@ -25,7 +25,7 @@ public class PurchasedInventory {
 
         StaticPane pane = new StaticPane(0, 0, 9, 5);
 
-        List<PlayersData> topPlayers = getters.getTopPurchasedSpawners();
+        List<PlayersData> topPlayers = getters.getTopKilledMobs();
 
         String[] slots = {"10", "11", "12", "13", "14", "15", "16", "21", "22", "23"};
 
@@ -34,9 +34,9 @@ public class PurchasedInventory {
                 PlayersData playersData = topPlayers.get(i);
                 String name = playersData.getNickname();
 
-                double amount = playersData.getPurchasedSpawners();
+                double amount = playersData.getKilledMobs();
 
-                GuiItem spawnersItem = new GuiItem(items.spawners(name, "Comprados", i, amount), event -> event.setCancelled(true));
+                GuiItem spawnersItem = new GuiItem(items.spawners(name, "Mobs Mortos", i, amount), event -> event.setCancelled(true));
                 pane.addItem(spawnersItem, Slot.fromIndex(Integer.parseInt(slots[i])));
             } else {
                 GuiItem placeholderItem = new GuiItem(items.nothing(i), event -> event.setCancelled(true));
@@ -53,14 +53,14 @@ public class PurchasedInventory {
                 Arrays.asList(
                         "§7Mude a categoria de destaques",
                         "",
-                        "§8 ▶ §fComprados",
+                        "§8 ▶ §7Comprados",
                         "§8 ▶ §7Limites",
-                        "§8 ▶ §7Mobs Mortos",
+                        "§8 ▶ §fMobs Mortos",
                         "",
                         "§aClique aqui para mudar."
                 )
         ), event -> {
-            LimitsInventory.getInstance().open(player);
+            PurchasedInventory.getInstance().open(player);
             player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.5f, 0.5f);
             event.setCancelled(true);
         });
@@ -73,8 +73,8 @@ public class PurchasedInventory {
         inventory.show(player);
     }
 
-    public static PurchasedInventory getInstance() {
-        if (instance == null) instance = new PurchasedInventory();
+    public static KilledInventory getInstance() {
+        if (instance == null) instance = new KilledInventory();
         return instance;
     }
 }

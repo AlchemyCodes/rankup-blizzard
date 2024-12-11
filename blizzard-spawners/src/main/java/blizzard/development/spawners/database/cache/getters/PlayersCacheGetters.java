@@ -23,9 +23,24 @@ public class PlayersCacheGetters {
         return 0.0;
     }
 
+    public double getKilledMobs(Player player) {
+        PlayersData data = cache.getPlayerData(player);
+        if (data != null) {
+            return data.getKilledMobs();
+        }
+        return 0.0;
+    }
+
     public List<PlayersData> getTopPurchasedSpawners() {
         return PlayersCacheManager.getInstance().playersCache.values().stream()
                 .sorted((p1, p2) -> Double.compare(p2.getPurchasedSpawners(), p1.getPurchasedSpawners()))
+                .limit(10)
+                .collect(Collectors.toList());
+    }
+
+    public List<PlayersData> getTopKilledMobs() {
+        return PlayersCacheManager.getInstance().playersCache.values().stream()
+                .sorted((p1, p2) -> Double.compare(p2.getKilledMobs(), p1.getKilledMobs()))
                 .limit(10)
                 .collect(Collectors.toList());
     }
