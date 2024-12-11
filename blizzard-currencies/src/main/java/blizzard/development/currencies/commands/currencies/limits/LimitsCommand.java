@@ -1,4 +1,4 @@
-package blizzard.development.currencies.commands.currencies.rankup;
+package blizzard.development.currencies.commands.currencies.limits;
 
 import blizzard.development.currencies.api.CurrenciesAPI;
 import blizzard.development.currencies.database.cache.PlayersCacheManager;
@@ -16,18 +16,18 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-@CommandAlias("flakes|flocos|floco")
-public class FlakesCommand extends BaseCommand {
+@CommandAlias("limits|limit|limites|limite")
+public class LimitsCommand extends BaseCommand {
     CooldownUtils cooldown = CooldownUtils.getInstance();
     PlayersCacheManager cache = PlayersCacheManager.getInstance();
     CurrenciesAPI api = CurrenciesAPI.getInstance();
-    Currencies currency = Currencies.FLAKES;
+    Currencies currency = Currencies.SPAWNERSLIMIT;
 
     @Default
     @CommandPermission("blizzard.currencies.basic")
     @CommandCompletion("@players")
     @Syntax("<jogador>")
-    public void onFlakesCommand(CommandSender sender, @Optional String nickname) {
+    public void onLimitsCommand(CommandSender sender, @Optional String nickname) {
         if (!(sender instanceof Player player)) {
             sender.sendMessage("§cEste comando só pode ser utilizado por jogadores!");
             return;
@@ -52,8 +52,8 @@ public class FlakesCommand extends BaseCommand {
             String balance = api.getFormattedBalance(player, currency);
             List<String> messages = Arrays.asList(
                     "",
-                    " §bConfira agora o seu saldo disponível de Flocos.",
-                    " §bFlocos: ❆" + "§l" + balance,
+                    " §3Confira agora o seu saldo disponível de Limites.",
+                    " §3Limites: ∞" + "§l" + balance,
                     ""
             );
 
@@ -75,15 +75,15 @@ public class FlakesCommand extends BaseCommand {
             }
 
             if (target.equals(player)) {
-                sender.sendActionBar(TextAPI.parse("§c§lEI! §cUtilize '/flocos'!"));
+                sender.sendActionBar(TextAPI.parse("§c§lEI! §cUtilize '/limites'!"));
                 return;
             }
 
             String balance = api.getFormattedBalance(target, currency);
             List<String> messages = Arrays.asList(
                     "",
-                    " §bConfira agora o saldo disponível de flocos do jogador §l" + target.getName() + "§b.",
-                    " §bFlocos: ❆" + "§l" + balance,
+                    " §3Confira agora o saldo disponível de limites do jogador §l" + target.getName() + "§b.",
+                    " §3Limites: ∞" + "§l" + balance,
                     ""
             );
 

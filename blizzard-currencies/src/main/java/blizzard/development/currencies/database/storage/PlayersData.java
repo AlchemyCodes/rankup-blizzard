@@ -2,14 +2,15 @@ package blizzard.development.currencies.database.storage;
 
 public class PlayersData {
     private String uuid, nickname;
-    private Double souls, flakes, fossils;
+    private Double souls, flakes, fossils, spawnersLimit;
 
-    public PlayersData(String uuid, String nickname, Double souls, Double flakes, Double fossils) {
+    public PlayersData(String uuid, String nickname, Double souls, Double flakes, Double fossils, Double spawnersLimit) {
         this.uuid = uuid;
         this.nickname = nickname;
         this.souls = souls;
         this.flakes = flakes;
         this.fossils = fossils;
+        this.spawnersLimit = spawnersLimit;
     }
 
     // Commons
@@ -54,5 +55,13 @@ public class PlayersData {
 
     public void setFossils(Double fossils) {
         this.fossils = fossils;
+    }
+
+    public Double getSpawnersLimit() {
+        return spawnersLimit;
+    }
+
+    public void setSpawnersLimit(Double spawnersLimit) {
+        this.spawnersLimit = spawnersLimit;
     }
 }
