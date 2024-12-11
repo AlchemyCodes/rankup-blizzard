@@ -25,6 +25,22 @@ public class PlayersCacheSetters {
         }
     }
 
+    public void addKilledMobs(Player player, double amount) {
+        PlayersData data = cache.getPlayerData(player);
+        if (data != null) {
+            data.setKilledMobs(data.getKilledMobs() + amount);
+            cache.cachePlayerData(player, data);
+        }
+    }
+
+    public void removeKilledMobs(Player player, double amount) {
+        PlayersData data = cache.getPlayerData(player);
+        if (data != null) {
+            data.setKilledMobs(data.getKilledMobs() - amount);
+            cache.cachePlayerData(player, data);
+        }
+    }
+
     public static PlayersCacheSetters getInstance() {
         if (instance == null) instance = new PlayersCacheSetters();
         return instance;

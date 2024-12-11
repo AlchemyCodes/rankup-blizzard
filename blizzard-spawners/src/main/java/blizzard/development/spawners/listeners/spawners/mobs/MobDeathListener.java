@@ -1,6 +1,7 @@
 package blizzard.development.spawners.listeners.spawners.mobs;
 
 import blizzard.development.spawners.database.cache.managers.SpawnersCacheManager;
+import blizzard.development.spawners.database.cache.setters.PlayersCacheSetters;
 import blizzard.development.spawners.database.cache.setters.SpawnersCacheSetters;
 import blizzard.development.spawners.database.storage.SpawnersData;
 import blizzard.development.spawners.handlers.enchantments.EnchantmentsHandler;
@@ -66,6 +67,7 @@ public class MobDeathListener implements Listener {
         ItemStack tool = player.getInventory().getItemInMainHand();
         int lootingLevel = tool.getEnchantments().getOrDefault(Enchantment.LOOT_BONUS_MOBS, 0);
         setters.addSpawnerDrops(data.getId(), (amount * (1 + lootingLevel)));
+        PlayersCacheSetters.getInstance().addKilledMobs(player, amount);
     }
 
     private void checkReward(Player player, SpawnersData data) {

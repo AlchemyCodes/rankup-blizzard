@@ -39,11 +39,11 @@ public class RankingItems {
         return item;
     }
 
-    public ItemStack filter(String type) {
-        ItemStack item = new ItemStack(Material.OAK_SIGN);
+    public ItemStack filter(List<String> lore) {
+        ItemStack item = new ItemStack(Material.MINECART);
         ItemMeta meta = item.getItemMeta();
         meta.displayName(TextAPI.parse("§aMudar Categoria"));
-        meta.setLore(List.of("§7Clique para mudar para " + type));
+        meta.setLore(lore);
         item.setItemMeta(meta);
         return item;
     }

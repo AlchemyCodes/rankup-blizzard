@@ -17,7 +17,7 @@ public class PlayersDAO {
                     "uuid VARCHAR(36) PRIMARY KEY, " +
                     "nickname VARCHAR(36), " +
                     "purchasedSpawners DOUBLE DEFAULT 0, " +
-                    "placedSpawners DOUBLE DEFAULT 0" +
+                    "killedMobs DOUBLE DEFAULT 0" +
                     ")";
             stat.execute(sql_player);
 
@@ -51,7 +51,7 @@ public class PlayersDAO {
                             resultSet.getString("uuid"),
                             resultSet.getString("nickname"),
                             resultSet.getDouble("purchasedSpawners"),
-                            resultSet.getDouble("placedSpawners")
+                            resultSet.getDouble("killedMobs")
                     );
                 }
             }
@@ -62,13 +62,13 @@ public class PlayersDAO {
     }
 
     public void createPlayerData(PlayersData playerData) throws SQLException {
-        String sql = "INSERT INTO spawners_users (uuid, nickname, purchasedSpawners, placedSpawners) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO spawners_users (uuid, nickname, purchasedSpawners, killedMobs) VALUES (?, ?, ?, ?)";
         executeUpdate(sql, statement -> {
             try {
                 statement.setString(1, playerData.getUuid());
                 statement.setString(2, playerData.getNickname());
                 statement.setDouble(3, playerData.getPurchasedSpawners());
-                statement.setDouble(4, playerData.getPlacedSpawners());
+                statement.setDouble(4, playerData.getKilledMobs());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -87,12 +87,12 @@ public class PlayersDAO {
     }
 
     public void updatePlayerData(PlayersData playerData) throws SQLException {
-        String sql = "UPDATE spawners_users SET nickname = ?, purchasedSpawners = ?, placedSpawners = ? WHERE uuid = ?";
+        String sql = "UPDATE spawners_users SET nickname = ?, purchasedSpawners = ?, killedMobs = ? WHERE uuid = ?";
         executeUpdate(sql, statement -> {
             try {
                 statement.setString(1, playerData.getNickname());
                 statement.setDouble(2, playerData.getPurchasedSpawners());
-                statement.setDouble(3, playerData.getPlacedSpawners());
+                statement.setDouble(3, playerData.getKilledMobs());
                 statement.setString(4, playerData.getUuid());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
@@ -113,7 +113,7 @@ public class PlayersDAO {
                         resultSet.getString("uuid"),
                         resultSet.getString("nickname"),
                         resultSet.getDouble("purchasedSpawners"),
-                        resultSet.getDouble("placedSpawners")
+                        resultSet.getDouble("killedMobs")
                 ));
             }
         } catch (SQLException e) {
