@@ -3,6 +3,8 @@ package blizzard.development.currencies.listeners.commons;
 import blizzard.development.currencies.database.cache.PlayersCacheManager;
 import blizzard.development.currencies.database.dao.PlayersDAO;
 import blizzard.development.currencies.database.storage.PlayersData;
+import blizzard.development.currencies.utils.PluginImpl;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,7 +21,17 @@ public class PlayersJoinListener implements Listener {
         Player player = event.getPlayer();
         PlayersData playersData = database.findPlayerData(player.getUniqueId().toString());
         if (playersData == null) {
-            playersData = new PlayersData(player.getUniqueId().toString(), player.getName(), 0.0, 0.0, 0.0, 0.0);
+
+            final FileConfiguration config = PluginImpl.getInstance().Config.getConfig();
+
+            playersData = new PlayersData(
+                    player.getUniqueId().toString(),
+                    player.getName(),
+                    config.getDouble("currencies.initial-balance.souls"),
+                    config.getDouble("currencies.initial-balance.flakes"),
+                    config.getDouble("currencies.initial-balance.fossils"),
+                    config.getDouble("currencies.initial-balance.spawners-limit")
+            );
             try {
                 database.createPlayerData(playersData);
             } catch(Exception err) {
