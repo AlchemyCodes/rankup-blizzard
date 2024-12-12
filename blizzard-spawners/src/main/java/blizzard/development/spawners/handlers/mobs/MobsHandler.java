@@ -17,7 +17,7 @@ public class MobsHandler {
     final static Plugin plugin = PluginImpl.getInstance().plugin;
     final static SpawnersUtils utils = SpawnersUtils.getInstance();
 
-    public static void giveMobSpawner(Player player, Spawners type, Double amount, Integer stack, int speed, int lucky, int experience) {
+    public static void giveMobSpawner(Player player, Spawners type, Double amount, Integer stack, int speed, int lucky, int experience, Integer limit) {
         final String spawner = utils.getMobNameBySpawner(type);
         final String key = "blizzard.spawners-" + spawner;
 
@@ -41,6 +41,7 @@ public class MobsHandler {
                 .addPersistentData(plugin, "speed", String.valueOf(speed))
                 .addPersistentData(plugin, "lucky", String.valueOf(lucky))
                 .addPersistentData(plugin, "experience", String.valueOf(experience))
+                .addPersistentData(plugin, "limit", String.valueOf(limit))
                 .setAmount(stack)
                 .build();
 

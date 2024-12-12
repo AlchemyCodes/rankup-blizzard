@@ -3,8 +3,10 @@ package blizzard.development.spawners.commands.spawners.subcommands;
 import blizzard.development.spawners.handlers.enchantments.EnchantmentsHandler;
 import blizzard.development.spawners.handlers.enums.Enchantments;
 import blizzard.development.spawners.handlers.enums.Spawners;
+import blizzard.development.spawners.handlers.limits.LimitsHandler;
 import blizzard.development.spawners.handlers.mobs.MobsHandler;
 import blizzard.development.spawners.utils.NumberFormat;
+import blizzard.development.spawners.utils.PluginImpl;
 import blizzard.development.spawners.utils.items.TextAPI;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
@@ -22,7 +24,7 @@ public class GiveCommand extends BaseCommand {
     @Subcommand("give")
     @CommandCompletion("@players @spawners @amount @amount")
     @Syntax("<player> <spawner> <quantia> <stack>")
-    public void onCommand(CommandSender sender, String target, String type, Double amount, Integer stack) {
+    public void onGiveSpawner(CommandSender sender, String target, String type, Double amount, Integer stack) {
         Player player = Bukkit.getPlayer(target);
         if (player == null) {
             sender.sendActionBar(TextAPI.parse("§c§lEI! §cO jogador fornecido é inválido ou está offline."));
@@ -45,9 +47,10 @@ public class GiveCommand extends BaseCommand {
                         stack,
                         handler.getInitialLevel(Enchantments.SPEED.getName()),
                         handler.getInitialLevel(Enchantments.LUCKY.getName()),
-                        handler.getInitialLevel(Enchantments.EXPERIENCE.getName())
+                        handler.getInitialLevel(Enchantments.EXPERIENCE.getName()),
+                        PluginImpl.getInstance().Config.getInt("spawners.initial-friends-limit")
                 );
-                sender.sendActionBar(TextAPI.parse(successMessage(player, type, amount, stack)));
+                sender.sendActionBar(TextAPI.parse(spawnersSuccessMessage(player, type, amount, stack)));
             }
             case "cows", "cow", "vacas", "vaca" -> {
                 MobsHandler.giveMobSpawner(
@@ -57,9 +60,10 @@ public class GiveCommand extends BaseCommand {
                         stack,
                         handler.getInitialLevel(Enchantments.SPEED.getName()),
                         handler.getInitialLevel(Enchantments.LUCKY.getName()),
-                        handler.getInitialLevel(Enchantments.EXPERIENCE.getName())
+                        handler.getInitialLevel(Enchantments.EXPERIENCE.getName()),
+                        PluginImpl.getInstance().Config.getInt("spawners.initial-friends-limit")
                 );
-                sender.sendActionBar(TextAPI.parse(successMessage(player, type, amount, stack)));
+                sender.sendActionBar(TextAPI.parse(spawnersSuccessMessage(player, type, amount, stack)));
             }
             case "mooshrooms", "mooshroom", "coguvacas", "coguvaca" -> {
                 MobsHandler.giveMobSpawner(
@@ -69,9 +73,10 @@ public class GiveCommand extends BaseCommand {
                         stack,
                         handler.getInitialLevel(Enchantments.SPEED.getName()),
                         handler.getInitialLevel(Enchantments.LUCKY.getName()),
-                        handler.getInitialLevel(Enchantments.EXPERIENCE.getName())
+                        handler.getInitialLevel(Enchantments.EXPERIENCE.getName()),
+                        PluginImpl.getInstance().Config.getInt("spawners.initial-friends-limit")
                 );
-                sender.sendActionBar(TextAPI.parse(successMessage(player, type, amount, stack)));
+                sender.sendActionBar(TextAPI.parse(spawnersSuccessMessage(player, type, amount, stack)));
             }
             case "sheeps", "sheep", "ovelhas", "ovelha" -> {
                 MobsHandler.giveMobSpawner(
@@ -81,9 +86,10 @@ public class GiveCommand extends BaseCommand {
                         stack,
                         handler.getInitialLevel(Enchantments.SPEED.getName()),
                         handler.getInitialLevel(Enchantments.LUCKY.getName()),
-                        handler.getInitialLevel(Enchantments.EXPERIENCE.getName())
+                        handler.getInitialLevel(Enchantments.EXPERIENCE.getName()),
+                        PluginImpl.getInstance().Config.getInt("spawners.initial-friends-limit")
                 );
-                sender.sendActionBar(TextAPI.parse(successMessage(player, type, amount, stack)));
+                sender.sendActionBar(TextAPI.parse(spawnersSuccessMessage(player, type, amount, stack)));
             }
             case "zombies", "zombie", "zumbis", "zumbi" -> {
                 MobsHandler.giveMobSpawner(
@@ -93,9 +99,10 @@ public class GiveCommand extends BaseCommand {
                         stack,
                         handler.getInitialLevel(Enchantments.SPEED.getName()),
                         handler.getInitialLevel(Enchantments.LUCKY.getName()),
-                        handler.getInitialLevel(Enchantments.EXPERIENCE.getName())
+                        handler.getInitialLevel(Enchantments.EXPERIENCE.getName()),
+                        PluginImpl.getInstance().Config.getInt("spawners.initial-friends-limit")
                 );
-                sender.sendActionBar(TextAPI.parse(successMessage(player, type, amount, stack)));
+                sender.sendActionBar(TextAPI.parse(spawnersSuccessMessage(player, type, amount, stack)));
             }
             default -> {
                 List<String> messages = Arrays.asList(
@@ -111,7 +118,7 @@ public class GiveCommand extends BaseCommand {
         }
     }
 
-    public String successMessage(Player player, String type, Double amount, Integer stack) {
+    public String spawnersSuccessMessage(Player player, String type, Double amount, Integer stack) {
         String formattedAmount = NumberFormat.getInstance().formatNumber(amount);
         return "§a§lYAY! §aVocê deu §fx" + formattedAmount + " spawner(s) §ade §f" + type + " (" + stack + ")" + "§a para o jogador §f" + player.getName() + "§a!";
     }
