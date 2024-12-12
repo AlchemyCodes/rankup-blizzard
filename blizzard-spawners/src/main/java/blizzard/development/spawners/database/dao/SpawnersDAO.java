@@ -29,7 +29,9 @@ public class SpawnersDAO {
                     "lucky_level INTEGER, " +
                     "experience_level INTEGER, " +
                     "friends TEXT, " +
-                    "friendsLimit INTEGER)";
+                    "friendsLimit INTEGER, " +
+                    "auto_sell BOOLEAN, " +
+                    "auto_sell_state BOOLEAN)";
             stat.execute(sql);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -44,8 +46,6 @@ public class SpawnersDAO {
         }
     }
 
-
-
     public List<SpawnersData> findSpawnerDataByPlotId(String plotId) {
         String sql = "SELECT * FROM spawners WHERE plotId = ?";
         List<SpawnersData> spawnersData = new ArrayList<>();
@@ -55,12 +55,10 @@ public class SpawnersDAO {
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     Gson gson = new Gson();
-
                     String friendsJson = resultSet.getString("friends");
                     List<String> friends = friendsJson != null
                             ? gson.fromJson(friendsJson, new TypeToken<List<String>>(){}.getType())
                             : new ArrayList<>();
-
                     spawnersData.add(new SpawnersData(
                             resultSet.getString("id"),
                             resultSet.getString("type"),
@@ -76,7 +74,9 @@ public class SpawnersDAO {
                             resultSet.getInt("lucky_level"),
                             resultSet.getInt("experience_level"),
                             friends,
-                            resultSet.getInt("friendsLimit")
+                            resultSet.getInt("friendsLimit"),
+                            resultSet.getBoolean("auto_sell"),
+                            resultSet.getBoolean("auto_sell_state")
                     ));
                 }
             }
@@ -87,7 +87,7 @@ public class SpawnersDAO {
     }
 
     public void createSpawnerData(SpawnersData spawnerData) throws SQLException {
-        String sql = "INSERT INTO spawners (id, type, location, mob_location, nickname, state, plotId, amount, mob_amount, drops, speed_level, lucky_level, experience_level, friends, friendsLimit) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO spawners (id, type, location, mob_location, nickname, state, plotId, amount, mob_amount, drops, speed_level, lucky_level, experience_level, friends, friendsLimit, auto_sell, auto_sell_state) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         executeUpdate(sql, statement -> {
             try {
                 statement.setString(1, spawnerData.getId());
@@ -105,6 +105,8 @@ public class SpawnersDAO {
                 statement.setInt(13, spawnerData.getExperienceLevel());
                 statement.setString(14, new Gson().toJson(spawnerData.getFriends()));
                 statement.setInt(15, spawnerData.getFriendsLimit());
+                statement.setBoolean(16, spawnerData.getAutoSell());
+                statement.setBoolean(17, spawnerData.getAutoSellState());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -123,7 +125,7 @@ public class SpawnersDAO {
     }
 
     public void updateSpawnerData(SpawnersData spawnerData) throws SQLException {
-        String sql = "UPDATE spawners SET type = ?, location = ?, mob_location = ?, nickname = ?, state = ?, plotId = ?, amount = ?, mob_amount = ?, drops = ?, speed_level = ?, lucky_level = ?, experience_level = ?, friends = ?, friendsLimit = ? WHERE id = ?";
+        String sql = "UPDATE spawners SET type = ?, location = ?, mob_location = ?, nickname = ?, state = ?, plotId = ?, amount = ?, mob_amount = ?, drops = ?, speed_level = ?, lucky_level = ?, experience_level = ?, friends = ?, friendsLimit = ?, auto_sell = ?, auto_sell_state = ? WHERE id = ?";
         executeUpdate(sql, statement -> {
             try {
                 statement.setString(1, spawnerData.getType());
@@ -140,13 +142,14 @@ public class SpawnersDAO {
                 statement.setInt(12, spawnerData.getExperienceLevel());
                 statement.setString(13, new Gson().toJson(spawnerData.getFriends()));
                 statement.setInt(14, spawnerData.getFriendsLimit());
-                statement.setString(15, spawnerData.getId());
+                statement.setBoolean(15, spawnerData.getAutoSell());
+                statement.setBoolean(16, spawnerData.getAutoSellState());
+                statement.setString(17, spawnerData.getId());
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         });
     }
-
 
     public List<SpawnersData> getAllSpawnersData() throws SQLException {
         String sql = "SELECT * FROM spawners";
@@ -156,12 +159,10 @@ public class SpawnersDAO {
              ResultSet resultSet = statement.executeQuery(sql)) {
             while (resultSet.next()) {
                 Gson gson = new Gson();
-
                 String friendsJson = resultSet.getString("friends");
                 List<String> friends = friendsJson != null
                         ? gson.fromJson(friendsJson, new TypeToken<List<String>>(){}.getType())
                         : new ArrayList<>();
-
                 spawnersDataList.add(new SpawnersData(
                         resultSet.getString("id"),
                         resultSet.getString("type"),
@@ -177,7 +178,9 @@ public class SpawnersDAO {
                         resultSet.getInt("lucky_level"),
                         resultSet.getInt("experience_level"),
                         friends,
-                        resultSet.getInt("friendsLimit")
+                        resultSet.getInt("friendsLimit"),
+                        resultSet.getBoolean("auto_sell"),
+                        resultSet.getBoolean("auto_sell_state")
                 ));
             }
         } catch (SQLException e) {

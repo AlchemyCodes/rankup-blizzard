@@ -14,8 +14,9 @@ public class SpawnersData {
     private Integer speedLevel, luckyLevel, experienceLevel;
     private List<String> friends;
     private Integer friendsLimit;
+    private Boolean autoSell, autoSellState;
 
-    public SpawnersData(String id, String type, String location, String mobLocation, String nickname, String state, String plotId, Double amount, Double mobAmount, Double drops, Integer speedLevel, Integer luckyLevel, Integer experienceLevel, List<String> friends, Integer friendsLimit) {
+    public SpawnersData(String id, String type, String location, String mobLocation, String nickname, String state, String plotId, Double amount, Double mobAmount, Double drops, Integer speedLevel, Integer luckyLevel, Integer experienceLevel, List<String> friends, Integer friendsLimit, Boolean autoSell, Boolean autoSellState) {
         this.id = id;
         this.type = type;
         this.location = location;
@@ -31,6 +32,8 @@ public class SpawnersData {
         this.experienceLevel = experienceLevel;
         this.friends = friends;
         this.friendsLimit = friendsLimit;
+        this.autoSell = autoSell;
+        this.autoSellState = autoSellState;
     }
 
     public String getId() {
@@ -151,5 +154,21 @@ public class SpawnersData {
 
     public void setFriendsLimit(Integer friendsLimit) {
         this.friendsLimit = friendsLimit;
+    }
+
+    public Boolean getAutoSell() {
+        return autoSell;
+    }
+
+    public void setAutoSell(Boolean autoSell) {
+        this.autoSell = autoSell;
+    }
+
+    public Boolean getAutoSellState() {
+        return autoSellState;
+    }
+
+    public void setAutoSellState(Boolean autoSellState) {
+        this.autoSellState = autoSellState;
     }
 }

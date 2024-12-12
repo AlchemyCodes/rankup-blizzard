@@ -1,4 +1,4 @@
-package blizzard.development.spawners.listeners.limits;
+package blizzard.development.spawners.listeners.drops;
 
 import blizzard.development.spawners.builders.ItemBuilder;
 import blizzard.development.spawners.database.cache.getters.SpawnersCacheGetters;
@@ -24,34 +24,34 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.concurrent.TimeUnit;
 
-public class FriendsLimitInteractListener implements Listener {
-
+public class DropsAutoSellInteractListener implements Listener {
     private final SpawnersCacheManager cache = SpawnersCacheManager.getInstance();
     private final CooldownUtils cooldown = CooldownUtils.getInstance();
-    private final String key = "blizzard.spawners-friendslimit";
+    private final String key = "blizzard.spawners-autosell";
 
     @EventHandler
-    private void onFriendsLimitPlace(PlayerInteractEvent event) {
+    private void onDropsAutoSellPlace(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         Block limitBlock = event.getClickedBlock();
         ItemStack limitItem = player.getInventory().getItemInMainHand();
-        String cooldownName = "blizzard.spawners.limits.place-cooldown";
+        String cooldownName = "blizzard.spawners.autosell.place-cooldown";
 
-        if (limitItem.getType().equals(Material.NETHER_STAR) && ItemBuilder.hasPersistentData(PluginImpl.getInstance().plugin, limitItem, key)) {
+        if (limitItem.getType().equals(Material.ENDER_EYE) && ItemBuilder.hasPersistentData(PluginImpl.getInstance().plugin, limitItem, key)) {
+
 
             if (event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
                 event.setCancelled(true);
 
                 if (cooldown.isInCountdown(player, cooldownName) && !player.hasPermission("blizzard.spawners.admin")) {
-                    player.sendActionBar(TextAPI.parse("§c§lEI! §cAguarde um pouco antes de usar outro limite."));
+                    player.sendActionBar(TextAPI.parse("§c§lEI! §cAguarde um pouco antes de usar outro ativador."));
                     event.setCancelled(true);
                     return;
                 }
 
                 if (limitBlock == null  || limitBlock.getType().equals(Material.AIR)) return;
 
-                if (addFriendsLimit(player, limitBlock.getLocation(), player.isSneaking())) {
-                    player.sendActionBar(TextAPI.parse("§a§lYAY! §aVocê aumentou o limite de amigos desse spawner com sucesso."));
+                if (activateAutoSell(player, limitBlock.getLocation())) {
+                    player.sendActionBar(TextAPI.parse("§a§lYAY! §aVocê ativou o auto-vender neste spawner."));
                     cooldown.createCountdown(player, cooldownName, 1000, TimeUnit.MILLISECONDS);
                     event.setCancelled(true);
                 }
@@ -61,13 +61,12 @@ public class FriendsLimitInteractListener implements Listener {
         }
     }
 
-    public Boolean addFriendsLimit(Player player, Location location, boolean sneaking) {
+    public Boolean activateAutoSell(Player player, Location location) {
         final SpawnersCacheSetters setters = SpawnersCacheSetters.getInstance();
-        final SpawnersCacheGetters getters = SpawnersCacheGetters.getInstance();
-        ItemStack limitItem = player.getInventory().getItemInMainHand();
+        ItemStack autoSellItem = player.getInventory().getItemInMainHand();
 
-        if (limitItem.getType().equals(Material.NETHER_STAR) && ItemBuilder.hasPersistentData(PluginImpl.getInstance().plugin, limitItem, key)) {
-            String limitAmount = ItemBuilder.getPersistentData(PluginImpl.getInstance().plugin, limitItem, key);
+        if (autoSellItem.getType().equals(Material.ENDER_EYE) && ItemBuilder.hasPersistentData(PluginImpl.getInstance().plugin, autoSellItem, key)) {
+            String limitAmount = ItemBuilder.getPersistentData(PluginImpl.getInstance().plugin, autoSellItem, key);
             if (limitAmount == null) {
                 return false;
             }
@@ -83,12 +82,11 @@ public class FriendsLimitInteractListener implements Listener {
             }
 
             if (data == null) {
-                player.sendActionBar(TextAPI.parse("§c§lEI! §cVocê precisa utilizar este limite em um spawner."));
+                player.sendActionBar(TextAPI.parse("§c§lEI! §cVocê precisa utilizar este ativador em um spawner."));
                 return false;
             }
 
             SpawnersData closestSpawner = data;
-            int limitsItemAmount = player.getInventory().getItemInMainHand().getAmount();
 
             FileConfiguration config = PluginImpl.getInstance().Spawners.getConfig();
             boolean released = config.getBoolean("spawners." + getSpawnerType(closestSpawner.getType()) + ".permitted-purchase", false);
@@ -106,45 +104,20 @@ public class FriendsLimitInteractListener implements Listener {
                 return false;
             }
 
-            int maxLimit = 10;
-            int currentLimit = getters.getSpawnerFriendsLimit(closestSpawner.getId());
-            int remainingLimit = maxLimit - currentLimit;
+            boolean autoSell = closestSpawner.getAutoSell();
 
-            if (remainingLimit <= 0) {
-                player.sendActionBar(TextAPI.parse("§c§lEI! §cEste spawner está com o limite de amigos no máximo."));
+            if (autoSell) {
+                player.sendActionBar(TextAPI.parse("§c§lEI! §cEste spawner já está com auto-vender ativo."));
                 return false;
             }
 
-            double amount;
-            if (sneaking) {
-                amount = Double.parseDouble(limitAmount) * limitsItemAmount;
+            ItemStack currentItem = player.getInventory().getItemInMainHand();
+            if (currentItem.getAmount() > 1) {
+                currentItem.setAmount(currentItem.getAmount() - 1);
+                setters.setDropsAutoSell(closestSpawner.getId(), true);
+            } else {
                 player.getInventory().setItemInMainHand(null);
-            } else {
-                amount = Double.parseDouble(limitAmount);
-                ItemStack currentItem = player.getInventory().getItemInMainHand();
-                if (currentItem.getAmount() > 1) {
-                    currentItem.setAmount(currentItem.getAmount() - 1);
-                } else {
-                    player.getInventory().setItemInMainHand(null);
-                }
-            }
-
-            if (amount <= remainingLimit) {
-                setters.addSpawnerFriendsLimit(closestSpawner.getId(), (int) amount);
-
-                player.sendActionBar(TextAPI.parse(
-                        "§a§lYAY! §aVocê adicionou §f+" + amount + " §alimite(s) de amigo no seu gerador.")
-                );
-            } else {
-                setters.addSpawnerFriendsLimit(closestSpawner.getId(), remainingLimit);
-
-                double remainingAmount = amount - remainingLimit;
-
-                LimitsHandler.giveFriendsLimit(player, remainingAmount, 1);
-
-                player.sendActionBar(TextAPI.parse(
-                        "§a§lYAY! §aVocê adicionou §f+" + remainingLimit + " §alimite(s) de amigo no seu gerador.")
-                );
+                setters.setDropsAutoSell(closestSpawner.getId(), true);
             }
 
             return true;

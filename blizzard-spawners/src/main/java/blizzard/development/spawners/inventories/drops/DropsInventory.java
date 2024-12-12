@@ -3,11 +3,14 @@ package blizzard.development.spawners.inventories.drops;
 import blizzard.development.currencies.api.CurrenciesAPI;
 import blizzard.development.currencies.enums.Currencies;
 import blizzard.development.spawners.database.cache.getters.SpawnersCacheGetters;
+import blizzard.development.spawners.database.cache.managers.SpawnersCacheManager;
 import blizzard.development.spawners.database.cache.setters.SpawnersCacheSetters;
+import blizzard.development.spawners.database.storage.SpawnersData;
 import blizzard.development.spawners.handlers.spawners.SpawnersHandler;
 import blizzard.development.spawners.inventories.drops.items.DropsItems;
 import blizzard.development.spawners.inventories.spawners.SpawnersInventory;
 import blizzard.development.spawners.managers.SpawnerAccessManager;
+import blizzard.development.spawners.tasks.spawners.drops.DropsAutoSellTaskManager;
 import blizzard.development.spawners.utils.CooldownUtils;
 import blizzard.development.spawners.utils.NumberFormat;
 import blizzard.development.spawners.utils.SpawnersUtils;
@@ -52,7 +55,14 @@ public class DropsInventory {
             event.setCancelled(true);
         });
 
-        GuiItem autoSellItem = new GuiItem(items.autoSell(), event -> {
+        GuiItem autoSellItem = new GuiItem(items.autoSell(id), event -> {
+            if (!player.getName().equals(getters.getSpawnerOwner(id)) && !player.hasPermission("blizzard.spawners.admin")) {
+                player.sendActionBar(TextAPI.parse("§c§lEI! §cVocê não é dono desse spawner."));
+                player.getInventory().close();
+                return;
+            }
+
+            changeAutoSellState(player, id);
             event.setCancelled(true);
         });
 
@@ -120,6 +130,23 @@ public class DropsInventory {
         player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_YES, 1.0f, 1.0f);
         player.getOpenInventory().close();
 
+    }
+
+    public void changeAutoSellState(Player player, String id) {
+        DropsAutoSellTaskManager manager = DropsAutoSellTaskManager.getInstance();
+        SpawnersData data = SpawnersCacheManager.getInstance().getSpawnerData(id);
+
+        if (getters.getDropsAutoSell(id)) {
+            if (getters.getDropsAutoSellState(id)) {
+                setters.setDropsAutoSellState(id, false);
+                manager.stopTask(data.getId());
+            } else {
+                setters.setDropsAutoSellState(id, true);
+                manager.startTask(data);
+            }
+            open(player, id);
+            player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_YES, 1.0f, 1.0f);
+        }
     }
 
     public static DropsInventory getInstance() {

@@ -14,6 +14,7 @@ import blizzard.development.spawners.listeners.plots.PlotClearListener;
 import blizzard.development.spawners.listeners.plots.PlotDeleteListener;
 import blizzard.development.spawners.tasks.players.PlayersSaveTask;
 import blizzard.development.spawners.tasks.spawners.SpawnersSaveTask;
+import blizzard.development.spawners.tasks.spawners.drops.DropsAutoSellTaskManager;
 import blizzard.development.spawners.tasks.spawners.mobs.SpawnersMobsTaskManager;
 import blizzard.development.spawners.utils.config.ConfigUtils;
 import co.aikar.commands.Locales;
@@ -73,6 +74,7 @@ public class PluginImpl {
     public void onDisable() {
         DatabaseConnection.getInstance().close();
         SpawnersMobsTaskManager.getInstance().stopAllTasks();
+        DropsAutoSellTaskManager.getInstance().stopAllTasks();
         DisplayBuilder.removeAllSpawnerDisplay();
     }
 
@@ -91,6 +93,9 @@ public class PluginImpl {
             for (SpawnersData spawner : allSpawners) {
                 SpawnersCacheManager.getInstance().cacheSpawnerData(spawner.getId(), spawner);
                 SpawnersMobsTaskManager.getInstance().startTask(spawner);
+                if (spawner.getAutoSellState()) {
+                    DropsAutoSellTaskManager.getInstance().startTask(spawner);
+                }
             }
         } catch (SQLException exception) {
             throw new RuntimeException(exception);

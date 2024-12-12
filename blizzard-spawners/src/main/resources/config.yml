@@ -2,3 +2,6 @@ spawners:
 
   # limits
   initial-friends-limit: 5
+
+  # auto-sell
+  auto-sell-cooldown: 3600 # seconds

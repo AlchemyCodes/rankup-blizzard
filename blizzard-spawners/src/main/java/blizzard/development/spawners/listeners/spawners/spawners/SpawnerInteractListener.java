@@ -52,7 +52,8 @@ public class SpawnerInteractListener implements Listener {
                     return;
                 }
 
-                if (ItemBuilder.hasPersistentData(PluginImpl.getInstance().plugin, player.getInventory().getItemInMainHand(), "blizzard.spawners-friendslimit")) {
+                if (ItemBuilder.hasPersistentData(PluginImpl.getInstance().plugin, player.getInventory().getItemInMainHand(), "blizzard.spawners-friendslimit"
+                ) || ItemBuilder.hasPersistentData(PluginImpl.getInstance().plugin, player.getInventory().getItemInMainHand(), "blizzard.spawners-autosell")) {
                     event.setCancelled(true);
                     return;
                 }

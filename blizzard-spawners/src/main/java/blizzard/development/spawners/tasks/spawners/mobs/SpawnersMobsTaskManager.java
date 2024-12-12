@@ -3,6 +3,7 @@ package blizzard.development.spawners.tasks.spawners.mobs;
 import blizzard.development.spawners.database.storage.SpawnersData;
 import blizzard.development.spawners.handlers.enchantments.EnchantmentsHandler;
 import blizzard.development.spawners.handlers.enums.Enchantments;
+import blizzard.development.spawners.tasks.spawners.drops.DropsAutoSellTaskManager;
 import blizzard.development.spawners.utils.LocationUtil;
 import blizzard.development.spawners.utils.PluginImpl;
 import org.bukkit.Location;

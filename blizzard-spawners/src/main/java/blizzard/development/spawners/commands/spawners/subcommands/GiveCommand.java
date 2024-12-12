@@ -48,7 +48,8 @@ public class GiveCommand extends BaseCommand {
                         handler.getInitialLevel(Enchantments.SPEED.getName()),
                         handler.getInitialLevel(Enchantments.LUCKY.getName()),
                         handler.getInitialLevel(Enchantments.EXPERIENCE.getName()),
-                        PluginImpl.getInstance().Config.getInt("spawners.initial-friends-limit")
+                        PluginImpl.getInstance().Config.getInt("spawners.initial-friends-limit"),
+                        false
                 );
                 sender.sendActionBar(TextAPI.parse(spawnersSuccessMessage(player, type, amount, stack)));
             }
@@ -61,7 +62,8 @@ public class GiveCommand extends BaseCommand {
                         handler.getInitialLevel(Enchantments.SPEED.getName()),
                         handler.getInitialLevel(Enchantments.LUCKY.getName()),
                         handler.getInitialLevel(Enchantments.EXPERIENCE.getName()),
-                        PluginImpl.getInstance().Config.getInt("spawners.initial-friends-limit")
+                        PluginImpl.getInstance().Config.getInt("spawners.initial-friends-limit"),
+                        false
                 );
                 sender.sendActionBar(TextAPI.parse(spawnersSuccessMessage(player, type, amount, stack)));
             }
@@ -74,7 +76,8 @@ public class GiveCommand extends BaseCommand {
                         handler.getInitialLevel(Enchantments.SPEED.getName()),
                         handler.getInitialLevel(Enchantments.LUCKY.getName()),
                         handler.getInitialLevel(Enchantments.EXPERIENCE.getName()),
-                        PluginImpl.getInstance().Config.getInt("spawners.initial-friends-limit")
+                        PluginImpl.getInstance().Config.getInt("spawners.initial-friends-limit"),
+                        false
                 );
                 sender.sendActionBar(TextAPI.parse(spawnersSuccessMessage(player, type, amount, stack)));
             }
@@ -87,7 +90,8 @@ public class GiveCommand extends BaseCommand {
                         handler.getInitialLevel(Enchantments.SPEED.getName()),
                         handler.getInitialLevel(Enchantments.LUCKY.getName()),
                         handler.getInitialLevel(Enchantments.EXPERIENCE.getName()),
-                        PluginImpl.getInstance().Config.getInt("spawners.initial-friends-limit")
+                        PluginImpl.getInstance().Config.getInt("spawners.initial-friends-limit"),
+                        false
                 );
                 sender.sendActionBar(TextAPI.parse(spawnersSuccessMessage(player, type, amount, stack)));
             }
@@ -100,7 +104,8 @@ public class GiveCommand extends BaseCommand {
                         handler.getInitialLevel(Enchantments.SPEED.getName()),
                         handler.getInitialLevel(Enchantments.LUCKY.getName()),
                         handler.getInitialLevel(Enchantments.EXPERIENCE.getName()),
-                        PluginImpl.getInstance().Config.getInt("spawners.initial-friends-limit")
+                        PluginImpl.getInstance().Config.getInt("spawners.initial-friends-limit"),
+                        false
                 );
                 sender.sendActionBar(TextAPI.parse(spawnersSuccessMessage(player, type, amount, stack)));
             }

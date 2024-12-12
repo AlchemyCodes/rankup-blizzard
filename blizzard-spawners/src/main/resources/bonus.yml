@@ -1,17 +1,7 @@
 bonus:
-
-  buy-bonus:
-    default:
-      bonus: 0 # in percentage
-      permission: blizzard.spawners.default-bonus
-    vip:
-      bonus: 10 # in percentage
-      permission: blizzard.spawners.vip-bonus
-
-  sell-bonus:
-    default:
-      bonus: 0 # in percentage
-      permission: blizzard.spawners.default-bonus
-    vip:
-      bonus: 10 # in percentage
-      permission: blizzard.spawners.vip-bonus
+  default:
+    bonus: 0 # in percentage
+    permission: blizzard.spawners.default-bonus
+  vip:
+    bonus: 5 # in percentage
+    permission: blizzard.spawners.vip-bonus

@@ -39,7 +39,7 @@ public class LimitsHandler {
         final String key = "blizzard.spawners-friendslimit";
 
         String formattedAmount = NumberFormat.getInstance().formatNumber(amount);
-        final ItemStack item = new ItemBuilder(Material.STONE_BUTTON)
+        final ItemStack item = new ItemBuilder(Material.NETHER_STAR)
                 .setDisplayName("&aLimite de §lAmigos &7(x" + formattedAmount + ")")
                 .setLore(Arrays.asList(
                         "&7Utilize este limite para",
