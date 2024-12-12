@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 
 public class SpawnersMethods {
-    public static Boolean createSpawner(Player player, Spawners spawner, String id, String location, String mobLocation, String state, String plotId, Double amount, Double mobAmount, Double drops, Integer speedLevel, Integer luckyLevel, Integer experienceLevel, Integer friendsLimit) {
+    public static Boolean createSpawner(Player player, Spawners spawner, String id, String location, String mobLocation, String state, String plotId, Double amount, Double mobAmount, Double drops, Integer speedLevel, Integer luckyLevel, Integer experienceLevel, Integer friendsLimit, Boolean autoSell) {
         String type = spawner.getType();
         String nickname = player.getName();
         SpawnersData spawnersData = new SpawnersData(
@@ -28,7 +28,9 @@ public class SpawnersMethods {
                 luckyLevel,
                 experienceLevel,
                 new ArrayList<>(),
-                friendsLimit
+                friendsLimit,
+                autoSell,
+                false
         );
         try {
             new SpawnersDAO().createSpawnerData(spawnersData);

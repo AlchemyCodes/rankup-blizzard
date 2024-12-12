@@ -22,7 +22,7 @@ import java.util.List;
 @CommandPermission("blizzard.spawners.admin")
 public class LimitsCommand extends BaseCommand {
 
-    @Subcommand("limits")
+    @Subcommand("limit|limits|limite|limites")
     @CommandCompletion("@actions @limits @players @amount")
     @Syntax("<ação> <tipo> <player> <quantia>")
     public void onGiveLimit(CommandSender sender, String action, String type, String target, Double amount) {
@@ -112,7 +112,7 @@ public class LimitsCommand extends BaseCommand {
             default -> {
                 List<String> messages = Arrays.asList(
                         "",
-                        " §c§lEI §cA ação §7" + type + "§c não existe.",
+                        " §c§lEI §cA ação §7" + action + "§c não existe.",
                         " §cDisponíveis: §7[dar, adicionar, remover]",
                         ""
                 );

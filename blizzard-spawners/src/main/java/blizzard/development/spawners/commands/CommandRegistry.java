@@ -23,7 +23,8 @@ public class CommandRegistry {
                 new ReloadCommand(),
                 new RankingCommand(),
                 new SpawnersCommand(),
-                new LimitsCommand()
+                new LimitsCommand(),
+                new AutoSellCommand()
         ).forEach(paperCommandManager::registerCommand);
 
         paperCommandManager.getCommandCompletions().registerCompletion("spawners", c -> Spawners.getAllTypes());
@@ -34,7 +35,6 @@ public class CommandRegistry {
             array.add("amigos");
 
             return array;
-
         });
         paperCommandManager.getCommandCompletions().registerCompletion("actions", c -> {
             ArrayList<String> array = new ArrayList<>();
@@ -44,7 +44,13 @@ public class CommandRegistry {
             array.add("remover");
 
             return array;
+        });
+        paperCommandManager.getCommandCompletions().registerCompletion("actionssell", c -> {
+            ArrayList<String> array = new ArrayList<>();
 
+            array.add("dar");
+
+            return array;
         });
 
         paperCommandManager.getCommandCompletions().registerCompletion("amount", c -> {

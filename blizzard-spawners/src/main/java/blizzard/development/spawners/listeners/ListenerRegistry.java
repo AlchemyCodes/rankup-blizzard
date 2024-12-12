@@ -5,6 +5,7 @@ import blizzard.development.spawners.listeners.chat.AsyncChatListener;
 import blizzard.development.spawners.listeners.chat.spawners.SpawnerFriendsListener;
 import blizzard.development.spawners.listeners.commons.PlayersJoinListener;
 import blizzard.development.spawners.listeners.commons.PlayersQuitListener;
+import blizzard.development.spawners.listeners.drops.DropsAutoSellInteractListener;
 import blizzard.development.spawners.listeners.limits.CommonLimitInteractListener;
 import blizzard.development.spawners.listeners.limits.FriendsLimitInteractListener;
 import blizzard.development.spawners.listeners.spawners.mobs.MobCommonListener;
@@ -45,7 +46,9 @@ public class ListenerRegistry {
                 new SpawnerFriendsListener(),
                 // limits
                 new CommonLimitInteractListener(),
-                new FriendsLimitInteractListener()
+                new FriendsLimitInteractListener(),
+                // drops
+                new DropsAutoSellInteractListener()
         ).forEach(listener -> pluginManager.registerEvents(listener, PluginImpl.getInstance().plugin));
     }
 

@@ -123,6 +123,22 @@ public class SpawnersCacheGetters {
         return 0;
     }
 
+    public boolean getDropsAutoSell(String id) {
+        SpawnersData data = cache.getSpawnerData(id);
+        if (data != null) {
+            return data.getAutoSell();
+        }
+        return false;
+    }
+
+    public boolean getDropsAutoSellState(String id) {
+        SpawnersData data = cache.getSpawnerData(id);
+        if (data != null) {
+            return data.getAutoSellState();
+        }
+        return false;
+    }
+
     public static SpawnersCacheGetters getInstance() {
         if (instance == null) instance = new SpawnersCacheGetters();
         return instance;

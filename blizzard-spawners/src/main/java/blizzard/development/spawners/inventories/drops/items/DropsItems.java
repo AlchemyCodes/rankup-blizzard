@@ -4,14 +4,18 @@ import blizzard.development.spawners.database.cache.managers.SpawnersCacheManage
 import blizzard.development.spawners.database.storage.SpawnersData;
 import blizzard.development.spawners.handlers.spawners.SpawnersHandler;
 import blizzard.development.spawners.utils.NumberFormat;
+import blizzard.development.spawners.utils.PluginImpl;
 import blizzard.development.spawners.utils.SpawnersUtils;
+import blizzard.development.spawners.utils.TimeConverter;
 import blizzard.development.spawners.utils.items.TextAPI;
+import com.plotsquared.core.util.task.TaskTime;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class DropsItems {
     private static DropsItems instance;
@@ -83,20 +87,57 @@ public class DropsItems {
         return item;
     }
 
-    public ItemStack autoSell() {
-        ItemStack item = new ItemStack(Material.REPEATER);
+    public ItemStack autoSell(String id) {
+        SpawnersData data = manager.getSpawnerData(id);
+
+        ItemStack item = new ItemStack(Material.BREWING_STAND);
         ItemMeta meta = item.getItemMeta();
 
-        meta.displayName(TextAPI.parse("§cVenda Automática"));
-        meta.setLore(Arrays.asList(
-                "§7Gerencie a venda automática",
-                "§7dos drops do seu gerador",
-                "",
-                "§f Estado de Venda:",
-                "§8  ▶ §a" + "Ligado",
-                "",
-                "§cClique para alternar o estado."
-        ));
+        meta.displayName(TextAPI.parse("§eVenda Automática"));
+
+        String time = TimeConverter.convertSecondsToTimeFormat(
+                PluginImpl.getInstance().Config.getInt("spawners.auto-sell-cooldown")
+        );
+
+        List<String> lore;
+        if (!data.getAutoSell()) {
+            lore = Arrays.asList(
+                    "§7Gerencie a venda automática",
+                    "§7dos drops do seu gerador",
+                    "",
+                    " §fAdquira a esta opção",
+                    " §fem nosso site agora!",
+                    " §7www.alchemynetwork.net",
+                    "",
+                    "§eVocê não possui esta opção."
+            );
+        } else {
+            if (!data.getAutoSellState()) {
+                lore = Arrays.asList(
+                        "§7Gerencie a venda automática",
+                        "§7dos drops do seu gerador",
+                        "",
+                        "§e Informações:",
+                        "§f  Estado: §cDesligado",
+                        "§f  Tempo: §7" + time,
+                        "",
+                        "§eClique para alternar o estado."
+                );
+            } else {
+                lore = Arrays.asList(
+                        "§7Gerencie a venda automática",
+                        "§7dos drops do seu gerador",
+                        "",
+                        "§e Informações:",
+                        "§f  Estado: §aLigado",
+                        "§f  Tempo: §7" + time,
+                        "",
+                        "§eClique para alternar o estado."
+                );
+            }
+        }
+
+        meta.setLore(lore);
 
         meta.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS, ItemFlag.HIDE_ATTRIBUTES);
         item.setItemMeta(meta);

@@ -103,6 +103,22 @@ public class SpawnersCacheSetters {
         }
     }
 
+    public void setDropsAutoSell(String id, boolean state) {
+        SpawnersData data = cache.getSpawnerData(id);
+        if (data != null) {
+            data.setAutoSell(state);
+            cache.cacheSpawnerData(id, data);
+        }
+    }
+
+    public void setDropsAutoSellState(String id, boolean state) {
+        SpawnersData data = cache.getSpawnerData(id);
+        if (data != null) {
+            data.setAutoSellState(state);
+            cache.cacheSpawnerData(id, data);
+        }
+    }
+
     public static SpawnersCacheSetters getInstance() {
         if (instance == null) instance = new SpawnersCacheSetters();
         return instance;

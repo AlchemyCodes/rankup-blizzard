@@ -10,6 +10,7 @@ import blizzard.development.spawners.database.storage.SpawnersData;
 import blizzard.development.spawners.handlers.enums.Spawners;
 import blizzard.development.spawners.handlers.mobs.MobsHandler;
 import blizzard.development.spawners.managers.SpawnerAccessManager;
+import blizzard.development.spawners.tasks.spawners.drops.DropsAutoSellTaskManager;
 import blizzard.development.spawners.tasks.spawners.mobs.SpawnersMobsTaskManager;
 import blizzard.development.spawners.utils.*;
 import blizzard.development.spawners.utils.items.TextAPI;
@@ -99,6 +100,7 @@ public class SpawnerBreakListener implements Listener {
 
             removeSpawner(player, data.getId(), data.getType(), data.getAmount());
             SpawnersMobsTaskManager.getInstance().stopTask(data.getId());
+            DropsAutoSellTaskManager.getInstance().stopTask(data.getId());
 
             cooldown.createCountdown(player, cooldownName, 1000, TimeUnit.MILLISECONDS);
         }
@@ -114,11 +116,11 @@ public class SpawnerBreakListener implements Listener {
             }
 
             switch (type.toLowerCase()) {
-                case "pigs", "pig", "porcos", "porco" -> MobsHandler.giveMobSpawner(player, Spawners.PIG, amount, 1, spawnerData.getSpeedLevel(), spawnerData.getLuckyLevel(), spawnerData.getExperienceLevel(), spawnerData.getFriendsLimit());
-                case "cows", "cow", "vacas", "vaca" -> MobsHandler.giveMobSpawner(player, Spawners.COW, amount, 1, spawnerData.getSpeedLevel(), spawnerData.getLuckyLevel(), spawnerData.getExperienceLevel(), spawnerData.getFriendsLimit());
-                case "mooshrooms", "mooshroom", "coguvacas", "coguvaca" -> MobsHandler.giveMobSpawner(player, Spawners.MOOSHROOM, amount, 1, spawnerData.getSpeedLevel(), spawnerData.getLuckyLevel(), spawnerData.getExperienceLevel(), spawnerData.getFriendsLimit());
-                case "sheeps", "sheep", "ovelhas", "ovelha" -> MobsHandler.giveMobSpawner(player, Spawners.SHEEP, amount, 1, spawnerData.getSpeedLevel(), spawnerData.getLuckyLevel(), spawnerData.getExperienceLevel(), spawnerData.getFriendsLimit());
-                case "zombies", "zombie", "zumbis", "zumbi" -> MobsHandler.giveMobSpawner(player, Spawners.ZOMBIE, amount, 1, spawnerData.getSpeedLevel(), spawnerData.getLuckyLevel(), spawnerData.getExperienceLevel(), spawnerData.getFriendsLimit());
+                case "pigs", "pig", "porcos", "porco" -> MobsHandler.giveMobSpawner(player, Spawners.PIG, amount, 1, spawnerData.getSpeedLevel(), spawnerData.getLuckyLevel(), spawnerData.getExperienceLevel(), spawnerData.getFriendsLimit(), spawnerData.getAutoSell());
+                case "cows", "cow", "vacas", "vaca" -> MobsHandler.giveMobSpawner(player, Spawners.COW, amount, 1, spawnerData.getSpeedLevel(), spawnerData.getLuckyLevel(), spawnerData.getExperienceLevel(), spawnerData.getFriendsLimit(), spawnerData.getAutoSell());
+                case "mooshrooms", "mooshroom", "coguvacas", "coguvaca" -> MobsHandler.giveMobSpawner(player, Spawners.MOOSHROOM, amount, 1, spawnerData.getSpeedLevel(), spawnerData.getLuckyLevel(), spawnerData.getExperienceLevel(), spawnerData.getFriendsLimit(), spawnerData.getAutoSell());
+                case "sheeps", "sheep", "ovelhas", "ovelha" -> MobsHandler.giveMobSpawner(player, Spawners.SHEEP, amount, 1, spawnerData.getSpeedLevel(), spawnerData.getLuckyLevel(), spawnerData.getExperienceLevel(), spawnerData.getFriendsLimit(), spawnerData.getAutoSell());
+                case "zombies", "zombie", "zumbis", "zumbi" -> MobsHandler.giveMobSpawner(player, Spawners.ZOMBIE, amount, 1, spawnerData.getSpeedLevel(), spawnerData.getLuckyLevel(), spawnerData.getExperienceLevel(), spawnerData.getFriendsLimit(), spawnerData.getAutoSell());
             }
 
             final SpawnerAccessManager accessManager = SpawnerAccessManager.getInstance();

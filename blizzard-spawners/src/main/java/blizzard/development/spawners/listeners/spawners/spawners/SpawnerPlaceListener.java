@@ -85,9 +85,10 @@ public class SpawnerPlaceListener implements Listener {
                     String lucky = ItemBuilder.getPersistentData(PluginImpl.getInstance().plugin, spawnerItem, "lucky");
                     String experience = ItemBuilder.getPersistentData(PluginImpl.getInstance().plugin, spawnerItem, "experience");
                     String limit = ItemBuilder.getPersistentData(PluginImpl.getInstance().plugin, spawnerItem, "limit");
+                    String autoSell = ItemBuilder.getPersistentData(PluginImpl.getInstance().plugin, spawnerItem, "autosell");
 
 
-                    if (value == null || speed == null || type == null || lucky == null || experience == null || limit == null) {
+                    if (value == null || speed == null || type == null || lucky == null || experience == null || limit == null || autoSell == null) {
                         event.setCancelled(true);
                         return;
                     }
@@ -103,7 +104,7 @@ public class SpawnerPlaceListener implements Listener {
                         return;
                     }
 
-                    if (!setupSpawner(player, id, spawnerBlock.getLocation(), spawnerType, Double.parseDouble(value), Integer.parseInt(speed), Integer.parseInt(lucky), Integer.parseInt(experience), Integer.parseInt(limit))) {
+                    if (!setupSpawner(player, id, spawnerBlock.getLocation(), spawnerType, Double.parseDouble(value), Integer.parseInt(speed), Integer.parseInt(lucky), Integer.parseInt(experience), Integer.parseInt(limit), Boolean.parseBoolean(autoSell))) {
                         event.setCancelled(true);
                         return;
                     }
@@ -123,7 +124,7 @@ public class SpawnerPlaceListener implements Listener {
         }
     }
 
-    private Boolean setupSpawner(Player player, String id, Location spawnerLocation, Spawners spawner, Double amount, Integer speed, Integer lucky, Integer experience, Integer limit) {
+    private Boolean setupSpawner(Player player, String id, Location spawnerLocation, Spawners spawner, Double amount, Integer speed, Integer lucky, Integer experience, Integer limit, Boolean autoSell) {
         spawnersHandler.createStaticSpawner(spawnerLocation, spawner);
 
         PlotArea plotArea = PlotSquared.get().getPlotAreaManager().getPlotArea(LocationUtil.getPlotLocation(spawnerLocation.getBlock()));
@@ -152,7 +153,8 @@ public class SpawnerPlaceListener implements Listener {
                 speed,
                 lucky,
                 experience,
-                limit
+                limit,
+                autoSell
         )) {
             return false;
         }
