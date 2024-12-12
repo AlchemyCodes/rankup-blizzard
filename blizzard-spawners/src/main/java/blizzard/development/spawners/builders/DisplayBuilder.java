@@ -25,7 +25,7 @@ public class DisplayBuilder {
         final String id = UUID.randomUUID().toString().substring(0, 5);
 
         if (holograms.containsKey(hologramLocation)) {
-            removeSpawnerDisplay(hologramLocation);
+            return;
         }
 
         String formattedAmount = NumberFormat.getInstance().formatNumber(amount);

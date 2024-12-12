@@ -114,11 +114,11 @@ public class SpawnerBreakListener implements Listener {
             }
 
             switch (type.toLowerCase()) {
-                case "pigs", "pig", "porcos", "porco" -> MobsHandler.giveMobSpawner(player, Spawners.PIG, amount, 1, spawnerData.getSpeedLevel(), spawnerData.getLuckyLevel(), spawnerData.getExperienceLevel());
-                case "cows", "cow", "vacas", "vaca" -> MobsHandler.giveMobSpawner(player, Spawners.COW, amount, 1, spawnerData.getSpeedLevel(), spawnerData.getLuckyLevel(), spawnerData.getExperienceLevel());
-                case "mooshrooms", "mooshroom", "coguvacas", "coguvaca" -> MobsHandler.giveMobSpawner(player, Spawners.MOOSHROOM, amount, 1, spawnerData.getSpeedLevel(), spawnerData.getLuckyLevel(), spawnerData.getExperienceLevel());
-                case "sheeps", "sheep", "ovelhas", "ovelha" -> MobsHandler.giveMobSpawner(player, Spawners.SHEEP, amount, 1, spawnerData.getSpeedLevel(), spawnerData.getLuckyLevel(), spawnerData.getExperienceLevel());
-                case "zombies", "zombie", "zumbis", "zumbi" -> MobsHandler.giveMobSpawner(player, Spawners.ZOMBIE, amount, 1, spawnerData.getSpeedLevel(), spawnerData.getLuckyLevel(), spawnerData.getExperienceLevel());
+                case "pigs", "pig", "porcos", "porco" -> MobsHandler.giveMobSpawner(player, Spawners.PIG, amount, 1, spawnerData.getSpeedLevel(), spawnerData.getLuckyLevel(), spawnerData.getExperienceLevel(), spawnerData.getFriendsLimit());
+                case "cows", "cow", "vacas", "vaca" -> MobsHandler.giveMobSpawner(player, Spawners.COW, amount, 1, spawnerData.getSpeedLevel(), spawnerData.getLuckyLevel(), spawnerData.getExperienceLevel(), spawnerData.getFriendsLimit());
+                case "mooshrooms", "mooshroom", "coguvacas", "coguvaca" -> MobsHandler.giveMobSpawner(player, Spawners.MOOSHROOM, amount, 1, spawnerData.getSpeedLevel(), spawnerData.getLuckyLevel(), spawnerData.getExperienceLevel(), spawnerData.getFriendsLimit());
+                case "sheeps", "sheep", "ovelhas", "ovelha" -> MobsHandler.giveMobSpawner(player, Spawners.SHEEP, amount, 1, spawnerData.getSpeedLevel(), spawnerData.getLuckyLevel(), spawnerData.getExperienceLevel(), spawnerData.getFriendsLimit());
+                case "zombies", "zombie", "zumbis", "zumbi" -> MobsHandler.giveMobSpawner(player, Spawners.ZOMBIE, amount, 1, spawnerData.getSpeedLevel(), spawnerData.getLuckyLevel(), spawnerData.getExperienceLevel(), spawnerData.getFriendsLimit());
             }
 
             final SpawnerAccessManager accessManager = SpawnerAccessManager.getInstance();

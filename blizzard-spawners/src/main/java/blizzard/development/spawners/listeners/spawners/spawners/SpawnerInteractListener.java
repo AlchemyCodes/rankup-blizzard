@@ -1,5 +1,6 @@
 package blizzard.development.spawners.listeners.spawners.spawners;
 
+import blizzard.development.spawners.builders.ItemBuilder;
 import blizzard.development.spawners.database.cache.getters.SpawnersCacheGetters;
 import blizzard.development.spawners.database.cache.managers.SpawnersCacheManager;
 import blizzard.development.spawners.database.storage.SpawnersData;
@@ -47,6 +48,11 @@ public class SpawnerInteractListener implements Listener {
 
                 if (data == null) {
                     player.sendActionBar(TextAPI.parse("§c§lEI! §cEste é um spawner sem dados."));
+                    event.setCancelled(true);
+                    return;
+                }
+
+                if (ItemBuilder.hasPersistentData(PluginImpl.getInstance().plugin, player.getInventory().getItemInMainHand(), "blizzard.spawners-friendslimit")) {
                     event.setCancelled(true);
                     return;
                 }

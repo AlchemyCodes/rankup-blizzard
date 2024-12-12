@@ -84,8 +84,10 @@ public class SpawnerPlaceListener implements Listener {
                     String speed = ItemBuilder.getPersistentData(PluginImpl.getInstance().plugin, spawnerItem, "speed");
                     String lucky = ItemBuilder.getPersistentData(PluginImpl.getInstance().plugin, spawnerItem, "lucky");
                     String experience = ItemBuilder.getPersistentData(PluginImpl.getInstance().plugin, spawnerItem, "experience");
+                    String limit = ItemBuilder.getPersistentData(PluginImpl.getInstance().plugin, spawnerItem, "limit");
 
-                    if (value == null || speed == null || type == null || lucky == null || experience == null) {
+
+                    if (value == null || speed == null || type == null || lucky == null || experience == null || limit == null) {
                         event.setCancelled(true);
                         return;
                     }
@@ -101,7 +103,7 @@ public class SpawnerPlaceListener implements Listener {
                         return;
                     }
 
-                    if (!setupSpawner(player, id, spawnerBlock.getLocation(), spawnerType, Double.parseDouble(value), Integer.parseInt(speed), Integer.parseInt(lucky), Integer.parseInt(experience))) {
+                    if (!setupSpawner(player, id, spawnerBlock.getLocation(), spawnerType, Double.parseDouble(value), Integer.parseInt(speed), Integer.parseInt(lucky), Integer.parseInt(experience), Integer.parseInt(limit))) {
                         event.setCancelled(true);
                         return;
                     }
@@ -121,9 +123,7 @@ public class SpawnerPlaceListener implements Listener {
         }
     }
 
-    private Boolean setupSpawner(Player player, String id, Location spawnerLocation, Spawners spawner, Double amount, Integer speed, Integer lucky, Integer experience) {
-        final PlayersCacheSetters setters = PlayersCacheSetters.getInstance();
-
+    private Boolean setupSpawner(Player player, String id, Location spawnerLocation, Spawners spawner, Double amount, Integer speed, Integer lucky, Integer experience, Integer limit) {
         spawnersHandler.createStaticSpawner(spawnerLocation, spawner);
 
         PlotArea plotArea = PlotSquared.get().getPlotAreaManager().getPlotArea(LocationUtil.getPlotLocation(spawnerLocation.getBlock()));
@@ -152,7 +152,7 @@ public class SpawnerPlaceListener implements Listener {
                 speed,
                 lucky,
                 experience,
-                PluginImpl.getInstance().Config.getInt("spawners.initial-friends-limit")
+                limit
         )) {
             return false;
         }
