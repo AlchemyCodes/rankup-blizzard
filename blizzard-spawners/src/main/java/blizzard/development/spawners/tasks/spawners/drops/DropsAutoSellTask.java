@@ -43,7 +43,7 @@ public class DropsAutoSellTask extends BukkitRunnable {
             String formattedValue = NumberFormat.getInstance().formatNumber(drops * unitValue);
 
             player.sendActionBar(TextAPI.parse(
-                    "§a§lYAY! §aVocê vendeu os drops desse gerador por §2§l$§a§l" + formattedValue + "§7 (0% de bônus)§a."
+                    "§a§lYAY! §aOs drops de um gerador foi vendido por §2§l$§a§l" + formattedValue + "§7 (0% de bônus)§a."
             ));
         }
     }
