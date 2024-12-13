@@ -90,10 +90,23 @@ public class DropsItems {
     public ItemStack autoSell(String id) {
         SpawnersData data = manager.getSpawnerData(id);
 
-        ItemStack item = new ItemStack(Material.BREWING_STAND);
+        ItemStack item;
+        if (!data.getAutoSell()) {
+            item = new ItemStack(Material.REPEATER);
+        } else {
+            item = new ItemStack(Material.BREWING_STAND);
+        }
+
         ItemMeta meta = item.getItemMeta();
 
-        meta.displayName(TextAPI.parse("§eVenda Automática"));
+        String display;
+        if (!data.getAutoSell()) {
+            display = "§cVenda Automática";
+        } else {
+            display = "§eVenda Automática";
+        }
+
+        meta.displayName(TextAPI.parse(display));
 
         String time = TimeConverter.convertSecondsToTimeFormat(
                 PluginImpl.getInstance().Config.getInt("spawners.auto-sell-cooldown")
@@ -109,7 +122,7 @@ public class DropsItems {
                     " §fem nosso site agora!",
                     " §7www.alchemynetwork.net",
                     "",
-                    "§eVocê não possui esta opção."
+                    "§cVocê não possui esta opção."
             );
         } else {
             if (!data.getAutoSellState()) {
