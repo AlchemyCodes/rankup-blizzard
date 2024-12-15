@@ -18,7 +18,7 @@ import java.util.List;
 public class ShopItems {
     private static ShopItems instance;
 
-    public ItemStack spawner(String material, String displayName, List<String> lore, boolean released, String cost, String dropCost) {
+    public ItemStack spawner(String material, String displayName, List<String> lore, boolean released, String cost, String dropCost, String discount) {
 
         if (released) {
             ItemStack item = new ItemStack(Material.valueOf(material.toUpperCase()));
@@ -28,8 +28,9 @@ public class ShopItems {
                 meta.setDisplayName(displayName);
 
                 lore.replaceAll(line -> line
-                                .replace("{cost}", cost)
-                                .replace("{drop-cost}", dropCost)
+                        .replace("{cost}", cost)
+                        .replace("{drop-cost}", dropCost)
+                        .replace("{discount}", discount)
                 );
 
                 meta.setLore(lore);

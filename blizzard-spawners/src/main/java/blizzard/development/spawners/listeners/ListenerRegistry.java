@@ -3,6 +3,7 @@ package blizzard.development.spawners.listeners;
 import blizzard.development.spawners.database.dao.PlayersDAO;
 import blizzard.development.spawners.listeners.chat.AsyncChatListener;
 import blizzard.development.spawners.listeners.chat.spawners.SpawnerFriendsListener;
+import blizzard.development.spawners.listeners.chat.spawners.SpawnerPurchaseListener;
 import blizzard.development.spawners.listeners.commons.PlayersJoinListener;
 import blizzard.development.spawners.listeners.commons.PlayersQuitListener;
 import blizzard.development.spawners.listeners.drops.DropsAutoSellInteractListener;
@@ -42,6 +43,7 @@ public class ListenerRegistry {
                 // chat
                 new AsyncChatListener(),
                 new SpawnerFriendsListener(),
+                new SpawnerPurchaseListener(),
                 // limits
                 new CommonLimitInteractListener(),
                 new FriendsLimitInteractListener(),

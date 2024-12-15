@@ -2,7 +2,6 @@ package blizzard.development.spawners.tasks.spawners.mobs;
 
 import blizzard.development.spawners.database.cache.setters.SpawnersCacheSetters;
 import blizzard.development.spawners.database.storage.SpawnersData;
-import blizzard.development.spawners.handlers.spawners.SpawnersHandler;
 import blizzard.development.spawners.utils.LocationUtil;
 import blizzard.development.spawners.utils.NumberFormat;
 import blizzard.development.spawners.utils.PluginImpl;
@@ -17,7 +16,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class SpawnersMobsTask extends BukkitRunnable {
     private final SpawnersData spawnerData;

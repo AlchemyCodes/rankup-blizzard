@@ -2,6 +2,8 @@ package blizzard.development.spawners.inventories.drops.items;
 
 import blizzard.development.spawners.database.cache.managers.SpawnersCacheManager;
 import blizzard.development.spawners.database.storage.SpawnersData;
+import blizzard.development.spawners.handlers.bonus.BonusHandler;
+import blizzard.development.spawners.handlers.mobs.MobsHandler;
 import blizzard.development.spawners.handlers.spawners.SpawnersHandler;
 import blizzard.development.spawners.utils.NumberFormat;
 import blizzard.development.spawners.utils.PluginImpl;
@@ -10,6 +12,7 @@ import blizzard.development.spawners.utils.TimeConverter;
 import blizzard.development.spawners.utils.items.TextAPI;
 import com.plotsquared.core.util.task.TaskTime;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -43,7 +46,7 @@ public class DropsItems {
         return item;
     }
 
-    public ItemStack drops(String id) {
+    public ItemStack drops(Player player, String id) {
         final SpawnersUtils utils = SpawnersUtils.getInstance();
         final SpawnersHandler handler = SpawnersHandler.getInstance();
         final NumberFormat format = NumberFormat.getInstance();
@@ -71,7 +74,7 @@ public class DropsItems {
                 "",
                 color + " Drops",
                 "§f  Armazenados: §7" +  drops,
-                "§f  Bônus de venda: §a" + 0 + "%",
+                "§f  Bônus de venda: §a" + (format.formatNumber(BonusHandler.getInstance().getPlayerBonus(player))) + "%",
                 "",
                 " §7Algumas informações",
                 " §7sobre este gerador.",

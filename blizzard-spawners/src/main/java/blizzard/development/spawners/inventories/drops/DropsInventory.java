@@ -6,6 +6,7 @@ import blizzard.development.spawners.database.cache.getters.SpawnersCacheGetters
 import blizzard.development.spawners.database.cache.managers.SpawnersCacheManager;
 import blizzard.development.spawners.database.cache.setters.SpawnersCacheSetters;
 import blizzard.development.spawners.database.storage.SpawnersData;
+import blizzard.development.spawners.handlers.bonus.BonusHandler;
 import blizzard.development.spawners.handlers.spawners.SpawnersHandler;
 import blizzard.development.spawners.inventories.drops.items.DropsItems;
 import blizzard.development.spawners.inventories.spawners.SpawnersInventory;
@@ -50,7 +51,7 @@ public class DropsInventory {
             event.setCancelled(true);
         });
 
-        GuiItem dropsItem = new GuiItem(items.drops(id), event -> {
+        GuiItem dropsItem = new GuiItem(items.drops(player, id), event -> {
             sellDrops(player, id, Currencies.COINS);
             event.setCancelled(true);
         });
@@ -117,15 +118,17 @@ public class DropsInventory {
             return;
         }
 
-        currencies.addBalance(player, currency, drops * unitValue);
+        double finalValue = (drops * unitValue) * (1 + (BonusHandler.getInstance().getPlayerBonus(player) / 100) );
+
+        currencies.addBalance(player, currency, finalValue);
         setters.setSpawnerDrops(id, 0);
 
         utils.createCountdown(cooldownKey, 1, TimeUnit.SECONDS);
 
-        String formattedValue = NumberFormat.getInstance().formatNumber(drops * unitValue);
+        String formattedValue = NumberFormat.getInstance().formatNumber(finalValue);
 
         player.sendActionBar(TextAPI.parse(
-                "§a§lYAY! §aVocê vendeu os drops desse gerador por §2§l$§a§l" + formattedValue + "§7 (0% de bônus)§a."
+                "§a§lYAY! §aVocê vendeu os drops desse gerador por §2§l$§a§l" + formattedValue + " §7(" + NumberFormat.getInstance().formatNumber(BonusHandler.getInstance().getPlayerBonus(player)) + "% de bônus)§a."
         ));
         player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_YES, 1.0f, 1.0f);
         player.getOpenInventory().close();

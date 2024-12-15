@@ -1,6 +1,7 @@
 package blizzard.development.spawners.listeners.chat;
 
 import blizzard.development.spawners.listeners.chat.spawners.SpawnerFriendsListener;
+import blizzard.development.spawners.listeners.chat.spawners.SpawnerPurchaseListener;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -18,6 +19,7 @@ public class AsyncChatListener implements Listener {
     }
 
     private boolean shouldCancelChat(Player player) {
-        return SpawnerFriendsListener.pendingInvites.containsKey(player);
+        return SpawnerFriendsListener.pendingInvites.containsKey(player)
+                || SpawnerPurchaseListener.pendingPurchases.containsKey(player);
     }
 }
