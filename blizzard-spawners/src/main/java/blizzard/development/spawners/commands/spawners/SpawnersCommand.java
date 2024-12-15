@@ -8,7 +8,7 @@ import co.aikar.commands.annotation.Default;
 import org.bukkit.entity.Player;
 
 @CommandAlias("spawners|spawner|geradores|gerador")
-@CommandPermission("blizzard.spawners.admin")
+@CommandPermission("blizzard.spawners.basic")
 public class SpawnersCommand extends BaseCommand {
 
     @Default

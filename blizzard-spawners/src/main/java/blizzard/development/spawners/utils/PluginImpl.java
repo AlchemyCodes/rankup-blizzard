@@ -27,6 +27,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 public class PluginImpl {
     public final Plugin plugin;
@@ -73,19 +74,18 @@ public class PluginImpl {
     }
 
     public void onDisable() {
-        DatabaseConnection.getInstance().close();
+        DropsAutoSellTaskManager dropsTaskManager = DropsAutoSellTaskManager.getInstance();
+        if (dropsTaskManager != null) {
+            dropsTaskManager.stopAllTasks();
+        }
 
         SpawnersMobsTaskManager mobsTaskManager = SpawnersMobsTaskManager.getInstance();
         if (mobsTaskManager != null) {
             mobsTaskManager.stopAllTasks();
         }
 
-        DropsAutoSellTaskManager autoSellTaskManager = DropsAutoSellTaskManager.getInstance();
-        if (autoSellTaskManager != null) {
-            autoSellTaskManager.stopAllTasks();
-        }
-
         DisplayBuilder.removeAllSpawnerDisplay();
+        DatabaseConnection.getInstance().close();
     }
 
     public void registerDatabase() {

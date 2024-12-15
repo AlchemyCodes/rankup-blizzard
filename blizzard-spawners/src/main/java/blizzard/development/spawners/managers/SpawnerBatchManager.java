@@ -6,7 +6,6 @@ import blizzard.development.spawners.utils.PluginImpl;
 import org.bukkit.Bukkit;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
 
 public class SpawnerBatchManager {
@@ -14,13 +13,6 @@ public class SpawnerBatchManager {
     private static final Logger LOGGER = Logger.getLogger(SpawnerBatchManager.class.getName());
 
     private SpawnerBatchManager() {}
-
-    public static synchronized SpawnerBatchManager getInstance() {
-        if (instance == null) {
-            instance = new SpawnerBatchManager();
-        }
-        return instance;
-    }
 
     public void startTasksInBatches(List<SpawnersData> spawners, int batchSize, long delayBetweenBatches) {
         for (int i = 0; i < spawners.size(); i += batchSize) {
@@ -76,5 +68,12 @@ public class SpawnerBatchManager {
 
     public void processSpawnersDefault(List<SpawnersData> spawners) {
         startTasksInBatches(spawners, 50, 10L);
+    }
+
+    public static synchronized SpawnerBatchManager getInstance() {
+        if (instance == null) {
+            instance = new SpawnerBatchManager();
+        }
+        return instance;
     }
 }
