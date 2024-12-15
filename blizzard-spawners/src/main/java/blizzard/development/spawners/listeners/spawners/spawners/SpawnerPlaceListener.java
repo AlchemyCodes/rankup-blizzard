@@ -1,11 +1,8 @@
 package blizzard.development.spawners.listeners.spawners.spawners;
 
 import blizzard.development.spawners.builders.DisplayBuilder;
-import blizzard.development.spawners.builders.EffectsBuilder;
-import blizzard.development.spawners.database.cache.getters.PlayersCacheGetters;
 import blizzard.development.spawners.database.cache.getters.SpawnersCacheGetters;
 import blizzard.development.spawners.database.cache.managers.SpawnersCacheManager;
-import blizzard.development.spawners.database.cache.setters.PlayersCacheSetters;
 import blizzard.development.spawners.database.cache.setters.SpawnersCacheSetters;
 import blizzard.development.spawners.database.storage.SpawnersData;
 import blizzard.development.spawners.handlers.enums.Spawners;
@@ -168,7 +165,6 @@ public class SpawnerPlaceListener implements Listener {
                 SpawnersUtils.getInstance().getSpawnerState(States.PRIVATE),
                 player.getName()
         );
-        EffectsBuilder.createSpawnerEffect(player, spawnerLocation, spawner.getType());
 
         String formattedAmount = NumberFormat.getInstance().formatNumber(amount);
         player.sendActionBar(TextAPI.parse("§a§lYAY! §aVocê colocou §fx" + formattedAmount + " §aspawner(s) de " + spawner.getType() + "§a!"));

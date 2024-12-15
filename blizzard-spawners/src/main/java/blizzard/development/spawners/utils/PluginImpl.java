@@ -15,6 +15,7 @@ import blizzard.development.spawners.listeners.plots.PlotDeleteListener;
 import blizzard.development.spawners.tasks.players.PlayersSaveTask;
 import blizzard.development.spawners.tasks.spawners.SpawnersSaveTask;
 import blizzard.development.spawners.tasks.spawners.drops.DropsAutoSellTaskManager;
+import blizzard.development.spawners.tasks.spawners.mobs.SpawnerBatchManager;
 import blizzard.development.spawners.tasks.spawners.mobs.SpawnersMobsTaskManager;
 import blizzard.development.spawners.utils.config.ConfigUtils;
 import co.aikar.commands.Locales;
@@ -73,8 +74,17 @@ public class PluginImpl {
 
     public void onDisable() {
         DatabaseConnection.getInstance().close();
-        SpawnersMobsTaskManager.getInstance().stopAllTasks();
-        DropsAutoSellTaskManager.getInstance().stopAllTasks();
+
+        SpawnersMobsTaskManager mobsTaskManager = SpawnersMobsTaskManager.getInstance();
+        if (mobsTaskManager != null) {
+            mobsTaskManager.stopAllTasks();
+        }
+
+        DropsAutoSellTaskManager autoSellTaskManager = DropsAutoSellTaskManager.getInstance();
+        if (autoSellTaskManager != null) {
+            autoSellTaskManager.stopAllTasks();
+        }
+
         DisplayBuilder.removeAllSpawnerDisplay();
     }
 
@@ -89,14 +99,11 @@ public class PluginImpl {
         new SpawnersSaveTask(spawnersDAO).runTaskTimerAsynchronously(plugin, 0, 20L * 3);
 
         try {
-            List<SpawnersData> allSpawners = spawnersDAO.getAllSpawnersData();
-            for (SpawnersData spawner : allSpawners) {
+            List<SpawnersData> spawners = spawnersDAO.getAllSpawnersData();
+            for (SpawnersData spawner : spawners) {
                 SpawnersCacheManager.getInstance().cacheSpawnerData(spawner.getId(), spawner);
-                SpawnersMobsTaskManager.getInstance().startTask(spawner);
-                if (spawner.getAutoSellState()) {
-                    DropsAutoSellTaskManager.getInstance().startTask(spawner);
-                }
             }
+            SpawnerBatchManager.getInstance().processSpawnersDefault(spawners);
         } catch (SQLException exception) {
             throw new RuntimeException(exception);
         }

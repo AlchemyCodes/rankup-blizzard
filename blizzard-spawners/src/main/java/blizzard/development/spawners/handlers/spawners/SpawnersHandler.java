@@ -25,22 +25,6 @@ public class SpawnersHandler {
         }
     }
 
-    public void spawnStaticMob(Spawners spawnerType, Double amount, Location location) {
-        EntityType entityType = utils.getEntityTypeFromSpawner(spawnerType);
-        if (entityType == null) return;
-
-        LivingEntity mob = (LivingEntity) location.getWorld().spawnEntity(location, entityType);
-
-        mob.setAI(false);
-        mob.setGravity(false);
-        mob.teleport(location);
-        mob.customName(TextAPI.parse("§7" + utils.getMobNameByEntity(entityType) + " (x" + NumberFormat.getInstance().formatNumber(amount) + ")"));
-        mob.setMetadata("blizzard_spawners-mob", new FixedMetadataValue(PluginImpl.getInstance().plugin, spawnerType));
-        mob.setMetadata("blizzard_spawners-id", new FixedMetadataValue(PluginImpl.getInstance().plugin, spawnerType));
-        mob.setCustomNameVisible(true);
-        mob.hasMetadata("blizzard_spawners-mob");
-    }
-
     public double getBuyPrice(String spawnerKey) {
         return PluginImpl.getInstance().Spawners.getConfig().getDouble("spawners." + spawnerKey + ".buy-price", 0.0);
     }

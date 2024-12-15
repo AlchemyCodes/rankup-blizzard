@@ -3,7 +3,6 @@ package blizzard.development.spawners.tasks.spawners.mobs;
 import blizzard.development.spawners.database.storage.SpawnersData;
 import blizzard.development.spawners.handlers.enchantments.EnchantmentsHandler;
 import blizzard.development.spawners.handlers.enums.Enchantments;
-import blizzard.development.spawners.tasks.spawners.drops.DropsAutoSellTaskManager;
 import blizzard.development.spawners.utils.LocationUtil;
 import blizzard.development.spawners.utils.PluginImpl;
 import org.bukkit.Location;
@@ -32,7 +31,7 @@ public class SpawnersMobsTaskManager {
 
         int currentLevel = spawnerData.getSpeedLevel();
 
-        long interval = Math.max(0, (handler.getMaxLevel(Enchantments.SPEED.getName()) - currentLevel) + 1)  * 20L;
+        long interval = Math.max(0, (handler.getMaxLevel(Enchantments.SPEED.getName()) - currentLevel) + 1) * 20L;
 
         BukkitTask bukkitTask = task.runTaskTimer(
                 PluginImpl.getInstance().plugin,
@@ -65,11 +64,6 @@ public class SpawnersMobsTaskManager {
         if (task != null) {
             task.cancel();
         }
-    }
-
-    public void restartTask(SpawnersData spawnerData) {
-        stopTask(spawnerData.getId());
-        startTask(spawnerData);
     }
 
     public void stopAllTasks() {

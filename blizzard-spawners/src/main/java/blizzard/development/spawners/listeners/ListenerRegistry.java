@@ -14,7 +14,6 @@ import blizzard.development.spawners.listeners.spawners.mobs.MobDeathListener;
 import blizzard.development.spawners.listeners.spawners.spawners.SpawnerBreakListener;
 import blizzard.development.spawners.listeners.spawners.spawners.SpawnerInteractListener;
 import blizzard.development.spawners.listeners.spawners.spawners.SpawnerPlaceListener;
-import blizzard.development.spawners.listeners.spawners.spawners.SpawnersJoinListener;
 import blizzard.development.spawners.utils.PluginImpl;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
@@ -36,7 +35,6 @@ public class ListenerRegistry {
                 new SpawnerPlaceListener(),
                 new SpawnerBreakListener(),
                 new SpawnerInteractListener(),
-                new SpawnersJoinListener(),
                 // mobs
                 new MobDeathListener(),
                 new MobDamageListener(),
