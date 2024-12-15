@@ -22,7 +22,7 @@ public class DisplayBuilder {
     public static void createSpawnerDisplay(Location location, String spawnerType, Double amount, String state, String name) {
         Location hologramLocation = location.clone().add(0.5, 2.4, 0.5);
 
-        final String id = UUID.randomUUID().toString().substring(0, 5);
+        final String id = UUID.randomUUID().toString().substring(0, 7);
 
         if (holograms.containsKey(hologramLocation)) {
             return;

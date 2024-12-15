@@ -6,12 +6,16 @@ import blizzard.development.spawners.database.storage.SpawnersData;
 import blizzard.development.spawners.handlers.enums.States;
 import blizzard.development.spawners.utils.PluginImpl;
 import blizzard.development.spawners.utils.items.TextAPI;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+
+import java.util.Objects;
 
 public class MobDamageListener implements Listener {
     private final SpawnersCacheManager manager = SpawnersCacheManager.getInstance();
@@ -33,6 +37,13 @@ public class MobDamageListener implements Listener {
                         "§c§lEI §cOcorreu um erro ao interagir com esse spawner.")
                 );
                 return;
+            }
+
+            if (mob.customName() != null) {
+                String plainName = PlainTextComponentSerializer.plainText().serialize(Objects.requireNonNull(mob.customName()));
+                if (plainName.contains("(x0)")) {
+                    event.setCancelled(true);
+                }
             }
 
             FileConfiguration config = PluginImpl.getInstance().Spawners.getConfig();
@@ -58,6 +69,7 @@ public class MobDamageListener implements Listener {
             }
         }
     }
+
 
     public String getSpawnerType(String spawner) {
         return switch (spawner) {

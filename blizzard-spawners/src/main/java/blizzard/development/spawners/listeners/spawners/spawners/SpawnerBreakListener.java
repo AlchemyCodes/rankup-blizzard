@@ -1,10 +1,7 @@
 package blizzard.development.spawners.listeners.spawners.spawners;
 
 import blizzard.development.spawners.builders.DisplayBuilder;
-import blizzard.development.spawners.builders.EffectsBuilder;
-import blizzard.development.spawners.database.cache.getters.PlayersCacheGetters;
 import blizzard.development.spawners.database.cache.managers.SpawnersCacheManager;
-import blizzard.development.spawners.database.cache.setters.PlayersCacheSetters;
 import blizzard.development.spawners.database.dao.SpawnersDAO;
 import blizzard.development.spawners.database.storage.SpawnersData;
 import blizzard.development.spawners.handlers.enums.Spawners;
@@ -112,7 +109,6 @@ public class SpawnerBreakListener implements Listener {
             if (spawnerData != null) {
                 Location location = LocationUtil.deserializeLocation(spawnerData.getLocation());
                 DisplayBuilder.removeSpawnerDisplay(location);
-                EffectsBuilder.removeSpawnerEffect(location);
             }
 
             switch (type.toLowerCase()) {
