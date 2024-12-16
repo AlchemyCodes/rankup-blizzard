@@ -1,15 +1,10 @@
 package blizzard.development.spawners.handlers.spawners;
 
-import blizzard.development.spawners.handlers.enums.Spawners;
-import blizzard.development.spawners.utils.NumberFormat;
+import blizzard.development.spawners.handlers.enums.spawners.Spawners;
 import blizzard.development.spawners.utils.PluginImpl;
 import blizzard.development.spawners.utils.SpawnersUtils;
-import blizzard.development.spawners.utils.items.TextAPI;
 import org.bukkit.Location;
 import org.bukkit.block.CreatureSpawner;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.metadata.FixedMetadataValue;
 
 import java.util.List;
 

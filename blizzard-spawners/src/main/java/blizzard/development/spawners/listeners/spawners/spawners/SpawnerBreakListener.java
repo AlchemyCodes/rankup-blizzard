@@ -1,10 +1,10 @@
 package blizzard.development.spawners.listeners.spawners.spawners;
 
-import blizzard.development.spawners.builders.DisplayBuilder;
+import blizzard.development.spawners.builders.spawners.DisplayBuilder;
 import blizzard.development.spawners.database.cache.managers.SpawnersCacheManager;
 import blizzard.development.spawners.database.dao.SpawnersDAO;
 import blizzard.development.spawners.database.storage.SpawnersData;
-import blizzard.development.spawners.handlers.enums.Spawners;
+import blizzard.development.spawners.handlers.enums.spawners.Spawners;
 import blizzard.development.spawners.handlers.mobs.MobsHandler;
 import blizzard.development.spawners.managers.spawners.SpawnerAccessManager;
 import blizzard.development.spawners.tasks.spawners.drops.DropsAutoSellTaskManager;

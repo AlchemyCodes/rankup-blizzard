@@ -6,7 +6,7 @@ import blizzard.development.spawners.database.cache.getters.SpawnersCacheGetters
 import blizzard.development.spawners.database.cache.managers.SpawnersCacheManager;
 import blizzard.development.spawners.database.cache.setters.SpawnersCacheSetters;
 import blizzard.development.spawners.handlers.enchantments.EnchantmentsHandler;
-import blizzard.development.spawners.handlers.enums.Enchantments;
+import blizzard.development.spawners.handlers.enums.spawners.Enchantments;
 import blizzard.development.spawners.inventories.spawners.enchantments.items.EnchantmentItems;
 import blizzard.development.spawners.inventories.spawners.main.MainInventory;
 import blizzard.development.spawners.managers.spawners.SpawnerAccessManager;

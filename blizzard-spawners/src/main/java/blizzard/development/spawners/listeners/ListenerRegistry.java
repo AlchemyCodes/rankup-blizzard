@@ -9,6 +9,8 @@ import blizzard.development.spawners.listeners.commons.PlayersQuitListener;
 import blizzard.development.spawners.listeners.drops.DropsAutoSellInteractListener;
 import blizzard.development.spawners.listeners.limits.CommonLimitInteractListener;
 import blizzard.development.spawners.listeners.limits.FriendsLimitInteractListener;
+import blizzard.development.spawners.listeners.slaughterhouses.SlaughterhouseBreakListener;
+import blizzard.development.spawners.listeners.slaughterhouses.SlaughterhousePlaceListener;
 import blizzard.development.spawners.listeners.spawners.mobs.MobCommonListener;
 import blizzard.development.spawners.listeners.spawners.mobs.MobDamageListener;
 import blizzard.development.spawners.listeners.spawners.mobs.MobDeathListener;
@@ -48,7 +50,10 @@ public class ListenerRegistry {
                 new CommonLimitInteractListener(),
                 new FriendsLimitInteractListener(),
                 // drops
-                new DropsAutoSellInteractListener()
+                new DropsAutoSellInteractListener(),
+                // slaughterhouses
+                new SlaughterhousePlaceListener(),
+                new SlaughterhouseBreakListener()
         ).forEach(listener -> pluginManager.registerEvents(listener, PluginImpl.getInstance().plugin));
     }
 

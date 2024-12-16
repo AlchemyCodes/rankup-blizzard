@@ -1,14 +1,16 @@
 package blizzard.development.spawners.utils;
 
-import blizzard.development.spawners.builders.DisplayBuilder;
+import blizzard.development.spawners.builders.spawners.DisplayBuilder;
 import blizzard.development.spawners.commands.CommandRegistry;
 import blizzard.development.spawners.database.DatabaseConnection;
 import blizzard.development.spawners.database.cache.managers.PlayersCacheManager;
+import blizzard.development.spawners.database.cache.managers.SlaughterhouseCacheManager;
 import blizzard.development.spawners.database.cache.managers.SpawnersCacheManager;
 import blizzard.development.spawners.database.dao.PlayersDAO;
 import blizzard.development.spawners.database.dao.SlaughterhouseDAO;
 import blizzard.development.spawners.database.dao.SpawnersDAO;
 import blizzard.development.spawners.database.storage.PlayersData;
+import blizzard.development.spawners.database.storage.SlaughterhouseData;
 import blizzard.development.spawners.database.storage.SpawnersData;
 import blizzard.development.spawners.listeners.ListenerRegistry;
 import blizzard.development.spawners.listeners.plots.PlotClearListener;
@@ -75,6 +77,7 @@ public class PluginImpl {
         registerCommands();
 
         Bukkit.getScheduler().runTaskLater(PluginImpl.getInstance().plugin, DisplayBuilder::createAllSpawnerDisplay, 200L);
+        Bukkit.getScheduler().runTaskLater(PluginImpl.getInstance().plugin, blizzard.development.spawners.builders.slaughterhouses.DisplayBuilder::createAllSlaughterhouseDisplay, 250L);
     }
 
     public void onDisable() {
@@ -89,6 +92,7 @@ public class PluginImpl {
         }
 
         DisplayBuilder.removeAllSpawnerDisplay();
+        blizzard.development.spawners.builders.slaughterhouses.DisplayBuilder.removeAllSlaughterhouseDisplay();
         DatabaseConnection.getInstance().close();
     }
 
@@ -122,12 +126,21 @@ public class PluginImpl {
         } catch (SQLException exception) {
             throw new RuntimeException(exception);
         }
+
+        try {
+            List<SlaughterhouseData> slaughterhouses = slaughterhouseDAO.getAllSlaughterhousesData();
+            for (SlaughterhouseData slaughterhouse : slaughterhouses) {
+                SlaughterhouseCacheManager.getInstance().cacheSlaughterhouseData(slaughterhouse.getId(), slaughterhouse);
+            }
+        } catch (SQLException exception) {
+            throw new RuntimeException(exception);
+        }
     }
 
     private void registerListeners() {
         ListenerRegistry.getInstance().register();
-        new PlotClearListener(plotAPI, spawnersDAO);
-        new PlotDeleteListener(plotAPI, spawnersDAO);
+        new PlotClearListener(plotAPI, spawnersDAO, slaughterhouseDAO);
+        new PlotDeleteListener(plotAPI, spawnersDAO, slaughterhouseDAO);
     }
 
     private void registerCommands() {
