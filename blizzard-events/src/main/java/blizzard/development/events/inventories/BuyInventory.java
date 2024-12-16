@@ -1,5 +1,7 @@
 package blizzard.development.events.inventories;
 
+import blizzard.development.currencies.api.CurrenciesAPI;
+import blizzard.development.currencies.enums.Currencies;
 import blizzard.development.events.managers.SumoManager;
 import blizzard.development.events.utils.PluginImpl;
 import blizzard.development.events.utils.items.ItemBuilder;
@@ -32,11 +34,12 @@ public class BuyInventory {
                 return;
             }
 
-//            if (CurrenciesAPI.getInstance().getBalance(player, Currencies.COINS) < 15000) {
-//                player.sendMessage(Objects.requireNonNull(messagesConfig.getString("events.sumo.sumoNotEnoughMoney")));
-//                return;
-//            }
+            if (CurrenciesAPI.getInstance().getBalance(player, Currencies.COINS) < 15000) {
+                player.sendMessage(Objects.requireNonNull(messagesConfig.getString("events.sumo.sumoNotEnoughMoney")));
+                return;
+            }
 
+            instance.sendStartMessage(messagesConfig, player);
             instance.startSumo();
             player.closeInventory();
         });
@@ -52,11 +55,12 @@ public class BuyInventory {
                 return;
             }
 
-//            if (CurrenciesAPI.getInstance().getBalance(player, Currencies.FLAKES) < 2000) {
-//                player.sendMessage(Objects.requireNonNull(messagesConfig.getString("events.sumo.sumoNotEnoughFlakes")));
-//                return;
-//            }
+            if (CurrenciesAPI.getInstance().getBalance(player, Currencies.FLAKES) < 2000) {
+                player.sendMessage(Objects.requireNonNull(messagesConfig.getString("events.sumo.sumoNotEnoughFlakes")));
+                return;
+            }
 
+            instance.sendStartMessage(messagesConfig, player);
             instance.startSumo();
             player.closeInventory();
         });
