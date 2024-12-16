@@ -2,6 +2,7 @@ package blizzard.development.events.commands;
 
 import blizzard.development.events.Main;
 import blizzard.development.events.commands.events.SumoCommand;
+import blizzard.development.events.commands.subcommands.SumoSubCommands;
 import co.aikar.commands.PaperCommandManager;
 
 import java.util.Arrays;
@@ -14,7 +15,8 @@ public class CommandRegistry {
         Arrays.asList(
                 new EventsCommand(),
                 new SumoCommand(),
-                new ReloadConfig()
+                new ReloadConfig(),
+                new SumoSubCommands()
         ).forEach(paperCommandManager::registerCommand);
     }
 }

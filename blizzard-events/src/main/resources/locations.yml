@@ -1,3 +1,6 @@
+spawn:
+  world: "spawn2"
+
 events:
   sumo:
     arena:

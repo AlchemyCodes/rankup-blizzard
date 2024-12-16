@@ -29,11 +29,13 @@ public class SumoCommand extends BaseCommand {
 
         if (instance.players.contains(player)) {
             instance.players.remove(player);
+            instance.teleportToSpawn(player);
             player.sendMessage(Objects.requireNonNull(messagesConfig.getString("events.sumo.sumoLeave")));
             return;
         }
 
         instance.players.add(player);
+        instance.teleportToSumoArena(player);
         player.sendMessage(Objects.requireNonNull(messagesConfig.getString("events.sumo.sumoEnter")));
 
     }

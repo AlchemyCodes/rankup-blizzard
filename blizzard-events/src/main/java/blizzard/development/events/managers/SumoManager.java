@@ -1,10 +1,15 @@
 package blizzard.development.events.managers;
 
 import blizzard.development.events.utils.PluginImpl;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.chat.hover.content.Text;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Hoglin;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -20,42 +25,44 @@ public class SumoManager {
     public List<Player> players = new ArrayList<>();
     public List<Player> isInGame = new ArrayList<>();
 
+    int time = PluginImpl.getInstance().Config.getInt("events.sumo.time");
+
     private static SumoManager instance;
 
     public void startSumo() {
+        time = PluginImpl.getInstance().Config.getInt("events.sumo.time");
+
         isSumoActive = true;
 
         YamlConfiguration messagesConfig = PluginImpl.getInstance().Messages.getConfig();
-        List<String> sumoStartMessage = messagesConfig.getStringList("events.sumo.sumoStart");
 
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            sumoStartMessage.forEach(player::sendMessage);
-        }
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (time == 0) {
+                    if (players.size() < 2) {
 
-            new BukkitRunnable() {
-                int time = 10;
-
-                @Override
-                public void run() {
-                    if (time == 0) {
-                        if (players.size() < 2) {
-                            sendMessage(messagesConfig.getString("events.sumo.sumoNoPlayers"));
-                            isSumoActive = false;
-                            players.clear();
-                            cancel();
-                            return;
+                        if (!players.isEmpty()) {
+                            teleportToSpawn(players.get(0));
                         }
 
-                        startGames();
+                        sendMessage(messagesConfig.getString("events.sumo.sumoNoPlayers"));
+                        isSumoActive = false;
+                        players.clear();
                         cancel();
                         return;
                     }
 
-                    sendTitle("§l§a" + time, "");
-
-                    time--;
+                    startGames();
+                    cancel();
+                    return;
                 }
-            }.runTaskTimer(PluginImpl.getInstance().plugin, 0, 20);
+
+                sendTitle("§l§a" + time, "");
+
+                time--;
+            }
+        }.runTaskTimer(PluginImpl.getInstance().plugin, 0, 20);
     }
 
     public void startGames() {
@@ -74,12 +81,12 @@ public class SumoManager {
             public void run() {
                 player1.setGameMode(GameMode.SURVIVAL);
                 player2.setGameMode(GameMode.SURVIVAL);
-                teleportToSumo(player1, player2);
+                teleportToSumoGame(player1, player2);
             }
         }.runTaskLater(PluginImpl.getInstance().plugin, 20 * 3);
     }
 
-    private void teleportToSumo(Player player1, Player player2) {
+    private void teleportToSumoGame(Player player1, Player player2) {
         YamlConfiguration locationsConfig = PluginImpl.getInstance().Locations.getConfig();
 
         Location arenaLocation1 = new Location(
@@ -104,6 +111,28 @@ public class SumoManager {
         player2.teleport(arenaLocation2);
     }
 
+    public void teleportToSumoArena(Player player) {
+        YamlConfiguration locationsConfig = PluginImpl.getInstance().Locations.getConfig();
+
+        Location arenaLocation = new Location(Bukkit.getWorld(
+                Objects.requireNonNull(locationsConfig.getString("events.sumo.arena.world"))),
+                locationsConfig.getDouble("events.sumo.arena.x"),
+                locationsConfig.getDouble("events.sumo.arena.y"),
+                locationsConfig.getDouble("events.sumo.arena.z"),
+                (float) locationsConfig.getDouble("events.sumo.arena.yaw"),
+                (float) locationsConfig.getDouble("events.sumo.arena.pitch"));
+
+        player.teleport(arenaLocation);
+    }
+
+    public void teleportToSpawn(Player player) {
+        YamlConfiguration locationsConfig = PluginImpl.getInstance().Locations.getConfig();
+
+        player.teleport(Objects.requireNonNull(Bukkit.getWorld(
+                        Objects.requireNonNull(locationsConfig.getString("spawn.world"))))
+                .getSpawnLocation());
+    }
+
     public void endSumo() {
         players.clear();
         isSumoActive = false;
@@ -124,6 +153,24 @@ public class SumoManager {
     public void sendMessageToAll(String message) {
         for (Player player : Bukkit.getOnlinePlayers()) {
             player.sendMessage(message);
+        }
+    }
+
+    public void sendStartMessage(YamlConfiguration messagesConfig, Player player1) {
+        List<String> sumoStartMessage = messagesConfig.getStringList("events.sumo.sumoStart");
+
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            for (String message : sumoStartMessage) {
+                String formattedMessage = message.replace("{player-name}", player1.getName())
+                        .replace("{seconds}", String.valueOf(time));
+
+                TextComponent textComponent = new TextComponent(formattedMessage);
+
+                textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sumo"));
+                textComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("§bClique para entrar!")));
+
+                player.spigot().sendMessage(textComponent);
+            }
         }
     }
 
