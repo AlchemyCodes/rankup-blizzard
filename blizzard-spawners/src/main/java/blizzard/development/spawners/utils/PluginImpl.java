@@ -6,6 +6,7 @@ import blizzard.development.spawners.database.DatabaseConnection;
 import blizzard.development.spawners.database.cache.managers.PlayersCacheManager;
 import blizzard.development.spawners.database.cache.managers.SpawnersCacheManager;
 import blizzard.development.spawners.database.dao.PlayersDAO;
+import blizzard.development.spawners.database.dao.SlaughterhouseDAO;
 import blizzard.development.spawners.database.dao.SpawnersDAO;
 import blizzard.development.spawners.database.storage.PlayersData;
 import blizzard.development.spawners.database.storage.SpawnersData;
@@ -15,7 +16,7 @@ import blizzard.development.spawners.listeners.plots.PlotDeleteListener;
 import blizzard.development.spawners.tasks.players.PlayersSaveTask;
 import blizzard.development.spawners.tasks.spawners.SpawnersSaveTask;
 import blizzard.development.spawners.tasks.spawners.drops.DropsAutoSellTaskManager;
-import blizzard.development.spawners.tasks.spawners.mobs.SpawnerBatchManager;
+import blizzard.development.spawners.managers.spawners.SpawnerBatchManager;
 import blizzard.development.spawners.tasks.spawners.mobs.SpawnersMobsTaskManager;
 import blizzard.development.spawners.utils.config.ConfigUtils;
 import co.aikar.commands.Locales;
@@ -27,7 +28,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Optional;
 
 public class PluginImpl {
     public final Plugin plugin;
@@ -35,10 +35,12 @@ public class PluginImpl {
     private static PlotAPI plotAPI;
     public PlayersDAO playersDAO;
     public SpawnersDAO spawnersDAO;
+    public SlaughterhouseDAO slaughterhouseDAO;
 
     public ConfigUtils Config;
     public ConfigUtils Database;
     public ConfigUtils Spawners;
+    public ConfigUtils Slaughterhouses;
     public ConfigUtils Enchantments;
     public ConfigUtils Rewards;
     public ConfigUtils Bonus;
@@ -50,6 +52,7 @@ public class PluginImpl {
         Config = new ConfigUtils((JavaPlugin) plugin, "config.yml");
         Database = new ConfigUtils((JavaPlugin) plugin, "database.yml");
         Spawners = new ConfigUtils((JavaPlugin) plugin, "spawners.yml");
+        Slaughterhouses = new ConfigUtils((JavaPlugin) plugin, "slaughterhouses.yml");
         Enchantments = new ConfigUtils((JavaPlugin) plugin, "enchantments.yml");
         Rewards = new ConfigUtils((JavaPlugin) plugin, "rewards.yml");
         Bonus = new ConfigUtils((JavaPlugin) plugin, "bonus.yml");
@@ -59,6 +62,7 @@ public class PluginImpl {
         Config.saveDefaultConfig();
         Database.saveDefaultConfig();
         Spawners.saveDefaultConfig();
+        Slaughterhouses.saveDefaultConfig();
         Enchantments.saveDefaultConfig();
         Rewards.saveDefaultConfig();
         Bonus.saveDefaultConfig();
@@ -94,6 +98,8 @@ public class PluginImpl {
         playersDAO.initializeDatabase();
         spawnersDAO = new SpawnersDAO();
         spawnersDAO.initializeDatabase();
+        slaughterhouseDAO = new SlaughterhouseDAO();
+        slaughterhouseDAO.initializeDatabase();
 
         new PlayersSaveTask(playersDAO).runTaskTimerAsynchronously(plugin, 0, 20L * 3);
         new SpawnersSaveTask(spawnersDAO).runTaskTimerAsynchronously(plugin, 0, 20L * 3);

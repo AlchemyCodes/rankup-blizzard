@@ -2,7 +2,6 @@ package blizzard.development.spawners.listeners.chat.spawners;
 
 import blizzard.development.spawners.database.cache.setters.SpawnersCacheSetters;
 import blizzard.development.spawners.database.cache.getters.SpawnersCacheGetters;
-import blizzard.development.spawners.inventories.friends.FriendsInventory;
 import blizzard.development.spawners.utils.PluginImpl;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
