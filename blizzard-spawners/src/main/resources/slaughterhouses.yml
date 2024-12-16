@@ -1,0 +1,153 @@
+slaughterhouses:
+  1:
+    level: 1
+    item: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWU0NjVkZTI2Y2FmYjk0YTM0Y2U5Mjc5ZGY2NzlhYzI4OWQxY2M4NzQxMmZlYWNkYTkwZGI5MjYyMzA3ODJlZSJ9fX0=
+    display-name: §6Abatedouro §l✂ §7Nível §l1
+    lore:
+      - '§7Mate os mobs do seu'
+      - '§7gerador mais facilmente.'
+      - ''
+      - ' §fÁrea: §3{area}x{area}'
+      - ' §fCooldown: §c{cooldown}'
+      - ''
+      - '§6Clique no chão para colocar.'
+    menu-lore:
+      - '§7Mate os mobs do seu'
+      - '§7gerador mais facilmente.'
+      - ''
+      - ' §fÁrea: §3{area}x{area}'
+      - ' §fCooldown: §c{cooldown}'
+      - ''
+      - '§fVocê pode adquirir esse'
+      - '§fabatedouro em caixas!'
+    kill-cooldown: 3600 # seconds
+    kill-area: 1 # ex: 5 = 5x5
+    released: true
+
+  2:
+    level: 1
+    item: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWU0NjVkZTI2Y2FmYjk0YTM0Y2U5Mjc5ZGY2NzlhYzI4OWQxY2M4NzQxMmZlYWNkYTkwZGI5MjYyMzA3ODJlZSJ9fX0=
+    display-name: §6Abatedouro §l✂ §7Nível §l2
+    lore:
+      - '§7Mate os mobs do seu'
+      - '§7gerador mais facilmente.'
+      - ''
+      - ' §fÁrea: §3{area}x{area}'
+      - ' §fCooldown: §c{cooldown}'
+      - ''
+      - '§6Clique no chão para colocar.'
+    menu-lore:
+      - '§7Mate os mobs do seu'
+      - '§7gerador mais facilmente.'
+      - ''
+      - ' §fÁrea: §3{area}x{area}'
+      - ' §fCooldown: §c{cooldown}'
+      - ''
+      - '§fVocê pode adquirir esse'
+      - '§fabatedouro em caixas!'
+    kill-cooldown: 1800 # seconds
+    kill-area: 1 # ex: 5 = 5x5
+    released: true
+
+  3:
+    level: 1
+    item: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWU0NjVkZTI2Y2FmYjk0YTM0Y2U5Mjc5ZGY2NzlhYzI4OWQxY2M4NzQxMmZlYWNkYTkwZGI5MjYyMzA3ODJlZSJ9fX0=
+    display-name: §6Abatedouro §l✂ §7Nível §l3
+    lore:
+      - '§7Mate os mobs do seu'
+      - '§7gerador mais facilmente.'
+      - ''
+      - ' §fÁrea: §3{area}x{area}'
+      - ' §fCooldown: §c{cooldown}'
+      - ''
+      - '§6Clique no chão para colocar.'
+    menu-lore:
+      - '§7Mate os mobs do seu'
+      - '§7gerador mais facilmente.'
+      - ''
+      - ' §fÁrea: §3{area}x{area}'
+      - ' §fCooldown: §c{cooldown}'
+      - ''
+      - '§fVocê pode adquirir esse'
+      - '§fabatedouro em caixas!'
+    kill-cooldown: 900 # seconds
+    kill-area: 1 # ex: 5 = 5x5
+    released: true
+
+  4:
+    level: 1
+    item: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWU0NjVkZTI2Y2FmYjk0YTM0Y2U5Mjc5ZGY2NzlhYzI4OWQxY2M4NzQxMmZlYWNkYTkwZGI5MjYyMzA3ODJlZSJ9fX0=
+    display-name: §6Abatedouro §l✂ §7Nível §l4
+    lore:
+      - '§7Mate os mobs do seu'
+      - '§7gerador mais facilmente.'
+      - ''
+      - ' §fÁrea: §3{area}x{area}'
+      - ' §fCooldown: §c{cooldown}'
+      - ''
+      - '§6Clique no chão para colocar.'
+    menu-lore:
+      - '§7Mate os mobs do seu'
+      - '§7gerador mais facilmente.'
+      - ''
+      - ' §fÁrea: §3{area}x{area}'
+      - ' §fCooldown: §c{cooldown}'
+      - ''
+      - '§fVocê pode adquirir esse'
+      - '§fabatedouro em caixas!'
+    kill-cooldown: 3600 # seconds
+    kill-area: 5 # ex: 5 = 5x5
+    released: true
+
+  5:
+    level: 1
+    item: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWU0NjVkZTI2Y2FmYjk0YTM0Y2U5Mjc5ZGY2NzlhYzI4OWQxY2M4NzQxMmZlYWNkYTkwZGI5MjYyMzA3ODJlZSJ9fX0=
+    display-name: §6Abatedouro §l✂ §7Nível §l5
+    lore:
+      - '§7Mate os mobs do seu'
+      - '§7gerador mais facilmente.'
+      - ''
+      - ' §fÁrea: §3{area}x{area}'
+      - ' §fCooldown: §c{cooldown}'
+      - ''
+      - '§6Clique no chão para colocar.'
+    menu-lore:
+      - '§7Mate os mobs do seu'
+      - '§7gerador mais facilmente.'
+      - ''
+      - ' §fÁrea: §3{area}x{area}'
+      - ' §fCooldown: §c{cooldown}'
+      - ''
+      - '§fVocê pode adquirir esse'
+      - '§fabatedouro em nosso site!'
+      - '§7www.alchemynetwork.net'
+    kill-cooldown: 1800 # seconds
+    kill-area: 5 # ex: 5 = 5x5
+    released: true
+
+  6:
+    level: 6
+    item: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWU0NjVkZTI2Y2FmYjk0YTM0Y2U5Mjc5ZGY2NzlhYzI4OWQxY2M4NzQxMmZlYWNkYTkwZGI5MjYyMzA3ODJlZSJ9fX0=
+    display-name: §6Abatedouro §l✂ §7Nível §l6
+    lore:
+      - '§7Mate os mobs do seu'
+      - '§7gerador mais facilmente.'
+      - ''
+      - ' §fÁrea: §3{area}x{area}'
+      - ' §fCooldown: §c{cooldown}'
+      - ''
+      - '§6Clique no chão para colocar.'
+    menu-lore:
+      - '§7Mate os mobs do seu'
+      - '§7gerador mais facilmente.'
+      - ''
+      - ' §fÁrea: §3{area}x{area}'
+      - ' §fCooldown: §c{cooldown}'
+      - ''
+      - '§fVocê pode adquirir esse'
+      - '§fabatedouro em nosso site!'
+      - '§7www.alchemynetwork.net'
+    kill-cooldown: 900 # seconds
+    kill-area: 5 # ex: 5 = 5x5
+    released: true
+

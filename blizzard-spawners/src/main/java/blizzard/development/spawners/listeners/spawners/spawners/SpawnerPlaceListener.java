@@ -8,7 +8,7 @@ import blizzard.development.spawners.database.storage.SpawnersData;
 import blizzard.development.spawners.handlers.enums.Spawners;
 import blizzard.development.spawners.handlers.enums.States;
 import blizzard.development.spawners.handlers.spawners.SpawnersHandler;
-import blizzard.development.spawners.methods.SpawnersMethods;
+import blizzard.development.spawners.managers.spawners.SpawnerManager;
 import blizzard.development.spawners.tasks.spawners.mobs.SpawnersMobsTaskManager;
 import blizzard.development.spawners.utils.*;
 import blizzard.development.spawners.builders.ItemBuilder;
@@ -136,7 +136,7 @@ public class SpawnerPlaceListener implements Listener {
         mobLocation.add(direction.multiply(1.0));
         mobLocation.setDirection(direction);
 
-        if (!SpawnersMethods.createSpawner(
+        if (!SpawnerManager.createSpawner(
                 player,
                 spawner,
                 id,
