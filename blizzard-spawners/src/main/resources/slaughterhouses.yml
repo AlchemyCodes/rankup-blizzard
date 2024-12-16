@@ -25,7 +25,7 @@ slaughterhouses:
     released: true
 
   2:
-    level: 1
+    level: 2
     item: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWU0NjVkZTI2Y2FmYjk0YTM0Y2U5Mjc5ZGY2NzlhYzI4OWQxY2M4NzQxMmZlYWNkYTkwZGI5MjYyMzA3ODJlZSJ9fX0=
     display-name: §6Abatedouro §l✂ §7Nível §l2
     lore:
@@ -50,7 +50,7 @@ slaughterhouses:
     released: true
 
   3:
-    level: 1
+    level: 3
     item: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWU0NjVkZTI2Y2FmYjk0YTM0Y2U5Mjc5ZGY2NzlhYzI4OWQxY2M4NzQxMmZlYWNkYTkwZGI5MjYyMzA3ODJlZSJ9fX0=
     display-name: §6Abatedouro §l✂ §7Nível §l3
     lore:
@@ -75,7 +75,7 @@ slaughterhouses:
     released: true
 
   4:
-    level: 1
+    level: 4
     item: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWU0NjVkZTI2Y2FmYjk0YTM0Y2U5Mjc5ZGY2NzlhYzI4OWQxY2M4NzQxMmZlYWNkYTkwZGI5MjYyMzA3ODJlZSJ9fX0=
     display-name: §6Abatedouro §l✂ §7Nível §l4
     lore:
@@ -100,7 +100,7 @@ slaughterhouses:
     released: true
 
   5:
-    level: 1
+    level: 5
     item: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWU0NjVkZTI2Y2FmYjk0YTM0Y2U5Mjc5ZGY2NzlhYzI4OWQxY2M4NzQxMmZlYWNkYTkwZGI5MjYyMzA3ODJlZSJ9fX0=
     display-name: §6Abatedouro §l✂ §7Nível §l5
     lore:

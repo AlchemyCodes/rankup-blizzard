@@ -1,4 +1,4 @@
-package blizzard.development.spawners.listeners.spawners.spawners;
+package blizzard.development.spawners.listeners.slaughterhouses;
 
 import blizzard.development.spawners.builders.ItemBuilder;
 import blizzard.development.spawners.database.cache.getters.SpawnersCacheGetters;
@@ -17,7 +17,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-public class SpawnerInteractListener implements Listener {
+public class SlaughterhouseInteractListener implements Listener {
 
     private final SpawnersCacheManager cache = SpawnersCacheManager.getInstance();
 

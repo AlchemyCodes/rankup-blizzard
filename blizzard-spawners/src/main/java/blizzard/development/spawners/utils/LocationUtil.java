@@ -1,6 +1,8 @@
 package blizzard.development.spawners.utils;
 
+import blizzard.development.spawners.database.cache.managers.SlaughterhouseCacheManager;
 import blizzard.development.spawners.database.cache.managers.SpawnersCacheManager;
+import blizzard.development.spawners.database.storage.SlaughterhouseData;
 import blizzard.development.spawners.database.storage.SpawnersData;
 import blizzard.development.spawners.utils.items.TextAPI;
 import com.plotsquared.core.PlotSquared;
@@ -105,6 +107,21 @@ public class LocationUtil {
         return spawnersData;
     }
 
+    public static Boolean hasNearbySlaughterhouses(Location location, int radius) {
+        SlaughterhouseCacheManager cache = SlaughterhouseCacheManager.getInstance();
+        Collection<SlaughterhouseData> slaughterhouses = cache.slaughterhouseCache.values();
+
+        for (SlaughterhouseData slaughterhouse : slaughterhouses) {
+            Location slaughterhouseLocation = deserializeLocation(slaughterhouse.getLocation());
+            if (slaughterhouseLocation == null) continue;
+
+            if (slaughterhouseLocation.getWorld().equals(location.getWorld()) &&
+                    slaughterhouseLocation.distance(location) <= radius) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 
     public static Boolean terrainVerify(Player player, Block block) {

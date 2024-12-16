@@ -1,6 +1,6 @@
 package blizzard.development.spawners.tasks.others;
 
-import blizzard.development.spawners.builders.HologramBuilder;
+import blizzard.development.spawners.builders.spawners.HologramBuilder;
 import blizzard.development.spawners.builders.ItemBuilder;
 import blizzard.development.spawners.utils.PluginImpl;
 import eu.decentsoftware.holograms.api.DHAPI;

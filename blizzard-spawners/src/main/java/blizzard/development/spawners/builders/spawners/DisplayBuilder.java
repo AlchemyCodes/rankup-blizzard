@@ -1,14 +1,14 @@
-package blizzard.development.spawners.builders;
+package blizzard.development.spawners.builders.spawners;
 
 import blizzard.development.spawners.database.cache.managers.SpawnersCacheManager;
 import blizzard.development.spawners.database.storage.SpawnersData;
-import blizzard.development.spawners.handlers.enums.States;
+import blizzard.development.spawners.handlers.enums.spawners.States;
 import blizzard.development.spawners.utils.LocationUtil;
 import blizzard.development.spawners.utils.SpawnersUtils;
 import eu.decentsoftware.holograms.api.DHAPI;
 import eu.decentsoftware.holograms.api.holograms.Hologram;
 import org.bukkit.Location;
-import blizzard.development.spawners.handlers.enums.Spawners;
+import blizzard.development.spawners.handlers.enums.spawners.Spawners;
 import blizzard.development.spawners.utils.NumberFormat;
 
 import java.util.HashMap;

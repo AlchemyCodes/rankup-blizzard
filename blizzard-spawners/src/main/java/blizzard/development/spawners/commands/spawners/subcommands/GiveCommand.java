@@ -1,9 +1,8 @@
 package blizzard.development.spawners.commands.spawners.subcommands;
 
 import blizzard.development.spawners.handlers.enchantments.EnchantmentsHandler;
-import blizzard.development.spawners.handlers.enums.Enchantments;
-import blizzard.development.spawners.handlers.enums.Spawners;
-import blizzard.development.spawners.handlers.limits.LimitsHandler;
+import blizzard.development.spawners.handlers.enums.spawners.Enchantments;
+import blizzard.development.spawners.handlers.enums.spawners.Spawners;
 import blizzard.development.spawners.handlers.mobs.MobsHandler;
 import blizzard.development.spawners.utils.NumberFormat;
 import blizzard.development.spawners.utils.PluginImpl;

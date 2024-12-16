@@ -1,9 +1,9 @@
 package blizzard.development.spawners.inventories.spawners.main;
 
-import blizzard.development.spawners.builders.DisplayBuilder;
+import blizzard.development.spawners.builders.spawners.DisplayBuilder;
 import blizzard.development.spawners.database.cache.getters.SpawnersCacheGetters;
 import blizzard.development.spawners.database.cache.setters.SpawnersCacheSetters;
-import blizzard.development.spawners.handlers.enums.States;
+import blizzard.development.spawners.handlers.enums.spawners.States;
 import blizzard.development.spawners.inventories.spawners.drops.DropsInventory;
 import blizzard.development.spawners.inventories.spawners.enchantments.EnchantmentsInventory;
 import blizzard.development.spawners.inventories.spawners.friends.FriendsInventory;

@@ -1,7 +1,9 @@
 package blizzard.development.spawners.listeners.plots;
 
-import blizzard.development.spawners.builders.DisplayBuilder;
+import blizzard.development.spawners.builders.spawners.DisplayBuilder;
+import blizzard.development.spawners.database.dao.SlaughterhouseDAO;
 import blizzard.development.spawners.database.dao.SpawnersDAO;
+import blizzard.development.spawners.database.storage.SlaughterhouseData;
 import blizzard.development.spawners.database.storage.SpawnersData;
 import blizzard.development.spawners.tasks.spawners.drops.DropsAutoSellTaskManager;
 import blizzard.development.spawners.tasks.spawners.mobs.SpawnersMobsTaskManager;
@@ -20,9 +22,11 @@ import java.util.List;
 public class PlotClearListener {
 
     private final SpawnersDAO spawnersDAO;
+    private final SlaughterhouseDAO slaughterhouseDAO;
 
-    public PlotClearListener(PlotAPI plotAPI, SpawnersDAO spawnersDAO) {
+    public PlotClearListener(PlotAPI plotAPI, SpawnersDAO spawnersDAO, SlaughterhouseDAO slaughterhouseDAO) {
         this.spawnersDAO = spawnersDAO;
+        this.slaughterhouseDAO = slaughterhouseDAO;
         plotAPI.registerListener(this);
     }
 
@@ -35,6 +39,7 @@ public class PlotClearListener {
     private void handlePlotRemoval(Plot plot) {
         final String plotId = plot.getId().toString();
         final List<SpawnersData> spawnersList = spawnersDAO.findSpawnerDataByPlotId(plotId);
+        final List<SlaughterhouseData> slaughterhouseList = slaughterhouseDAO.findSlaughterhouseDataByPlotId(plotId);
 
         if (!spawnersList.isEmpty()) {
             for (SpawnersData spawnersData : spawnersList) {
@@ -51,6 +56,25 @@ public class PlotClearListener {
                 final String spawnerId = spawnersData.getId();
                 try {
                     spawnersDAO.deleteSpawnerData(spawnerId);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+        if (!slaughterhouseList.isEmpty()) {
+            for (SlaughterhouseData slaughterhouseData : slaughterhouseList) {
+                Location slaughterhouseLocation = LocationUtil.deserializeLocation(slaughterhouseData.getLocation());
+
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    if (player.getWorld().equals(slaughterhouseLocation.getWorld())) {
+                        blizzard.development.spawners.builders.slaughterhouses.DisplayBuilder.removeSlaughterhouseDisplay(slaughterhouseLocation);
+                    }
+                }
+
+                final String slaughterhouseId = slaughterhouseData.getId();
+                try {
+                    slaughterhouseDAO.deleteSlaughterhouseData(slaughterhouseId);
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }

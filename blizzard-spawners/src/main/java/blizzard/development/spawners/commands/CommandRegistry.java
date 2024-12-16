@@ -3,12 +3,13 @@ package blizzard.development.spawners.commands;
 import blizzard.development.spawners.commands.slaughterhouses.SlaughterhousesCommand;
 import blizzard.development.spawners.commands.spawners.SpawnersCommand;
 import blizzard.development.spawners.commands.spawners.subcommands.*;
-import blizzard.development.spawners.handlers.enums.Spawners;
+import blizzard.development.spawners.handlers.enums.spawners.Spawners;
 import blizzard.development.spawners.utils.PluginImpl;
 import co.aikar.commands.PaperCommandManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 
 public class CommandRegistry {
 
@@ -29,6 +30,7 @@ public class CommandRegistry {
                 new AutoSellCommand(),
                 // slaughterhouses
                 new SlaughterhousesCommand(),
+                new blizzard.development.spawners.commands.slaughterhouses.subcommands.GiveCommand(),
                 new blizzard.development.spawners.commands.slaughterhouses.subcommands.ReloadCommand()
         ).forEach(paperCommandManager::registerCommand);
 
@@ -64,13 +66,7 @@ public class CommandRegistry {
             }
             return array;
         });
-        paperCommandManager.getCommandCompletions().registerCompletion("slaughterhouseslevels", c -> {
-            ArrayList<String> array = new ArrayList<>();
-            for (int i = 1; i < 7; i++) {
-                array.add(String.valueOf(i));
-            }
-            return array;
-        });
+        paperCommandManager.getCommandCompletions().registerCompletion("slaughterhouseslevels", c -> Objects.requireNonNull(PluginImpl.getInstance().Slaughterhouses.getConfig().getConfigurationSection("slaughterhouses")).getKeys(false));
     }
 
     public static CommandRegistry getInstance() {

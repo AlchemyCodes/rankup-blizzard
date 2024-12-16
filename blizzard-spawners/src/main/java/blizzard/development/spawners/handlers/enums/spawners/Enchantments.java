@@ -1,4 +1,4 @@
-package blizzard.development.spawners.handlers.enums;
+package blizzard.development.spawners.handlers.enums.spawners;
 
 public enum Enchantments {
     SPEED("speed"),
