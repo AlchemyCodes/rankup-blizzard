@@ -3,17 +3,18 @@ package blizzard.development.plantations.database.storage;
 public class ToolData {
 
     private String id, type, nickname;
-    private Integer botany, agility, explosion, accelerator, plow;
+    private Integer blocks, botany, agility, explosion, thunderstorm, xray;
 
-    public ToolData(String id, String type, String nickname, Integer botany, Integer agility, Integer explosion, Integer accelerator, Integer plow) {
+    public ToolData(String id, String type, String nickname, Integer blocks, Integer botany, Integer agility, Integer explosion, Integer thunderstorm, Integer xray) {
         this.id = id;
         this.type = type;
         this.nickname = nickname;
+        this.blocks = blocks;
         this.botany = botany;
         this.agility = agility;
         this.explosion = explosion;
-        this.accelerator = accelerator;
-        this.plow = plow;
+        this.thunderstorm = thunderstorm;
+        this.xray = xray;
     }
 
     public String getId() {
@@ -40,6 +41,14 @@ public class ToolData {
         this.nickname = nickname;
     }
 
+    public Integer getBlocks() {
+        return blocks;
+    }
+
+    public void setBlocks(Integer blocks) {
+        this.blocks = blocks;
+    }
+
     public Integer getBotany() {
         return botany;
     }
@@ -64,19 +73,19 @@ public class ToolData {
         this.explosion = explosion;
     }
 
-    public Integer getAccelerator() {
-        return accelerator;
+    public Integer getThunderstorm() {
+        return thunderstorm;
     }
 
-    public void setAccelerator(Integer accelerator) {
-        this.accelerator = accelerator;
+    public void setThunderstorm(Integer thunderstorm) {
+        this.thunderstorm = thunderstorm;
     }
 
-    public Integer getPlow() {
-        return plow;
+    public Integer getXray() {
+        return xray;
     }
 
-    public void setPlow(Integer plow) {
-        this.plow = plow;
+    public void setXray(Integer xray) {
+        this.xray = xray;
     }
 }

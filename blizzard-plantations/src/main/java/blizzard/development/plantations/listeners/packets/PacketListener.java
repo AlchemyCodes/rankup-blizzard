@@ -1,28 +1,15 @@
 package blizzard.development.plantations.listeners.packets;
 
 import blizzard.development.plantations.Main;
-import blizzard.development.plantations.api.CuboidAPI;
 import blizzard.development.plantations.database.cache.methods.PlayerCacheMethod;
+import blizzard.development.plantations.managers.BlockManager;
 import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketAdapter;
-import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
-import com.comphenix.protocol.wrappers.BlockPosition;
+
 import com.comphenix.protocol.wrappers.WrappedBlockData;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.EquipmentSlot;
-
-import java.util.Iterator;
-import java.util.Optional;
-
 
 public class PacketListener extends PacketAdapter implements Listener {
 
@@ -34,80 +21,57 @@ public class PacketListener extends PacketAdapter implements Listener {
         ).optionAsync());
     }
 
-    public PlayerCacheMethod playerCacheMethod = new PlayerCacheMethod();
+    public PlayerCacheMethod playerCacheMethod = PlayerCacheMethod.getInstance();
 
     @Override
     public void onPacketSending(PacketEvent event) {
-        PacketContainer packet = event.getPacket();
+        final var packet = event.getPacket();
 
-        Optional<Object> packetMeta = packet.getMeta("farmland");
-        Optional<Object> packetCropsMeta = packet.getMeta("crops");
+        final var blockPosition = packet.getBlockPositionModifier().read(0);
+        final var blockX = blockPosition.getX();
+        final var blockY = blockPosition.getY();
+        final var blockZ = blockPosition.getZ();
 
-        if (playerCacheMethod.isInPlantation(event.getPlayer()) && packet.getType() == PacketType.Play.Server.BLOCK_CHANGE) {
-            if (packetMeta.isPresent()) {
-                packet.getBlockData().write(0, WrappedBlockData.createData(Material.FARMLAND));
-            }
 
-            if (packetCropsMeta.isPresent()) {
-                packet.getBlockData().write(0, WrappedBlockData.createData(Material.WHEAT));
-            }
-        }
+//        if (BlockManager.isPlantation(blockX, blockY, blockZ)) {
+//            packet.getBlockData().write(0, WrappedBlockData.createData(Material.WHEAT));
+//        }
 
     }
 
-
-    @EventHandler
-    public void onInteract(PlayerInteractEvent event) {
-        Player player = event.getPlayer();
-        Block block = event.getClickedBlock();
-        Action action = event.getAction();
-        EquipmentSlot equipmentSlot = event.getHand();
-
-        if (block == null) return;
-
-        if (action == Action.RIGHT_CLICK_BLOCK) {
-            if (equipmentSlot == EquipmentSlot.HAND) {
-                if (block.getType() == Material.CRYING_OBSIDIAN) {
-                    sendPacket(player, block);
-                }
-            }
-        }
-
-    }
-
-    @EventHandler
-    public void onChat(AsyncPlayerChatEvent event) {
-        Player player = event.getPlayer();
-        String message = event.getMessage();
-
-
-        if (message.equalsIgnoreCase("swagviper")) {
-
-            CuboidAPI cuboidAPI = new CuboidAPI(
-                player.getLocation().add(10, 10, 10),
-                player.getLocation().add(-10, 0, -10)
-            );
-
-            Iterator<Block> block = cuboidAPI.blockList();
-
-            while (block.hasNext()) {
-                sendPacket(player, block.next());
-            }
-
-        }
-    }
-
-    private void sendPacket(Player player, Block block) {
-        PacketContainer packet = new PacketContainer(PacketType.Play.Server.BLOCK_CHANGE);
-        packet.getBlockData().write(0, WrappedBlockData.createData(Material.DIAMOND_BLOCK));
-        packet.getBlockPositionModifier().write(0, new BlockPosition(
-            block.getLocation().getBlockX(),
-            block.getLocation().getBlockY(),
-            block.getLocation().getBlockZ()
-        ));
-
-        packet.setMeta("farmland", true);
-
-        ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet);
-    }
+//    @Override
+//    public void onPacketSending(PacketEvent event) {
+//        PacketContainer packet = event.getPacket();
+//        Player player = event.getPlayer();
+//
+//        if (player == null || !playerCacheMethod.isInPlantation(player)) {
+//            return;
+//        }
+//
+//        Optional<Object> packetMeta = packet.getMeta("farmland");
+//        Optional<Object> packetCropsMeta = packet.getMeta("crops");
+//
+//        Block block = player.getTargetBlockExact(4);
+//        if (block == null) return;
+//
+//        if (!packetMeta.isPresent()) {
+//            packet.getBlockData().write(0, WrappedBlockData.createData(Material.FARMLAND));
+//            packet.getBlockPositionModifier().write(0, new BlockPosition(
+//                block.getLocation().getBlockX(),
+//                block.getLocation().getBlockY(),
+//                block.getLocation().getBlockZ()
+//            ));
+//
+//        }
+//
+//        if (!packetCropsMeta.isPresent()) {
+//            packet.getBlockData().write(0, WrappedBlockData.createData(Material.CARROTS));
+//            packet.getBlockPositionModifier().write(0, new BlockPosition(
+//                block.getLocation().getBlockX(),
+//                block.getLocation().getBlockY() + 1,
+//                block.getLocation().getBlockZ()
+//            ));
+//        }
+//
+//    }
 }

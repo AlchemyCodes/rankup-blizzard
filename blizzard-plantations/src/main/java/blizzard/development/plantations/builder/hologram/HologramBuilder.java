@@ -23,8 +23,7 @@ public class HologramBuilder {
         Hologram hologram = DHAPI.createHologram(uuid.toString(), block.getLocation().add(0.5, 0 ,0.5));
         HologramBuilder.hologram.put(uuid, hologram);
 
-        DHAPI.addHologramLine(hologram, "#ICON:" + HologramItem.fromItemStack(new ItemStack(Material.BONE)).getContent());
-        DHAPI.addHologramLine(hologram, "§7Fóssil de Mamute §f+1");
+        DHAPI.addHologramLine(hologram, "§c§lERRO!");
 
         hologram.setDefaultVisibleState(true); // mudar para false quando terminar o plugin.
         hologram.setShowPlayer(player);

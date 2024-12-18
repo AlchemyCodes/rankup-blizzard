@@ -29,20 +29,19 @@ public class PlayerListener implements Listener{
         PlayerData playerData = playerDAO.findPlayerData(player.getUniqueId().toString());
 
         if (playerData == null) {
-            playerData = new PlayerData(player.getName(), player.getUniqueId().toString(), 0, false);
+            playerData = new PlayerData(player.getUniqueId().toString(), player.getName(), 20, 0, 0, false);
 
             try {
                 playerDAO.createPlayerData(playerData);
 
                 ToolAdapter toolAdapter = new ToolAdapter();
                 toolAdapter.giveTool(player);
-                toolAdapter.givePlowingTool(player);
             } catch (SQLException exception) {
                 exception.printStackTrace();
             }
         }
 
-        playerCacheManager.cachePlayerData(player.getName(), playerData);
+        playerCacheManager.cachePlayerData(player.getUniqueId().toString(), playerData);
     }
 
     @EventHandler
@@ -50,9 +49,8 @@ public class PlayerListener implements Listener{
         Player player = event.getPlayer();
         String message = event.getMessage();
 
-        if (message.equalsIgnoreCase("arar")) {
+        if (message.equalsIgnoreCase("cultivar")) {
             ToolAdapter toolAdapter = new ToolAdapter();
-            toolAdapter.givePlowingTool(player);
             toolAdapter.giveTool(player);
             event.setCancelled(true);
         }
