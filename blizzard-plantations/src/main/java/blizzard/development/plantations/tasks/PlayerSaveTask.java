@@ -2,7 +2,6 @@ package blizzard.development.plantations.tasks;
 
 import blizzard.development.plantations.database.cache.PlayerCacheManager;
 import blizzard.development.plantations.database.dao.PlayerDAO;
-import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.SQLException;

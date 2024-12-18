@@ -22,37 +22,36 @@ import java.util.stream.Collectors;
 
 import static blizzard.development.plantations.utils.NumberFormat.formatNumber;
 
-public class RankingInventory {
-
+public class RankingBlocksInventory {
     public void open(Player player) {
-        ChestGui inventory = new ChestGui(5, "§8Destaques");
+        ChestGui inventory = new ChestGui(5, "§8Destaques (Blocos quebrados)");
         StaticPane pane = new StaticPane(0, 0, 9, 5);
 
 
-        List<PlayerData> topPlayers = PlayerCacheManager.getInstance().getTopPlayers(10);
+        List<PlayerData> topPlayers = PlayerCacheManager.getInstance().getTopBlocks(10);
 
-        for (String item : PluginImpl.getInstance().Ranking.getConfig().getConfigurationSection("ranking").getKeys(false)) {
+        for (String item : PluginImpl.getInstance().Ranking.getConfig().getConfigurationSection("ranking-blocks").getKeys(false)) {
 
-            String itemType = PluginImpl.getInstance().Ranking.getConfig().getString("ranking." + item + ".item");
-            int itemSlot = PluginImpl.getInstance().Ranking.getConfig().getInt("ranking." + item + ".slot");
-            String displayName = PluginImpl.getInstance().Ranking.getConfig().getString("ranking." + item + ".display-name").replace("&", "§");
-            int top = PluginImpl.getInstance().Ranking.getConfig().getInt("ranking." + item + ".top");
-            List<String> lore = PluginImpl.getInstance().Ranking.getConfig().getStringList("ranking." + item + ".lore");
+            String itemType = PluginImpl.getInstance().Ranking.getConfig().getString("ranking-blocks." + item + ".item");
+            int itemSlot = PluginImpl.getInstance().Ranking.getConfig().getInt("ranking-blocks." + item + ".slot");
+            String displayName = PluginImpl.getInstance().Ranking.getConfig().getString("ranking-blocks." + item + ".display-name").replace("&", "§");
+            int top = PluginImpl.getInstance().Ranking.getConfig().getInt("ranking-blocks." + item + ".top");
+            List<String> lore = PluginImpl.getInstance().Ranking.getConfig().getStringList("ranking-blocks." + item + ".lore");
 
             List<String> replacedLore;
             ItemStack ranking;
 
             if (top >= 0 && top < topPlayers.size()) {
                 replacedLore = lore.stream()
-                        .map(s -> s.replace("&", "§")
-                                .replace("{player-name}", topPlayers.get(top).getNickname())
-                                .replace("{plantations}", String.valueOf(formatNumber(topPlayers.get(top).getPlantations())))
-                        ).collect(Collectors.toList());
+                    .map(s -> s.replace("&", "§")
+                        .replace("{player-name}", topPlayers.get(top).getNickname())
+                        .replace("{blocks}", String.valueOf(formatNumber(topPlayers.get(top).getBlocks())))
+                    ).collect(Collectors.toList());
 
                 ranking = SkullAPI.withName(new ItemStack(Material.PLAYER_HEAD), topPlayers.get(top).getNickname());
             } else {
                 replacedLore = Arrays.asList(
-                        "§7Nenhuma informação."
+                    "§7Nenhuma informação."
                 );
                 ranking = new ItemStack(Material.BARRIER);
             }
@@ -75,8 +74,15 @@ public class RankingInventory {
                 event.setCancelled(true);
             });
 
+            GuiItem changerItem = new GuiItem(changer(), event -> {
+                RankingSeedsInventory rankingSeedsInventory = new RankingSeedsInventory();
+                rankingSeedsInventory.open(player);
+                event.setCancelled(true);
+            });
+
             pane.addItem(rankingItem, Slot.fromIndex(itemSlot));
-            pane.addItem(backItem, Slot.fromIndex(40));
+            pane.addItem(backItem, Slot.fromIndex(36));
+            pane.addItem(changerItem, Slot.fromIndex(40));
 
         }
 
@@ -85,14 +91,28 @@ public class RankingInventory {
         player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.5f, 0.5f);
     }
 
+    public static ItemStack changer() {
+        return new ItemBuilder(Material.MINECART)
+            .setDisplayName("§aMudar categoria")
+            .setLore(Arrays.asList(
+                "§7Mude a categoria",
+                "§7de destaques.",
+                "",
+                " §3▼ §fPlantações Q.",
+                " §a✿ §7Sementes",
+                "",
+                "§aClique para mudar."
+            ))
+            .build();
+    }
 
     public static ItemStack back() {
         return new ItemBuilder(Material.REDSTONE)
-                .setDisplayName("§cVoltar")
-                .setLore(Arrays.asList(
-                        "§7Clique para voltar",
-                        "§7ao menu anterior."
-                ))
-                .build();
+            .setDisplayName("§cVoltar")
+            .setLore(Arrays.asList(
+                "§7Clique para voltar",
+                "§7ao menu anterior."
+            ))
+            .build();
     }
 }

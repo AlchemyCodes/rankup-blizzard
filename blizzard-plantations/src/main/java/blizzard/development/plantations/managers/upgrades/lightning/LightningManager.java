@@ -1,9 +1,8 @@
-package blizzard.development.plantations.managers.upgrades.explosion;
+package blizzard.development.plantations.managers.upgrades.lightning;
 
 import blizzard.development.plantations.Main;
 import blizzard.development.plantations.database.cache.methods.ToolCacheMethod;
 import blizzard.development.plantations.utils.TextUtils;
-import blizzard.development.plantations.utils.packets.PacketUtils;
 import net.kyori.adventure.title.Title;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -13,43 +12,41 @@ import java.time.Duration;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class ExplosionManager {
+public class LightningManager {
 
     public static final ToolCacheMethod toolCacheMethod = ToolCacheMethod.getInstance();
 
     public static void check(Player player, Block block, String id) {
-        int explosion = toolCacheMethod.getExplosion(id);
+        int thunderstorm = toolCacheMethod.getThunderstorm(id);
 
         double random = ThreadLocalRandom.current().nextDouble(0, 100);
 
-        double randomX = new Random().nextDouble(-20, 20);
-        double randomZ = new Random().nextDouble(-20, 20);
-
-        if (random <= activation(explosion)) {
-            PacketUtils.getInstance()
-                .sendEntityPacket(
-                    block.getLocation().add(randomX, 58, randomZ),
-                    player
-                );
-
+        if (random <= activation(thunderstorm)) {
             new BukkitRunnable() {
                 int i = 0;
                 @Override
                 public void run() {
                     i++;
 
-                    if (i == 5) {
-                        ExplosionEffect.startExplosionBreak(player, block.getLocation().add(randomX, 0, randomZ));
+                    double randomX = new Random().nextDouble(-20, 20);
+                    double randomZ = new Random().nextDouble(-20, 20);
+
+                    LightningEffect.startLightningEffect(player, block.getLocation().add(randomX, 0, randomZ));
+                    if (i >= 5) {
                         this.cancel();
                     }
                 }
             }.runTaskTimer(Main.getInstance(), 0L, 20L);
 
+            player.sendMessage("");
+            player.sendMessage(TextUtils.parse("<bold><#00aaaa>Tr<#02c9c9><#02c9c9>ovo<#02c9c9><#02c9c9>ada!<#00aaaa></bold> <#02c9c9>Confira o relatório:<#02c9c9>"));
+            player.sendMessage(" §fA trovoada quebrou §l92§f plantações.");
+            player.sendMessage("");
 
             player.showTitle(
                 Title.title(
-                    TextUtils.parse("<bold><#d90404>Expl<#f71919><#f71919>osão!<#d90404></bold>"),
-                    TextUtils.parse("<#f71919>O encantamento foi ativado.<#f71919>"),
+                    TextUtils.parse("<bold><#00aaaa>Tr<#02c9c9><#02c9c9>ovo<#02c9c9><#02c9c9>ada!<#00aaaa></bold>"),
+                    TextUtils.parse("<#02c9c9>O encantamento foi ativado.<#02c9c9>"),
                     Title.Times.times(Duration.ZERO, Duration.ofSeconds(2), Duration.ofSeconds(1))
                 )
             );

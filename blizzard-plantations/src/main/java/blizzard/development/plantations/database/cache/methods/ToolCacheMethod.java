@@ -14,39 +14,18 @@ public class ToolCacheMethod {
         return instance;
     }
 
-    public static void createTool(Player player, String id, String type, Integer botany, Integer agility, Integer explosion) {
+    public static void createTool(Player player, String id, String type, Integer blocks, Integer botany, Integer agility, Integer explosion, Integer thunderstorm, Integer xray) {
         String nickname = player.getName();
         ToolData toolData = new ToolData(
                 id,
                 type,
                 nickname,
+                blocks,
                 botany,
                 agility,
                 explosion,
-                0,
-                0
-        );
-
-        try {
-            BatchManager.addToPendingQueue(toolData);
-            ToolCacheManager.cacheToolData(id, toolData);
-        } catch (Exception exception) {
-            player.sendMessage("§cOcorreu um erro ao salvar essa ferramenta no banco de dados!");
-            throw new RuntimeException(exception);
-        }
-    }
-
-    public static void createTool(Player player, String id, String type, Integer accelerator, Integer plow) {
-        String nickname = player.getName();
-        ToolData toolData = new ToolData(
-                id,
-                type,
-                nickname,
-                0,
-                0,
-                0,
-                accelerator,
-                plow
+                thunderstorm,
+                xray
         );
 
         try {
@@ -97,28 +76,41 @@ public class ToolCacheMethod {
         }
     }
 
-    public Integer getAccelerator(String id) {
+    public Integer getThunderstorm(String id) {
         ToolData toolData = toolCacheManager.getToolData(id);
-        return toolData != null ? toolData.getAccelerator() : 0;
+        return toolData != null ? toolData.getThunderstorm() : 0;
     }
 
-    public void setAccelerator(String id, int accelerator) {
+    public void setThunderstorm(String id, int thunderstorm) {
         ToolData toolData = toolCacheManager.getToolData(id);
         if (toolData != null) {
-            toolData.setAccelerator(accelerator);
+            toolData.setThunderstorm(thunderstorm);
             toolCacheManager.updateToolData(id, toolData);
         }
     }
 
-    public Integer getPlow(String id) {
+    public Integer getXray(String id) {
         ToolData toolData = toolCacheManager.getToolData(id);
-        return toolData != null ? toolData.getPlow() : 0;
+        return toolData != null ? toolData.getXray() : 0;
     }
 
-    public void setPlow(String id, int plow) {
+    public void setXray(String id, int xray) {
         ToolData toolData = toolCacheManager.getToolData(id);
         if (toolData != null) {
-            toolData.setPlow(plow);
+            toolData.setXray(xray);
+            toolCacheManager.updateToolData(id, toolData);
+        }
+    }
+
+    public Integer getBlocks(String id) {
+        ToolData toolData = toolCacheManager.getToolData(id);
+        return toolData != null ? toolData.getBlocks() : 0;
+    }
+
+    public void setBlocks(String id, int blocks) {
+        ToolData toolData = toolCacheManager.getToolData(id);
+        if (toolData != null) {
+            toolData.setBlocks(blocks);
             toolCacheManager.updateToolData(id, toolData);
         }
     }

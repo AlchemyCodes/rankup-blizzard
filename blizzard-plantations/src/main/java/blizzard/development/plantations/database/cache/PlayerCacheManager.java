@@ -39,10 +39,17 @@ public class PlayerCacheManager {
         playerCache.clear();
     }
 
-    public List<PlayerData> getTopPlayers(int topCount) {
+    public List<PlayerData> getTopSeeds(int topCount) {
         return playerCache.values().stream()
                 .sorted((p1, p2) -> Integer.compare(p2.getPlantations(), p1.getPlantations()))
                 .limit(topCount)
                 .collect(Collectors.toList());
+    }
+
+    public List<PlayerData> getTopBlocks(int topCount) {
+        return playerCache.values().stream()
+            .sorted((p1, p2) -> Integer.compare(p2.getBlocks(), p1.getBlocks()))
+            .limit(topCount)
+            .collect(Collectors.toList());
     }
 }
