@@ -10,14 +10,13 @@ import java.util.ArrayList;
 
 
 public class SlaughterhouseManager {
-    public static Boolean createSlaughterhouse(Player player, String id, String tier, String location, Double fuel, String state, String plotId, Integer friendsLimit) {
+    public static Boolean createSlaughterhouse(Player player, String id, String tier, String location, String state, String plotId, Integer friendsLimit) {
         String nickname = player.getName();
         SlaughterhouseData slaughterhouseData = new SlaughterhouseData(
                 id,
                 tier,
                 location,
                 nickname,
-                fuel,
                 state,
                 plotId,
                 new ArrayList<>(),

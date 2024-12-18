@@ -2,6 +2,7 @@ package blizzard.development.spawners.listeners;
 
 import blizzard.development.spawners.database.dao.PlayersDAO;
 import blizzard.development.spawners.listeners.chat.AsyncChatListener;
+import blizzard.development.spawners.listeners.chat.slaughterhouses.SlaughterhousesFriendsListener;
 import blizzard.development.spawners.listeners.chat.spawners.SpawnerFriendsListener;
 import blizzard.development.spawners.listeners.chat.spawners.SpawnerPurchaseListener;
 import blizzard.development.spawners.listeners.commons.PlayersJoinListener;
@@ -10,6 +11,7 @@ import blizzard.development.spawners.listeners.drops.DropsAutoSellInteractListen
 import blizzard.development.spawners.listeners.limits.CommonLimitInteractListener;
 import blizzard.development.spawners.listeners.limits.FriendsLimitInteractListener;
 import blizzard.development.spawners.listeners.slaughterhouses.SlaughterhouseBreakListener;
+import blizzard.development.spawners.listeners.slaughterhouses.SlaughterhouseInteractListener;
 import blizzard.development.spawners.listeners.slaughterhouses.SlaughterhousePlaceListener;
 import blizzard.development.spawners.listeners.spawners.mobs.MobCommonListener;
 import blizzard.development.spawners.listeners.spawners.mobs.MobDamageListener;
@@ -46,6 +48,7 @@ public class ListenerRegistry {
                 new AsyncChatListener(),
                 new SpawnerFriendsListener(),
                 new SpawnerPurchaseListener(),
+                new SlaughterhousesFriendsListener(),
                 // limits
                 new CommonLimitInteractListener(),
                 new FriendsLimitInteractListener(),
@@ -53,7 +56,8 @@ public class ListenerRegistry {
                 new DropsAutoSellInteractListener(),
                 // slaughterhouses
                 new SlaughterhousePlaceListener(),
-                new SlaughterhouseBreakListener()
+                new SlaughterhouseBreakListener(),
+                new SlaughterhouseInteractListener()
         ).forEach(listener -> pluginManager.registerEvents(listener, PluginImpl.getInstance().plugin));
     }
 

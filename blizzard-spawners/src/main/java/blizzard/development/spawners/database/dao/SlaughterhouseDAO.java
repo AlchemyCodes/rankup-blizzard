@@ -19,7 +19,6 @@ public class SlaughterhouseDAO {
                     "tier VARCHAR(50), " +
                     "location VARCHAR(255), " +
                     "nickname VARCHAR(36), " +
-                    "fuel DOUBLE, " +
                     "state VARCHAR(50), " +
                     "plotId VARCHAR(36), " +
                     "friends TEXT, " +
@@ -56,7 +55,6 @@ public class SlaughterhouseDAO {
                             resultSet.getString("tier"),
                             resultSet.getString("location"),
                             resultSet.getString("nickname"),
-                            resultSet.getDouble("fuel"),
                             resultSet.getString("state"),
                             resultSet.getString("plotId"),
                             friends,
@@ -71,18 +69,17 @@ public class SlaughterhouseDAO {
     }
 
     public void createSlaughterhouseData(SlaughterhouseData slaughterhouseData) throws SQLException {
-        String sql = "INSERT INTO spawners_slaughterhouses (id, tier, location, nickname, fuel, state, plotId, friends, friendsLimit) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO spawners_slaughterhouses (id, tier, location, nickname, state, plotId, friends, friendsLimit) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         executeUpdate(sql, statement -> {
             try {
                 statement.setString(1, slaughterhouseData.getId());
                 statement.setString(2, slaughterhouseData.getTier());
                 statement.setString(3, slaughterhouseData.getLocation());
                 statement.setString(4, slaughterhouseData.getNickname());
-                statement.setDouble(5, slaughterhouseData.getFuel());
-                statement.setString(6, slaughterhouseData.getState());
-                statement.setString(7, slaughterhouseData.getPlotId());
-                statement.setString(8, new Gson().toJson(slaughterhouseData.getFriends()));
-                statement.setInt(9, slaughterhouseData.getFriendsLimit());
+                statement.setString(5, slaughterhouseData.getState());
+                statement.setString(6, slaughterhouseData.getPlotId());
+                statement.setString(7, new Gson().toJson(slaughterhouseData.getFriends()));
+                statement.setInt(8, slaughterhouseData.getFriendsLimit());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -101,18 +98,17 @@ public class SlaughterhouseDAO {
     }
 
     public void updateSlaughterhouseData(SlaughterhouseData slaughterhouseData) throws SQLException {
-        String sql = "UPDATE spawners_slaughterhouses SET tier = ?, location = ?, nickname = ?, fuel = ?, state = ?, plotId = ?, friends = ?, friendsLimit = ? WHERE id = ?";
+        String sql = "UPDATE spawners_slaughterhouses SET tier = ?, location = ?, nickname = ?, state = ?, plotId = ?, friends = ?, friendsLimit = ? WHERE id = ?";
         executeUpdate(sql, statement -> {
             try {
                 statement.setString(1, slaughterhouseData.getTier());
                 statement.setString(2, slaughterhouseData.getLocation());
                 statement.setString(3, slaughterhouseData.getNickname());
-                statement.setDouble(4, slaughterhouseData.getFuel());
-                statement.setString(5, slaughterhouseData.getState());
-                statement.setString(6, slaughterhouseData.getPlotId());
-                statement.setString(7, new Gson().toJson(slaughterhouseData.getFriends()));
-                statement.setInt(8, slaughterhouseData.getFriendsLimit());
-                statement.setString(9, slaughterhouseData.getId());
+                statement.setString(4, slaughterhouseData.getState());
+                statement.setString(5, slaughterhouseData.getPlotId());
+                statement.setString(6, new Gson().toJson(slaughterhouseData.getFriends()));
+                statement.setInt(7, slaughterhouseData.getFriendsLimit());
+                statement.setString(8, slaughterhouseData.getId());
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -136,7 +132,6 @@ public class SlaughterhouseDAO {
                         resultSet.getString("tier"),
                         resultSet.getString("location"),
                         resultSet.getString("nickname"),
-                        resultSet.getDouble("fuel"),
                         resultSet.getString("state"),
                         resultSet.getString("plotId"),
                         friends,

@@ -96,7 +96,6 @@ public class SlaughterhousePlaceListener implements Listener {
                 id,
                 tier,
                 LocationUtil.getSerializedLocation(location),
-                0.0,
                 States.OFF.getState(),
                 plot.getId().toString(),
                 5
@@ -133,6 +132,8 @@ public class SlaughterhousePlaceListener implements Listener {
         armorStand.setInvulnerable(true);
         armorStand.setSmall(true);
         armorStand.setArms(false);
+        armorStand.setCanPickupItems(false);
+        armorStand.setMarker(true);
 
         armorStand.getEquipment().setHelmet(
                 SkullAPI.withBase64(new ItemStack(Material.PLAYER_HEAD), handler.getItem(level))

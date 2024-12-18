@@ -63,7 +63,6 @@ public class DisplayBuilder {
                             SlaughterhousesUtils.getInstance().getSlaughterhouseState(States.valueOf(slaughterhouseData.getState().toUpperCase())),
                             slaughterhouseData.getNickname()
                     );
-                    System.out.println("foi");
                 }
             }
         }

@@ -1,24 +1,23 @@
 package blizzard.development.spawners.database.storage;
 
 import java.util.List;
+import java.util.Optional;
 
 public class SlaughterhouseData {
     private String id;
     private String tier;
     private String location;
     private String nickname;
-    private Double fuel;
     private String state;
     private String plotId;
     private List<String> friends;
     private Integer friendsLimit;
 
-    public SlaughterhouseData(String id, String tier, String location, String nickname, Double fuel, String state, String plotId, List<String> friends, Integer friendsLimit) {
+    public SlaughterhouseData(String id, String tier, String location, String nickname, String state, String plotId, List<String> friends, Integer friendsLimit) {
         this.id = id;
         this.tier = tier;
         this.location = location;
         this.nickname = nickname;
-        this.fuel = fuel;
         this.state = state;
         this.plotId = plotId;
         this.friends = friends;
@@ -55,14 +54,6 @@ public class SlaughterhouseData {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
-    }
-
-    public Double getFuel() {
-        return fuel;
-    }
-
-    public void setFuel(Double fuel) {
-        this.fuel = fuel;
     }
 
     public String getState() {

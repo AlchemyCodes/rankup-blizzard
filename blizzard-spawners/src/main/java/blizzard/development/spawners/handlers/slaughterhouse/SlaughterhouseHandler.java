@@ -32,6 +32,7 @@ public class SlaughterhouseHandler {
             lore.replaceAll(line -> line
                     .replace("{cooldown}", TimeConverter.convertSecondsToTimeFormat(getKillCooldown(tier)))
                     .replace("{area}", String.valueOf(getKillArea(tier)))
+                    .replace("{looting}", String.valueOf(getKillLooting(tier)))
             );
 
             item = new ItemBuilder(getItem(tier))
@@ -49,7 +50,7 @@ public class SlaughterhouseHandler {
     }
 
     public int getLevel(int slaughterhouseId) {
-        return PluginImpl.getInstance().Slaughterhouses.getConfig().getInt("slaughterhouses." + slaughterhouseId + ".level", 0);
+        return PluginImpl.getInstance().Slaughterhouses.getConfig().getInt("slaughterhouses." + slaughterhouseId + ".level");
     }
 
     public String getItem(int slaughterhouseId) {
@@ -65,11 +66,15 @@ public class SlaughterhouseHandler {
     }
 
     public int getKillCooldown(int slaughterhouseId) {
-        return PluginImpl.getInstance().Slaughterhouses.getConfig().getInt("slaughterhouses." + slaughterhouseId + ".kill-cooldown", 60);
+        return PluginImpl.getInstance().Slaughterhouses.getConfig().getInt("slaughterhouses." + slaughterhouseId + ".kill-cooldown");
     }
 
     public int getKillArea(int slaughterhouseId) {
-        return PluginImpl.getInstance().Slaughterhouses.getConfig().getInt("slaughterhouses." + slaughterhouseId + ".kill-area", 5);
+        return PluginImpl.getInstance().Slaughterhouses.getConfig().getInt("slaughterhouses." + slaughterhouseId + ".kill-area");
+    }
+
+    public int getKillLooting(int slaughterhouseId) {
+        return PluginImpl.getInstance().Slaughterhouses.getConfig().getInt("slaughterhouses." + slaughterhouseId + ".kill-looting");
     }
 
     public boolean isSlaughterhouseReleased(int slaughterhouseId) {

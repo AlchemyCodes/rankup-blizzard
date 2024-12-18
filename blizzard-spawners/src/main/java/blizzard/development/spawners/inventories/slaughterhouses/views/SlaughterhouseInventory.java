@@ -39,8 +39,9 @@ public class SlaughterhouseInventory {
             boolean released = config.getBoolean("slaughterhouses." + key + ".released");
             int cooldown = config.getInt("slaughterhouses." + key + ".kill-cooldown");
             int area = config.getInt("slaughterhouses." + key + ".kill-area");
+            int looting = config.getInt("slaughterhouses." + key + ".kill-looting");
 
-            ItemStack slaughterhouseItem = items.slaughterhouse(itemType, displayName, lore, released, cooldown, area);
+            ItemStack slaughterhouseItem = items.slaughterhouse(itemType, displayName, lore, released, cooldown, area, looting);
 
             GuiItem guiItem = new GuiItem(slaughterhouseItem, event -> event.setCancelled(true));
             pane.addItem(guiItem, Slot.fromIndex(slots[index]));
@@ -52,10 +53,6 @@ public class SlaughterhouseInventory {
             pane.addItem(comingSoonItem, Slot.fromIndex(slots[index]));
             index++;
         }
-
-        GuiItem fuelsItem = new GuiItem(items.fuels(), event -> event.setCancelled(true));
-
-        pane.addItem(fuelsItem, Slot.fromIndex(40));
 
         inventory.addPane(pane);
         inventory.show(player);
