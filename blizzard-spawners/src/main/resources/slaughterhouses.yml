@@ -23,7 +23,7 @@ slaughterhouses:
       - '§fVocê pode adquirir esse'
       - '§fabatedouro em caixas!'
     kill-cooldown: 3600 # seconds
-    kill-area: 1 # ex: 5 = 5x5
+    kill-area: 3 # ex: 5 = 5x5
     kill-looting: 3
     released: true
 
@@ -51,7 +51,7 @@ slaughterhouses:
       - '§fVocê pode adquirir esse'
       - '§fabatedouro em caixas!'
     kill-cooldown: 1800 # seconds
-    kill-area: 1 # ex: 5 = 5x5
+    kill-area: 3 # ex: 5 = 5x5
     kill-looting: 5
     released: true
 
@@ -79,7 +79,7 @@ slaughterhouses:
       - '§fVocê pode adquirir esse'
       - '§fabatedouro em caixas!'
     kill-cooldown: 900 # seconds
-    kill-area: 1 # ex: 5 = 5x5
+    kill-area: 3 # ex: 5 = 5x5
     kill-looting: 7
     released: true
 
@@ -139,7 +139,6 @@ slaughterhouses:
     kill-area: 5 # ex: 5 = 5x5
     kill-looting: 5
     released: true
-
   6:
     level: 6
     item: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWU0NjVkZTI2Y2FmYjk0YTM0Y2U5Mjc5ZGY2NzlhYzI4OWQxY2M4NzQxMmZlYWNkYTkwZGI5MjYyMzA3ODJlZSJ9fX0=
