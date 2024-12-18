@@ -44,42 +44,59 @@ public class SlaughterhouseKillTask extends BukkitRunnable {
         final SpawnersCacheSetters setters = SpawnersCacheSetters.getInstance();
         final SpawnersUtils utils = SpawnersUtils.getInstance();
 
+        if (!slaughterhouseData.getState().equals(States.ON.getState())) {
+            return;
+        }
+
         String nickname = slaughterhouseData.getNickname();
         Player player = Bukkit.getPlayer(nickname);
 
-        if ((player != null && player.isOnline()) && slaughterhouseData.getState().equals(States.ON.getState())) {
-            Location slaughterhouseLocation = LocationUtil.deserializeLocation(slaughterhouseData.getLocation());
-            int radius = handler.getKillArea(Integer.parseInt(slaughterhouseData.getTier()));
-            int looting = handler.getKillLooting(Integer.parseInt(slaughterhouseData.getTier()));
+        List<String> friends = slaughterhouseData.getFriends();
+        boolean anyFriendOnline = friends != null && friends.stream()
+                .map(Bukkit::getPlayer)
+                .filter(Objects::nonNull)
+                .anyMatch(Player::isOnline);
 
-            if (slaughterhouseLocation == null) return;
+        if ((player == null || !player.isOnline()) && !anyFriendOnline) {
+            return;
+        }
 
-            List<SpawnersData> nearbySpawners = LocationUtil.getNearbySpawners(slaughterhouseLocation, radius);
+        Location slaughterhouseLocation = LocationUtil.deserializeLocation(slaughterhouseData.getLocation());
+        int radius = handler.getKillArea(Integer.parseInt(slaughterhouseData.getTier()));
+        int looting = handler.getKillLooting(Integer.parseInt(slaughterhouseData.getTier()));
 
-            for (SpawnersData spawnerData : nearbySpawners) {
+        if (slaughterhouseLocation == null) {
+            return;
+        }
 
-                if (spawnerData.getMobAmount() <= 0) return;
+        List<SpawnersData> nearbySpawners = LocationUtil.getNearbySpawners(slaughterhouseLocation, radius);
 
-                EntityType entityType = utils.getEntityTypeFromSpawner(utils.getSpawnerFromName(spawnerData.getType()));
-                Location spawnerLoc = LocationUtil.deserializeLocation(spawnerData.getLocation());
+        for (SpawnersData spawnerData : nearbySpawners) {
 
-                List<Entity> nearbyEntities = Objects.requireNonNull(spawnerLoc).getWorld().getNearbyEntities(spawnerLoc, radius, radius, radius)
-                        .stream()
-                        .filter(entity -> entity instanceof LivingEntity)
-                        .filter(entity -> entity.getType() == entityType)
-                        .toList();
-
-                nearbyEntities.forEach(entity -> ((LivingEntity) entity).setHealth(0.0));
-
-                double mobAmount = spawnerData.getMobAmount();
-
-                double drops = mobAmount * (1 + looting);
-
-                setters.addSpawnerDrops(spawnerData.getId(), drops);
-                resetMobsAmount(spawnerData, spawnerData.getId());
+            if (spawnerData.getMobAmount() <= 0) {
+                return;
             }
+
+            EntityType entityType = utils.getEntityTypeFromSpawner(utils.getSpawnerFromName(spawnerData.getType()));
+            Location spawnerLoc = LocationUtil.deserializeLocation(spawnerData.getLocation());
+
+            List<Entity> nearbyEntities = Objects.requireNonNull(spawnerLoc).getWorld().getNearbyEntities(spawnerLoc, radius, radius, radius)
+                    .stream()
+                    .filter(entity -> entity instanceof LivingEntity)
+                    .filter(entity -> entity.getType() == entityType)
+                    .toList();
+
+            nearbyEntities.forEach(entity -> ((LivingEntity) entity).setHealth(0.0));
+
+            double mobAmount = spawnerData.getMobAmount();
+
+            double drops = mobAmount * (1 + looting);
+
+            setters.addSpawnerDrops(spawnerData.getId(), drops);
+            resetMobsAmount(spawnerData, spawnerData.getId());
         }
     }
+
 
     public void resetMobsAmount(SpawnersData data, String id) {
         final SpawnersCacheSetters setters = SpawnersCacheSetters.getInstance();
