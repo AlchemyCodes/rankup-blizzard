@@ -30,32 +30,38 @@ public class MobDeathListener implements Listener {
 
     @EventHandler
     public void onMobDeath(EntityDeathEvent event) {
-        if (event.getEntity().getKiller() == null) return;
-
-        Player player = event.getEntity().getKiller();
         Entity mob = event.getEntity();
 
+        if (!mob.hasMetadata("blizzard_spawners-mob") || !mob.hasMetadata("blizzard_spawners-id")) {
+            return;
+        }
+
+        String spawnerId = mob.getMetadata("blizzard_spawners-id").get(0).asString();
+        SpawnersData data = manager.getSpawnerData(spawnerId);
+
+        if (data == null) {
+            return;
+        }
+
+        if (event.getEntity().getKiller() == null) {
+            event.getDrops().clear();
+            event.setDroppedExp(0);
+            return;
+        }
+
+        Player player = event.getEntity().getKiller();
         final EnchantmentsHandler handler = EnchantmentsHandler.getInstance();
 
-        if (mob.hasMetadata("blizzard_spawners-mob") && mob.hasMetadata("blizzard_spawners-id")) {
-            event.getDrops().clear();
+        event.getDrops().clear();
+        event.setDroppedExp(
+                SpawnersUtils.getInstance().getSpawnerDroppedXP(data)
+                        * data.getExperienceLevel()
+                        * handler.getPerLevel(Enchantments.EXPERIENCE.getName())
+        );
 
-            String spawnerId = mob.getMetadata("blizzard_spawners-id").get(0).asString();
-
-            SpawnersData data = manager.getSpawnerData(spawnerId);
-
-            if (data != null) {
-                event.setDroppedExp(
-                        SpawnersUtils.getInstance().getSpawnerDroppedXP(data)
-                                * data.getExperienceLevel()
-                                * handler.getPerLevel(Enchantments.EXPERIENCE.getName())
-                );
-
-                addDrops(player, data, data.getMobAmount());
-                resetMobsAmount(data, spawnerId);
-                checkReward(player, data);
-            }
-        }
+        addDrops(player, data, data.getMobAmount());
+        resetMobsAmount(data, spawnerId);
+        checkReward(player, data);
     }
 
     public void resetMobsAmount(SpawnersData data, String id) {

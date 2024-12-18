@@ -15,7 +15,10 @@ import blizzard.development.spawners.database.storage.SpawnersData;
 import blizzard.development.spawners.listeners.ListenerRegistry;
 import blizzard.development.spawners.listeners.plots.PlotClearListener;
 import blizzard.development.spawners.listeners.plots.PlotDeleteListener;
+import blizzard.development.spawners.managers.slaughterhouses.SlaughterhouseBatchManager;
 import blizzard.development.spawners.tasks.players.PlayersSaveTask;
+import blizzard.development.spawners.tasks.slaughterhouses.SlaughterhouseSaveTask;
+import blizzard.development.spawners.tasks.slaughterhouses.kill.SlaughterhouseKillTaskManager;
 import blizzard.development.spawners.tasks.spawners.SpawnersSaveTask;
 import blizzard.development.spawners.tasks.spawners.drops.DropsAutoSellTaskManager;
 import blizzard.development.spawners.managers.spawners.SpawnerBatchManager;
@@ -72,6 +75,10 @@ public class PluginImpl {
         PaperCommandManager commandManager = new PaperCommandManager(plugin);
         commandManager.getLocales().setDefaultLocale(Locales.PORTUGUESE);
 
+        SpawnersMobsTaskManager.getInstance();
+        DropsAutoSellTaskManager.getInstance();
+        SlaughterhouseKillTaskManager.getInstance();
+
         registerDatabase();
         registerListeners();
         registerCommands();
@@ -81,14 +88,19 @@ public class PluginImpl {
     }
 
     public void onDisable() {
-        DropsAutoSellTaskManager dropsTaskManager = DropsAutoSellTaskManager.getInstance();
-        if (dropsTaskManager != null) {
-            dropsTaskManager.stopAllTasks();
-        }
-
         SpawnersMobsTaskManager mobsTaskManager = SpawnersMobsTaskManager.getInstance();
         if (mobsTaskManager != null) {
             mobsTaskManager.stopAllTasks();
+        }
+
+        SlaughterhouseKillTaskManager slaughterhouseKillTaskManager = SlaughterhouseKillTaskManager.getInstance();
+        if (slaughterhouseKillTaskManager != null) {
+            slaughterhouseKillTaskManager.stopAllTasks();
+        }
+
+        DropsAutoSellTaskManager dropsTaskManager = DropsAutoSellTaskManager.getInstance();
+        if (dropsTaskManager != null) {
+            dropsTaskManager.stopAllTasks();
         }
 
         DisplayBuilder.removeAllSpawnerDisplay();
@@ -107,6 +119,7 @@ public class PluginImpl {
 
         new PlayersSaveTask(playersDAO).runTaskTimerAsynchronously(plugin, 0, 20L * 3);
         new SpawnersSaveTask(spawnersDAO).runTaskTimerAsynchronously(plugin, 0, 20L * 3);
+        new SlaughterhouseSaveTask(slaughterhouseDAO).runTaskTimerAsynchronously(plugin, 0, 20L * 3);
 
         try {
             List<SpawnersData> spawners = spawnersDAO.getAllSpawnersData();
@@ -132,6 +145,7 @@ public class PluginImpl {
             for (SlaughterhouseData slaughterhouse : slaughterhouses) {
                 SlaughterhouseCacheManager.getInstance().cacheSlaughterhouseData(slaughterhouse.getId(), slaughterhouse);
             }
+            SlaughterhouseBatchManager.getInstance().processSlaughterhousesDefault(slaughterhouses);
         } catch (SQLException exception) {
             throw new RuntimeException(exception);
         }

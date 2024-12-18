@@ -5,6 +5,7 @@ import blizzard.development.spawners.database.dao.SlaughterhouseDAO;
 import blizzard.development.spawners.database.dao.SpawnersDAO;
 import blizzard.development.spawners.database.storage.SlaughterhouseData;
 import blizzard.development.spawners.database.storage.SpawnersData;
+import blizzard.development.spawners.tasks.slaughterhouses.kill.SlaughterhouseKillTaskManager;
 import blizzard.development.spawners.tasks.spawners.drops.DropsAutoSellTaskManager;
 import blizzard.development.spawners.tasks.spawners.mobs.SpawnersMobsTaskManager;
 import blizzard.development.spawners.utils.LocationUtil;
@@ -69,6 +70,7 @@ public class PlotClearListener {
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     if (player.getWorld().equals(slaughterhouseLocation.getWorld())) {
                         blizzard.development.spawners.builders.slaughterhouses.DisplayBuilder.removeSlaughterhouseDisplay(slaughterhouseLocation);
+                        SlaughterhouseKillTaskManager.getInstance().stopTask(slaughterhouseData.getId());
                     }
                 }
 

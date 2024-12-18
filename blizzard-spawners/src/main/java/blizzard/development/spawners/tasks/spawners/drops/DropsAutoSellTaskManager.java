@@ -16,6 +16,10 @@ public class DropsAutoSellTaskManager {
     }
 
     public synchronized void startTask(SpawnersData spawnerData) {
+        if (spawnerData == null || spawnerData.getId() == null || spawnerData.getId().isEmpty()) {
+            return;
+        }
+
         stopTask(spawnerData.getId());
 
         DropsAutoSellTask task = new DropsAutoSellTask(spawnerData);
@@ -32,16 +36,33 @@ public class DropsAutoSellTaskManager {
         taskMap.put(spawnerData.getId(), task);
     }
 
-    public synchronized void stopTask(String spawnerId) {
+    public void stopTask(String spawnerId) {
+        if (spawnerId == null || spawnerId.isEmpty()) {
+            return;
+        }
+
         DropsAutoSellTask task = taskMap.remove(spawnerId);
-        if (task != null) {
-            task.cancel();
+
+        if (task != null && !task.isCancelled()) {
+            try {
+                task.cancel();
+            } catch (IllegalStateException ignored) {
+            }
         }
     }
 
-    public synchronized void stopAllTasks() {
-        taskMap.values().forEach(DropsAutoSellTask::cancel);
-        taskMap.clear();
+    public void stopAllTasks() {
+        if (!taskMap.isEmpty()) {
+            taskMap.values().forEach(task -> {
+                if (task != null && !task.isCancelled()) {
+                    try {
+                        task.cancel();
+                    } catch (IllegalStateException ignored) {
+                    }
+                }
+            });
+            taskMap.clear();
+        }
     }
 
     public static synchronized DropsAutoSellTaskManager getInstance() {

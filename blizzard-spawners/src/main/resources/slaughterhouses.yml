@@ -9,6 +9,7 @@ slaughterhouses:
       - ''
       - ' §fÁrea: §3{area}x{area}'
       - ' §fCooldown: §c{cooldown}'
+      - ' §fPilhagem: §6{looting}'
       - ''
       - '§6Clique no chão para colocar.'
     menu-lore:
@@ -17,11 +18,13 @@ slaughterhouses:
       - ''
       - ' §fÁrea: §3{area}x{area}'
       - ' §fCooldown: §c{cooldown}'
+      - ' §fPilhagem: §6{looting}'
       - ''
       - '§fVocê pode adquirir esse'
       - '§fabatedouro em caixas!'
     kill-cooldown: 3600 # seconds
     kill-area: 1 # ex: 5 = 5x5
+    kill-looting: 3
     released: true
 
   2:
@@ -34,6 +37,7 @@ slaughterhouses:
       - ''
       - ' §fÁrea: §3{area}x{area}'
       - ' §fCooldown: §c{cooldown}'
+      - ' §fPilhagem: §6{looting}'
       - ''
       - '§6Clique no chão para colocar.'
     menu-lore:
@@ -42,11 +46,13 @@ slaughterhouses:
       - ''
       - ' §fÁrea: §3{area}x{area}'
       - ' §fCooldown: §c{cooldown}'
+      - ' §fPilhagem: §6{looting}'
       - ''
       - '§fVocê pode adquirir esse'
       - '§fabatedouro em caixas!'
     kill-cooldown: 1800 # seconds
     kill-area: 1 # ex: 5 = 5x5
+    kill-looting: 5
     released: true
 
   3:
@@ -59,6 +65,7 @@ slaughterhouses:
       - ''
       - ' §fÁrea: §3{area}x{area}'
       - ' §fCooldown: §c{cooldown}'
+      - ' §fPilhagem: §6{looting}'
       - ''
       - '§6Clique no chão para colocar.'
     menu-lore:
@@ -67,11 +74,13 @@ slaughterhouses:
       - ''
       - ' §fÁrea: §3{area}x{area}'
       - ' §fCooldown: §c{cooldown}'
+      - ' §fPilhagem: §6{looting}'
       - ''
       - '§fVocê pode adquirir esse'
       - '§fabatedouro em caixas!'
     kill-cooldown: 900 # seconds
     kill-area: 1 # ex: 5 = 5x5
+    kill-looting: 7
     released: true
 
   4:
@@ -84,6 +93,7 @@ slaughterhouses:
       - ''
       - ' §fÁrea: §3{area}x{area}'
       - ' §fCooldown: §c{cooldown}'
+      - ' §fPilhagem: §6{looting}'
       - ''
       - '§6Clique no chão para colocar.'
     menu-lore:
@@ -92,11 +102,13 @@ slaughterhouses:
       - ''
       - ' §fÁrea: §3{area}x{area}'
       - ' §fCooldown: §c{cooldown}'
+      - ' §fPilhagem: §6{looting}'
       - ''
       - '§fVocê pode adquirir esse'
       - '§fabatedouro em caixas!'
     kill-cooldown: 3600 # seconds
     kill-area: 5 # ex: 5 = 5x5
+    kill-looting: 3
     released: true
 
   5:
@@ -109,6 +121,7 @@ slaughterhouses:
       - ''
       - ' §fÁrea: §3{area}x{area}'
       - ' §fCooldown: §c{cooldown}'
+      - ' §fPilhagem: §6{looting}'
       - ''
       - '§6Clique no chão para colocar.'
     menu-lore:
@@ -117,12 +130,14 @@ slaughterhouses:
       - ''
       - ' §fÁrea: §3{area}x{area}'
       - ' §fCooldown: §c{cooldown}'
+      - ' §fPilhagem: §6{looting}'
       - ''
       - '§fVocê pode adquirir esse'
       - '§fabatedouro em nosso site!'
       - '§7www.alchemynetwork.net'
     kill-cooldown: 1800 # seconds
     kill-area: 5 # ex: 5 = 5x5
+    kill-looting: 5
     released: true
 
   6:
@@ -135,6 +150,7 @@ slaughterhouses:
       - ''
       - ' §fÁrea: §3{area}x{area}'
       - ' §fCooldown: §c{cooldown}'
+      - ' §fPilhagem: §6{looting}'
       - ''
       - '§6Clique no chão para colocar.'
     menu-lore:
@@ -143,11 +159,13 @@ slaughterhouses:
       - ''
       - ' §fÁrea: §3{area}x{area}'
       - ' §fCooldown: §c{cooldown}'
+      - ' §fPilhagem: §6{looting}'
       - ''
       - '§fVocê pode adquirir esse'
       - '§fabatedouro em nosso site!'
       - '§7www.alchemynetwork.net'
     kill-cooldown: 900 # seconds
     kill-area: 5 # ex: 5 = 5x5
+    kill-looting: 7
     released: true
 

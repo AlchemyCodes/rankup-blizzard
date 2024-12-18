@@ -22,6 +22,10 @@ public class DropsAutoSellTask extends BukkitRunnable {
         this.spawnerData = spawnerData;
     }
 
+    public void setBukkitTask(BukkitTask bukkitTask) {
+        this.bukkitTask = bukkitTask;
+    }
+
     @Override
     public void run() {
         final SpawnersHandler handler = SpawnersHandler.getInstance();
@@ -51,10 +55,6 @@ public class DropsAutoSellTask extends BukkitRunnable {
                     "§a§lYAY! §aVocê vendeu os drops desse gerador por §2§l$§a§l" + formattedValue + " §7(" + NumberFormat.getInstance().formatNumber(BonusHandler.getInstance().getPlayerBonus(player)) + "% de bônus)§a."
             ));
         }
-    }
-
-    public void setBukkitTask(BukkitTask bukkitTask) {
-        this.bukkitTask = bukkitTask;
     }
 
     @Override

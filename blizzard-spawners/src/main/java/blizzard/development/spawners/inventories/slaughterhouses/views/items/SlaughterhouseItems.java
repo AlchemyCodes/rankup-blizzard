@@ -16,7 +16,7 @@ import java.util.List;
 public class SlaughterhouseItems {
     private static SlaughterhouseItems instance;
 
-    public ItemStack slaughterhouse(String value, String displayName, List<String> lore, boolean released, int cooldown, int area) {
+    public ItemStack slaughterhouse(String value, String displayName, List<String> lore, boolean released, int cooldown, int area, int looting) {
 
         if (released) {
             ItemStack item = SkullAPI.withBase64(new ItemStack(Material.PLAYER_HEAD), value);
@@ -28,6 +28,7 @@ public class SlaughterhouseItems {
                 lore.replaceAll(line -> line
                         .replace("{cooldown}", TimeConverter.convertSecondsToTimeFormat(cooldown))
                         .replace("{area}", String.valueOf(area))
+                        .replace("{looting}", String.valueOf(looting))
                 );
 
                 meta.setLore(lore);
@@ -54,22 +55,6 @@ public class SlaughterhouseItems {
 
             return item;
         }
-    }
-
-    public ItemStack fuels() {
-        ItemStack item = new ItemStack(Material.COAL);
-        ItemMeta meta = item.getItemMeta();
-
-        meta.setDisplayName("§8Combustíveis");
-        meta.setLore(Arrays.asList(
-                "§7Visualize os combustíveis",
-                "§7disponíveis para adquirir",
-                "",
-                "§8Clique para visualizar"
-        ));
-
-        item.setItemMeta(meta);
-        return item;
     }
 
     public ItemStack comingSoon() {

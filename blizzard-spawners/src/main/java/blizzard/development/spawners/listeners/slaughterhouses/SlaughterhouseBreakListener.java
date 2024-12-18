@@ -6,6 +6,7 @@ import blizzard.development.spawners.database.dao.SlaughterhouseDAO;
 import blizzard.development.spawners.database.storage.SlaughterhouseData;
 import blizzard.development.spawners.handlers.slaughterhouse.SlaughterhouseHandler;
 import blizzard.development.spawners.managers.spawners.SpawnerAccessManager;
+import blizzard.development.spawners.tasks.slaughterhouses.kill.SlaughterhouseKillTaskManager;
 import blizzard.development.spawners.utils.*;
 import blizzard.development.spawners.utils.items.TextAPI;
 import org.bukkit.Bukkit;
@@ -48,14 +49,14 @@ public class SlaughterhouseBreakListener implements Listener {
                 }
             }
 
+            if (data == null) return;
+
             Material itemInHand = player.getInventory().getItemInMainHand().getType();
             if (player.getGameMode().equals(GameMode.CREATIVE) && itemInHand != Material.AIR && !SpawnersUtils.getInstance().isPickaxe(itemInHand)) {
                 player.sendActionBar(TextAPI.parse("§c§lEI! §cVocê só pode quebrar abatedouros com a mão ou uma picareta."));
                 event.setCancelled(true);
                 return;
             }
-
-            if (data == null) return;
 
             if (!player.getName().equals(data.getNickname()) && !player.hasPermission("blizzard.spawners.admin")) {
                 player.sendActionBar(TextAPI.parse("§c§lEI! §cVocê não é dono desse abatedouro."));
@@ -86,6 +87,7 @@ public class SlaughterhouseBreakListener implements Listener {
             }
 
             removeSlaughterhouse(player, slaughterhouseBlock, data.getId(), data.getTier());
+            SlaughterhouseKillTaskManager.getInstance().stopTask(data.getId());
 
             cooldown.createCountdown(player, cooldownName, 1000, TimeUnit.MILLISECONDS);
         }
