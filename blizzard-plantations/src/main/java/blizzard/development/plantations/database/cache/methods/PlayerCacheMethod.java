@@ -2,6 +2,7 @@ package blizzard.development.plantations.database.cache.methods;
 
 import blizzard.development.plantations.database.cache.PlayerCacheManager;
 import blizzard.development.plantations.database.storage.PlayerData;
+import blizzard.development.plantations.plantations.enums.PlantationEnum;
 import org.bukkit.entity.Player;
 
 public class PlayerCacheMethod {
@@ -18,6 +19,19 @@ public class PlayerCacheMethod {
         PlayerData playerData = playerCacheManager.getPlayerData(player);
         if (playerData != null) {
             playerData.setArea(radius);
+            playerCacheManager.cachePlayerData(player.getUniqueId().toString(), playerData);
+        }
+    }
+
+    public String getAreaPlantation(Player player) {
+        PlayerData playerData = playerCacheManager.getPlayerData(player);
+        return playerData != null ? playerData.getAreaPlantation() : "§c§lERRO!";
+    }
+
+    public void setAreaPlantation(Player player, PlantationEnum plantationEnum) {
+        PlayerData playerData = playerCacheManager.getPlayerData(player);
+        if (playerData != null) {
+            playerData.setAreaPlantation(plantationEnum);
             playerCacheManager.cachePlayerData(player.getUniqueId().toString(), playerData);
         }
     }

@@ -15,8 +15,6 @@ import java.util.UUID;
 public class HologramBuilder {
     private static final Map<UUID, Hologram> hologram = new HashMap<>();
 
-    // TODO: fazer um item de preferencia no menu para desativar/ativar holograma na estufa.
-
     public static UUID hologram(Player player, Block block) {
         UUID uuid = UUID.randomUUID();
 
@@ -24,9 +22,6 @@ public class HologramBuilder {
         HologramBuilder.hologram.put(uuid, hologram);
 
         DHAPI.addHologramLine(hologram, "§c§lERRO!");
-
-        hologram.setDefaultVisibleState(true); // mudar para false quando terminar o plugin.
-        hologram.setShowPlayer(player);
 
         return uuid;
     }

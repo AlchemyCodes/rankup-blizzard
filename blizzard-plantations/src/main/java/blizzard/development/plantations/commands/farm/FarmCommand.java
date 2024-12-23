@@ -80,7 +80,39 @@ public class FarmCommand extends BaseCommand {
     public void onSetSpawn(CommandSender commandSender) {
         Player player = (Player) commandSender;
 
+        LocationUtils.setPlantationSpawnLocation(
+            player,
+            player.getWorld(),
+            (int) player.getX(),
+            (int) player.getY(),
+            (int) player.getZ(),
+            player.getYaw(),
+            player.getPitch()
+        );
+    }
+
+    @Subcommand("setnormalspawn")
+    @CommandPermission("alchemy.plantations.setspawn")
+    public void onSetNormalSpawn(CommandSender commandSender) {
+        Player player = (Player) commandSender;
+
         LocationUtils.setSpawnLocation(
+            player,
+            player.getWorld(),
+            (int) player.getX(),
+            (int) player.getY(),
+            (int) player.getZ(),
+            player.getYaw(),
+            player.getPitch()
+        );
+    }
+
+    @Subcommand("setcenterspawn")
+    @CommandPermission("alchemy.plantations.setspawn")
+    public void onSetCenterSpawn(CommandSender commandSender) {
+        Player player = (Player) commandSender;
+
+        LocationUtils.setCenterLocation(
             player,
             player.getWorld(),
             (int) player.getX(),
@@ -111,7 +143,7 @@ public class FarmCommand extends BaseCommand {
     public void onGo(CommandSender commandSender) {
         Player player = (Player) commandSender;
 
-        Location location = LocationUtils.getSpawnLocation();
+        Location location = LocationUtils.getPlantationSpawnLocation();
 
         if (location == null) {
             player.sendActionBar("§c§lEI! §cO spawn da estufa ainda não foi setado.");
@@ -244,7 +276,7 @@ public class FarmCommand extends BaseCommand {
     public void onDev(CommandSender commandSender) {
         Player player = (Player) commandSender;
 
-
+        player.teleport(LocationUtils.getCenterLocation());
 //        HarvestEffect harvestEffect = new HarvestEffect();
 //        harvestEffect.executeHarvestWave(player, 20);
 

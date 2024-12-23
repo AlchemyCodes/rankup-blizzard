@@ -1,6 +1,7 @@
 package blizzard.development.plantations.managers;
 
 import blizzard.development.plantations.database.cache.methods.PlayerCacheMethod;
+import blizzard.development.plantations.plantations.enums.PlantationEnum;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
 import org.bukkit.entity.Player;
@@ -56,6 +57,14 @@ public class AreaManager {
 
     public Integer getArea(Player player) {
         return playerCacheMethod.getArea(player);
+    }
+
+    public void setAreaPlantation(Player player, PlantationEnum plantationEnum) {
+        playerCacheMethod.setAreaPlantation(player, plantationEnum);
+    }
+
+    public String getAreaPlantation(Player player) {
+        return playerCacheMethod.getAreaPlantation(player);
     }
 
     public static AreaManager getInstance() {

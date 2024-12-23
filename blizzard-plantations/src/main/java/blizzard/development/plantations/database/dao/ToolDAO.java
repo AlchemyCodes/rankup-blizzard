@@ -14,7 +14,7 @@ public class ToolDAO {
         try (Connection connection = DatabaseConnection.getInstance().getConnection();
              Statement statement = connection.createStatement()) {
 
-            String sql_tool = "CREATE TABLE IF NOT EXISTS plantations_tools (id varchar(36) primary key, type varchar(36), nickname varchar(36), blocks int, botany int, agility int, explosion int, thunderstorm int, xray int)";
+            String sql_tool = "CREATE TABLE IF NOT EXISTS plantations_tools (id varchar(36) primary key, type varchar(36), nickname varchar(36), blocks int, botany int, agility int, explosion int, thunderstorm int, xray int, blizzard int)";
             statement.execute(sql_tool);
 
         } catch (SQLException exception) {
@@ -51,7 +51,8 @@ public class ToolDAO {
                             resultSet.getInt("agility"),
                             resultSet.getInt("explosion"),
                             resultSet.getInt("thunderstorm"),
-                            resultSet.getInt("xray")
+                            resultSet.getInt("xray"),
+                            resultSet.getInt("blizzard")
                     );
                 }
             }
@@ -62,7 +63,7 @@ public class ToolDAO {
     }
 
     public void createToolData(ToolData toolData) throws SQLException {
-        String sql = "INSERT INTO plantations_tools (id, type, nickname, blocks, botany, agility, explosion, thunderstorm, xray) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO plantations_tools (id, type, nickname, blocks, botany, agility, explosion, thunderstorm, xray, blizzard) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         executeUpdate(sql, (statement) -> {
             try {
@@ -75,6 +76,7 @@ public class ToolDAO {
                 statement.setInt(7, toolData.getExplosion() != null ? toolData.getExplosion() : 0);
                 statement.setInt(8, toolData.getThunderstorm() != null ? toolData.getThunderstorm() : 0);
                 statement.setInt(9, toolData.getXray() != null ? toolData.getXray() : 0);
+                statement.setInt(10, toolData.getBlizzard() != null ? toolData.getBlizzard() : 0);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -82,7 +84,7 @@ public class ToolDAO {
     }
 
     public void updateToolData(ToolData toolData) throws SQLException {
-        String sql = "UPDATE plantations_tools SET type = ?, nickname = ?, blocks = ?, botany = ?, agility = ?, explosion = ?, thunderstorm = ?, xray = ? WHERE id = ?";
+        String sql = "UPDATE plantations_tools SET type = ?, nickname = ?, blocks = ?, botany = ?, agility = ?, explosion = ?, thunderstorm = ?, xray = ?, blizzard = ? WHERE id = ?";
         executeUpdate(sql, statement -> {
             try {
                 statement.setString(1, toolData.getType());
@@ -93,7 +95,8 @@ public class ToolDAO {
                 statement.setInt(6, toolData.getExplosion() != null ? toolData.getExplosion() : 0);
                 statement.setInt(7, toolData.getThunderstorm() != null ? toolData.getThunderstorm() : 0);
                 statement.setInt(8, toolData.getXray() != null ? toolData.getXray() : 0);
-                statement.setString(9, toolData.getId());
+                statement.setInt(9, toolData.getBlizzard() != null ? toolData.getBlizzard() : 0);
+                statement.setString(10, toolData.getId());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -118,7 +121,9 @@ public class ToolDAO {
                         resultSet.getInt("agility"),
                         resultSet.getInt("explosion"),
                         resultSet.getInt("thunderstorm"),
-                        resultSet.getInt("xray")
+                        resultSet.getInt("xray"),
+                        resultSet.getInt("blizzard")
+
                 ));
             }
         } catch (SQLException e) {

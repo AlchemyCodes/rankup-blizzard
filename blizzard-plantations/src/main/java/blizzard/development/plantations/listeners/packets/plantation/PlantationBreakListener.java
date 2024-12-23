@@ -3,11 +3,15 @@ package blizzard.development.plantations.listeners.packets.plantation;
 import blizzard.development.plantations.Main;
 import blizzard.development.plantations.database.cache.methods.PlayerCacheMethod;
 import blizzard.development.plantations.database.cache.methods.ToolCacheMethod;
+import blizzard.development.plantations.managers.AreaManager;
 import blizzard.development.plantations.managers.BlockManager;
 import blizzard.development.plantations.managers.PlantationManager;
+import blizzard.development.plantations.managers.upgrades.blizzard.BlizzardEffect;
+import blizzard.development.plantations.managers.upgrades.blizzard.BlizzardManager;
 import blizzard.development.plantations.managers.upgrades.explosion.ExplosionManager;
 import blizzard.development.plantations.managers.upgrades.lightning.LightningManager;
 import blizzard.development.plantations.managers.upgrades.xray.XrayManager;
+import blizzard.development.plantations.plantations.enums.PlantationEnum;
 import blizzard.development.plantations.plantations.item.ToolBuildItem;
 import blizzard.development.plantations.tasks.PlantationRegenTask;
 import blizzard.development.plantations.utils.packets.PacketUtils;
@@ -102,13 +106,14 @@ public class PlantationBreakListener extends PacketAdapter {
             return;
         }
 
-        int botany, agility, explosion, thunderstorm, xray;
+        int botany, agility, explosion, thunderstorm, xray, blizzard;
         try {
             botany = toolCacheMethod.getBotany(id);
             agility = toolCacheMethod.getAgility(id);
             explosion = toolCacheMethod.getExplosion(id);
             thunderstorm = toolCacheMethod.getThunderstorm(id);
             xray = toolCacheMethod.getXray(id);
+            blizzard = toolCacheMethod.getBlizzard(id);
         } catch (NullPointerException e) {
             LOGGER.log(Level.SEVERE, "Erro ao buscar dados da ferramenta para ID: " + id, e);
             event.setCancelled(true);
@@ -121,12 +126,9 @@ public class PlantationBreakListener extends PacketAdapter {
         PacketUtils.getInstance().sendPacket(
             player,
             plantationToRegen,
-            Material.AIR
-        );
+            Material.getMaterial(AreaManager.getInstance().getAreaPlantation(player)
+            ));
 
-        player.sendMessage("voce tem " + playerCacheMethod.getBlocks(player) + " blocos");
-        player.sendMessage("a ferramenta tem " + toolCacheMethod.getBlocks(id) + " blocos");
-        player.sendMessage("voce tem " + playerCacheMethod.getPlantations(player) + " sementes");
 
         player.getInventory().setItemInMainHand(ToolBuildItem.tool(
             id,
@@ -136,12 +138,14 @@ public class PlantationBreakListener extends PacketAdapter {
             explosion,
             thunderstorm,
             xray,
+            blizzard,
             1
         ));
 
         ExplosionManager.check(player, plantationToRegen, id);
         LightningManager.check(player, plantationToRegen, id);
         XrayManager.check(player, plantationToRegen, id);
+        BlizzardManager.check(player, id);
 
         plantations.forEach((p, plantation) -> {
             PlantationRegenTask.create(plantationToRegen, player, 5);
@@ -152,15 +156,50 @@ public class PlantationBreakListener extends PacketAdapter {
                 );
         });
 
+        int seeds = 0;
+
+        switch (AreaManager.getInstance().getAreaPlantation(player)) {
+
+            case "POTATOES":
+                playerCacheMethod.setPlantations(
+                    player,
+                    playerCacheMethod.getPlantations(player) + 3
+                );
+                seeds = 3;
+                break;
+            case "CARROTS":
+                playerCacheMethod.setPlantations(
+                    player,
+                    playerCacheMethod.getPlantations(player) + 8
+                );
+                seeds = 8;
+                break;
+            case "BEETROOTS":
+                playerCacheMethod.setPlantations(
+                    player,
+                    playerCacheMethod.getPlantations(player) + 12
+                );
+                seeds = 12;
+                break;
+            case "WHEAT":
+                playerCacheMethod.setPlantations(
+                    player,
+                    playerCacheMethod.getPlantations(player) + 16
+                );
+                seeds = 16;
+        }
+
         playerCacheMethod.setBlocks(
             player,
             playerCacheMethod.getBlocks(player) + 1
         );
 
-        playerCacheMethod.setPlantations(
-            player,
-            playerCacheMethod.getPlantations(player) + 1
-        );
+        if (BlizzardEffect.getInstance().blizzard.containsKey(player)) {
+            playerCacheMethod.setPlantations(
+                player,
+                playerCacheMethod.getPlantations(player) + 20
+            );
+        }
 
         toolCacheMethod.setBlocks(
             id,
@@ -168,6 +207,10 @@ public class PlantationBreakListener extends PacketAdapter {
         );
 
 
-        player.sendMessage("§6Você quebrou uma plantação! §7[packet]");
+        if (BlizzardEffect.getInstance().blizzard.containsKey(player)) {
+            player.sendActionBar("§d§lEstufa! §8▼ §b§l+20 §b★ §8▶ §7[20% de Bônus] §8✎ §bNevasca ativada!");
+        } else {
+            player.sendActionBar("§d§lEstufa! §8▼ §a§l+" + seeds + " §a★ §8▶ §7[20% de Bônus]");
+        }
     }
 }

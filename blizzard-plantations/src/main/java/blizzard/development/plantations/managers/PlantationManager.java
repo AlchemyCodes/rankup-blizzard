@@ -23,7 +23,7 @@ public class PlantationManager {
     private static final PlantationManager instance = new PlantationManager();
 
     public void transform(Player player, int radius) {
-        Location centerLocation = LocationUtils.getSpawnLocation();
+        Location centerLocation = LocationUtils.getCenterLocation();
         if (centerLocation == null) return;
 
         World world = centerLocation.getWorld();
@@ -78,7 +78,7 @@ public class PlantationManager {
     }
 
     public void reset(Player player, int radius) {
-        Location centerLocation = LocationUtils.getSpawnLocation();
+        Location centerLocation = LocationUtils.getPlantationSpawnLocation();
         if (centerLocation == null) return;
 
         World world = centerLocation.getWorld();
@@ -141,7 +141,14 @@ public class PlantationManager {
 
             PacketContainer packet = new PacketContainer(PacketType.Play.Server.BLOCK_CHANGE);
 
-            BlockData blockData = Bukkit.createBlockData("minecraft:potatoes[age=7]");
+            BlockData blockData;
+
+            if (AreaManager.getInstance().getAreaPlantation(player).equalsIgnoreCase("BEETROOTS")) {
+                blockData = Bukkit.createBlockData("minecraft:" + AreaManager.getInstance().getAreaPlantation(player).toLowerCase() + "[age=3]");
+            } else {
+                blockData = Bukkit.createBlockData("minecraft:" + AreaManager.getInstance().getAreaPlantation(player).toLowerCase() + "[age=7]");
+            }
+
             WrappedBlockData wrappedBlockData = WrappedBlockData.createData(blockData);
 
             BlockPosition blockPosition = new BlockPosition(
@@ -208,7 +215,14 @@ public class PlantationManager {
                 public void run() {
                     try {
                         if (player.isOnline()) {
-                            BlockData blockData = Bukkit.createBlockData("minecraft:potatoes[age=" + currentAge + "]");
+
+                            BlockData blockData;
+
+                            if (AreaManager.getInstance().getAreaPlantation(player).equalsIgnoreCase("BEETROOTS")) {
+                                blockData = Bukkit.createBlockData("minecraft:" + AreaManager.getInstance().getAreaPlantation(player).toLowerCase() + "[age=3]");
+                            } else {
+                                blockData = Bukkit.createBlockData("minecraft:" + AreaManager.getInstance().getAreaPlantation(player).toLowerCase() + "[age=" + currentAge + "]");
+                            }
                             WrappedBlockData wheatState = WrappedBlockData.createData(blockData);
 
                             BlockPosition blockPosition = new BlockPosition(

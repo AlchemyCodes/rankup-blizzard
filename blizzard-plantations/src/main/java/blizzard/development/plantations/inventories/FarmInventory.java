@@ -23,7 +23,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.checkerframework.checker.units.qual.A;
 
 import java.time.Duration;
 import java.util.Arrays;
@@ -31,32 +30,31 @@ import java.util.concurrent.TimeUnit;
 
 public class FarmInventory {
 
-    private final PlayerCacheMethod playerCacheMethod = new PlayerCacheMethod();
 
     public void open(Player player) {
         ChestGui inventory = new ChestGui(3, "Estufa");
         StaticPane pane = new StaticPane(0, 0, 9, 3);
 
-        boolean isInPlantation = playerCacheMethod.isInPlantation(player);
-        AreaManager areaManager = AreaManager.getInstance();
 
-        Location location = LocationUtils.getSpawnLocation();
+        Location location = LocationUtils.getPlantationSpawnLocation();
+        Location spawn = LocationUtils.getSpawnLocation();
 
         if (location == null) {
             player.sendActionBar("§c§lEI! §cO spawn da estufa ainda não foi setado.");
             return;
         }
 
-        World spawn = Bukkit.getWorld("spawn2");
-        if (spawn == null) return;
+        if (spawn == null) {
+            return;
+        }
 
-        GuiItem go = new GuiItem(go(isInPlantation), event -> {
+        GuiItem go = new GuiItem(go(PlayerCacheMethod.getInstance().isInPlantation(player)), event -> {
             event.setCancelled(true);
 
-            if (isInPlantation) {
+            if (PlayerCacheMethod.getInstance().isInPlantation(player)) {
                 player.closeInventory();
 
-                player.teleport(spawn.getSpawnLocation());
+                player.teleport(spawn);
                 player.sendTitle("§c§lEstufa!", "§cVocê saiu da estufa.", 10, 70, 20);
 
                 for (Player players : Bukkit.getOnlinePlayers()) {
@@ -64,21 +62,11 @@ public class FarmInventory {
                     player.showPlayer(Main.getInstance(), players);
                 }
 
-                playerCacheMethod.removeInPlantation(player);
+                PlayerCacheMethod.
+                    getInstance()
+                    .removeInPlantation(player);
             } else {
                 player.closeInventory();
-
-                player.teleport(location);
-                player.sendTitle("§a§lEstufa!", "§aVocê entrou na estufa.", 10, 70, 20);
-
-                for (Player players : Bukkit.getOnlinePlayers()) {
-                    player.hidePlayer(Main.getInstance(), players);
-                }
-
-                playerCacheMethod.setInPlantation(player);
-
-                PlantationManager plantationManager = new PlantationManager();
-                plantationManager.transform(player, areaManager.getArea(player));
 
                 new BukkitRunnable() {
 
@@ -87,27 +75,52 @@ public class FarmInventory {
                     public void run() {
                         i++;
 
+                        if (i == 5) {
+                            player.teleport(location);
+                        }
+
                         if (i == 10) {
+
+                            player.sendTitle("§a§lEstufa!", "§aVocê entrou na estufa.", 10, 70, 20);
+
+                            for (Player players : Bukkit.getOnlinePlayers()) {
+                                player.hidePlayer(Main.getInstance(), players);
+                            }
+
+                            PlayerCacheMethod.
+                                getInstance()
+                                .setInPlantation(player);
+
+                            PlantationManager
+                                .getInstance()
+                                .transform(
+                                    player,
+                                    AreaManager.getInstance().getArea(player)
+                                );
+
+                            player.clearActivePotionEffects();
                             this.cancel();
                         }
 
-                       player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 10, 8));
-                       player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20 * 10, 100000));
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 2, 8));
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20 * 2, 100000));
 
-                       if (player.hasPermission("*")) {
-                           player.clearActivePotionEffects();
-                       }
+                        if (player.hasPermission("*")) {
+                            player.clearActivePotionEffects();
+                        }
 
                         player.showTitle(
                             Title.title(
-                                Component.text("§a§lAguarde!"),
-                                Component.text("§7Estamos carregando a sua área."),
+                                Component.text("§c§lAguarde!"),
+                                Component.text("§cEstamos carregando a sua área."),
                                 Title.Times.times(Duration.ZERO, Duration.ofSeconds(2), Duration.ofSeconds(3))
                             )
                         );
                         player.playSound(player, Sound.BLOCK_NOTE_BLOCK_PLING, 5L, 1L);
                     }
                 }.runTaskTimer(Main.getInstance(), 0L, 20L);
+
+
             }
         });
 

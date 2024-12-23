@@ -144,6 +144,15 @@ public class PacketUtils {
         protocolManager.sendServerPacket(player, headRotationPacket);
     }
 
+    public void sendWeatherPacket(Player player) {
+        PacketContainer rainPacket = ProtocolLibrary.getProtocolManager().createPacket(PacketType.Play.Server.GAME_STATE_CHANGE);
+
+        rainPacket.getIntegers().write(0, 0);
+        rainPacket.getFloat().write(0, 1F);
+
+        ProtocolLibrary.getProtocolManager().sendServerPacket(player, rainPacket);
+    }
+
     public static void removeEntity(Player player, Integer entityId) {
         ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
         final PacketContainer destroyEntity = new PacketContainer(PacketType.Play.Server.ENTITY_DESTROY);

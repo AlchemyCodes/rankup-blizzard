@@ -4,6 +4,11 @@ import blizzard.development.plantations.Main;
 import blizzard.development.plantations.builder.ItemBuilder;
 import blizzard.development.plantations.database.cache.methods.PlayerCacheMethod;
 import blizzard.development.plantations.database.cache.methods.ToolCacheMethod;
+import blizzard.development.plantations.managers.upgrades.blizzard.BlizzardManager;
+import blizzard.development.plantations.managers.upgrades.explosion.ExplosionManager;
+import blizzard.development.plantations.managers.upgrades.lightning.LightningManager;
+import blizzard.development.plantations.managers.upgrades.xray.XrayManager;
+import blizzard.development.plantations.utils.NumberFormat;
 import blizzard.development.plantations.utils.TextUtils;
 import com.comphenix.protocol.PacketType;
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
@@ -37,12 +42,14 @@ public class EnchantmentInventory {
         int botanyEnchant = toolCacheMethod.getBotany(id);
         int thunderstormEnchant = toolCacheMethod.getThunderstorm(id);
         int xrayEnchant = toolCacheMethod.getXray(id);
+        int blizzardEnchant = toolCacheMethod.getBlizzard(id);
 
         int explosionCost = 1000;
         int agilityCost = 1000;
         int botanyCost = 1000;
         int thunderstormCost = 1000;
         int xrayCost = 1000;
+        int blizzardCost = 1000;
 
         int seeds = playerCacheMethod.getPlantations(player);
 
@@ -141,10 +148,29 @@ public class EnchantmentInventory {
                 return;
             }
 
-            toolCacheMethod.setThunderstorm(id, xrayEnchant + 1);
+            toolCacheMethod.setXray(id, xrayEnchant + 1);
 
             open(player);
             player.sendActionBar("§a§lYAY! §aVocê evoluiu o encantamento ´§fRaio-X§a´ com sucesso!");
+            event.setCancelled(true);
+        });
+
+        GuiItem blizzard = new GuiItem(blizzard(id, player), event -> {
+            if (blizzardCost > seeds) {
+                int subtraction = blizzardCost - seeds;
+
+                player.closeInventory();
+                player.sendMessage("");
+                player.sendMessage(" §c§lEI! §cVocê não possui sementes para evoluir.");
+                player.sendMessage(" §cFaltam §l" + formatNumber(subtraction) + "§c sementes para executar a ação.");
+                player.sendMessage("");
+                return;
+            }
+
+            toolCacheMethod.setBlizzard(id, blizzardEnchant + 1);
+
+            open(player);
+            player.sendActionBar("§a§lYAY! §aVocê evoluiu o encantamento ´§fNevasca§a´ com sucesso!");
             event.setCancelled(true);
         });
 
@@ -161,6 +187,7 @@ public class EnchantmentInventory {
         pane.addItem(botany, Slot.fromIndex(13));
         pane.addItem(thunderstorm, Slot.fromIndex(20));
         pane.addItem(xray, Slot.fromIndex(24));
+        pane.addItem(blizzard, Slot.fromIndex(22));
         pane.addItem(comingSoon, Slot.fromIndex(39));
         pane.addItem(tool, Slot.fromIndex(41));
 
@@ -176,7 +203,7 @@ public class EnchantmentInventory {
             "§7Invoque uma dinamite para",
             "§7explodir sua plantação.",
             "",
-            " §fChance: §c▼2%",
+            " §fChance: §c▼" + NumberFormat.format(ExplosionManager.activation(toolCacheMethod.getExplosion(id))) + "%",
             " §fCusto: §a✿50K",
             "",
             "§cClique para evoluir."
@@ -280,12 +307,12 @@ public class EnchantmentInventory {
     private ItemStack thunderstorm(String id, Player player) {
 
         Material material = Material.TRIDENT;
-        String displayName = "<#00aaaa>Tr<#02c9c9><#02c9c9>ovo<#02c9c9><#02c9c9>ada<#00aaaa> <bold><#00aaaa>" + toolCacheMethod.getThunderstorm(id) + "<#00aaaa></bold>";
+        String displayName = "<#00aaaa>Tr<#02c9c9><#02c9c9>ovo<#02c9c9><#02c9c9>ada<#00aaaa> §3§l" + toolCacheMethod.getThunderstorm(id);
         List<String> lore = Arrays.asList(
             "§7Invoque uma trovoada para",
             "§7quebrar suas plantações.",
             "",
-            " §fChance: §c▼10%",
+            " §fChance: §c▼" + NumberFormat.format(LightningManager.activation(toolCacheMethod.getThunderstorm(id))) + "%",
             " §fCusto: §a✿50K",
             "",
             "<#00aaaa>Clique para evoluir.<#00aaaa>"
@@ -313,12 +340,12 @@ public class EnchantmentInventory {
     private ItemStack xray(String id, Player player) {
 
         Material material = Material.FLINT;
-        String displayName = "<#555555>Ra<#737373><#737373>io<#737373><#737373>-X<#555555> <bold><#737373>" + toolCacheMethod.getXray(id) + "<#737373></bold>";
+        String displayName = "<#555555>Ra<#737373><#737373>io-X!<#555555> §8§l" + toolCacheMethod.getXray(id);
         List<String> lore = Arrays.asList(
             "§7Quebre em formato de X",
             "§7as suas plantações.",
             "",
-            " §fChance: §c▼10%",
+            " §fChance: §c▼" + NumberFormat.format(XrayManager.activation(toolCacheMethod.getXray(id))) + "%",
             " §fCusto: §a✿50K",
             "",
             "<#737373>Clique para evoluir.<#737373>"
@@ -330,6 +357,39 @@ public class EnchantmentInventory {
             lore = Arrays.asList(
                 "§7Quebre em formato de X",
                 "§7as suas plantações.",
+                "",
+                " §fCusto: §a✿50K",
+                "",
+                "§cSementes insuficientes."
+            );
+        }
+
+        return new ItemBuilder(material)
+            .setDisplayName(displayName)
+            .setLore(lore)
+            .build();
+    }
+
+    private ItemStack blizzard(String id, Player player) {
+
+        Material material = Material.BLUE_ICE;
+        String displayName = "<#55FFFF>Ne<#72f7f7><#72f7f7>vas<#72f7f7><#72f7f7>ca<#55FFFF> §b§l" + toolCacheMethod.getBlizzard(id);
+        List<String> lore = Arrays.asList(
+            "§7Ganhe mais sementes a",
+            "§7cada plantação quebrada.",
+            "",
+            " §fChance: §c▼" + NumberFormat.format(BlizzardManager.activation(toolCacheMethod.getBlizzard(id))) + "%",
+            " §fCusto: §a✿50K",
+            "",
+            "<#72f7f7>Clique para evoluir.<#72f7f7>"
+        );
+
+        if (playerCacheMethod.getPlantations(player) < 1000) {
+            material = Material.RED_STAINED_GLASS_PANE;
+            displayName = "§cNevasca §l" + toolCacheMethod.getBlizzard(id);
+            lore = Arrays.asList(
+                "§7Ganhe mais sementes a",
+                "§7cada plantação quebrada.",
                 "",
                 " §fCusto: §a✿50K",
                 "",

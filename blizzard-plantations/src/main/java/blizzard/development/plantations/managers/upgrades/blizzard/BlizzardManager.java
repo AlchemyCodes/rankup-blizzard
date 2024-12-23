@@ -1,61 +1,58 @@
-package blizzard.development.plantations.managers.upgrades.lightning;
+package blizzard.development.plantations.managers.upgrades.blizzard;
 
 import blizzard.development.plantations.Main;
 import blizzard.development.plantations.database.cache.methods.ToolCacheMethod;
 import blizzard.development.plantations.managers.AreaManager;
-import blizzard.development.plantations.utils.LocationUtils;
 import blizzard.development.plantations.utils.TextUtils;
 import net.kyori.adventure.title.Title;
-import org.bukkit.Location;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.time.Duration;
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class LightningManager {
+public class BlizzardManager {
 
     public static final ToolCacheMethod toolCacheMethod = ToolCacheMethod.getInstance();
 
-    public static void check(Player player, Block block, String id) {
-        int thunderstorm = toolCacheMethod.getThunderstorm(id);
-
-        int area = AreaManager.getInstance().getArea(player) - 3;
-        Location location = LocationUtils.getCenterLocation();
+    public static void check(Player player, String id) {
+        int blizzard = toolCacheMethod.getBlizzard(id);
 
         double random = ThreadLocalRandom.current().nextDouble(0, 100);
 
-        if (random <= activation(thunderstorm)) {
+        if (BlizzardEffect.getInstance().blizzard.containsKey(player)) return;
+
+        if (random <= activation(blizzard)) {
             new BukkitRunnable() {
                 int i = 0;
                 @Override
                 public void run() {
                     i++;
 
-                    double randomX = new Random().nextDouble(-area, area);
-                    double randomZ = new Random().nextDouble(-area, area);
+                    BlizzardEffect.getInstance()
+                            .startBlizzardEffect(player);
 
-                    LightningEffect.startLightningEffect(player, location.getBlock().getLocation().add(randomX, 0, randomZ));
-                    if (i >= 5) {
+                    if (i >= 10) {
+                        BlizzardEffect.getInstance()
+                            .stopBlizzardEffect(player);
                         this.cancel();
                     }
                 }
             }.runTaskTimer(Main.getInstance(), 0L, 20L);
 
             player.sendMessage("");
-            player.sendMessage(TextUtils.parse(" <bold><#00aaaa>Tr<#02c9c9><#02c9c9>ovo<#02c9c9><#02c9c9>ada!<#00aaaa></bold> <#02c9c9>Confira o relatório:<#02c9c9>"));
-            player.sendMessage(" §fA trovoada quebrou §l92§f plantações.");
+            player.sendMessage(TextUtils.parse(" <bold><#55FFFF>Ne<#72f7f7><#72f7f7>vas<#72f7f7><#72f7f7>ca!<#55FFFF></bold> <#72f7f7>Confira o relatório:<#72f7f7>"));
+            player.sendMessage(" §fGanhe um bônus a cada plantação quebrada.");
             player.sendMessage("");
 
             player.showTitle(
                 Title.title(
-                    TextUtils.parse("<bold><#00aaaa>Tr<#02c9c9><#02c9c9>ovo<#02c9c9><#02c9c9>ada!<#00aaaa></bold>"),
-                    TextUtils.parse("<#02c9c9>O encantamento foi ativado.<#02c9c9>"),
+                    TextUtils.parse("<bold><#55FFFF>Ne<#72f7f7><#72f7f7>vas<#72f7f7><#72f7f7>ca!<#55FFFF></bold>"),
+                    TextUtils.parse("<#72f7f7>O encantamento foi ativado.<#72f7f7>"),
                     Title.Times.times(Duration.ZERO, Duration.ofSeconds(2), Duration.ofSeconds(1))
                 )
             );
+
         }
     }
 
