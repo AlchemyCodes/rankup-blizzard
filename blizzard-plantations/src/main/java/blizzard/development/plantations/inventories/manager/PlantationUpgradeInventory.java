@@ -1,15 +1,21 @@
 package blizzard.development.plantations.inventories.manager;
 
 import blizzard.development.plantations.builder.ItemBuilder;
+import blizzard.development.plantations.managers.AreaManager;
+import blizzard.development.plantations.managers.PlantationManager;
+import blizzard.development.plantations.plantations.enums.PlantationEnum;
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
 import com.github.stefvanschie.inventoryframework.pane.util.Slot;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.title.Title;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.time.Duration;
 import java.util.Arrays;
 
 public class PlantationUpgradeInventory {
@@ -24,14 +30,80 @@ public class PlantationUpgradeInventory {
         });
 
         GuiItem carrot = new GuiItem(carrot(), event -> {
+
+            AreaManager.getInstance()
+                .setAreaPlantation(
+                    player,
+                    PlantationEnum.CARROT
+                );
+
+            PlantationManager.getInstance()
+                    .transform(
+                        player,
+                        AreaManager.getInstance().getArea(player)
+                    );
+
+            player.closeInventory();
+            player.showTitle(
+                Title.title(
+                    Component.text("§d§lYeah! §dnovo upgrade."),
+                    Component.text("§fVocê adquiriu a plantação §d§lcenoura§d."),
+                    Title.Times.times(Duration.ZERO, Duration.ofSeconds(2), Duration.ofSeconds(1))
+                )
+            );
+
             event.setCancelled(true);
         });
 
         GuiItem tomato = new GuiItem(tomato(), event -> {
+
+            AreaManager.getInstance()
+                .setAreaPlantation(
+                    player,
+                    PlantationEnum.TOMATO
+                );
+
+            PlantationManager.getInstance()
+                .transform(
+                    player,
+                    AreaManager.getInstance().getArea(player)
+                );
+
+            player.closeInventory();
+            player.showTitle(
+                Title.title(
+                    Component.text("§d§lYeah! §dnovo upgrade."),
+                    Component.text("§fVocê adquiriu a plantação §d§ltomate§d."),
+                    Title.Times.times(Duration.ZERO, Duration.ofSeconds(2), Duration.ofSeconds(1))
+                )
+            );
+
             event.setCancelled(true);
         });
 
         GuiItem corn = new GuiItem(corn(), event -> {
+
+            AreaManager.getInstance()
+                .setAreaPlantation(
+                    player,
+                    PlantationEnum.CORN
+                );
+
+            PlantationManager.getInstance()
+                .transform(
+                    player,
+                    AreaManager.getInstance().getArea(player)
+                );
+
+            player.closeInventory();
+            player.showTitle(
+                Title.title(
+                    Component.text("§d§lYeah! §dnovo upgrade."),
+                    Component.text("§fVocê adquiriu a plantação §d§lmilho§d."),
+                    Title.Times.times(Duration.ZERO, Duration.ofSeconds(2), Duration.ofSeconds(1))
+                )
+            );
+
             event.setCancelled(true);
         });
 
@@ -43,7 +115,6 @@ public class PlantationUpgradeInventory {
         });
 
         GuiItem plantations = new GuiItem(plantations(), event -> {
-
             event.setCancelled(true);
         });
 

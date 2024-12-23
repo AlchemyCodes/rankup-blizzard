@@ -3,9 +3,9 @@ package blizzard.development.plantations.database.storage;
 public class ToolData {
 
     private String id, type, nickname;
-    private Integer blocks, botany, agility, explosion, thunderstorm, xray;
+    private Integer blocks, botany, agility, explosion, thunderstorm, xray, blizzard;
 
-    public ToolData(String id, String type, String nickname, Integer blocks, Integer botany, Integer agility, Integer explosion, Integer thunderstorm, Integer xray) {
+    public ToolData(String id, String type, String nickname, Integer blocks, Integer botany, Integer agility, Integer explosion, Integer thunderstorm, Integer xray, Integer blizzard) {
         this.id = id;
         this.type = type;
         this.nickname = nickname;
@@ -15,6 +15,7 @@ public class ToolData {
         this.explosion = explosion;
         this.thunderstorm = thunderstorm;
         this.xray = xray;
+        this.blizzard = blizzard;
     }
 
     public String getId() {
@@ -87,5 +88,13 @@ public class ToolData {
 
     public void setXray(Integer xray) {
         this.xray = xray;
+    }
+
+    public Integer getBlizzard() {
+        return blizzard;
+    }
+
+    public void setBlizzard(Integer blizzard) {
+        this.blizzard = blizzard;
     }
 }

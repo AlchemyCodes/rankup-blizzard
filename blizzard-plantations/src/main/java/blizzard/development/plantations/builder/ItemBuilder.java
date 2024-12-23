@@ -1,7 +1,7 @@
 package blizzard.development.plantations.builder;
 
 import blizzard.development.plantations.Main;
-import blizzard.development.plantations.plantations.enums.SeedEnum;
+import blizzard.development.plantations.plantations.enums.PlantationEnum;
 import blizzard.development.plantations.utils.items.SkullAPI;
 import blizzard.development.plantations.utils.items.TextAPI;
 import net.kyori.adventure.text.Component;
@@ -142,21 +142,6 @@ public class ItemBuilder {
             NamespacedKey namespacedKey = new NamespacedKey(plugin, key);
             if (pdc.has(namespacedKey, PersistentDataType.STRING)) {
                 return pdc.get(namespacedKey, PersistentDataType.STRING);
-            }
-        }
-        return null;
-    }
-
-    public static String getSeedType(ItemStack item) {
-        if (item == null || !item.hasItemMeta()) {
-            return null;
-        }
-
-        PersistentDataContainer container = item.getItemMeta().getPersistentDataContainer();
-        for (SeedEnum seed : SeedEnum.values()) {
-            if (container.has(new NamespacedKey(Main.getInstance(), seed.getPersistentKey()),
-                    PersistentDataType.STRING)) {
-                return seed.getPersistentKey();
             }
         }
         return null;

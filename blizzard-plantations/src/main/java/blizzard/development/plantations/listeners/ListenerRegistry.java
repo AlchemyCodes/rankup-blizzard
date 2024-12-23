@@ -5,6 +5,7 @@ import blizzard.development.plantations.database.dao.PlayerDAO;
 import blizzard.development.plantations.listeners.geral.PlayerListener;
 import blizzard.development.plantations.listeners.packets.plantation.PlantationBreakListener;
 import blizzard.development.plantations.listeners.plantation.PlantationDisplayListener;
+import blizzard.development.plantations.listeners.plantation.PlantationListener;
 import blizzard.development.plantations.listeners.plantation.ToolInteractListener;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
@@ -27,7 +28,8 @@ public class ListenerRegistry {
         Arrays.asList(
                 new PlayerListener(playerDAO),
                 new PlantationDisplayListener(),
-                new ToolInteractListener()
+                new ToolInteractListener(),
+                new PlantationListener()
         ).forEach(listener -> pluginManager.registerEvents(listener, Main.getInstance()));
     }
 

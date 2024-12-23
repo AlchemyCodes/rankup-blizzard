@@ -3,6 +3,8 @@ package blizzard.development.plantations.tasks;
 import blizzard.development.plantations.Main;
 import blizzard.development.plantations.builder.ItemBuilder;
 import blizzard.development.plantations.builder.hologram.HologramBuilder;
+import blizzard.development.plantations.managers.AreaManager;
+import blizzard.development.plantations.managers.upgrades.blizzard.BlizzardEffect;
 import eu.decentsoftware.holograms.api.DHAPI;
 import eu.decentsoftware.holograms.api.holograms.Hologram;
 import eu.decentsoftware.holograms.api.utils.items.HologramItem;
@@ -52,12 +54,42 @@ public class HologramTask {
                 DHAPI.moveHologram(currentHologram, newLocation);
 
                 List<String> newLines = new ArrayList<>();
-                newLines.add("§a§l+1 §a✿");
 
+                if (BlizzardEffect.getInstance().blizzard.containsKey(player)) {
+                    newLines.add("§b§l+20 §b✿");
 
-                if (!newLines.isEmpty()) {
                     DHAPI.setHologramLines(currentHologram, newLines);
+
+                    if (currentFrame >= totalFrames) {
+                        HologramBuilder.removeHologram(hologramUUID);
+                        this.cancel();
+                    }
+
+                    currentFrame++;
+
+                    return;
                 }
+
+                switch (AreaManager.getInstance().getAreaPlantation(player)) {
+
+                    case "POTATOES":
+                       newLines.add("§a§l+3 §a✿");
+                        break;
+                    case "CARROTS":
+                        newLines.add("§a§l+8 §a✿");
+                        break;
+                    case "BEETROOTS":
+                        newLines.add("§a§l+12 §a✿");
+                        break;
+                    case "WHEAT":
+                        newLines.add("§a§l+16 §a✿");
+                }
+
+                if (BlizzardEffect.getInstance().blizzard.containsKey(player)) {
+                    newLines.add("§b§l+20 §b✿");
+                }
+
+                DHAPI.setHologramLines(currentHologram, newLines);
 
                 if (currentFrame >= totalFrames) {
                     HologramBuilder.removeHologram(hologramUUID);

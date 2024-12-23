@@ -68,11 +68,13 @@ public class XrayEffect {
             2
         );
 
-        PacketUtils.getInstance().sendEntityPacket(
-            blockLocation.add(0, 10, 0),
-            player,
-            EntityType.SNOWBALL
-        );
+        PacketUtils.getInstance()
+            .sendEntityPacket(
+                blockLocation.add(0, 10, 0),
+                player,
+                EntityType.SNOWBALL
+            );
+
 
         playerCacheMethod.setPlantations(player, 5);
     }

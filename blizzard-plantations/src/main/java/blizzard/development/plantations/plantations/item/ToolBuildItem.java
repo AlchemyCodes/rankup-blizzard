@@ -23,11 +23,12 @@ public class ToolBuildItem {
             id,
             ToolsEnum.TOOL.toString(),
             0,
+            1,
             0,
-            0,
-            0,
-            0,
-            0
+            1,
+            1,
+            1,
+            1
         );
 
         return new ItemBuilder(Material.GOLDEN_HOE)
@@ -39,10 +40,11 @@ public class ToolBuildItem {
                 " §6Encantamentos:",
                 "  §7Durabilidade §l∞",
                 "  §7Agilidade §l0",
-                "  §7Botânico §l0",
-                "  §7Explosão §l0",
-                "  §7Trovoada §l0",
-                "  §7Raio-X §l0",
+                "  §7Botânico §l1",
+                "  §7Explosão §l1",
+                "  §7Trovoada §l1",
+                "  §7Nevasca §l1",
+                "  §7Raio-X §l1",
                 "",
                 "§6Pressione shift + b. direito."
             ))
@@ -52,7 +54,7 @@ public class ToolBuildItem {
             .build(amount);
     }
 
-    public static ItemStack tool(String id, int blocks, int botany, int agility, int explosion, int thunderstorm, int xray, int amount) {
+    public static ItemStack tool(String id, int blocks, int botany, int agility, int explosion, int thunderstorm, int xray, int blizzard, int amount) {
         return new ItemBuilder(Material.GOLDEN_HOE)
             .setDisplayName("§6Cultivadora §7[" + formatNumber(blocks) + "]")
             .setLore(Arrays.asList(
@@ -64,8 +66,9 @@ public class ToolBuildItem {
                 "  §7Agilidade §l" + formatNumber(agility),
                 "  §7Botânico §l" + formatNumber(botany),
                 "  §7Explosão §l" + formatNumber(explosion),
-                "  §7Trovoada §l " + formatNumber(thunderstorm),
-                "  §7Raio-X §l " + formatNumber(xray),
+                "  §7Trovoada §l" + formatNumber(thunderstorm),
+                "  §7Nevasca §l" + formatNumber(blizzard),
+                "  §7Raio-X §l" + formatNumber(xray),
                 "",
                 "§6Pressione shift + b. direito."
             ))

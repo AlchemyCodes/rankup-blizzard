@@ -1,15 +1,18 @@
 package blizzard.development.plantations.database.storage;
 
+import blizzard.development.plantations.plantations.enums.PlantationEnum;
+
 public class PlayerData {
 
-    private String uuid, nickname;
+    private String uuid, nickname, area_plantation;
     private Integer area, blocks, plantations;
     private Boolean isInPlantation;
 
-    public PlayerData(String uuid, String nickname, Integer area, Integer blocks, Integer plantations, boolean isInPlantation) {
+    public PlayerData(String uuid, String nickname, Integer area, String area_plantation, Integer blocks, Integer plantations, boolean isInPlantation) {
         this.uuid = uuid;
         this.nickname = nickname;
         this.area = area;
+        this.area_plantation = area_plantation;
         this.blocks = blocks;
         this.plantations = plantations;
         this.isInPlantation = isInPlantation;
@@ -37,6 +40,14 @@ public class PlayerData {
 
     public void setArea(Integer area) {
         this.area = area;
+    }
+
+    public String getAreaPlantation() {
+        return area_plantation;
+    }
+
+    public void setAreaPlantation(PlantationEnum plantationEnum) {
+        this.area_plantation = plantationEnum.getName();
     }
 
     public Integer getBlocks() {

@@ -4,10 +4,10 @@ import blizzard.development.plantations.database.cache.methods.PlayerCacheMethod
 import blizzard.development.plantations.managers.PlantationManager;
 import blizzard.development.plantations.utils.TextUtils;
 import blizzard.development.plantations.utils.packets.PacketUtils;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.events.PacketContainer;
+import org.bukkit.*;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
@@ -67,6 +67,7 @@ public class LightningEffect {
                         0,
                         1
                     );
+
             }
         }
     }

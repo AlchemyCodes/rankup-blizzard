@@ -14,7 +14,7 @@ public class ToolCacheMethod {
         return instance;
     }
 
-    public static void createTool(Player player, String id, String type, Integer blocks, Integer botany, Integer agility, Integer explosion, Integer thunderstorm, Integer xray) {
+    public static void createTool(Player player, String id, String type, Integer blocks, Integer botany, Integer agility, Integer explosion, Integer thunderstorm, Integer xray, Integer blizzard) {
         String nickname = player.getName();
         ToolData toolData = new ToolData(
                 id,
@@ -25,7 +25,8 @@ public class ToolCacheMethod {
                 agility,
                 explosion,
                 thunderstorm,
-                xray
+                xray,
+                blizzard
         );
 
         try {
@@ -98,6 +99,19 @@ public class ToolCacheMethod {
         ToolData toolData = toolCacheManager.getToolData(id);
         if (toolData != null) {
             toolData.setXray(xray);
+            toolCacheManager.updateToolData(id, toolData);
+        }
+    }
+
+    public Integer getBlizzard(String id) {
+        ToolData toolData = toolCacheManager.getToolData(id);
+        return toolData != null ? toolData.getBlizzard() : 0;
+    }
+
+    public void setBlizzard(String id, int xray) {
+        ToolData toolData = toolCacheManager.getToolData(id);
+        if (toolData != null) {
+            toolData.setBlizzard(xray);
             toolCacheManager.updateToolData(id, toolData);
         }
     }
