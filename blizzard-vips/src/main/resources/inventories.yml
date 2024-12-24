@@ -1,0 +1,24 @@
+vip-inventory:
+  rows: 5
+  title: "Inventário Vips"
+  items:
+    - vip-name: "ouro"
+      material: "GOLD_INGOT"
+      display-name: "§6Vip Ouro"
+      lore:
+        - "§7Clique para trocar para esse vip!"
+      slot: 20
+
+    - vip-name: "diamante"
+      material: "DIAMOND"
+      display-name: "§bVip Diamante"
+      lore:
+        - "§7Clique para trocar para esse vip!"
+      slot: 24
+
+    - vip-name: "esmeralda"
+      material: "EMERALD"
+      display-name: "§aVip Esmeralda"
+      lore:
+        - "§7Clique para trocar para esse vip!"
+      slot: 13

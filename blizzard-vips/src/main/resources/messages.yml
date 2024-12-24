@@ -1,0 +1,20 @@
+messages:
+  playerNotFound: "§cJogador não encontrado ou offline."
+
+commands:
+  consultVip:
+    vipFormat: "§b{vipName}"
+    hoverMessage: "§fData de Ativação: §b{activationDate}\n§fDuração: §b{duration}"
+    detailsMessage: "§b§lDETALHES DO VIP\n§fNome: §b§l{vipName}\n§fData de Ativação: §b§l{activationDate}\n§fDuração: §b§l{duration}"
+    noVipDetails: "§cVocê não possui vip {vipName}."
+    noActiveVip: "§cEsse jogador não possui nenhum vip ativo."
+
+  giveVip:
+    vipTimeExtended: "§aEsse jogador já possui esse VIP, então o tempo foi aumentado."
+    vip:
+      title: "§bVIPS!"
+      subtitle: "§fO jogador §b{playerName} §fganhou um vip §b§l{vipName}"
+
+  removeVip:
+    vipRemoved: "§aVIP {vipName} removido com sucesso!"
+    vipNotFound: "§cEsse jogador não possui o VIP {vipName}!"
