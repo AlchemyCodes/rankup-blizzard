@@ -2,8 +2,11 @@ package blizzard.development.vips.utils;
 
 import blizzard.development.vips.commands.CommandRegistry;
 import blizzard.development.vips.database.DatabaseConnection;
+import blizzard.development.vips.database.cache.KeysCacheManager;
 import blizzard.development.vips.database.cache.PlayersCacheManager;
+import blizzard.development.vips.database.dao.KeysDao;
 import blizzard.development.vips.database.dao.PlayersDAO;
+import blizzard.development.vips.database.storage.KeysData;
 import blizzard.development.vips.database.storage.PlayersData;
 import blizzard.development.vips.listeners.ListenerRegistry;
 import blizzard.development.vips.tasks.PlayerSaveTask;
@@ -20,6 +23,7 @@ import java.util.List;
 
 public class PluginImpl {
     public PlayersDAO playersDAO;
+    public KeysDao keysDAO;
     public final Plugin plugin;
 
     @Getter
@@ -74,9 +78,9 @@ public class PluginImpl {
     }
 
     public void onUnload() {
-        PlayersCacheManager.getInstance().playerCache.forEach((player, playersData) -> {
+        KeysCacheManager.getInstance().keysCache.forEach((key, keysData) -> {
             try {
-                this.playersDAO.updatePlayerData(playersData);
+                this.keysDAO.updateKeyData(keysData);
             } catch (SQLException exception) {
                 throw new RuntimeException(exception);
             }
@@ -86,9 +90,16 @@ public class PluginImpl {
     public void registerDatabase() {
         DatabaseConnection.getInstance();
         this.playersDAO = new PlayersDAO();
+        this.keysDAO = new KeysDao();
+        this.keysDAO.initializeDatabase();
         this.playersDAO.initializeDatabase();
 
         new PlayerSaveTask(playersDAO).runTaskTimerAsynchronously(plugin, 0L, 20L * 3);
+
+        List<KeysData> keys = keysDAO.getAllKeysData();
+        for (KeysData key : keys) {
+            KeysCacheManager.getInstance().cacheKeyData(key.getKey(), key);
+        }
     }
 
     private void registerTasks() {

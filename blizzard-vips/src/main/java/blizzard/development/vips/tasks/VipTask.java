@@ -2,6 +2,7 @@ package blizzard.development.vips.tasks;
 
 import blizzard.development.vips.database.dao.PlayersDAO;
 import blizzard.development.vips.database.storage.PlayersData;
+import blizzard.development.vips.utils.vips.VipUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -20,6 +21,8 @@ public class VipTask extends BukkitRunnable {
 
     @Override
     public void run() {
+        if (VipUtils.getInstance().isVipTimeFrozen) return;
+
         for (@NotNull OfflinePlayer player : Bukkit.getOfflinePlayers()) {
             try {
                 List<PlayersData> allPlayerVips = playersDAO.getAllPlayerVips(player.getName());

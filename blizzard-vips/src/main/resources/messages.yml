@@ -18,3 +18,8 @@ commands:
   removeVip:
     vipRemoved: "§aVIP {vipName} removido com sucesso!"
     vipNotFound: "§cEsse jogador não possui o VIP {vipName}!"
+
+  keyCommand:
+    keyCreated: "§bKey §b§l{key} §bgerada com sucesso!"
+    keyDoesNotExist: "§cEssa key não existe!"
+

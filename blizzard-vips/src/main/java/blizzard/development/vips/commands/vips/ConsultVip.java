@@ -24,6 +24,11 @@ public class ConsultVip extends BaseCommand {
     @Syntax("<id|playerName>")
     @CommandCompletion("@playerName")
     public void onCommand(Player player, @Optional String argument) throws SQLException {
+        if (argument == null) {
+            sendPlayerVips(player, player.getName());
+            return;
+        }
+
         sendPlayerVips(player, argument);
     }
 
