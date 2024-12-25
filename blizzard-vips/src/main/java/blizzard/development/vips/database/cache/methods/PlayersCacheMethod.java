@@ -28,12 +28,6 @@ public class PlayersCacheMethod {
 //        return (data != null) ? data.getVipActivationDate() : "Sem Vip";
 //    }
 //
-    public String getDate() {
-        LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy 'às' HH:mm");
-
-        return now.format(formatter);
-    }
 //
 //    public void setVipActivationDate(Player player) {
 //        PlayersData data = cache.getPlayerData(player);

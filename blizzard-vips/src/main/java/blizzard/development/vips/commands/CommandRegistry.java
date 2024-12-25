@@ -1,11 +1,15 @@
 package blizzard.development.vips.commands;
 
 import blizzard.development.vips.Main;
+import blizzard.development.vips.commands.subcommands.freeze.FreezeVip;
+import blizzard.development.vips.commands.subcommands.keys.GenerateKey;
+import blizzard.development.vips.commands.subcommands.keys.UseKey;
 import blizzard.development.vips.commands.vips.ChangeVip;
 import blizzard.development.vips.commands.vips.ConsultVip;
 import blizzard.development.vips.commands.vips.GiveVip;
 import blizzard.development.vips.commands.vips.RemoveVip;
 import blizzard.development.vips.database.cache.PlayersCacheManager;
+import blizzard.development.vips.database.dao.KeysDao;
 import blizzard.development.vips.database.dao.PlayersDAO;
 import co.aikar.commands.PaperCommandManager;
 import org.bukkit.entity.Player;
@@ -18,6 +22,7 @@ public class CommandRegistry {
 
     public void register() {
         PlayersDAO playersDAO = new PlayersDAO();
+        KeysDao keysDAO = new KeysDao();
 
         PaperCommandManager paperCommandManager = new PaperCommandManager(Main.getInstance());
 
@@ -25,7 +30,10 @@ public class CommandRegistry {
                 new GiveVip(playersDAO),
                 new ConsultVip(),
                 new RemoveVip(),
-                new ChangeVip()
+                new ChangeVip(),
+                new GenerateKey(keysDAO),
+                new UseKey(keysDAO),
+                new FreezeVip()
         ).forEach(paperCommandManager::registerCommand);
 
         registerCompletions(paperCommandManager);

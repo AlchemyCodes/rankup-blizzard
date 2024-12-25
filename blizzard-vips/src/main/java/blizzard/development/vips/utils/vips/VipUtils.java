@@ -4,10 +4,15 @@ import blizzard.development.vips.database.cache.PlayersCacheManager;
 import blizzard.development.vips.database.dao.PlayersDAO;
 import blizzard.development.vips.database.storage.PlayersData;
 import blizzard.development.vips.utils.PluginImpl;
+import blizzard.development.vips.utils.TimeParser;
+import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 
@@ -17,6 +22,7 @@ public class VipUtils {
     private final PlayersDAO playersDAO;
 
     public HashMap<String, String> activeVip = new HashMap<>();
+    public boolean isVipTimeFrozen = false;
 
     public VipUtils(PlayersDAO playersDAO) {
         this.playersDAO = playersDAO;
@@ -65,6 +71,25 @@ public class VipUtils {
         return false;
     }
 
+    public void extendVip(Player sender, String targetPlayer, String vipName, VipUtils vipUtils, long duration) throws SQLException {
+        YamlConfiguration messagesConfig = PluginImpl.getInstance().Messages.getConfig();
+
+        List<PlayersData> playerVips = playersDAO.getAllPlayerVips(targetPlayer);
+
+        boolean hasVip = vipUtils.hasVip(targetPlayer, vipName);
+
+        if (hasVip) {
+            for (PlayersData vipData : playerVips) {
+                if (vipData.getVipName().equalsIgnoreCase(vipName)) {
+                    vipData.setVipDuration(vipData.getVipDuration() + duration);
+                    playersDAO.updatePlayerData(vipData);
+                }
+            }
+
+            sender.sendMessage(messagesConfig.getString("commands.giveVip.vipTimeExtended"));
+        }
+    }
+
     public void giveVip(Player targetPlayer, String date, String vipId, String vipName, long duration) throws SQLException {
         PlayersData newPlayerData = new PlayersData(
                 targetPlayer.getUniqueId().toString(),
@@ -79,6 +104,40 @@ public class VipUtils {
         playersDAO.createPlayerData(newPlayerData);
 
         PlayersCacheManager.getInstance().cachePlayerData(targetPlayer.getName(), newPlayerData);
+    }
+
+    public void sendVipMessage(String playerName, String vipName) {
+        YamlConfiguration messagesConfig = PluginImpl.getInstance().Messages.getConfig();
+
+        String title = messagesConfig.getString("commands.giveVip.vip.title");
+        String subtitle = messagesConfig.getString("commands.giveVip.vip.subtitle")
+                .replace("{playerName}", playerName)
+                .replace("{vipName}", vipName);
+
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            player.sendTitle(title, subtitle);
+            player.playSound(player.getLocation(), Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 1, 1);
+        }
+    }
+
+    public long getDuration(String durationInput) {
+        long duration = 0;
+
+        try {
+            duration = TimeParser.parseTime(durationInput);
+            return duration;
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+
+        return duration;
+    }
+
+    public String getDate() {
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy 'às' HH:mm");
+
+        return now.format(formatter);
     }
 
 
