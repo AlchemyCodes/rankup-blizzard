@@ -2,8 +2,7 @@ package blizzard.development.plantations.plantations.enums;
 
 public enum ToolsEnum {
 
-    PLOWING("arar"),
-    TOOL("cultivo");
+    TOOL("cultivadora");
 
     private final String type;
 

@@ -21,6 +21,13 @@ public class NumberFormat {
         return FORMAT.format(number / (double) VALUES[1][index]) + VALUES[0][index];
     }
 
+    public static String format(double number) {
+        if (number < 0.001 && number != 0) return "0.001";
+
+        return FORMAT.format(number);
+    }
+
+
     public Double parseNumber(String input) {
         if (input == null || input.isEmpty()) return null;
 

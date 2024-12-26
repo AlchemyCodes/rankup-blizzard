@@ -2,6 +2,7 @@ package blizzard.development.plantations.utils;
 
 import blizzard.development.plantations.Main;
 import blizzard.development.plantations.commands.CommandRegistry;
+import blizzard.development.plantations.database.DatabaseConnection;
 import blizzard.development.plantations.database.cache.PlayerCacheManager;
 import blizzard.development.plantations.database.cache.ToolCacheManager;
 import blizzard.development.plantations.database.dao.PlayerDAO;
@@ -13,6 +14,7 @@ import blizzard.development.plantations.managers.BatchManager;
 import blizzard.development.plantations.tasks.PlayerSaveTask;
 import blizzard.development.plantations.tasks.ToolSaveTask;
 import blizzard.development.plantations.utils.config.ConfigUtils;
+import blizzard.development.plantations.utils.displayentity.DisplayEntityUtils;
 import co.aikar.commands.Locales;
 import co.aikar.commands.PaperCommandManager;
 import org.bukkit.plugin.Plugin;
@@ -31,6 +33,7 @@ public class PluginImpl {
     public ConfigUtils Locations;
     public ConfigUtils Ranking;
     public ConfigUtils Database;
+    public ConfigUtils Shop;
     private final PlayerCacheManager playerCacheManager = PlayerCacheManager.getInstance();
 
     public PluginImpl(Plugin plugin) {
@@ -43,13 +46,23 @@ public class PluginImpl {
         Config = new ConfigUtils((JavaPlugin) plugin, "config.yml");
         Locations = new ConfigUtils((JavaPlugin) plugin, "locations.yml");
         Ranking = new ConfigUtils((JavaPlugin) plugin, "ranking.yml");
+        Shop = new ConfigUtils((JavaPlugin) plugin, "shop.yml");
         Database = new ConfigUtils((JavaPlugin) plugin, "database.yml");
     }
 
     public void onEnable() {
+        try {
+            commandManager = new PaperCommandManager(plugin);
+            commandManager.getLocales().setDefaultLocale(Locales.PORTUGUESE);
+        } catch (IllegalStateException e) {
+            throw new RuntimeException("Erro ao inicializar PaperCommandManager", e);
+        }
+
+
         Config.saveDefaultConfig();
         Locations.saveDefaultConfig();
         Ranking.saveDefaultConfig();
+        Shop.saveDefaultConfig();
         Database.saveDefaultConfig();
         registerDatabase();
         registerListeners();
@@ -61,7 +74,7 @@ public class PluginImpl {
             List<ToolData> allTools = toolDAO.getAllToolData();
 
             for (PlayerData player : allPlayers) {
-                playerCacheManager.cachePlayerData(player.getNickname(), player);
+                playerCacheManager.cachePlayerData(player.getUuid(), player);
             }
 
             for (ToolData tool : allTools) {
@@ -73,6 +86,7 @@ public class PluginImpl {
         }
 
         registerTasks();
+        DisplayEntityUtils.initialize();
     }
 
     public void onDisable() {
@@ -84,6 +98,10 @@ public class PluginImpl {
                 throw new RuntimeException("Erro ao atualizar dados do jogador " + playerData.getNickname(), exception);
             }
         });
+
+        DisplayEntityUtils.removeDisplay();
+        DatabaseConnection.getInstance().close();
+
     }
 
 
@@ -93,6 +111,9 @@ public class PluginImpl {
 
         toolDAO = new ToolDAO();
         toolDAO.initializeDatabase();
+
+//        plantationDAO = new PlantationDAO();
+//        plantationDAO.initializeDatabase();
     }
 
     private void registerListeners() {
