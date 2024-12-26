@@ -1,0 +1,6 @@
+name: blizzard-monsters
+version: '${version}'
+main: blizzard.development.monsters.Main
+api-version: '1.20'
+commands:
+  monsters:
