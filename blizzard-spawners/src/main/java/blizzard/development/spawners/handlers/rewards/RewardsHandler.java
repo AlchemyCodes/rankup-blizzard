@@ -10,28 +10,7 @@ import java.util.*;
 public class RewardsHandler {
     private static RewardsHandler instance;
 
-    public static class Reward {
-        private final String material;
-        private final String display;
-        private final String command;
-
-        public Reward(String material, String display, String command) {
-            this.material = material;
-            this.display = display;
-            this.command = command;
-        }
-
-        public String getMaterial() {
-            return material;
-        }
-
-        public String getDisplay() {
-            return display;
-        }
-
-        public String getCommand() {
-            return command;
-        }
+    public record Reward(String material, String display, String command) {
     }
 
     public List<Reward> getRewards(String rewardKey) {
@@ -71,7 +50,7 @@ public class RewardsHandler {
         }
 
         Reward randomReward = rewards.get(random.nextInt(rewards.size()));
-        String formattedCommand = randomReward.getCommand().replace("{player}", player.getName());
+        String formattedCommand = randomReward.command().replace("{player}", player.getName());
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), formattedCommand);
 
         return randomReward;

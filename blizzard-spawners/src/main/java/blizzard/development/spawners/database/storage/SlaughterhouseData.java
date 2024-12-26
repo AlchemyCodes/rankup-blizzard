@@ -1,7 +1,6 @@
 package blizzard.development.spawners.database.storage;
 
 import java.util.List;
-import java.util.Optional;
 
 public class SlaughterhouseData {
     private String id;

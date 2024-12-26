@@ -93,8 +93,8 @@ public class MobDeathListener implements Listener {
                 HologramsTask.initializeHologramTask(
                         player,
                         Objects.requireNonNull(LocationUtil.deserializeLocation(data.getMobLocation())),
-                        Material.getMaterial(reward.getMaterial()),
-                        reward.getDisplay()
+                        Material.getMaterial(reward.material()),
+                        reward.display()
                 );
                 player.sendActionBar(TextAPI.parse("§a§lYAY! §aVocê encontrou uma recompensa matando mobs."));
             }

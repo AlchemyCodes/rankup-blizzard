@@ -2,6 +2,7 @@ package blizzard.development.spawners.inventories.spawners.shop;
 
 import blizzard.development.currencies.api.CurrenciesAPI;
 import blizzard.development.currencies.enums.Currencies;
+import blizzard.development.spawners.database.cache.setters.PlayersCacheSetters;
 import blizzard.development.spawners.handlers.bonus.BonusHandler;
 import blizzard.development.spawners.handlers.enchantments.EnchantmentsHandler;
 import blizzard.development.spawners.handlers.enums.spawners.Enchantments;
@@ -96,6 +97,7 @@ public class ShopInventory {
     public void buySpawners(Player player, InventoryClickEvent event, String spawnerType, Currencies currency) {
         final CurrenciesAPI currencies = CurrenciesAPI.getInstance();
         final SpawnersHandler handler = SpawnersHandler.getInstance();
+        final PlayersCacheSetters setters = PlayersCacheSetters.getInstance();
 
         String spawner = spawnerType.toLowerCase();
         double spawnerPrice = handler.getBuyPrice(spawner);
@@ -119,6 +121,7 @@ public class ShopInventory {
                     if (currencies.getBalance(player, Currencies.SPAWNERSLIMIT) >= 1) {
                         giveSpawners(player, spawner, 1, finalValue);
                         currencies.removeBalance(player, currency, finalValue);
+                        setters.addPurchasedSpawners(player, 1);
                         player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_YES, 1.0f, 1.0f);
                     } else {
                         player.sendActionBar(limitsErrorMessage());
@@ -142,6 +145,7 @@ public class ShopInventory {
                 if (hasEmptySlot(player)) {
                     giveSpawners(player, spawner, limits, finalValue);
                     currencies.removeBalance(player, currency, finalValue);
+                    setters.addPurchasedSpawners(player, limits);
                     player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_YES, 1.0f, 1.0f);
                 } else {
                     player.sendActionBar(TextAPI.parse("§c§lEI! §cVocê precisa de pelo menos um slot vazio."));

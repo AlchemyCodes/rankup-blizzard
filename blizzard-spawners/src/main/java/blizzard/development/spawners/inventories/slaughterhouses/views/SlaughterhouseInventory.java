@@ -27,7 +27,7 @@ public class SlaughterhouseInventory {
 
         Set<String> slaughterhousesKeys = Objects.requireNonNull(config.getConfigurationSection("slaughterhouses")).getKeys(false);
 
-        int[] slots = {12, 13, 14, 21, 22, 23};
+        int[] slots = {12, 13, 14, 21, 22, 23, 30, 31, 32};
 
         int index = 0;
         for (String key : slaughterhousesKeys) {

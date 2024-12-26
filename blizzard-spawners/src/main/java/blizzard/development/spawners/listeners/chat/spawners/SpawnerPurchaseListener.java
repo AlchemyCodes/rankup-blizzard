@@ -2,6 +2,8 @@ package blizzard.development.spawners.listeners.chat.spawners;
 
 import blizzard.development.currencies.api.CurrenciesAPI;
 import blizzard.development.currencies.enums.Currencies;
+import blizzard.development.spawners.database.cache.setters.PlayersCacheSetters;
+import blizzard.development.spawners.database.cache.setters.SpawnersCacheSetters;
 import blizzard.development.spawners.handlers.bonus.BonusHandler;
 import blizzard.development.spawners.handlers.spawners.SpawnersHandler;
 import blizzard.development.spawners.inventories.spawners.shop.ShopInventory;
@@ -93,6 +95,7 @@ public class SpawnerPurchaseListener implements Listener {
         String spawnerType = pendingPurchases.get(player);
         SpawnersHandler handler = SpawnersHandler.getInstance();
         CurrenciesAPI currencies = CurrenciesAPI.getInstance();
+        PlayersCacheSetters setters = PlayersCacheSetters.getInstance();
 
         double spawnerPrice = handler.getBuyPrice(spawnerType.toLowerCase());
         double totalCost = (spawnerPrice * finalAmount) * (1 - (BonusHandler.getInstance().getPlayerBonus(player) / 100) );
@@ -104,6 +107,7 @@ public class SpawnerPurchaseListener implements Listener {
                     double finalValue = (spawnerPrice) * (1 - (BonusHandler.getInstance().getPlayerBonus(player) / 100) );
                     shop.giveSpawners(player, spawnerType.toLowerCase(), finalAmount, finalValue);
                     currencies.removeBalance(player, Currencies.COINS, totalCost);
+                    setters.addPurchasedSpawners(player, finalAmount);
                     player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_YES, 1.0f, 1.0f);
                 } else {
                     player.sendActionBar(shop.limitsErrorMessage());
