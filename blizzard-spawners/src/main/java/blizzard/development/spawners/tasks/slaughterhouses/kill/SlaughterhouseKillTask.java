@@ -20,11 +20,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class SlaughterhouseKillTask extends BukkitRunnable {
     private final SlaughterhouseData slaughterhouseData;
@@ -72,9 +69,15 @@ public class SlaughterhouseKillTask extends BukkitRunnable {
         List<SpawnersData> nearbySpawners = LocationUtil.getNearbySpawners(slaughterhouseLocation, radius);
 
         for (SpawnersData spawnerData : nearbySpawners) {
+            boolean isOwner = Objects.equals(spawnerData.getNickname(), slaughterhouseData.getNickname());
+            boolean isFriend = spawnerData.getFriends() != null && spawnerData.getFriends().contains(slaughterhouseData.getNickname());
+
+            if (!isOwner && !isFriend) {
+                continue;
+            }
 
             if (spawnerData.getMobAmount() <= 0) {
-                return;
+                continue;
             }
 
             EntityType entityType = utils.getEntityTypeFromSpawner(utils.getSpawnerFromName(spawnerData.getType()));
@@ -84,12 +87,12 @@ public class SlaughterhouseKillTask extends BukkitRunnable {
                     .stream()
                     .filter(entity -> entity instanceof LivingEntity)
                     .filter(entity -> entity.getType() == entityType)
+                    .filter(entity -> hasSpawnerMeta(entity, spawnerData.getId()))
                     .toList();
 
             nearbyEntities.forEach(entity -> ((LivingEntity) entity).setHealth(0.0));
 
             double mobAmount = spawnerData.getMobAmount();
-
             double drops = mobAmount * (1 + looting);
 
             setters.addSpawnerDrops(spawnerData.getId(), drops);
@@ -97,11 +100,18 @@ public class SlaughterhouseKillTask extends BukkitRunnable {
         }
     }
 
-
     public void resetMobsAmount(SpawnersData data, String id) {
         final SpawnersCacheSetters setters = SpawnersCacheSetters.getInstance();
         setters.setSpawnerMobAmout(data.getId(), 0.0);
         SpawnersMobsTaskManager.getInstance().syncMobAmount(id, 0.0);
+    }
+
+    private boolean hasSpawnerMeta(Entity entity, String spawnerId) {
+        if (entity.hasMetadata("blizzard_spawners-id")) {
+            return entity.getMetadata("blizzard_spawners-id").stream()
+                    .anyMatch(meta -> meta.asString().equals(spawnerId));
+        }
+        return false;
     }
 
     @Override
