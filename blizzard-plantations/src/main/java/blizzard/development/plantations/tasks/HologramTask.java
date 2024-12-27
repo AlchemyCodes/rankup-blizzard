@@ -3,6 +3,8 @@ package blizzard.development.plantations.tasks;
 import blizzard.development.plantations.Main;
 import blizzard.development.plantations.builder.ItemBuilder;
 import blizzard.development.plantations.builder.hologram.HologramBuilder;
+import blizzard.development.plantations.managers.AreaManager;
+import blizzard.development.plantations.managers.upgrades.blizzard.BlizzardEffect;
 import eu.decentsoftware.holograms.api.DHAPI;
 import eu.decentsoftware.holograms.api.holograms.Hologram;
 import eu.decentsoftware.holograms.api.utils.items.HologramItem;
@@ -19,13 +21,13 @@ import java.util.UUID;
 public class HologramTask {
 
     public static void initializeHologramTask(Player player, Block block, Material material) {
-        Location initialLocation = block.getLocation().add(0.5, 0.5, 0.5);
+        Location initialLocation = block.getLocation().add(0.5, 1.9, 0.5);
         UUID hologramUUID = HologramBuilder.hologram(player, block);
 
         new BukkitRunnable() {
             final int totalFrames = 25;
             int currentFrame = 0;
-            final double maxHeight = 1.5;
+            final double maxHeight = 3;
 
             @Override
             public void run() {
@@ -35,6 +37,8 @@ public class HologramTask {
                     this.cancel();
                     return;
                 }
+                currentHologram.setDefaultVisibleState(false);
+                currentHologram.setShowPlayer(player);
 
                 double progress = (double) currentFrame / totalFrames;
 
@@ -42,36 +46,50 @@ public class HologramTask {
                 double wobble = Math.sin(progress * Math.PI * 2) * 0.05;
 
                 Location newLocation = initialLocation.clone().add(
-                        wobble,
-                        height,
-                        wobble
+                    wobble,
+                    height,
+                    wobble
                 );
 
                 DHAPI.moveHologram(currentHologram, newLocation);
 
                 List<String> newLines = new ArrayList<>();
-                switch (material) {
-                    case POTATOES:
-                        newLines.add("#ICON:" + HologramItem.fromItemStack(new ItemBuilder("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvY2Y0NjI0ZWJmN2Q0MTlhMTFlNDNlZDBjMjAzOGQzMmNkMDlhZDFkN2E2YzZlMjBmNjMzOWNiY2ZlMzg2ZmQxYyJ9fX0=").build()).getContent());
-                        newLines.add("§e§l+1 §eBatata");
-                        break;
-                    case CARROTS:
-                        newLines.add("#ICON:" + HologramItem.fromItemStack(new ItemBuilder("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNGQzYTZiZDk4YWMxODMzYzY2NGM0OTA5ZmY4ZDJkYzYyY2U4ODdiZGNmM2NjNWIzODQ4NjUxYWU1YWY2YiJ9fX0=").build()).getContent());
-                        newLines.add("§6§l+1 §6Cenoura");
-                        break;
-                    case BEETROOTS:
-                        newLines.add("#ICON:" + HologramItem.fromItemStack(new ItemBuilder("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNGYxNGI1OGYzZGY2NWEwYzZiOTBlZTE5NDY0YjI1NTdjODNhZTJjOWZhMWI1NzM4YmIxMTM2NGNkOWY1YjNlMSJ9fX0=").build()).getContent());
-                        newLines.add("§c§l+1 §cTomate");
-                        break;
-                    case WHEAT:
-                        newLines.add("#ICON:" + HologramItem.fromItemStack(new ItemBuilder("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDNhNmIwOTljZDQwMWUzYTBkNjRkOWExNmY0NmNkMGM1Y2E1ZjdlNDVlNmE2OWMyN2QyZTQ3Mzc3NWIyNWZlIn19fQ==").build()).getContent());
-                        newLines.add("§e§l+1 §eMilho");
-                        break;
+
+                if (BlizzardEffect.getInstance().blizzard.containsKey(player)) {
+                    newLines.add("§b§l+20 §b✿");
+
+                    DHAPI.setHologramLines(currentHologram, newLines);
+
+                    if (currentFrame >= totalFrames) {
+                        HologramBuilder.removeHologram(hologramUUID);
+                        this.cancel();
+                    }
+
+                    currentFrame++;
+
+                    return;
                 }
 
-                if (!newLines.isEmpty()) {
-                    DHAPI.setHologramLines(currentHologram, newLines);
+                switch (AreaManager.getInstance().getAreaPlantation(player)) {
+
+                    case "POTATOES":
+                       newLines.add("§a§l+3 §a✿");
+                        break;
+                    case "CARROTS":
+                        newLines.add("§a§l+8 §a✿");
+                        break;
+                    case "BEETROOTS":
+                        newLines.add("§a§l+12 §a✿");
+                        break;
+                    case "WHEAT":
+                        newLines.add("§a§l+16 §a✿");
                 }
+
+                if (BlizzardEffect.getInstance().blizzard.containsKey(player)) {
+                    newLines.add("§b§l+20 §b✿");
+                }
+
+                DHAPI.setHologramLines(currentHologram, newLines);
 
                 if (currentFrame >= totalFrames) {
                     HologramBuilder.removeHologram(hologramUUID);

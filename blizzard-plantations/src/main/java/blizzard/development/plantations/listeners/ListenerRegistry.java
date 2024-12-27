@@ -3,11 +3,10 @@ package blizzard.development.plantations.listeners;
 import blizzard.development.plantations.Main;
 import blizzard.development.plantations.database.dao.PlayerDAO;
 import blizzard.development.plantations.listeners.geral.PlayerListener;
-import blizzard.development.plantations.listeners.packets.BlockPlowListener;
-import blizzard.development.plantations.listeners.packets.PacketListener;
-import blizzard.development.plantations.listeners.plantation.PlantationBlockListener;
-import blizzard.development.plantations.listeners.plantation.PlantationBreakListener;
-import blizzard.development.plantations.listeners.plantation.PlantationPlaceListener;
+import blizzard.development.plantations.listeners.packets.plantation.PlantationBreakListener;
+import blizzard.development.plantations.listeners.plantation.PlantationDisplayListener;
+import blizzard.development.plantations.listeners.plantation.PlantationListener;
+import blizzard.development.plantations.listeners.plantation.ToolInteractListener;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import org.bukkit.Bukkit;
@@ -27,10 +26,10 @@ public class ListenerRegistry {
         PluginManager pluginManager = Bukkit.getPluginManager();
 
         Arrays.asList(
-//                new PlantationBreakListener(),
                 new PlayerListener(playerDAO),
-//                new PlantationBlockListener(),
-                new PacketListener()
+                new PlantationDisplayListener(),
+                new ToolInteractListener(),
+                new PlantationListener()
         ).forEach(listener -> pluginManager.registerEvents(listener, Main.getInstance()));
     }
 
@@ -38,9 +37,7 @@ public class ListenerRegistry {
         ProtocolManager manager = ProtocolLibrary.getProtocolManager();
 
         Arrays.asList(
-            new PacketListener(),
-            new BlockPlowListener(),
-            new blizzard.development.plantations.listeners.packets.plantation.PlantationPlaceListener()
+            new PlantationBreakListener()
         ).forEach(manager::addPacketListener);
     }
 }

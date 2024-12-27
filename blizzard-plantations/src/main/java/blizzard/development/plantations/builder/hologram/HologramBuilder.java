@@ -15,19 +15,13 @@ import java.util.UUID;
 public class HologramBuilder {
     private static final Map<UUID, Hologram> hologram = new HashMap<>();
 
-    // TODO: fazer um item de preferencia no menu para desativar/ativar holograma na estufa.
-
     public static UUID hologram(Player player, Block block) {
         UUID uuid = UUID.randomUUID();
 
         Hologram hologram = DHAPI.createHologram(uuid.toString(), block.getLocation().add(0.5, 0 ,0.5));
         HologramBuilder.hologram.put(uuid, hologram);
 
-        DHAPI.addHologramLine(hologram, "#ICON:" + HologramItem.fromItemStack(new ItemStack(Material.BONE)).getContent());
-        DHAPI.addHologramLine(hologram, "§7Fóssil de Mamute §f+1");
-
-        hologram.setDefaultVisibleState(true); // mudar para false quando terminar o plugin.
-        hologram.setShowPlayer(player);
+        DHAPI.addHologramLine(hologram, "§c§lERRO!");
 
         return uuid;
     }

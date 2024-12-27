@@ -1,0 +1,22 @@
+events:
+  sumo:
+    sumoStart:
+      - ""
+      - "  §3§l❒ §3O evento §lsumo §3foi iniciado pelo jogador §8[{player-name}] "
+      - ""
+      - "    §7Uma batalha um contra um em uma"
+      - "    §7plataforma compacta e desafiadora."
+      - ""
+      - "    §b⏰ §fContagem: §b§l{seconds} §bsegundos."
+      - ""
+      - "  §3Clique §lAQUI! §3para entrar no evento."
+      - ""
+
+    sumoNotActive: "§cSumo não está ativo!"
+    sumoActive: "§cSumo já está ativo!"
+    sumoInGame: "§cVocê foi selecionado para jogar, não pode sair agora!"
+    sumoEnter: "§aVocê entrou no sumo!"
+    sumoLeave: "§cVocê saiu do sumo!"
+    sumoNoPlayers: "§cJogadores insuficientes para iniciar o sumo!"
+    sumoNotEnoughMoney: "§cVocê não tem money suficiente!"
+    sumoNotEnoughFlakes: "§cVocê não tem flocos suficiente!"

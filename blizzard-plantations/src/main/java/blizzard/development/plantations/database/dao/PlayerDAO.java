@@ -11,15 +11,16 @@ import java.util.function.Consumer;
 public class PlayerDAO {
 
     public void initializeDatabase() {
-        try(Connection connection = DatabaseConnection.getInstance().getConnection();
-            Statement statement = connection.createStatement()) {
+        try (Connection connection = DatabaseConnection.getInstance().getConnection();
+             Statement statement = connection.createStatement()) {
 
-            String sql_plantations = "CREATE TABLE IF NOT EXISTS plantations_player (uuid varchar(36) primary key, nickname varchar(36), plantations int, plantation TINYINT(1))";
+            String sql_plantations = "CREATE TABLE IF NOT EXISTS plantations_player (uuid varchar(36) primary key, nickname varchar(36), area int, area_plantation varchar(36), blocks int, plantations int, plantation TINYINT(1))";
 
             statement.execute(sql_plantations);
 
         } catch (SQLException exception) {
-            exception.printStackTrace();}
+            exception.printStackTrace();
+        }
     }
 
     private void executeUpdate(String sql, Consumer<PreparedStatement> setter) throws SQLException {
@@ -43,10 +44,13 @@ public class PlayerDAO {
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     return new PlayerData(
-                            resultSet.getString("uuid"),
-                            resultSet.getString("nickname"),
-                            resultSet.getInt("plantations"),
-                            resultSet.getBoolean("plantation")
+                        resultSet.getString("uuid"),
+                        resultSet.getString("nickname"),
+                        resultSet.getInt("area"),
+                        resultSet.getString("area_plantation"),
+                        resultSet.getInt("blocks"),
+                        resultSet.getInt("plantations"),
+                        resultSet.getBoolean("plantation")
                     );
                 }
             }
@@ -65,10 +69,13 @@ public class PlayerDAO {
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     return new PlayerData(
-                            resultSet.getString("uuid"),
-                            resultSet.getString("nickname"),
-                            resultSet.getInt("plantations"),
-                            resultSet.getBoolean("plantation")
+                        resultSet.getString("uuid"),
+                        resultSet.getString("nickname"),
+                        resultSet.getInt("area"),
+                        resultSet.getString("area_plantation"),
+                        resultSet.getInt("blocks"),
+                        resultSet.getInt("plantations"),
+                        resultSet.getBoolean("plantation")
                     );
                 }
             }
@@ -79,14 +86,17 @@ public class PlayerDAO {
     }
 
     public void createPlayerData(PlayerData playerData) throws SQLException {
-        String sql_par = "INSERT INTO plantations_player (uuid, nickname, plantations, plantation) VALUES (?, ?, ?, ?)";
+        String sql_par = "INSERT INTO plantations_player (uuid, nickname, area, area_plantation, blocks, plantations, plantation) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         executeUpdate(sql_par, (statement) -> {
             try {
                 statement.setString(1, playerData.getUuid());
                 statement.setString(2, playerData.getNickname());
-                statement.setInt(3, playerData.getPlantations());
-                statement.setBoolean(4, playerData.getIsInPlantation());
+                statement.setInt(3, playerData.getArea());
+                statement.setString(4, playerData.getAreaPlantation());
+                statement.setInt(5, playerData.getBlocks());
+                statement.setInt(6, playerData.getPlantations());
+                statement.setBoolean(7, playerData.getIsInPlantation());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -105,13 +115,16 @@ public class PlayerDAO {
     }
 
     public void updatePlayerData(PlayerData playerData) throws SQLException {
-        String sqlpar = "UPDATE plantations_player SET nickname = ?, plantations = ?, plantation = ? WHERE uuid = ?";
+        String sqlpar = "UPDATE plantations_player SET nickname = ?, area = ?, area_plantation = ?, blocks = ?,plantations = ?, plantation = ? WHERE uuid = ?";
         executeUpdate(sqlpar, statement -> {
             try {
                 statement.setString(1, playerData.getNickname());
-                statement.setInt(2, playerData.getPlantations());
-                statement.setBoolean(3, playerData.getIsInPlantation());
-                statement.setString(4, playerData.getUuid());
+                statement.setInt(2, playerData.getArea());
+                statement.setString(3, playerData.getAreaPlantation());
+                statement.setInt(4, playerData.getBlocks());
+                statement.setInt(5, playerData.getPlantations());
+                statement.setBoolean(6, playerData.getIsInPlantation());
+                statement.setString(7, playerData.getUuid());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -128,10 +141,13 @@ public class PlayerDAO {
 
             while (resultSet.next()) {
                 playerDataList.add(new PlayerData(
-                        resultSet.getString("uuid"),
-                        resultSet.getString("nickname"),
-                        resultSet.getInt("plantations"),
-                        resultSet.getBoolean("plantation")
+                    resultSet.getString("uuid"),
+                    resultSet.getString("nickname"),
+                    resultSet.getInt("area"),
+                    resultSet.getString("area_plantation"),
+                    resultSet.getInt("blocks"),
+                    resultSet.getInt("plantations"),
+                    resultSet.getBoolean("plantation")
                 ));
             }
         }

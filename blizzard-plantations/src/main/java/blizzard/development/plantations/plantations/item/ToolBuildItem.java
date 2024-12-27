@@ -17,58 +17,64 @@ import static blizzard.development.plantations.utils.NumberFormat.formatNumber;
 public class ToolBuildItem {
 
     public static ItemStack tool(Player player, int amount) {
-        String id = UUID.randomUUID().toString().substring(0, 5);
+        String id = UUID.randomUUID().toString().substring(0, 8);
         ToolCacheMethod.createTool(
-                player,
-                id,
-                ToolsEnum.TOOL.toString(),
-                0,
-                0,
-                0
+            player,
+            id,
+            ToolsEnum.TOOL.toString(),
+            0,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1
         );
 
         return new ItemBuilder(Material.GOLDEN_HOE)
-                .setDisplayName("§6Ferramenta de Cultivo")
-                .setLore(Arrays.asList(
-                        "§7Use esta ferramenta para",
-                        "§7cultivar plantações.",
-                        "",
-                        " §6Encantamentos:",
-                        "  §7Durabilidade §l∞",
-                        "  §7Agilidade §l0",
-                        "  §7Botânico §l0",
-                        "  §7Explosão §l0",
-                        "",
-                        " §6Os encantamentos são",
-                        " §6upados automaticamente.",
-                        ""
-                ))
-                .addEnchant(Enchantment.DURABILITY, 1000, true)
-                .addPersistentData(Main.getInstance(), "ferramenta", "ferramenta.cultivar")
-                .addPersistentData(Main.getInstance(), "ferramenta-id", id)
-                .build(amount);
+            .setDisplayName("§6Cultivadora")
+            .setLore(Arrays.asList(
+                "§7Use esta ferramenta para",
+                "§7cultivar plantações.",
+                "",
+                " §6Encantamentos:",
+                "  §7Durabilidade §l∞",
+                "  §7Agilidade §l0",
+                "  §7Botânico §l1",
+                "  §7Explosão §l1",
+                "  §7Trovoada §l1",
+                "  §7Nevasca §l1",
+                "  §7Raio-X §l1",
+                "",
+                "§6Pressione shift + b. direito."
+            ))
+            .addEnchant(Enchantment.DURABILITY, 1000, true)
+            .addPersistentData(Main.getInstance(), "ferramenta", "ferramenta.cultivar")
+            .addPersistentData(Main.getInstance(), "ferramenta-id", id)
+            .build(amount);
     }
 
-    public static ItemStack tool(String id, int plantations, int botany, int agility, int explosion, int amount) {
+    public static ItemStack tool(String id, int blocks, int botany, int agility, int explosion, int thunderstorm, int xray, int blizzard, int amount) {
         return new ItemBuilder(Material.GOLDEN_HOE)
-                .setDisplayName("§6Ferramenta de Cultivo §7[" + formatNumber(plantations) + "]")
-                .setLore(Arrays.asList(
-                        "§7Use esta ferramenta para",
-                        "§7cultivar plantações.",
-                        "",
-                        " §6Encantamentos:",
-                        "  §7Durabilidade §l∞",
-                        "  §7Agilidade §l" + formatNumber(agility),
-                        "  §7Botânico §l" + formatNumber(botany),
-                        "  §7Explosão §l" + formatNumber(explosion),
-                        "",
-                        " §6Os encantamentos são",
-                        " §6upados automaticamente.",
-                        ""
-                ))
-                .addEnchant(Enchantment.DURABILITY, 1000, true)
-                .addPersistentData(Main.getInstance(), "ferramenta", "ferramenta.cultivar")
-                .addPersistentData(Main.getInstance(), "ferramenta-id", id)
-                .build(amount);
+            .setDisplayName("§6Cultivadora §7[" + formatNumber(blocks) + "]")
+            .setLore(Arrays.asList(
+                "§7Use esta ferramenta para",
+                "§7cultivar plantações.",
+                "",
+                " §6Encantamentos:",
+                "  §7Durabilidade §l∞",
+                "  §7Agilidade §l" + formatNumber(agility),
+                "  §7Botânico §l" + formatNumber(botany),
+                "  §7Explosão §l" + formatNumber(explosion),
+                "  §7Trovoada §l" + formatNumber(thunderstorm),
+                "  §7Nevasca §l" + formatNumber(blizzard),
+                "  §7Raio-X §l" + formatNumber(xray),
+                "",
+                "§6Pressione shift + b. direito."
+            ))
+            .addEnchant(Enchantment.DURABILITY, 1000, true)
+            .addPersistentData(Main.getInstance(), "ferramenta", "ferramenta.cultivar")
+            .addPersistentData(Main.getInstance(), "ferramenta-id", id)
+            .build(amount);
     }
 }

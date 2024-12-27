@@ -1,0 +1,29 @@
+spawn:
+  world: "spawn2"
+
+events:
+  sumo:
+    arena:
+      world:
+      x:
+      y:
+      z:
+      pitch:
+      yaw:
+
+    player1:
+      world: "spawn2"
+      x: 992
+      y: 70
+      z: 924
+      yaw: -90
+      pitch: 0
+
+
+    player2:
+      world: "spawn2"
+      x: 998
+      y: 70
+      z: 924
+      yaw: 90
+      pitch: 0
