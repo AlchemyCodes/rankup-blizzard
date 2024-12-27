@@ -1,0 +1,19 @@
+locations:
+
+  entry:
+    world:
+    x:
+    y:
+    z:
+    yaw:
+    pitch:
+
+  exit:
+    world:
+    x:
+    y:
+    z:
+    yaw:
+    pitch:
+
+  area:

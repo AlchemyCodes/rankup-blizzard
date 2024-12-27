@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-public class CooldownUtil {
-    private static CooldownUtil instance;
+public class CooldownUtils {
+    private static CooldownUtils instance;
 
     private final Map<String, Long> rawMap = new HashMap<>();
 
@@ -39,8 +39,8 @@ public class CooldownUtil {
         rawMap.clear();
     }
 
-    public static CooldownUtil getInstance() {
-        if (instance == null) instance = new CooldownUtil();
+    public static CooldownUtils getInstance() {
+        if (instance == null) instance = new CooldownUtils();
         return instance;
     }
 }
