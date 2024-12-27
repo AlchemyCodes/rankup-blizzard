@@ -69,7 +69,7 @@ public class ShopItems {
                 "",
                 "§a Informações:",
                 "§8 ■ §fCoins: §2$§f" + NumberFormat.getInstance().formatNumber(CurrenciesAPI.getInstance().getBalance(player, Currencies.COINS)),
-                //"§8 ▶ §fSeu Limite: §7" + NumberFormat.getInstance().formatNumber(LimitMethods.getMachinesLimit(player)),
+                "§8 ▶ §fSeu Limite: §3∞" + NumberFormat.getInstance().formatNumber(CurrenciesAPI.getInstance().getBalance(player, Currencies.SPAWNERSLIMIT)),
                 ""
         ));
 
