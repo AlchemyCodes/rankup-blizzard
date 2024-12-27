@@ -10,6 +10,7 @@ import blizzard.development.monsters.tasks.players.PlayersSaveTask;
 import blizzard.development.monsters.utils.config.ConfigUtils;
 import co.aikar.commands.Locales;
 import co.aikar.commands.PaperCommandManager;
+import lombok.Getter;
 import lombok.SneakyThrows;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -18,22 +19,28 @@ import java.util.List;
 
 public class PluginImpl {
     public final Plugin plugin;
-    private static PluginImpl instance;
+    private static @Getter PluginImpl instance;
     public PlayersDAO playersDAO;
 
     public ConfigUtils Config;
     public ConfigUtils Database;
+    public ConfigUtils Monsters;
+    public ConfigUtils Rewards;
 
     public PluginImpl(Plugin plugin) {
         this.plugin = plugin;
         instance = this;
         Config = new ConfigUtils((JavaPlugin) plugin, "config.yml");
         Database = new ConfigUtils((JavaPlugin) plugin, "database.yml");
+        Monsters = new ConfigUtils((JavaPlugin) plugin, "monsters.yml");
+        Rewards = new ConfigUtils((JavaPlugin) plugin, "rewards.yml");
     }
 
     public void onEnable() {
         Config.saveDefaultConfig();
         Database.saveDefaultConfig();
+        Monsters.saveDefaultConfig();
+        Rewards.saveDefaultConfig();
 
         PaperCommandManager commandManager = new PaperCommandManager(plugin);
         commandManager.getLocales().setDefaultLocale(Locales.PORTUGUESE);
@@ -71,9 +78,5 @@ public class PluginImpl {
 
     private void registerCommands() {
         CommandRegistry.getInstance().register();
-    }
-
-    public static PluginImpl getInstance() {
-        return instance;
     }
 }

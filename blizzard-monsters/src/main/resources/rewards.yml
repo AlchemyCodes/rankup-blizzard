@@ -1,0 +1,8 @@
+rewards:
+
+  1:
+    material: GRASS # material or head
+    display-name: "§bLimite"
+    lore:
+      - "§7Este é um limite."
+    command: "give limite {player}"
