@@ -1,8 +1,0 @@
-bosses:
-
-  commands-blacklist:
-    - "/tpa"
-    - "/tpaccept"
-    - "/home"
-    - "/homes"
-    - "/trigger"
