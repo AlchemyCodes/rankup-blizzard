@@ -1,0 +1,173 @@
+shop:
+
+  boss-1:
+    skull: false
+    item: SPIDER_SPAWN_EGG
+    display-name: "§cMonstro §l✈ §7Nível §l1"
+    lore:
+      - "§7Este monstro pode"
+      - "§7te proporcionar;"
+      - ""
+      - " §cRecompensas"
+      - "  §f3x §aChave Rara"
+      - "  §f2x §bChave Mística"
+      - "  §f1x §7Manto"
+      - ""
+      - " §7Algumas informações"
+      - " §7sobre este boss."
+      - ""
+      - " §fVida: §c❤15.9"
+      - " §fLocalização: §62.2KM"
+      - " §fCusto: §a✿{cost}"
+      - ""
+      - "§cClique para comprar."
+    slot: 10
+
+    command-executor: "anuncio jogador {player} comprou um boss"
+    cost: 15000
+
+  boss-2:
+    skull: false
+    item: MULE_SPAWN_EGG
+    display-name: "§8Monstro §l✈ §7Nível §l2"
+    lore:
+      - "§7Este monstro pode"
+      - "§7te proporcionar;"
+      - ""
+      - " §8Recompensas"
+      - "  §f3x §aChave Rara"
+      - "  §f2x §bChave Mística"
+      - "  §f1x §7Manto"
+      - ""
+      - " §7Algumas informações"
+      - " §7sobre este boss."
+      - ""
+      - " §fVida: §c❤125.9"
+      - " §fLocalização: §62.2KM"
+      - " §fCusto: §a✿{cost}"
+      - ""
+      - "§8Clique para comprar."
+    slot: 11
+
+    command-executor: "anuncio jogador {player} comprou um boss"
+    cost: 15000
+
+  boss-3:
+    skull: false
+    item: WARDEN_SPAWN_EGG
+    display-name: "§3Monstro §l✈ §7Nível §l3"
+    lore:
+      - "§7Este monstro pode"
+      - "§7te proporcionar;"
+      - ""
+      - " §3Recompensas"
+      - "  §f3x §aChave Rara"
+      - "  §f2x §bChave Mística"
+      - "  §f1x §7Manto"
+      - ""
+      - " §7Algumas informações"
+      - " §7sobre este boss."
+      - ""
+      - " §fVida: §c❤259.9"
+      - " §fLocalização: §62.2KM"
+      - " §fCusto: §a✿{cost}"
+      - ""
+      - "§3Clique para comprar."
+    slot: 19
+
+    command-executor: "anuncio jogador {player} comprou um boss"
+    cost: 15000
+
+  boss-4:
+    skull: false
+    item: ALLAY_SPAWN_EGG
+    display-name: "§bMonstro §l✈ §7Nível §l4"
+    lore:
+      - "§7Este monstro pode"
+      - "§7te proporcionar;"
+      - ""
+      - " §bRecompensas"
+      - "  §f3x §aChave Rara"
+      - "  §f2x §bChave Mística"
+      - "  §f1x §7Manto"
+      - ""
+      - " §7Algumas informações"
+      - " §7sobre este boss."
+      - ""
+      - " §fVida: §c❤259.9"
+      - " §fLocalização: §62.2KM"
+      - " §fCusto: §a✿{cost}"
+      - ""
+      - "§bClique para comprar."
+    slot: 20
+
+    command-executor: "anuncio jogador {player} comprou um boss"
+    cost: 15000
+
+  aniquiladora:
+    skull: false
+    item: WOODEN_SWORD
+    display-name: "§6Aniquiladora §l✂ §7Nível §l1"
+    lore:
+      - "§7Use esta espada para"
+      - "§7aniquilar seus bosses."
+      - ""
+      - " §fDano: §c❤2.0"
+      - " §fCusto: §a✿{cost}"
+      - ""
+      - "§6Clique para comprar."
+    slot: 15
+
+    command-executor: "anuncio jogador {player} comprou uma aniquiladora"
+    cost: 15000
+
+  salto:
+    skull: false
+    item: SNOWBALL
+    display-name: "§9Salto Tridimensional §l❧ §72"
+    lore:
+      - "§7Use este item para conseguir"
+      - "§7ter um salto na sua corrida."
+      - ""
+      - " §fUsos: §72"
+      - " §fCusto: §a✿{cost}"
+      - ""
+      - "§9Clique para comprar."
+    slot: 16
+
+    command-executor: "anuncio jogador {player} comprou uma aniquiladora"
+    cost: 15000
+
+  armadura-1:
+    skull: false
+    item: LEATHER_HORSE_ARMOR
+    display-name: "§cArmadura p/ Cavalos §l▶ §7Couro"
+    lore:
+      - "§7Essa armadura irá proporcionar"
+      - "§7mais velocidade ao seu cavalo."
+      - ""
+      - " §fDano: §c❤2.0"
+      - " §fCusto: §a✿{cost}"
+      - ""
+      - "§cClique para comprar."
+    slot: 24
+
+    command-executor: "anuncio jogador {player} comprou uma armadura"
+    cost: 15000
+
+  armadura-2:
+    skull: false
+    item: IRON_HORSE_ARMOR
+    display-name: "§fArmadura p/ Cavalos §l▶ §7Ferro"
+    lore:
+      - "§7Essa armadura irá proporcionar"
+      - "§7mais velocidade ao seu cavalo."
+      - ""
+      - " §fDano: §c❤2.0"
+      - " §fCusto: §a✿{cost}"
+      - ""
+      - "§fClique para comprar."
+    slot: 25
+
+    command-executor: "anuncio jogador {player} comprou uma armadura"
+    cost: 15000

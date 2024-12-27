@@ -13,3 +13,7 @@ include 'blizzard-fishing'
 include 'blizzard-slimeworlds'
 include 'blizzard-time'
 include 'blizzard-tops'
+include 'blizzard-monsters'
+include 'blizzard-events'
+include 'blizzard-vips'
+

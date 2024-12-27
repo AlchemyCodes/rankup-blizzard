@@ -1,9 +1,9 @@
 package blizzard.development.spawners.utils;
 
 import blizzard.development.spawners.database.storage.SpawnersData;
-import blizzard.development.spawners.handlers.enums.Enchantments;
-import blizzard.development.spawners.handlers.enums.Spawners;
-import blizzard.development.spawners.handlers.enums.States;
+import blizzard.development.spawners.handlers.enums.spawners.Enchantments;
+import blizzard.development.spawners.handlers.enums.spawners.Spawners;
+import blizzard.development.spawners.handlers.enums.spawners.States;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;

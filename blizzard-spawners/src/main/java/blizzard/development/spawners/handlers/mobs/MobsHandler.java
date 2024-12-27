@@ -1,7 +1,7 @@
 package blizzard.development.spawners.handlers.mobs;
 
 import blizzard.development.spawners.builders.ItemBuilder;
-import blizzard.development.spawners.handlers.enums.Spawners;
+import blizzard.development.spawners.handlers.enums.spawners.Spawners;
 import blizzard.development.spawners.utils.NumberFormat;
 import blizzard.development.spawners.utils.PluginImpl;
 import blizzard.development.spawners.utils.SpawnersUtils;

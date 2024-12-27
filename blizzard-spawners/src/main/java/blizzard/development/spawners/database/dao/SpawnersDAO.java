@@ -54,11 +54,13 @@ public class SpawnersDAO {
             statement.setString(1, plotId);
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
+
                     Gson gson = new Gson();
                     String friendsJson = resultSet.getString("friends");
                     List<String> friends = friendsJson != null
                             ? gson.fromJson(friendsJson, new TypeToken<List<String>>(){}.getType())
                             : new ArrayList<>();
+
                     spawnersData.add(new SpawnersData(
                             resultSet.getString("id"),
                             resultSet.getString("type"),

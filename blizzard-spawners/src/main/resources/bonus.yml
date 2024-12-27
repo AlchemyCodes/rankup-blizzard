@@ -1,7 +1,25 @@
 bonus:
   default:
+    priority: 0
     bonus: 0 # in percentage
     permission: blizzard.spawners.default-bonus
-  vip:
+  ouro:
+    priority: 1
     bonus: 5 # in percentage
-    permission: blizzard.spawners.vip-bonus
+    permission: blizzard.spawners.ouro-bonus
+  diamante:
+    priority: 2
+    bonus: 15 # in percentage
+    permission: blizzard.spawners.diamante-bonus
+  esmeralda:
+    priority: 3
+    bonus: 15 # in percentage
+    permission: blizzard.spawners.esmeralda-bonus
+  blizzard:
+    priority: 4
+    bonus: 15 # in percentage
+    permission: blizzard.spawners.blizzard-bonus
+  alchemy:
+    priority: 5
+    bonus: 15 # in percentage
+    permission: blizzard.spawners.alchemy-bonus

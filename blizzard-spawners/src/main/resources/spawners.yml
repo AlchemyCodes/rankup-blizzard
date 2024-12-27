@@ -8,6 +8,7 @@ spawners:
       - ' §7■ §fTipo: §7Porco'
       - ' §7▶ §fCusto: §2$§a{cost}'
       - ' §7▶ §fDrop Unidade: §2$§a{drop-cost}'
+      - ' §7■ §fDesconto: §7{discount}§8%'
       - ''
       - ' §fCompras disponíveis:'
       - ' §8 ■ §fBotão esquerdo: §7Escolher quantia.'
@@ -27,13 +28,14 @@ spawners:
       - ' §7■ §fTipo: §7Vaca'
       - ' §7▶ §fCusto: §2$§a{cost}'
       - ' §7▶ §fDrop Unidade: §2$§a{drop-cost}'
+      - ' §7■ §fDesconto: §7{discount}§8%'
       - ''
       - ' §fCompras disponíveis:'
       - ' §8 ■ §fBotão esquerdo: §7Escolher quantia.'
       - ' §8 ■ §fBotão direito: §71 unidade.'
       - ' §8 ■ §fBotão Q: §7Comprar com todo o limite.'
       - ''
-    permitted-purchase: false
+    permitted-purchase: true
     buy-price: 150000
     sell-drop-price: 150
 
@@ -46,13 +48,14 @@ spawners:
       - ' §7■ §fTipo: §7Coguvaca'
       - ' §7▶ §fCusto: §2$§a{cost}'
       - ' §7▶ §fDrop Unidade: §2$§a{drop-cost}'
+      - ' §7■ §fDesconto: §7{discount}§8%'
       - ''
       - ' §fCompras disponíveis:'
       - ' §8 ■ §fBotão esquerdo: §7Escolher quantia.'
       - ' §8 ■ §fBotão direito: §71 unidade.'
       - ' §8 ■ §fBotão Q: §7Comprar com todo o limite.'
       - ''
-    permitted-purchase: false
+    permitted-purchase: true
     buy-price: 200000
     sell-drop-price: 200
 
@@ -65,13 +68,14 @@ spawners:
       - ' §7■ §fTipo: §7Ovelha'
       - ' §7▶ §fCusto: §2$§a{cost}'
       - ' §7▶ §fDrop Unidade: §2$§a{drop-cost}'
+      - ' §7■ §fDesconto: §7{discount}§8%'
       - ''
       - ' §fCompras disponíveis:'
       - ' §8 ■ §fBotão esquerdo: §7Escolher quantia.'
       - ' §8 ■ §fBotão direito: §71 unidade.'
       - ' §8 ■ §fBotão Q: §7Comprar com todo o limite.'
       - ''
-    permitted-purchase: false
+    permitted-purchase: true
     buy-price: 250000
     sell-drop-price: 250
 
@@ -84,12 +88,13 @@ spawners:
       - ' §7■ §fTipo: §7Zumbi'
       - ' §7▶ §fCusto: §2$§a{cost}'
       - ' §7▶ §fDrop Unidade: §2$§a{drop-cost}'
+      - ' §7■ §fDesconto: §7{discount}§8%'
       - ''
       - ' §fCompras disponíveis:'
       - ' §8 ■ §fBotão esquerdo: §7Escolher quantia.'
       - ' §8 ■ §fBotão direito: §71 unidade.'
       - ' §8 ■ §fBotão Q: §7Comprar com todo o limite.'
       - ''
-    permitted-purchase: false
+    permitted-purchase: true
     buy-price: 300000
     sell-drop-price: 300

@@ -9,17 +9,21 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class DropsAutoSellTaskManager {
     private static DropsAutoSellTaskManager instance;
-    private final Map<String, BukkitTask> taskMap;
+    private final Map<String, DropsAutoSellTask> taskMap;
 
     private DropsAutoSellTaskManager() {
         this.taskMap = new ConcurrentHashMap<>();
     }
 
     public synchronized void startTask(SpawnersData spawnerData) {
-        String spawnerId = spawnerData.getId();
-        stopTask(spawnerId);
+        if (spawnerData == null || spawnerData.getId() == null || spawnerData.getId().isEmpty()) {
+            return;
+        }
+
+        stopTask(spawnerData.getId());
 
         DropsAutoSellTask task = new DropsAutoSellTask(spawnerData);
+
         long interval = PluginImpl.getInstance().Config.getInt("spawners.auto-sell-cooldown") * 20L;
 
         BukkitTask bukkitTask = task.runTaskTimer(
@@ -27,20 +31,38 @@ public class DropsAutoSellTaskManager {
                 interval,
                 interval
         );
+        task.setBukkitTask(bukkitTask);
 
-        taskMap.put(spawnerId, bukkitTask);
+        taskMap.put(spawnerData.getId(), task);
     }
 
-    public synchronized void stopTask(String spawnerId) {
-        BukkitTask task = taskMap.remove(spawnerId);
-        if (task != null) {
-            task.cancel();
+    public void stopTask(String spawnerId) {
+        if (spawnerId == null || spawnerId.isEmpty()) {
+            return;
+        }
+
+        DropsAutoSellTask task = taskMap.remove(spawnerId);
+
+        if (task != null && !task.isCancelled()) {
+            try {
+                task.cancel();
+            } catch (IllegalStateException ignored) {
+            }
         }
     }
 
-    public synchronized void stopAllTasks() {
-        taskMap.values().forEach(BukkitTask::cancel);
-        taskMap.clear();
+    public void stopAllTasks() {
+        if (!taskMap.isEmpty()) {
+            taskMap.values().forEach(task -> {
+                if (task != null && !task.isCancelled()) {
+                    try {
+                        task.cancel();
+                    } catch (IllegalStateException ignored) {
+                    }
+                }
+            });
+            taskMap.clear();
+        }
     }
 
     public static synchronized DropsAutoSellTaskManager getInstance() {
