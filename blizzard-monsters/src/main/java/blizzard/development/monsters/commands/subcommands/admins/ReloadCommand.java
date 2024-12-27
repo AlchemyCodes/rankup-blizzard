@@ -18,6 +18,9 @@ public class ReloadCommand extends BaseCommand {
 
         plugin.Config.reloadConfig();
         plugin.Database.reloadConfig();
+        plugin.Monsters.reloadConfig();
+        plugin.Rewards.reloadConfig();
+        plugin.Locations.reloadConfig();
 
         sender.sendActionBar(TextAPI.parse("§a§lYAY! §aPlugin reiniciado com sucesso."));
     }

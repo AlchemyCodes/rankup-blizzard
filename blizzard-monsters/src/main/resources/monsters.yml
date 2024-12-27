@@ -1,0 +1,20 @@
+monsters:
+
+  1:
+    type: "bigfoot-1"
+    data: "blizzard.monsters.monster-{type}"
+
+    egg:
+      material: SNOW_GOLEM_SPAWN_EGG # material or head
+      display-name: "§bPé Grande §lLevel 1 §7[{amount}]"
+      lore:
+        - "§7Este é um monstro."
+
+    monster:
+      display-name: "§bPé Grande §lLevel 1"
+      skin-value: ""
+      skin-signature: ""
+      life: 1000
+      attack-chance: # in percentage
+      attack-damage: 2
+      rewards: [ "reward" ]

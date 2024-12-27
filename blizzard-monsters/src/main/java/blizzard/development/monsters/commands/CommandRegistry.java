@@ -1,4 +1,5 @@
 package blizzard.development.monsters.commands;
+import blizzard.development.monsters.commands.subcommands.admins.LocationCommand;
 import blizzard.development.monsters.commands.subcommands.admins.ReloadCommand;
 import blizzard.development.monsters.commands.main.MonstersCommand;
 import blizzard.development.monsters.utils.PluginImpl;
@@ -17,10 +18,18 @@ public class CommandRegistry {
         Arrays.asList(
                 // admins
                 new ReloadCommand(),
+                new LocationCommand(),
 
                 // users
                 new MonstersCommand()
         ).forEach(paperCommandManager::registerCommand);
+
+        paperCommandManager.getCommandCompletions().registerCompletion("subcommand_actions", c -> {
+            ArrayList<String> array = new ArrayList<>();
+            array.add("entrada");
+            array.add("saida");
+            return array;
+        });
 
         paperCommandManager.getCommandCompletions().registerCompletion("amount", c -> {
             ArrayList<String> array = new ArrayList<>();
