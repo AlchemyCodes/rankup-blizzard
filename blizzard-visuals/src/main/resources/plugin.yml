@@ -1,0 +1,5 @@
+name: blizzard-visuals
+version: '1.0-SNAPSHOT'
+author: 'swagviper'
+main: blizzard.development.visuals.Main
+api-version: '1.20'
