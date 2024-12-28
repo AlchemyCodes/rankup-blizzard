@@ -2,6 +2,8 @@ package blizzard.development.plantations.database.dao;
 
 import blizzard.development.plantations.database.DatabaseConnection;
 import blizzard.development.plantations.database.storage.PlayerData;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -14,7 +16,7 @@ public class PlayerDAO {
         try (Connection connection = DatabaseConnection.getInstance().getConnection();
              Statement statement = connection.createStatement()) {
 
-            String sql_plantations = "CREATE TABLE IF NOT EXISTS plantations_player (uuid varchar(36) primary key, nickname varchar(36), area int, area_plantation varchar(36), blocks int, plantations int, plantation TINYINT(1))";
+            String sql_plantations = "CREATE TABLE IF NOT EXISTS plantations_player (uuid varchar(36) primary key, nickname varchar(36), area int, area_plantation varchar(36), blocks int, plantations int, plantation TINYINT(1), friends TEXT)";
 
             statement.execute(sql_plantations);
 
@@ -43,6 +45,13 @@ public class PlayerDAO {
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
+
+                    Gson gson = new Gson();
+                    String friendsJson = resultSet.getString("friends");
+                    List<String> friends = friendsJson != null
+                        ? gson.fromJson(friendsJson, new TypeToken<List<String>>() {}.getType())
+                        : new ArrayList<>();
+
                     return new PlayerData(
                         resultSet.getString("uuid"),
                         resultSet.getString("nickname"),
@@ -50,7 +59,8 @@ public class PlayerDAO {
                         resultSet.getString("area_plantation"),
                         resultSet.getInt("blocks"),
                         resultSet.getInt("plantations"),
-                        resultSet.getBoolean("plantation")
+                        resultSet.getBoolean("plantation"),
+                        friends
                     );
                 }
             }
@@ -68,6 +78,13 @@ public class PlayerDAO {
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
+
+                    Gson gson = new Gson();
+                    String friendsJson = resultSet.getString("friends");
+                    List<String> friends = friendsJson != null
+                        ? gson.fromJson(friendsJson, new TypeToken<List<String>>() {}.getType())
+                        : new ArrayList<>();
+
                     return new PlayerData(
                         resultSet.getString("uuid"),
                         resultSet.getString("nickname"),
@@ -75,7 +92,8 @@ public class PlayerDAO {
                         resultSet.getString("area_plantation"),
                         resultSet.getInt("blocks"),
                         resultSet.getInt("plantations"),
-                        resultSet.getBoolean("plantation")
+                        resultSet.getBoolean("plantation"),
+                        friends
                     );
                 }
             }
@@ -86,7 +104,7 @@ public class PlayerDAO {
     }
 
     public void createPlayerData(PlayerData playerData) throws SQLException {
-        String sql_par = "INSERT INTO plantations_player (uuid, nickname, area, area_plantation, blocks, plantations, plantation) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql_par = "INSERT INTO plantations_player (uuid, nickname, area, area_plantation, blocks, plantations, plantation, friends) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         executeUpdate(sql_par, (statement) -> {
             try {
@@ -97,6 +115,7 @@ public class PlayerDAO {
                 statement.setInt(5, playerData.getBlocks());
                 statement.setInt(6, playerData.getPlantations());
                 statement.setBoolean(7, playerData.getIsInPlantation());
+                statement.setString(8, new Gson().toJson(playerData.getFriends()));
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -115,7 +134,7 @@ public class PlayerDAO {
     }
 
     public void updatePlayerData(PlayerData playerData) throws SQLException {
-        String sqlpar = "UPDATE plantations_player SET nickname = ?, area = ?, area_plantation = ?, blocks = ?,plantations = ?, plantation = ? WHERE uuid = ?";
+        String sqlpar = "UPDATE plantations_player SET nickname = ?, area = ?, area_plantation = ?, blocks = ?, plantations = ?, plantation = ?, friends = ? WHERE uuid = ?";
         executeUpdate(sqlpar, statement -> {
             try {
                 statement.setString(1, playerData.getNickname());
@@ -124,7 +143,8 @@ public class PlayerDAO {
                 statement.setInt(4, playerData.getBlocks());
                 statement.setInt(5, playerData.getPlantations());
                 statement.setBoolean(6, playerData.getIsInPlantation());
-                statement.setString(7, playerData.getUuid());
+                statement.setString(7, new Gson().toJson(playerData.getFriends()));
+                statement.setString(8, playerData.getUuid());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -140,6 +160,13 @@ public class PlayerDAO {
              ResultSet resultSet = statement.executeQuery(sql)) {
 
             while (resultSet.next()) {
+
+                Gson gson = new Gson();
+                String friendsJson = resultSet.getString("friends");
+                List<String> friends = friendsJson != null
+                    ? gson.fromJson(friendsJson, new TypeToken<List<String>>() {}.getType())
+                    : new ArrayList<>();
+
                 playerDataList.add(new PlayerData(
                     resultSet.getString("uuid"),
                     resultSet.getString("nickname"),
@@ -147,7 +174,8 @@ public class PlayerDAO {
                     resultSet.getString("area_plantation"),
                     resultSet.getInt("blocks"),
                     resultSet.getInt("plantations"),
-                    resultSet.getBoolean("plantation")
+                    resultSet.getBoolean("plantation"),
+                    friends
                 ));
             }
         }

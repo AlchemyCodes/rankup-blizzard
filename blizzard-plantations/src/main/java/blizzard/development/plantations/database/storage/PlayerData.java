@@ -2,13 +2,17 @@ package blizzard.development.plantations.database.storage;
 
 import blizzard.development.plantations.plantations.enums.PlantationEnum;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PlayerData {
 
     private String uuid, nickname, area_plantation;
     private Integer area, blocks, plantations;
     private Boolean isInPlantation;
+    private List<String> friends;
 
-    public PlayerData(String uuid, String nickname, Integer area, String area_plantation, Integer blocks, Integer plantations, boolean isInPlantation) {
+    public PlayerData(String uuid, String nickname, Integer area, String area_plantation, Integer blocks, Integer plantations, boolean isInPlantation, List<String> friends) {
         this.uuid = uuid;
         this.nickname = nickname;
         this.area = area;
@@ -16,6 +20,7 @@ public class PlayerData {
         this.blocks = blocks;
         this.plantations = plantations;
         this.isInPlantation = isInPlantation;
+        this.friends = friends;
     }
 
     public String getNickname() {
@@ -72,5 +77,16 @@ public class PlayerData {
 
     public void setInPlantation(Boolean inPlantation) {
         isInPlantation = inPlantation;
+    }
+
+    public List<String> getFriends() {
+        if (friends == null) {
+            friends = new ArrayList<>();
+        }
+        return friends;
+    }
+
+    public void setFriends(List<String> friends) {
+        this.friends = friends;
     }
 }

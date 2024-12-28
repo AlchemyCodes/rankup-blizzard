@@ -11,10 +11,12 @@ import blizzard.development.plantations.database.storage.PlayerData;
 import blizzard.development.plantations.database.storage.ToolData;
 import blizzard.development.plantations.listeners.ListenerRegistry;
 import blizzard.development.plantations.managers.BatchManager;
+import blizzard.development.plantations.tasks.PlantationRegenTask;
 import blizzard.development.plantations.tasks.PlayerSaveTask;
 import blizzard.development.plantations.tasks.ToolSaveTask;
 import blizzard.development.plantations.utils.config.ConfigUtils;
 import blizzard.development.plantations.utils.displayentity.DisplayEntityUtils;
+import blizzard.development.plantations.utils.placeholder.PlaceholderRegistry;
 import co.aikar.commands.Locales;
 import co.aikar.commands.PaperCommandManager;
 import org.bukkit.plugin.Plugin;
@@ -69,6 +71,8 @@ public class PluginImpl {
         registerCommands();
         BatchManager.initialize(Main.getInstance());
 
+        new PlaceholderRegistry().register();
+
         try {
             List<PlayerData> allPlayers = playerDAO.getAllPlayersData();
             List<ToolData> allTools = toolDAO.getAllToolData();
@@ -87,6 +91,7 @@ public class PluginImpl {
 
         registerTasks();
         DisplayEntityUtils.initialize();
+        PlantationRegenTask.start();
     }
 
     public void onDisable() {

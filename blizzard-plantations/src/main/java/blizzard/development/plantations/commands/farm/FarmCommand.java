@@ -1,27 +1,40 @@
 package blizzard.development.plantations.commands.farm;
 
 import blizzard.development.plantations.Main;
+import blizzard.development.plantations.api.CoreAPI;
 import blizzard.development.plantations.database.cache.methods.PlayerCacheMethod;
 import blizzard.development.plantations.inventories.FarmInventory;
 import blizzard.development.plantations.managers.AreaManager;
 import blizzard.development.plantations.managers.PlantationManager;
+import blizzard.development.plantations.managers.upgrades.agility.AgilityManager;
+import blizzard.development.plantations.plantations.adapters.AreaAdapter;
 import blizzard.development.plantations.plantations.adapters.ToolAdapter;
 import blizzard.development.plantations.utils.CooldownUtils;
 import blizzard.development.plantations.utils.LocationUtils;
 import blizzard.development.plantations.utils.PluginImpl;
 import blizzard.development.plantations.utils.displayentity.DisplayEntityUtils;
+import blizzard.development.plantations.utils.packets.PacketUtils;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Sound;
+import org.bukkit.WeatherType;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Horse;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
+import static blizzard.development.plantations.builder.ItemBuilder.getPersistentData;
 import static blizzard.development.plantations.utils.NumberFormat.formatNumber;
 
 @CommandAlias("estufa|plantar")
@@ -245,7 +258,7 @@ public class FarmCommand extends BaseCommand {
         Player player = (Player) commandSender;
 
         AreaManager areaManager = AreaManager.getInstance();
-        areaManager.setArea(player, 20);
+        areaManager.setArea(player, 10);
         areaManager.resetArea(player);
     }
 
@@ -271,13 +284,57 @@ public class FarmCommand extends BaseCommand {
         player.sendMessage("sementes do jogador " + target.getName() + ": " + playerCacheMethod.getPlantations(target));
     }
 
+    @Subcommand("ir")
+    @Syntax("<player>")
+    @CommandCompletion("@players")
+    public void onGoCommand(CommandSender commandSender, @Optional String playerTarget) {
+        if (playerTarget == null) {
+            Player player = (Player) commandSender;
+
+            AreaAdapter
+                .getInstance()
+                .teleportToArea(player);
+            return;
+        }
+
+        Player player = (Player) commandSender;
+        Player target = Bukkit.getPlayer(playerTarget);
+
+        Location location = LocationUtils.getPlantationSpawnLocation();
+
+        if (location == null) {
+            player.sendActionBar("§c§lEI! §cO spawn da estufa ainda não foi setado.");
+            return;
+        }
+
+        if (target == null) {
+            player.sendActionBar("§c§lEI! §cO jogador está offline ou não existe.");
+            return;
+        }
+
+        AreaAdapter
+            .getInstance()
+            .teleportToFriendArea(player, target);
+    }
+
     @Subcommand("devs")
     @CommandPermission("alchemy.plantations.giveseed")
-    public void onDev(CommandSender commandSender) {
+    public void onDev(CommandSender commandSender, String playerTarget) {
         Player player = (Player) commandSender;
+        Player target = Bukkit.getPlayer(playerTarget);
 
-        player.teleport(LocationUtils.getCenterLocation());
-//        HarvestEffect harvestEffect = new HarvestEffect();
+
+        if (target == null) {
+            player.sendActionBar("§c§lEI! §cO jogador está offline ou não existe.");
+            return;
+        }
+
+        PlayerCacheMethod
+            .getInstance()
+            .addFriend(player, target.getName());
+
+
+        //        HarvestEffect harvestEffect = new HarvestEffect();
 //        harvestEffect.executeHarvestWave(player, 20);
 
 //        TornadoEffect tornadoEffect = new TornadoEffect();

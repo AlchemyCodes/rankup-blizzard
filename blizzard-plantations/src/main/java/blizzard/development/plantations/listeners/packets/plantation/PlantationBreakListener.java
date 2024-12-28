@@ -19,6 +19,7 @@ import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.BlockPosition;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -26,8 +27,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -83,16 +83,16 @@ public class PlantationBreakListener extends PacketAdapter {
             return;
         }
 
+        if (!BlockManager.isPlantation(blockX, blockY, blockZ)) {
+            return;
+        }
+
         if (player.getGameMode() == GameMode.SURVIVAL) {
             if (!hasPersistentData(Main.getInstance(), item, "ferramenta")) {
                 player.sendActionBar("§c§lEI! §cUse uma ferramenta da estufa para isso.");
-                event.setCancelled(true);
+                PacketUtils.getInstance().sendPacket(player, plantationToRegen);
                 return;
             }
-        }
-
-        if (!BlockManager.isPlantation(blockX, blockY, blockZ)) {
-            return;
         }
 
         if (block.getType() == Material.FARMLAND) {
@@ -101,7 +101,7 @@ public class PlantationBreakListener extends PacketAdapter {
 
         String id = getPersistentData(Main.getInstance(), item, "ferramenta-id");
         if (id == null || id.isEmpty()) {
-            LOGGER.log(Level.WARNING, "Ferramenta sem ID encontrada para o jogador: " + player.getName());
+            LOGGER.log(Level.SEVERE, "Ferramenta sem ID encontrada para o jogador: " + player.getName());
             event.setCancelled(true);
             return;
         }
@@ -122,12 +122,23 @@ public class PlantationBreakListener extends PacketAdapter {
 
         plantations.put(player, plantationToRegen);
 
-        initializeHologramTask(player, plantationToRegen, Material.POTATOES);
-        PacketUtils.getInstance().sendPacket(
-            player,
-            plantationToRegen,
-            Material.getMaterial(AreaManager.getInstance().getAreaPlantation(player)
-            ));
+//        initializeHologramTask(player, plantationToRegen);
+
+        List<String> players = Arrays.asList(
+            "chaossviper",
+            "swagviper"
+        );
+
+        for (String playerName : players) {
+            Player player1 = Bukkit.getPlayer(playerName);
+            if (player1 != null) {
+                PacketUtils.getInstance().sendPacket(
+                    player1,
+                    plantationToRegen,
+                    Material.getMaterial(AreaManager.getInstance().getAreaPlantation(player1))
+                );
+            }
+        }
 
 
         player.getInventory().setItemInMainHand(ToolBuildItem.tool(
@@ -148,13 +159,9 @@ public class PlantationBreakListener extends PacketAdapter {
         BlizzardManager.check(player, id);
 
         plantations.forEach((p, plantation) -> {
-            PlantationRegenTask.create(plantationToRegen, player, 5);
-            PlantationManager.getInstance()
-                .growthDelay(
-                    player,
-                    plantationToRegen
-                );
+            PlantationRegenTask.create(plantationToRegen, player, "LucwsH", 3);
         });
+
 
         int seeds = 0;
 

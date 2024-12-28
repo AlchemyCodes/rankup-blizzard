@@ -1,5 +1,6 @@
 package blizzard.development.plantations.utils.packets;
 
+import blizzard.development.plantations.managers.AreaManager;
 import blizzard.development.plantations.managers.BlockManager;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
@@ -31,7 +32,14 @@ public class PacketUtils {
 
             PacketContainer packet = new PacketContainer(PacketType.Play.Server.BLOCK_CHANGE);
 
-            BlockData blockData = Bukkit.createBlockData("minecraft:potatoes");
+            BlockData blockData = switch (AreaManager.getInstance().getAreaPlantation(player)) {
+                case "POTATOES" -> Bukkit.createBlockData("minecraft:potatoes[age=7]");
+                case "CARROTS" -> Bukkit.createBlockData("minecraft:carrots[age=7]");
+                case "BEETROOTS" -> Bukkit.createBlockData("minecraft:beetroots[age=3]");
+                case "WHEAT" -> Bukkit.createBlockData("minecraft:wheat[age=7]");
+                default -> throw new IllegalStateException("Unexpected value to switch PacketUtils:java51");
+            };
+
             WrappedBlockData wrappedBlockData = WrappedBlockData.createData(blockData);
 
             BlockPosition blockPosition = new BlockPosition(
@@ -143,6 +151,50 @@ public class PacketUtils {
         protocolManager.sendServerPacket(player, lookPacket);
         protocolManager.sendServerPacket(player, headRotationPacket);
     }
+
+    public void sendEntityPacket(Location location, Player player, EntityType entityType, String a) {
+        ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
+
+        // Criando pacote de spawn
+        PacketContainer spawnPacket = protocolManager.createPacket(PacketType.Play.Server.SPAWN_ENTITY);
+
+        int entityId = (int) (Math.random() * Integer.MAX_VALUE); // Gerar um ID único para a entidade
+        spawnPacket.getIntegers()
+            .write(0, entityId);
+        spawnPacket.getUUIDs()
+            .write(0, UUID.randomUUID());
+        spawnPacket.getDoubles()
+            .write(0, location.getX())
+            .write(1, location.getY())
+            .write(2, location.getZ());
+        spawnPacket.getEntityTypeModifier().write(0, entityType);
+
+        protocolManager.sendServerPacket(player, spawnPacket);
+
+        // Configurar rotação do cavalo
+        PacketContainer lookPacket = protocolManager.createPacket(PacketType.Play.Server.ENTITY_LOOK);
+        lookPacket.getIntegers().write(0, entityId);
+        lookPacket.getBytes()
+            .write(0, (byte) ((location.getYaw() % 360) * 256 / 360))
+            .write(1, (byte) ((location.getPitch() % 360) * 256 / 360));
+        lookPacket.getBooleans().write(0, true);
+
+        protocolManager.sendServerPacket(player, lookPacket);
+
+        PacketContainer headRotationPacket = protocolManager.createPacket(PacketType.Play.Server.ENTITY_HEAD_ROTATION);
+        headRotationPacket.getIntegers().write(0, entityId);
+        headRotationPacket.getBytes().write(0, (byte) ((location.getYaw() % 360) * 256 / 360));
+
+        protocolManager.sendServerPacket(player, headRotationPacket);
+
+        // Vincular o jogador ao cavalo
+        PacketContainer mountPacket = protocolManager.createPacket(PacketType.Play.Server.MOUNT);
+        mountPacket.getIntegers().write(0, entityId); // ID do cavalo
+        mountPacket.getIntegerArrays().write(0, new int[]{player.getEntityId()}); // ID do jogador
+
+        protocolManager.sendServerPacket(player, mountPacket);
+    }
+
 
     public void sendWeatherPacket(Player player) {
         PacketContainer rainPacket = ProtocolLibrary.getProtocolManager().createPacket(PacketType.Play.Server.GAME_STATE_CHANGE);

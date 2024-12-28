@@ -1,5 +1,7 @@
 package blizzard.development.plantations.listeners.plantation;
 
+import blizzard.development.core.clothing.ClothingType;
+import blizzard.development.plantations.api.CoreAPI;
 import blizzard.development.plantations.database.cache.methods.PlayerCacheMethod;
 import blizzard.development.plantations.inventories.manager.AreaUpgradeInventory;
 import blizzard.development.plantations.utils.PluginImpl;
@@ -26,6 +28,11 @@ public class PlantationDisplayListener implements Listener {
             armorStand.getPersistentDataContainer();
             if (armorStand.getPersistentDataContainer().has(new NamespacedKey(PluginImpl.getInstance().plugin, "blizzard.plantations.estufa-display"), PersistentDataType.STRING)) {
                 Player player = event.getPlayer();
+
+                if (CoreAPI.getInstance().clothing(player).equalsIgnoreCase(ClothingType.COMMON.toString())) {
+                    player.sendActionBar("§c§lEI! §cVocê precisa ter um manto melhor para acessar isso.");
+                    return;
+                }
 
                 AreaUpgradeInventory areaUpgradeInventory = new AreaUpgradeInventory();
                 areaUpgradeInventory.open(player);

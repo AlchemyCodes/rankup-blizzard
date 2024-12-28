@@ -1,6 +1,8 @@
 package blizzard.development.plantations.utils.displayentity;
 
+import blizzard.development.core.clothing.ClothingType;
 import blizzard.development.plantations.Main;
+import blizzard.development.plantations.api.CoreAPI;
 import blizzard.development.plantations.utils.PluginImpl;
 import blizzard.development.plantations.utils.TextUtils;
 import net.kyori.adventure.text.Component;
@@ -8,6 +10,7 @@ import org.bukkit.*;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Display.Billboard;
 import org.bukkit.entity.ItemDisplay;
+import org.bukkit.entity.Player;
 import org.bukkit.entity.TextDisplay;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
@@ -78,14 +81,25 @@ public class DisplayEntityUtils {
             new Quaternionf()
         ));
 
-        itemDisplay.setItemStack(new ItemStack(Material.PINK_GLAZED_TERRACOTTA));
+
+
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (CoreAPI.getInstance().clothing(player).equalsIgnoreCase(ClothingType.COMMON.toString())) {
+                itemDisplay.setItemStack(new ItemStack(Material.MAGMA_BLOCK));
+            } else {
+                itemDisplay.setItemStack(new ItemStack(Material.PINK_GLAZED_TERRACOTTA));
+            }
+        }
+
         startRotationAnimation();
 
         Location titleLocation = itemDisplay.getLocation().add(0, 1.6, 0);
         textDisplay = (TextDisplay) titleLocation.getWorld().spawn(titleLocation, TextDisplay.class);
 
 
-        Component mainTitle = TextUtils.parse("""
+        Component mainTitle;
+
+        mainTitle = TextUtils.parse("""
                             
                     <bold><#FF55FF>Geren<#fa7dfa><#fa7dfa>ciador da<#fa7dfa> <#fa7dfa>Estufa<#FF55FF></bold>
                             
@@ -93,6 +107,19 @@ public class DisplayEntityUtils {
                      
                     §dClique para abrir o menu.
                     """);
+
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (CoreAPI.getInstance().clothing(player).equalsIgnoreCase(ClothingType.COMMON.toString())) {
+                mainTitle = TextUtils.parse("""
+                            
+                    <bold><#ff0000>Geren<#f73131><#f73131>ciador da<#f73131> <#f73131>Estufa<#ff0000></bold>
+                            
+                     §fTorne sua área mais eficiente com upgrades
+                     
+                    <#f73131>Você deve possuir um manto melhor para acessar.<#f73131>
+                    """);
+            }
+        }
 
         textDisplay.text(mainTitle);
         textDisplay.setBillboard(Billboard.FIXED);
