@@ -19,4 +19,8 @@ public class AgilityManager {
             player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, PotionEffect.INFINITE_DURATION, 1));
         }
     }
+
+    public static void clearEffect(Player player) {
+        player.clearActivePotionEffects();
+    }
 }

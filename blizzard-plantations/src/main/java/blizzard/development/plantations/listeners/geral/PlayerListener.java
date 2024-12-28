@@ -13,6 +13,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class PlayerListener implements Listener{
 
@@ -30,7 +31,7 @@ public class PlayerListener implements Listener{
         PlayerData playerData = playerDAO.findPlayerData(player.getUniqueId().toString());
 
         if (playerData == null) {
-            playerData = new PlayerData(player.getUniqueId().toString(), player.getName(), 20, PlantationEnum.POTATO.getName(), 0,0, false);
+            playerData = new PlayerData(player.getUniqueId().toString(), player.getName(), 10, PlantationEnum.POTATO.getName(), 0,0, false, new ArrayList<>());
 
             try {
                 playerDAO.createPlayerData(playerData);

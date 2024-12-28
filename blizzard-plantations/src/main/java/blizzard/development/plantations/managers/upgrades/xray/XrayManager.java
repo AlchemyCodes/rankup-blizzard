@@ -23,7 +23,7 @@ public class XrayManager {
 
         double random = ThreadLocalRandom.current().nextDouble(0, 100);
 
-        int area = AreaManager.getInstance().getArea(player) - 17;
+        int area = AreaManager.getInstance().getArea(player) - 7;
         Location location = LocationUtils.getCenterLocation();
 
         double randomX = new Random().nextDouble(-area, area);
