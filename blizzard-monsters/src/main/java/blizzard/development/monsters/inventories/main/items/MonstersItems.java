@@ -43,18 +43,38 @@ public class MonstersItems {
     }
 
     public ItemStack go(boolean state) {
-        ItemStack item = new ItemStack(Material.COMPASS);
-        ItemMeta meta = item.getItemMeta();
-        meta.displayName(TextAPI.parse("§aIr ao mundo"));
-        meta.setLore(Arrays.asList(
-                "§7Crie coragem e vá à",
-                "§7caça de monstros",
-                "",
-                "§aClique para ir."
-        ));
+        ItemStack item;
 
-        meta.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS, ItemFlag.HIDE_ATTRIBUTES);
-        item.setItemMeta(meta);
+        if (state) {
+            item = new ItemStack(Material.REDSTONE_TORCH);
+            ItemMeta meta = item.getItemMeta();
+
+            meta.displayName(TextAPI.parse("§cSair do mundo"));
+            meta.setLore(Arrays.asList(
+                    "§7Tire uma folga, saia",
+                    "§7do mundo de monstros",
+                    "",
+                    "§cClique para sair."
+            ));
+
+            meta.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS, ItemFlag.HIDE_ATTRIBUTES);
+            item.setItemMeta(meta);
+        } else {
+            item = new ItemStack(Material.COMPASS);
+            ItemMeta meta = item.getItemMeta();
+
+            meta.displayName(TextAPI.parse("§aIr ao mundo"));
+            meta.setLore(Arrays.asList(
+                    "§7Crie coragem e vá à",
+                    "§7caça de monstros",
+                    "",
+                    "§aClique para ir."
+            ));
+
+            meta.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS, ItemFlag.HIDE_ATTRIBUTES);
+            item.setItemMeta(meta);
+        }
+
         return item;
     }
 

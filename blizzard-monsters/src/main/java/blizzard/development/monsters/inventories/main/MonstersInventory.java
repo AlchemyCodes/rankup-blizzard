@@ -1,16 +1,24 @@
 package blizzard.development.monsters.inventories.main;
 
+import blizzard.development.monsters.builders.hologram.HologramBuilder;
 import blizzard.development.monsters.inventories.main.items.MonstersItems;
+import blizzard.development.monsters.monsters.enums.Locations;
+import blizzard.development.monsters.monsters.handlers.packets.MonstersPacketsHandler;
+import blizzard.development.monsters.monsters.handlers.world.MonstersWorldHandler;
+import blizzard.development.monsters.utils.LocationUtils;
+import blizzard.development.monsters.utils.items.TextAPI;
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
 import com.github.stefvanschie.inventoryframework.pane.util.Slot;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 public class MonstersInventory {
     private static MonstersInventory instance;
 
     private final MonstersItems items = MonstersItems.getInstance();
+    private final MonstersWorldHandler handler = MonstersWorldHandler.getInstance();
 
     public void open(Player player) {
 
@@ -25,7 +33,11 @@ public class MonstersInventory {
             event.setCancelled(true);
         });
 
-        GuiItem goItem = new GuiItem(items.go(true), event -> {
+        GuiItem goItem = new GuiItem(items.go(
+                handler.containsPlayer(player)
+        ), event -> {
+            sendToWorld(player);
+            player.getInventory().close();
             event.setCancelled(true);
         });
 
@@ -45,6 +57,46 @@ public class MonstersInventory {
 
         inventory.addPane(pane);
         inventory.show(player);
+    }
+
+    private void sendToWorld(Player player) {
+        LocationUtils utils = LocationUtils.getInstance();
+
+        if (handler.containsPlayer(player)) {
+            Location exit = utils.getLocation(Locations.EXIT.getName());
+
+            if (exit == null) {
+                player.sendActionBar(TextAPI.parse("§c§lEI! §cO local de saída não está configurado."));
+                return;
+            }
+
+            handler.removePlayer(player);
+
+            player.teleport(exit);
+            player.sendActionBar(TextAPI.parse("§a§lYAY! §aVocê saiu do mundo de monstros."));
+        } else {
+            Location entry = utils.getLocation(Locations.ENTRY.getName());
+
+            if (entry == null) {
+                player.sendActionBar(TextAPI.parse("§c§lEI! §cO local de entrada não está configurado."));
+                return;
+            }
+
+            if (player.getInventory().firstEmpty() == -1) {
+                player.sendActionBar(TextAPI.parse("§c§lEI! §cVocê precisa de pelo menos um slot vazio."));
+                return;
+            }
+
+            handler.addPlayer(player);
+
+            player.teleport(entry);
+
+            MonstersPacketsHandler handler = MonstersPacketsHandler.getInstance();
+            handler.spawnMonster(player, player.getLocation().add(0.5, 0, 0.5));
+            HologramBuilder.getInstance().createHologram(player, player.getLocation(), "§bGolem de Neve", 20);
+
+            player.sendActionBar(TextAPI.parse("§a§lYAY! §aVocê entrou no mundo de monstros."));
+        }
     }
 
     public static MonstersInventory getInstance() {

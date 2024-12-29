@@ -1,12 +1,17 @@
 package blizzard.development.monsters.commands;
+import blizzard.development.monsters.commands.subcommands.admins.GiveCommand;
 import blizzard.development.monsters.commands.subcommands.admins.LocationCommand;
 import blizzard.development.monsters.commands.subcommands.admins.ReloadCommand;
 import blizzard.development.monsters.commands.main.MonstersCommand;
+import blizzard.development.monsters.commands.subcommands.users.JoinCommand;
+import blizzard.development.monsters.commands.subcommands.users.LeaveCommand;
+import blizzard.development.monsters.monsters.handlers.eggs.MonstersHandler;
 import blizzard.development.monsters.utils.PluginImpl;
 import co.aikar.commands.PaperCommandManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Set;
 
 public class CommandRegistry {
 
@@ -19,12 +24,17 @@ public class CommandRegistry {
                 // admins
                 new ReloadCommand(),
                 new LocationCommand(),
+                new GiveCommand(),
 
                 // users
-                new MonstersCommand()
+                new MonstersCommand(),
+                new JoinCommand(),
+                new LeaveCommand()
         ).forEach(paperCommandManager::registerCommand);
 
-        paperCommandManager.getCommandCompletions().registerCompletion("subcommand_actions", c -> {
+        paperCommandManager.getCommandCompletions().registerCompletion("monsters", c -> MonstersHandler.getInstance().getAll());
+
+        paperCommandManager.getCommandCompletions().registerCompletion("location_actions", c -> {
             ArrayList<String> array = new ArrayList<>();
             array.add("entrada");
             array.add("saida");

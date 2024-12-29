@@ -17,15 +17,15 @@ import java.util.Arrays;
 public class LocationCommand extends BaseCommand {
 
     @Subcommand("set")
-    @CommandCompletion("@subcommand_actions")
+    @CommandCompletion("@location_actions")
     public void onCommand(Player player, String place) {
         switch (place) {
             case "entrada", "entry" -> {
-                LocationUtils.setLocation(Locations.ENTRY.getName(), player.getLocation());
+                LocationUtils.getInstance().setLocation(Locations.ENTRY.getName(), player.getLocation());
                 handleMessage(player, place);
             }
             case "saida", "exit" -> {
-                LocationUtils.setLocation(Locations.EXIT.getName(), player.getLocation());
+                LocationUtils.getInstance().setLocation(Locations.EXIT.getName(), player.getLocation());
                 handleMessage(player, place);
             }
             default -> Arrays.asList(
