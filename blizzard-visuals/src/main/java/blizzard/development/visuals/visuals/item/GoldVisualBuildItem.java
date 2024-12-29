@@ -23,7 +23,7 @@ public class GoldVisualBuildItem {
                 "",
                 "§6Arraste para aplicar."
             ))
-            .addPersistentData(Main.getInstance(), "stone", "blizzard.visuals.gold-visual")
+            .addPersistentData(Main.getInstance(), "visual", "blizzard.visuals.gold-visual")
             .build(amount);
     }
 }

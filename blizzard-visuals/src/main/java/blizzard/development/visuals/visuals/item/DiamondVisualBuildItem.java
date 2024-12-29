@@ -23,7 +23,7 @@ public class DiamondVisualBuildItem {
                 "",
                 "§bArraste para aplicar."
             ))
-            .addPersistentData(Main.getInstance(), "stone", "blizzard.visuals.diamond-visual")
+            .addPersistentData(Main.getInstance(), "visual", "blizzard.visuals.diamond-visual")
             .build(amount);
     }
 }
