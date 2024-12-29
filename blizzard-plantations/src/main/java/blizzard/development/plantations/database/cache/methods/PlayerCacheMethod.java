@@ -91,14 +91,14 @@ public class PlayerCacheMethod {
         if (playerData != null) {
             List<String> friends = playerData.getFriends();
 
-//            if (friends == null) {
-//                friends = new ArrayList<>();
-//            }
-
             friends.add(friend);
             playerData.setFriends(friends);
             playerCacheManager.cachePlayerData(player.getUniqueId().toString(), playerData);
         }
+    }
+    public List<String> getFriends(Player player) {
+        PlayerData playerData = playerCacheManager.getPlayerData(player);
+        return playerData.getFriends();
     }
 
     public void removeFriend(Player player, String friend) {

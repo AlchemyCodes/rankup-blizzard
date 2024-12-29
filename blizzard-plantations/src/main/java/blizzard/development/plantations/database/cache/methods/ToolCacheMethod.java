@@ -3,6 +3,8 @@ package blizzard.development.plantations.database.cache.methods;
 import blizzard.development.plantations.database.cache.ToolCacheManager;
 import blizzard.development.plantations.database.storage.ToolData;
 import blizzard.development.plantations.managers.BatchManager;
+import blizzard.development.plantations.plantations.enums.ToolsEnum;
+import blizzard.development.plantations.plantations.item.ToolBuildItem;
 import org.bukkit.entity.Player;
 
 public class ToolCacheMethod {
@@ -14,11 +16,12 @@ public class ToolCacheMethod {
         return instance;
     }
 
-    public static void createTool(Player player, String id, String type, Integer blocks, Integer botany, Integer agility, Integer explosion, Integer thunderstorm, Integer xray, Integer blizzard) {
+    public static void createTool(Player player, String id, String type, String skin, Integer blocks, Integer botany, Integer agility, Integer explosion, Integer thunderstorm, Integer xray, Integer blizzard) {
         String nickname = player.getName();
         ToolData toolData = new ToolData(
                 id,
                 type,
+                skin,
                 nickname,
                 blocks,
                 botany,
@@ -35,6 +38,40 @@ public class ToolCacheMethod {
         } catch (Exception exception) {
             player.sendMessage("§cOcorreu um erro ao salvar essa ferramenta no banco de dados!");
             throw new RuntimeException(exception);
+        }
+    }
+
+//    private void updateTool(String id, Player player, int botany, int agility, int explosion, int thunderstorm, int xray, int blizzard) {
+//        ToolCacheMethod toolCacheMethod = ToolCacheMethod.getInstance();
+//
+//        String skin = toolCacheMethod.getSkin(id);
+//        ToolsEnum tool = ToolsEnum.valueOf(skin);
+//
+//        player.getInventory().setItemInMainHand(ToolBuildItem.tool(
+//            id,
+//            tool.getMaterial(),
+//            toolCacheMethod.getBlocks(id),
+//            botany,
+//            agility,
+//            explosion,
+//            thunderstorm,
+//            xray,
+//            blizzard,
+//            1
+//        ));
+//    }
+
+
+    public String getSkin(String id) {
+        ToolData toolData = toolCacheManager.getToolData(id);
+        return toolData != null ? toolData.getSkin() : "ERRO!";
+    }
+
+    public void setSkin(String id, ToolsEnum toolsEnum) {
+        ToolData toolData = toolCacheManager.getToolData(id);
+
+        if (toolData != null) {
+            toolData.setSkin(toolsEnum.toString());
         }
     }
 

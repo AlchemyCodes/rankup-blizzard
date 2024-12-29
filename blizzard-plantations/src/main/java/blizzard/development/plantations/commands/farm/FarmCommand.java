@@ -3,12 +3,15 @@ package blizzard.development.plantations.commands.farm;
 import blizzard.development.plantations.Main;
 import blizzard.development.plantations.api.CoreAPI;
 import blizzard.development.plantations.database.cache.methods.PlayerCacheMethod;
+import blizzard.development.plantations.database.cache.methods.ToolCacheMethod;
 import blizzard.development.plantations.inventories.FarmInventory;
 import blizzard.development.plantations.managers.AreaManager;
 import blizzard.development.plantations.managers.PlantationManager;
 import blizzard.development.plantations.managers.upgrades.agility.AgilityManager;
 import blizzard.development.plantations.plantations.adapters.AreaAdapter;
 import blizzard.development.plantations.plantations.adapters.ToolAdapter;
+import blizzard.development.plantations.plantations.enums.ToolsEnum;
+import blizzard.development.plantations.plantations.item.ToolBuildItem;
 import blizzard.development.plantations.utils.CooldownUtils;
 import blizzard.development.plantations.utils.LocationUtils;
 import blizzard.development.plantations.utils.PluginImpl;
@@ -315,6 +318,37 @@ public class FarmCommand extends BaseCommand {
         AreaAdapter
             .getInstance()
             .teleportToFriendArea(player, target);
+    }
+
+    @Subcommand("testes")
+    @CommandPermission("alchemy.plantations.giveseed")
+    public void onTest(CommandSender commandSender, ToolsEnum toolsEnum) {
+        Player player = (Player) commandSender;
+
+        ItemStack item = player.getInventory().getItemInMainHand();
+        String id = getPersistentData(Main.getInstance(), item, "ferramenta-id");
+
+        ToolCacheMethod toolCacheMethod = ToolCacheMethod.getInstance();
+
+        switch (toolsEnum) {
+            case STONE -> toolCacheMethod.setSkin(id, ToolsEnum.STONE);
+            case IRON -> toolCacheMethod.setSkin(id, ToolsEnum.IRON);
+            case GOLD -> toolCacheMethod.setSkin(id, ToolsEnum.GOLD);
+            case DIAMOND -> toolCacheMethod.setSkin(id, ToolsEnum.DIAMOND);
+            default -> player.sendMessage("nao tem");
+        }
+
+        player.getInventory().setItemInMainHand(ToolBuildItem.tool(
+            id,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+        ));
     }
 
     @Subcommand("devs")

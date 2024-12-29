@@ -14,7 +14,8 @@ public class CommandRegistry {
 
         Arrays.asList(
             new FarmCommand(),
-            new SeedCommand()
+            new SeedCommand(),
+            new DebugCommand()
         ).forEach(paperCommandManager::registerCommand);
     }
 }
