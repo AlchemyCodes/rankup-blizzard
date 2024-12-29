@@ -2,12 +2,13 @@ package blizzard.development.plantations.database.storage;
 
 public class ToolData {
 
-    private String id, type, nickname;
+    private String id, type, skin, nickname;
     private Integer blocks, botany, agility, explosion, thunderstorm, xray, blizzard;
 
-    public ToolData(String id, String type, String nickname, Integer blocks, Integer botany, Integer agility, Integer explosion, Integer thunderstorm, Integer xray, Integer blizzard) {
+    public ToolData(String id, String type, String skin, String nickname, Integer blocks, Integer botany, Integer agility, Integer explosion, Integer thunderstorm, Integer xray, Integer blizzard) {
         this.id = id;
         this.type = type;
+        this.skin = skin;
         this.nickname = nickname;
         this.blocks = blocks;
         this.botany = botany;
@@ -32,6 +33,14 @@ public class ToolData {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getSkin() {
+        return skin;
+    }
+
+    public void setSkin(String skin) {
+        this.skin = skin;
     }
 
     public String getNickname() {

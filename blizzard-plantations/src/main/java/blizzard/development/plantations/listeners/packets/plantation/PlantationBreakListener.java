@@ -12,6 +12,7 @@ import blizzard.development.plantations.managers.upgrades.explosion.ExplosionMan
 import blizzard.development.plantations.managers.upgrades.lightning.LightningManager;
 import blizzard.development.plantations.managers.upgrades.xray.XrayManager;
 import blizzard.development.plantations.plantations.enums.PlantationEnum;
+import blizzard.development.plantations.plantations.enums.ToolsEnum;
 import blizzard.development.plantations.plantations.item.ToolBuildItem;
 import blizzard.development.plantations.tasks.PlantationRegenTask;
 import blizzard.development.plantations.utils.packets.PacketUtils;
@@ -122,12 +123,9 @@ public class PlantationBreakListener extends PacketAdapter {
 
         plantations.put(player, plantationToRegen);
 
-//        initializeHologramTask(player, plantationToRegen);
-
-        List<String> players = Arrays.asList(
-            "chaossviper",
-            "swagviper"
-        );
+        List<String> players = PlayerCacheMethod
+            .getInstance()
+            .getFriends(player);
 
         for (String playerName : players) {
             Player player1 = Bukkit.getPlayer(playerName);
@@ -220,4 +218,72 @@ public class PlantationBreakListener extends PacketAdapter {
             player.sendActionBar("§d§lEstufa! §8▼ §a§l+" + seeds + " §a★ §8▶ §7[20% de Bônus]");
         }
     }
+
+//    private void updateTool(String id, Player player, int botany, int agility, int explosion, int thunderstorm, int xray, int blizzard) {
+//        ToolCacheMethod toolCacheMethod = ToolCacheMethod.getInstance();
+//
+//
+//        switch (toolCacheMethod.getSkin(id)) {
+//            case "WOODEN" -> player.getInventory().setItemInMainHand(ToolBuildItem.tool(
+//                id,
+//                ToolsEnum.WOODEN.getMaterial(),
+//                toolCacheMethod.getBlocks(id),
+//                botany,
+//                agility,
+//                explosion,
+//                thunderstorm,
+//                xray,
+//                blizzard,
+//                1
+//            ));
+//            case "STONE" -> player.getInventory().setItemInMainHand(ToolBuildItem.tool(
+//                id,
+//                ToolsEnum.STONE.getMaterial(),
+//                toolCacheMethod.getBlocks(id),
+//                botany,
+//                agility,
+//                explosion,
+//                thunderstorm,
+//                xray,
+//                blizzard,
+//                1
+//            ));
+//            case "IRON" -> player.getInventory().setItemInMainHand(ToolBuildItem.tool(
+//                id,
+//                ToolsEnum.IRON.getMaterial(),
+//                toolCacheMethod.getBlocks(id),
+//                botany,
+//                agility,
+//                explosion,
+//                thunderstorm,
+//                xray,
+//                blizzard,
+//                1
+//            ));
+//            case "GOLD" -> player.getInventory().setItemInMainHand(ToolBuildItem.tool(
+//                id,
+//                ToolsEnum.GOLD.getMaterial(),
+//                toolCacheMethod.getBlocks(id),
+//                botany,
+//                agility,
+//                explosion,
+//                thunderstorm,
+//                xray,
+//                blizzard,
+//                1
+//            ));
+//            case "DIAMOND" -> player.getInventory().setItemInMainHand(ToolBuildItem.tool(
+//                id,
+//                ToolsEnum.DIAMOND.getMaterial(),
+//                toolCacheMethod.getBlocks(id),
+//                botany,
+//                agility,
+//                explosion,
+//                thunderstorm,
+//                xray,
+//                blizzard,
+//                1
+//            ));
+//        }
+//      }
 }
