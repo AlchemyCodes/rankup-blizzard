@@ -23,7 +23,7 @@ public class StoneVisualBuildItem {
                 "",
                 "§8Arraste para aplicar."
             ))
-            .addPersistentData(Main.getInstance(), "stone", "blizzard.visuals.stone-visual")
+            .addPersistentData(Main.getInstance(), "visual", "blizzard.visuals.stone-visual")
             .build(amount);
     }
 }

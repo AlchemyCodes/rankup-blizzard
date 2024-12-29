@@ -23,7 +23,7 @@ public class IronVisualBuildItem {
                 "",
                 "§fArraste para aplicar."
             ))
-            .addPersistentData(Main.getInstance(), "stone", "blizzard.visuals.iron-visual")
+            .addPersistentData(Main.getInstance(), "visual", "blizzard.visuals.iron-visual")
             .build(amount);
     }
 }
