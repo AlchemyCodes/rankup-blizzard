@@ -2,6 +2,7 @@ package blizzard.development.monsters.database.dao;
 
 import blizzard.development.monsters.database.DatabaseConnection;
 import blizzard.development.monsters.database.storage.ToolsData;
+import org.bukkit.Bukkit;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -16,7 +17,8 @@ public class ToolsDAO {
             String sql_tools = "CREATE TABLE IF NOT EXISTS monsters_tools (" +
                     "id VARCHAR(36) PRIMARY KEY, " +
                     "type VARCHAR(36), " +
-                    "damage VARCHAR(10), " +
+                    "damage INTEGER, " +
+                    "experienced INTEGER, " +
                     "owner VARCHAR(36)" +
                     ")";
             stat.execute(sql_tools);
@@ -47,7 +49,8 @@ public class ToolsDAO {
                     return new ToolsData(
                             resultSet.getString("id"),
                             resultSet.getString("type"),
-                            resultSet.getString("damage"),
+                            resultSet.getInt("damage"),
+                            resultSet.getInt("experienced"),
                             resultSet.getString("owner")
                     );
                 }
@@ -59,13 +62,14 @@ public class ToolsDAO {
     }
 
     public void createToolData(ToolsData toolData) throws SQLException {
-        String sql = "INSERT INTO monsters_tools (id, type, damage, owner) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO monsters_tools (id, type, damage, experienced, owner) VALUES (?, ?, ?, ?, ?)";
         executeUpdate(sql, statement -> {
             try {
                 statement.setString(1, toolData.getId());
                 statement.setString(2, toolData.getType());
-                statement.setString(3, toolData.getDamage());
-                statement.setString(4, toolData.getOwner());
+                statement.setInt(3, toolData.getDamage());
+                statement.setInt(4, toolData.getExperienced());
+                statement.setString(5, toolData.getOwner());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -84,13 +88,14 @@ public class ToolsDAO {
     }
 
     public void updateToolData(ToolsData toolData) throws SQLException {
-        String sql = "UPDATE monsters_tools SET type = ?, damage = ?, owner = ? WHERE id = ?";
+        String sql = "UPDATE monsters_tools SET type = ?, damage = ?, experienced = ?, owner = ? WHERE id = ?";
         executeUpdate(sql, statement -> {
             try {
                 statement.setString(1, toolData.getType());
-                statement.setString(2, toolData.getDamage());
-                statement.setString(3, toolData.getOwner());
-                statement.setString(4, toolData.getId());
+                statement.setInt(2, toolData.getDamage());
+                statement.setInt(3, toolData.getExperienced());
+                statement.setString(4, toolData.getOwner());
+                statement.setString(5, toolData.getId());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -109,7 +114,8 @@ public class ToolsDAO {
                 toolsDataList.add(new ToolsData(
                         resultSet.getString("id"),
                         resultSet.getString("type"),
-                        resultSet.getString("damage"),
+                        resultSet.getInt("damage"),
+                        resultSet.getInt("experienced"),
                         resultSet.getString("owner")
                 ));
             }

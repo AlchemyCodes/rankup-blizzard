@@ -1,6 +1,11 @@
-package blizzard.development.monsters.monsters.handlers.eggs;
+package blizzard.development.monsters.monsters.handlers.monsters;
 
+import blizzard.development.monsters.database.cache.managers.MonstersCacheManager;
+import blizzard.development.monsters.database.dao.MonstersDAO;
+import blizzard.development.monsters.database.storage.MonstersData;
 import blizzard.development.monsters.utils.PluginImpl;
+import blizzard.development.monsters.utils.items.TextAPI;
+import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.Objects;
@@ -47,6 +52,26 @@ public class MonstersHandler {
         return Objects.requireNonNull(
                 plugin.Monsters.getConfig().getConfigurationSection("monsters")
         ).getKeys(false);
+    }
+
+    public void createData(Player player, String id, String type, String location, Double life) {
+        String owner = player.getName();
+
+        MonstersData monstersData = new MonstersData(
+                id,
+                type,
+                location,
+                life,
+                owner
+        );
+
+        try {
+            new MonstersDAO().createMonsterData(monstersData);
+            MonstersCacheManager.getInstance().cacheMonsterData(id, monstersData);
+        } catch (Exception ex) {
+            player.sendActionBar(TextAPI.parse("§c§lEI! §cOcorreu um erro ao salvar esse monstro no banco de dados!"));
+            ex.printStackTrace();
+        }
     }
 
     public static MonstersHandler getInstance() {

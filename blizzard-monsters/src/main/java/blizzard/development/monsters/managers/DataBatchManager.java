@@ -1,5 +1,6 @@
 package blizzard.development.monsters.managers;
 
+import blizzard.development.monsters.database.dao.ToolsDAO;
 import blizzard.development.monsters.database.storage.ToolsData;
 import blizzard.development.monsters.monsters.enums.Tools;
 import org.bukkit.Bukkit;
@@ -34,7 +35,7 @@ public class DataBatchManager {
             while (!pendingTools.isEmpty() && processed < BATCH_SIZE) {
                 ToolsData tool = pendingTools.poll();
                 if (tool != null) {
-                    //new ToolsDAO().createToolsData(tool);
+                    new ToolsDAO().createToolData(tool);
                     processed++;
                 }
             }

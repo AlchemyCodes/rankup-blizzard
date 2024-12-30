@@ -1,6 +1,7 @@
 package blizzard.development.monsters.commands.subcommands.users;
 
 import blizzard.development.monsters.monsters.enums.Locations;
+import blizzard.development.monsters.monsters.handlers.tools.MonstersToolHandler;
 import blizzard.development.monsters.monsters.handlers.world.MonstersWorldHandler;
 import blizzard.development.monsters.utils.LocationUtils;
 import blizzard.development.monsters.utils.items.TextAPI;
@@ -28,6 +29,7 @@ public class LeaveCommand extends BaseCommand {
             }
 
             handler.removePlayer(player);
+            MonstersToolHandler.getInstance().removeRadar(player);
 
             player.teleport(location);
             player.sendActionBar(TextAPI.parse("§a§lYAY! §aVocê saiu do mundo de monstros."));

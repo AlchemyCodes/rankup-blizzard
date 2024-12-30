@@ -97,12 +97,13 @@ public class MonstersItems {
     public ItemStack sword() {
         ItemStack item = new ItemStack(Material.WOODEN_SWORD);
         ItemMeta meta = item.getItemMeta();
-        meta.displayName(TextAPI.parse("§6Aniquiladora §l✂ §7Nível §l1"));
+        meta.displayName(TextAPI.parse("§6Aniquiladora §l✂"));
         meta.setLore(Arrays.asList(
                 "§7Use esta espada para",
                 "§7aniquilar os monstros.",
                 "",
                 " §fDano: §c❤2.0",
+                " §fExperiente: §a★1",
                 "",
                 "§6Clique para resgatar."
         ));

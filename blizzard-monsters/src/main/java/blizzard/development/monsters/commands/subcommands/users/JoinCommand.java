@@ -1,6 +1,7 @@
 package blizzard.development.monsters.commands.subcommands.users;
 
 import blizzard.development.monsters.monsters.enums.Locations;
+import blizzard.development.monsters.monsters.handlers.tools.MonstersToolHandler;
 import blizzard.development.monsters.monsters.handlers.world.MonstersWorldHandler;
 import blizzard.development.monsters.utils.LocationUtils;
 import blizzard.development.monsters.utils.items.TextAPI;
@@ -35,6 +36,8 @@ public class JoinCommand extends BaseCommand {
             handler.addPlayer(player);
 
             player.teleport(location);
+            MonstersToolHandler.getInstance().giveRadar(player);
+
             player.sendActionBar(TextAPI.parse("§a§lYAY! §aVocê entrou no mundo de monstros."));
         } else {
             player.sendActionBar(TextAPI.parse("§c§lEI! §cVocê já está no mundo de monstros."));

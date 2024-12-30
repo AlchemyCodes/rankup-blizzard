@@ -4,6 +4,7 @@ import blizzard.development.monsters.builders.hologram.HologramBuilder;
 import blizzard.development.monsters.inventories.main.items.MonstersItems;
 import blizzard.development.monsters.monsters.enums.Locations;
 import blizzard.development.monsters.monsters.handlers.packets.MonstersPacketsHandler;
+import blizzard.development.monsters.monsters.handlers.tools.MonstersToolHandler;
 import blizzard.development.monsters.monsters.handlers.world.MonstersWorldHandler;
 import blizzard.development.monsters.utils.LocationUtils;
 import blizzard.development.monsters.utils.items.TextAPI;
@@ -46,6 +47,8 @@ public class MonstersInventory {
         });
 
         GuiItem swordItem = new GuiItem(items.sword(), event -> {
+            giveSword(player);
+            player.getInventory().close();
             event.setCancelled(true);
         });
 
@@ -71,6 +74,7 @@ public class MonstersInventory {
             }
 
             handler.removePlayer(player);
+            MonstersToolHandler.getInstance().removeRadar(player);
 
             player.teleport(exit);
             player.sendActionBar(TextAPI.parse("§a§lYAY! §aVocê saiu do mundo de monstros."));
@@ -90,6 +94,7 @@ public class MonstersInventory {
             handler.addPlayer(player);
 
             player.teleport(entry);
+            MonstersToolHandler.getInstance().giveRadar(player);
 
             MonstersPacketsHandler handler = MonstersPacketsHandler.getInstance();
             handler.spawnMonster(player, player.getLocation().add(0.5, 0, 0.5));
@@ -97,6 +102,16 @@ public class MonstersInventory {
 
             player.sendActionBar(TextAPI.parse("§a§lYAY! §aVocê entrou no mundo de monstros."));
         }
+    }
+
+    private void giveSword(Player player) {
+        if (player.getInventory().firstEmpty() == -1) {
+            player.sendActionBar(TextAPI.parse("§c§lEI! §cVocê precisa de pelo menos um slot vazio."));
+            return;
+        }
+
+        player.sendActionBar(TextAPI.parse("§a§lYAY! §aVocê recebeu uma aniquiladora."));
+        MonstersToolHandler.getInstance().giveSword(player, 2, 1);
     }
 
     public static MonstersInventory getInstance() {
