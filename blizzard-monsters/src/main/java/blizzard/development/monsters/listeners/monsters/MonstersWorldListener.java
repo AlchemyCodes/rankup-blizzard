@@ -1,13 +1,17 @@
 package blizzard.development.monsters.listeners.monsters;
 
+import blizzard.development.monsters.builders.ItemBuilder;
 import blizzard.development.monsters.monsters.enums.Locations;
+import blizzard.development.monsters.monsters.handlers.tools.MonstersToolHandler;
 import blizzard.development.monsters.monsters.handlers.world.MonstersWorldHandler;
 import blizzard.development.monsters.utils.LocationUtils;
+import blizzard.development.monsters.utils.PluginImpl;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.inventory.ItemStack;
 
 public class MonstersWorldListener implements Listener {
 
@@ -27,6 +31,8 @@ public class MonstersWorldListener implements Listener {
         if (from.equals(utils.getLocation(Locations.ENTRY.getName()).getWorld())
                 && !to.equals(utils.getLocation(Locations.ENTRY.getName()).getWorld())) {
             handler.removePlayer(player);
+
+            MonstersToolHandler.getInstance().removeRadar(player);
         }
     }
 }

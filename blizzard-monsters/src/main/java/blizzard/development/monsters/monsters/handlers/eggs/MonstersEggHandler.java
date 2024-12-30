@@ -1,6 +1,7 @@
 package blizzard.development.monsters.monsters.handlers.eggs;
 
 import blizzard.development.monsters.builders.ItemBuilder;
+import blizzard.development.monsters.monsters.handlers.monsters.MonstersHandler;
 import blizzard.development.monsters.utils.PluginImpl;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -15,7 +16,7 @@ public class MonstersEggHandler {
 
     private final PluginImpl plugin = PluginImpl.getInstance();
 
-    public void giveEgg(Player player, String monster, Integer amount, Integer stack) {
+    public void giveEgg(Player player, String monster, Double amount, Integer stack) {
         MonstersHandler monstersHandler = MonstersHandler.getInstance();
 
         String eggType = "blizzard.monsters.monster";
@@ -40,7 +41,7 @@ public class MonstersEggHandler {
                         .setLore(lore)
                         .addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS)
                         .addPersistentData(plugin.plugin, eggType, monster)
-                        .addPersistentData(plugin.plugin, eggAmount, amount)
+                        .addPersistentData(plugin.plugin, eggAmount, amount.toString())
                         .setAmount(stack)
                         .build();
 
@@ -51,7 +52,7 @@ public class MonstersEggHandler {
                         .setLore(lore)
                         .addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS)
                         .addPersistentData(plugin.plugin, eggType, monster)
-                        .addPersistentData(plugin.plugin, eggAmount, amount)
+                        .addPersistentData(plugin.plugin, eggAmount, amount.toString())
                         .setAmount(stack)
                         .build();
 

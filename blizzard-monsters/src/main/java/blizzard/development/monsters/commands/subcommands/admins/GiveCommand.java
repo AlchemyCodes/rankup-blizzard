@@ -1,7 +1,7 @@
 package blizzard.development.monsters.commands.subcommands.admins;
 
 import blizzard.development.monsters.monsters.handlers.eggs.MonstersEggHandler;
-import blizzard.development.monsters.monsters.handlers.eggs.MonstersHandler;
+import blizzard.development.monsters.monsters.handlers.monsters.MonstersHandler;
 import blizzard.development.monsters.utils.items.TextAPI;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
@@ -19,7 +19,7 @@ public class GiveCommand extends BaseCommand {
     @Subcommand("give|dar")
     @CommandCompletion("@players @monsters @amount @amount")
     @Syntax("<jogador> <monstro> <quantia> <stack>")
-    public void onCommand(CommandSender sender, String player, String monster, Integer amount, Integer stack) {
+    public void onCommand(CommandSender sender, String player, String monster, Double amount, Integer stack) {
         MonstersHandler monstersHandler = MonstersHandler.getInstance();
         MonstersEggHandler eggHandler = MonstersEggHandler.getInstance();
 

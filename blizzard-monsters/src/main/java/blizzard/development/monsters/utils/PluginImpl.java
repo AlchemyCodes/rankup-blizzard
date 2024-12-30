@@ -12,6 +12,7 @@ import blizzard.development.monsters.database.storage.MonstersData;
 import blizzard.development.monsters.database.storage.PlayersData;
 import blizzard.development.monsters.database.storage.ToolsData;
 import blizzard.development.monsters.listeners.ListenerRegistry;
+import blizzard.development.monsters.managers.DataBatchManager;
 import blizzard.development.monsters.tasks.monsters.MonstersSaveTask;
 import blizzard.development.monsters.tasks.players.PlayersSaveTask;
 import blizzard.development.monsters.tasks.tools.ToolsSaveTask;
@@ -63,6 +64,8 @@ public class PluginImpl {
         registerDatabase();
         registerListeners();
         registerCommands();
+
+        DataBatchManager.initialize(plugin);
     }
 
     public void onDisable() {
