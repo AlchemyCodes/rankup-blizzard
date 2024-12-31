@@ -131,19 +131,19 @@ public class LocationUtil {
         PlotArea plotArea = PlotSquared.get().getPlotAreaManager().getPlotArea(blockLocation);
 
         if (plotArea == null) {
-            player.sendActionBar(TextAPI.parse("§c§lEI! §cVocê não pode colocar um spawner nesse local."));
+            player.sendActionBar(TextAPI.parse("§c§lEI! §cVocê não pode colocar isto nesse local."));
             return false;
         }
 
         Plot plot = plotArea.getPlot(blockLocation);
 
         if (plot == null) {
-            player.sendActionBar(TextAPI.parse("§c§lEI! §cVocê não pode colocar um spawner nesse local."));
+            player.sendActionBar(TextAPI.parse("§c§lEI! §cVocê não pode colocar isto nesse local."));
             return false;
         }
 
         if (!(Objects.equals(plot.getOwner(), playerUUID) || plot.isAdded(playerUUID) || player.hasPermission("blizzard.spawners.admin"))) {
-            player.sendActionBar(TextAPI.parse("§c§lEI! §cVocê não tem permissão para colocar um spawner nesse local."));
+            player.sendActionBar(TextAPI.parse("§c§lEI! §cVocê não tem permissão para colocar isto nesse local."));
             return false;
         }
         return true;
@@ -156,19 +156,19 @@ public class LocationUtil {
         PlotArea plotArea = PlotSquared.get().getPlotAreaManager().getPlotArea(blockLocation);
 
         if (plotArea == null) {
-            player.sendActionBar(TextAPI.parse("§c§lEI! §cVocê não pode interagir com esse spawner."));
+            player.sendActionBar(TextAPI.parse("§c§lEI! §cVocê não pode interagir com isto."));
             return false;
         }
 
         Plot plot = plotArea.getPlot(blockLocation);
 
         if (plot == null) {
-            player.sendActionBar(TextAPI.parse("§c§lEI! §cVocê não pode interagir com esse spawner."));
+            player.sendActionBar(TextAPI.parse("§c§lEI! §cVocê não pode interagir com isto."));
             return false;
         }
 
         if (!(Objects.equals(plot.getOwner(), playerUUID) || plot.isAdded(playerUUID) || player.hasPermission("blizzard.spawners.admin"))) {
-            player.sendActionBar(TextAPI.parse("§c§lEI! §cVocê não pode interagir com esse spawner."));
+            player.sendActionBar(TextAPI.parse("§c§lEI! §cVocê não pode interagir com isto."));
             return false;
         }
         return true;
