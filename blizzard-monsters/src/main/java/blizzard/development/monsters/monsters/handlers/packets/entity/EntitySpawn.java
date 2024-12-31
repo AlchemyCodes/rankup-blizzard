@@ -1,13 +1,13 @@
 package blizzard.development.monsters.monsters.handlers.packets.entity;
 
 import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketContainer;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
+import java.util.Collections;
 import java.util.UUID;
 
 public class EntitySpawn {
@@ -17,8 +17,7 @@ public class EntitySpawn {
         PacketContainer npc = protocolManager.createPacket(PacketType.Play.Server.SPAWN_ENTITY);
 
         npc.getIntegers()
-                .write(0, -1)
-                .writeSafely(1, 122);
+                .write(0, (int) Math.round(Math.random() * Integer.MAX_VALUE));
 
         npc.getUUIDs()
                 .write(0, uuid);
@@ -36,6 +35,13 @@ public class EntitySpawn {
                 .write(1, (byte) (0));
 
         protocolManager.sendServerPacket(player, npc);
+    }
+
+    public void destroyEntity(Player player, UUID uuid, ProtocolManager protocolManager) {
+        PacketContainer packet = protocolManager.createPacket(PacketType.Play.Server.ENTITY_DESTROY);
+        packet.getIntLists().write(0, Collections.singletonList((int) Math.round(Math.random() * Integer.MAX_VALUE)));
+
+        protocolManager.sendServerPacket(player, packet);
     }
 
     public static EntitySpawn getInstance() {

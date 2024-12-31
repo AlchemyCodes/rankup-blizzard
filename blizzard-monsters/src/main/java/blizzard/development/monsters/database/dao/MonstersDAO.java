@@ -17,7 +17,7 @@ public class MonstersDAO {
                     "id VARCHAR(36) PRIMARY KEY, " +
                     "type VARCHAR(36), " +
                     "location VARCHAR(255), " +
-                    "life DOUBLE, " +
+                    "life INTEGER, " +
                     "owner VARCHAR(36)" +
                     ")";
             stat.execute(sql_monsters);
@@ -49,7 +49,7 @@ public class MonstersDAO {
                             resultSet.getString("id"),
                             resultSet.getString("type"),
                             resultSet.getString("location"),
-                            resultSet.getDouble("life"),
+                            resultSet.getInt("life"),
                             resultSet.getString("owner")
                     );
                 }
@@ -67,7 +67,7 @@ public class MonstersDAO {
                 statement.setString(1, monsterData.getId());
                 statement.setString(2, monsterData.getType());
                 statement.setString(3, monsterData.getLocation());
-                statement.setDouble(4, monsterData.getLife());
+                statement.setInt(4, monsterData.getLife());
                 statement.setString(5, monsterData.getOwner());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
@@ -92,7 +92,7 @@ public class MonstersDAO {
             try {
                 statement.setString(1, monsterData.getType());
                 statement.setString(2, monsterData.getLocation());
-                statement.setDouble(3, monsterData.getLife());
+                statement.setInt(3, monsterData.getLife());
                 statement.setString(4, monsterData.getOwner());
                 statement.setString(5, monsterData.getId());
             } catch (SQLException e) {
@@ -114,7 +114,7 @@ public class MonstersDAO {
                         resultSet.getString("id"),
                         resultSet.getString("type"),
                         resultSet.getString("location"),
-                        resultSet.getDouble("life"),
+                        resultSet.getInt("life"),
                         resultSet.getString("owner")
                 ));
             }

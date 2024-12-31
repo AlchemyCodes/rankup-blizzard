@@ -7,6 +7,7 @@ import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
@@ -19,12 +20,14 @@ public class GiveCommand extends BaseCommand {
     @Subcommand("give|dar")
     @CommandCompletion("@players @monsters @amount @amount")
     @Syntax("<jogador> <monstro> <quantia> <stack>")
-    public void onCommand(CommandSender sender, String player, String monster, Double amount, Integer stack) {
+    public void onCommand(CommandSender sender, String player, String monster, Integer stack) {
         MonstersHandler monstersHandler = MonstersHandler.getInstance();
         MonstersEggHandler eggHandler = MonstersEggHandler.getInstance();
 
+        ConfigurationSection monstersSection = monstersHandler.getSection();
         Set<String> monsters = monstersHandler.getAll();
-        if (monster == null) {
+
+        if (monstersSection == null || monsters == null) {
             sender.sendActionBar(TextAPI.parse("§c§lEI! §cOcorreu um erro ao encontrar os monstros na configuração."));
             return;
         }
@@ -37,13 +40,12 @@ public class GiveCommand extends BaseCommand {
 
         if (monsters.contains(monster)) {
             sender.sendActionBar(TextAPI.parse(
-                    "§a§lYAY! §aVocê deu §7x" + amount
-                            + " (" + stack + ")"
+                    "§a§lYAY! §aVocê deu §7x" + stack
                             + "§a monstros do tipo §7" + monster
                             + "§a para o jogador §7"
                             + target.getName() + "§a."
             ));
-            eggHandler.giveEgg(target, monster, amount, stack);
+            eggHandler.giveEgg(target, monster, stack);
         } else {
             Arrays.asList(
                     "",

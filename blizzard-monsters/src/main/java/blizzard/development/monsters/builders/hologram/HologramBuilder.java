@@ -12,11 +12,10 @@ public class HologramBuilder {
 
     private final Map<UUID, Hologram> hologram = new HashMap<>();
 
-    public void createHologram(Player player, Location location, String display, Integer life) {
-        UUID uuid = UUID.randomUUID();
+    public void createHologram(Player player, UUID id, Location location, String display, Integer life) {
 
-        Hologram hologram = DHAPI.createHologram(uuid.toString(), location.add(0.5, 2.5 ,0.5));
-        this.hologram.put(uuid, hologram);
+        Hologram hologram = DHAPI.createHologram(id.toString(), location);
+        this.hologram.put(id, hologram);
 
         hologram.setDefaultVisibleState(false);
         hologram.setShowPlayer(player);
