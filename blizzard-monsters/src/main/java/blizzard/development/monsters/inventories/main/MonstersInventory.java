@@ -96,10 +96,6 @@ public class MonstersInventory {
             player.teleport(entry);
             MonstersToolHandler.getInstance().giveRadar(player);
 
-            MonstersPacketsHandler handler = MonstersPacketsHandler.getInstance();
-            handler.spawnMonster(player, player.getLocation().add(0.5, 0, 0.5));
-            HologramBuilder.getInstance().createHologram(player, player.getLocation(), "§bGolem de Neve", 20);
-
             player.sendActionBar(TextAPI.parse("§a§lYAY! §aVocê entrou no mundo de monstros."));
         }
     }

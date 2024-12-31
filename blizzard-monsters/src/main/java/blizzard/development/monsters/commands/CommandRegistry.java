@@ -10,8 +10,7 @@ import blizzard.development.monsters.monsters.handlers.monsters.MonstersHandler;
 import blizzard.development.monsters.utils.PluginImpl;
 import co.aikar.commands.PaperCommandManager;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 
 public class CommandRegistry {
 
@@ -33,7 +32,13 @@ public class CommandRegistry {
                 new SwordCommand()
         ).forEach(paperCommandManager::registerCommand);
 
-        paperCommandManager.getCommandCompletions().registerCompletion("monsters", c -> MonstersHandler.getInstance().getAll());
+        paperCommandManager.getCommandCompletions().registerCompletion("monsters", set -> {
+            Set<String> monsters = MonstersHandler.getInstance().getAll();
+            if (monsters != null && !monsters.isEmpty()) {
+                return monsters;
+            }
+            return List.of("Nenhum");
+        });
 
         paperCommandManager.getCommandCompletions().registerCompletion("location_actions", c -> {
             ArrayList<String> array = new ArrayList<>();

@@ -1,6 +1,9 @@
 package blizzard.development.monsters.listeners.monsters;
 
 import blizzard.development.monsters.builders.ItemBuilder;
+import blizzard.development.monsters.builders.hologram.HologramBuilder;
+import blizzard.development.monsters.database.cache.managers.MonstersCacheManager;
+import blizzard.development.monsters.database.storage.MonstersData;
 import blizzard.development.monsters.monsters.enums.Locations;
 import blizzard.development.monsters.monsters.handlers.tools.MonstersToolHandler;
 import blizzard.development.monsters.monsters.handlers.world.MonstersWorldHandler;
@@ -12,6 +15,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.UUID;
 
 public class MonstersWorldListener implements Listener {
 
@@ -33,6 +38,12 @@ public class MonstersWorldListener implements Listener {
             handler.removePlayer(player);
 
             MonstersToolHandler.getInstance().removeRadar(player);
+
+            for (MonstersData monstersData : MonstersCacheManager.getInstance().monstersCache.values()) {
+                if (monstersData.getOwner().equals(player.getName())) {
+                    HologramBuilder.getInstance().removeHologram(UUID.fromString(monstersData.getId()));
+                }
+            }
         }
     }
 }

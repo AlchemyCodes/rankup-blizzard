@@ -5,8 +5,10 @@ import blizzard.development.monsters.database.dao.MonstersDAO;
 import blizzard.development.monsters.database.storage.MonstersData;
 import blizzard.development.monsters.utils.PluginImpl;
 import blizzard.development.monsters.utils.items.TextAPI;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -32,8 +34,8 @@ public class MonstersHandler {
         return plugin.Monsters.getConfig().getString("monsters." + monsterName + ".monster.skin-signature");
     }
 
-    public Double getLife(String monsterName) {
-        return plugin.Monsters.getConfig().getDouble("monsters." + monsterName + ".monster.life");
+    public Integer getLife(String monsterName) {
+        return plugin.Monsters.getConfig().getInt("monsters." + monsterName + ".monster.life");
     }
 
     public Integer getAttackChance(String monsterName) {
@@ -48,13 +50,20 @@ public class MonstersHandler {
         return plugin.Monsters.getConfig().getStringList("monsters." + monsterName + ".monster.rewards");
     }
 
-    public Set<String> getAll() {
-        return Objects.requireNonNull(
-                plugin.Monsters.getConfig().getConfigurationSection("monsters")
-        ).getKeys(false);
+    public ConfigurationSection getSection() {
+        return plugin.Monsters.getConfig().getConfigurationSection("monsters");
     }
 
-    public void createData(Player player, String id, String type, String location, Double life) {
+    public Set<String> getAll() {
+        if (getSection() == null) return null;
+
+        Set<String> keys = getSection().getKeys(false);
+        if (keys.isEmpty()) return null;
+
+        return keys;
+    }
+
+    public void createData(Player player, String id, String type, String location, Integer life) {
         String owner = player.getName();
 
         MonstersData monstersData = new MonstersData(

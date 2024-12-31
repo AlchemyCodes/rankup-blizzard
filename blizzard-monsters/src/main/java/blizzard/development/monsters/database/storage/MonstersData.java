@@ -4,9 +4,9 @@ import lombok.Data;
 
 public @Data class MonstersData {
     private String id, type, location, owner;
-    private Double life;
+    private Integer life;
 
-    public MonstersData(String id, String type, String location, Double life, String owner) {
+    public MonstersData(String id, String type, String location, Integer life, String owner) {
         this.id = id;
         this.type = type;
         this.location = location;

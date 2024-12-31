@@ -13,6 +13,7 @@ import blizzard.development.monsters.database.storage.PlayersData;
 import blizzard.development.monsters.database.storage.ToolsData;
 import blizzard.development.monsters.listeners.ListenerRegistry;
 import blizzard.development.monsters.managers.DataBatchManager;
+import blizzard.development.monsters.monsters.handlers.packets.MonstersPacketsHandler;
 import blizzard.development.monsters.tasks.monsters.MonstersSaveTask;
 import blizzard.development.monsters.tasks.players.PlayersSaveTask;
 import blizzard.development.monsters.tasks.tools.ToolsSaveTask;
@@ -69,6 +70,7 @@ public class PluginImpl {
     }
 
     public void onDisable() {
+        MonstersPacketsHandler.getInstance().removeAllMonsters();
         DatabaseConnection.getInstance().close();
     }
 
