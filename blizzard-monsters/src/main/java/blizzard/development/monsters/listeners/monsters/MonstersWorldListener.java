@@ -9,6 +9,7 @@ import blizzard.development.monsters.monsters.handlers.tools.MonstersToolHandler
 import blizzard.development.monsters.monsters.handlers.world.MonstersWorldHandler;
 import blizzard.development.monsters.utils.LocationUtils;
 import blizzard.development.monsters.utils.PluginImpl;
+import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -41,7 +42,7 @@ public class MonstersWorldListener implements Listener {
 
             for (MonstersData monstersData : MonstersCacheManager.getInstance().monstersCache.values()) {
                 if (monstersData.getOwner().equals(player.getName())) {
-                    HologramBuilder.getInstance().removeHologram(UUID.fromString(monstersData.getId()));
+                    HologramBuilder.getInstance().removeHologram(UUID.fromString(monstersData.getUuid()));
                 }
             }
         }

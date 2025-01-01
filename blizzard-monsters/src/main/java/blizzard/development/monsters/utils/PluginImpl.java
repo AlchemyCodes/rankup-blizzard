@@ -70,7 +70,10 @@ public class PluginImpl {
     }
 
     public void onDisable() {
-        MonstersPacketsHandler.getInstance().removeAllMonsters();
+        MonstersPacketsHandler packetsHandler = MonstersPacketsHandler.getInstance();
+        packetsHandler.removeAllMonsters();
+        packetsHandler.clear();
+
         DatabaseConnection.getInstance().close();
     }
 

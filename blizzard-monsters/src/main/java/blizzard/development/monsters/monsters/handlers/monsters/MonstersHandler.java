@@ -9,12 +9,25 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 public class MonstersHandler {
     private static MonstersHandler instance;
+
+    public HashMap<Player, List<String>> monsters = new HashMap<>();
+
+    public void addMonster(Player player, List<String> monsterNames) {
+        List<String> monstersList = monsters.getOrDefault(player, new ArrayList<>());
+
+        monstersList.addAll(monsterNames);
+        monsters.put(player, monstersList);
+    }
+
+    public List<String> getMonsters(Player player) {
+        return monsters.getOrDefault(player, new ArrayList<>());
+    }
 
     private final PluginImpl plugin = PluginImpl.getInstance();
 
@@ -63,10 +76,11 @@ public class MonstersHandler {
         return keys;
     }
 
-    public void createData(Player player, String id, String type, String location, Integer life) {
+    public void createData(Player player, String uuid, String id, String type, String location, Integer life) {
         String owner = player.getName();
 
         MonstersData monstersData = new MonstersData(
+                uuid,
                 id,
                 type,
                 location,
@@ -76,7 +90,7 @@ public class MonstersHandler {
 
         try {
             new MonstersDAO().createMonsterData(monstersData);
-            MonstersCacheManager.getInstance().cacheMonsterData(id, monstersData);
+            MonstersCacheManager.getInstance().cacheMonsterData(uuid, monstersData);
         } catch (Exception ex) {
             player.sendActionBar(TextAPI.parse("§c§lEI! §cOcorreu um erro ao salvar esse monstro no banco de dados!"));
             ex.printStackTrace();

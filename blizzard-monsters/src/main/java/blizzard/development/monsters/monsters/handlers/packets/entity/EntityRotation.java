@@ -5,34 +5,30 @@ import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketContainer;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 
 public class EntityRotation {
     private static EntityRotation instance;
 
-    public void updateRotation(Player player, Location location, int entityId, ProtocolManager protocolManager) {
+    public void updateRotation(Player player, Location entityLocation, int entityId, ProtocolManager protocolManager) {
         PacketContainer rotateHead = protocolManager.createPacket(PacketType.Play.Server.ENTITY_HEAD_ROTATION);
         PacketContainer rotateBody = protocolManager.createPacket(PacketType.Play.Server.ENTITY_LOOK);
 
-        Location entityLoc = location.clone();
-        Location playerLoc = player.getLocation();
+        rotateHead.getIntegers().write(0, entityId);
+        rotateBody.getIntegers().write(0, entityId);
 
-        double dx = playerLoc.getX() - entityLoc.getX();
-        double dz = playerLoc.getZ() - entityLoc.getZ();
+        Vector direction = player.getEyeLocation().toVector().subtract(entityLocation.toVector());
+
+        double dx = direction.getX();
+        double dy = direction.getY();
+        double dz = direction.getZ();
 
         double yaw = Math.atan2(dz, dx);
         yaw = yaw * (180 / Math.PI);
-        yaw -= 90;
+        yaw = yaw - 90;
 
-        while (yaw < 0) yaw += 360;
-        while (yaw > 360) yaw -= 360;
-
-        double dy = playerLoc.getY() + player.getEyeHeight() - (entityLoc.getY() + 1.6);
-        double distance = Math.sqrt(dx * dx + dz * dz);
-        double pitch = Math.atan2(dy, distance);
-        pitch = pitch * (180 / Math.PI);
-
-        rotateHead.getIntegers().write(0, entityId);
-        rotateBody.getIntegers().write(0, entityId);
+        double pitch = Math.atan2(dy, Math.sqrt(dx * dx + dz * dz));
+        pitch = -pitch * (180 / Math.PI);
 
         byte yawByte = (byte) ((yaw % 360) * 256 / 360);
         byte pitchByte = (byte) ((pitch % 360) * 256 / 360);
@@ -42,14 +38,8 @@ public class EntityRotation {
                 .write(0, yawByte)
                 .write(1, pitchByte);
 
-        rotateBody.getBooleans().write(0, true);
-
-        try {
-            protocolManager.sendServerPacket(player, rotateBody);
-            protocolManager.sendServerPacket(player, rotateHead);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        protocolManager.sendServerPacket(player, rotateHead);
+        protocolManager.sendServerPacket(player, rotateBody);
     }
 
     public static EntityRotation getInstance() {

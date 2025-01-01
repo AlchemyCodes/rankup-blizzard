@@ -4,6 +4,7 @@ import blizzard.development.monsters.builders.ItemBuilder;
 import blizzard.development.monsters.monsters.handlers.monsters.MonstersHandler;
 import blizzard.development.monsters.monsters.handlers.packets.MonstersPacketsHandler;
 import blizzard.development.monsters.monsters.handlers.world.MonstersWorldHandler;
+import blizzard.development.monsters.utils.LocationUtils;
 import blizzard.development.monsters.utils.PluginImpl;
 import blizzard.development.monsters.utils.items.TextAPI;
 import org.bukkit.Location;
@@ -62,7 +63,7 @@ public class MonstersEggListener implements Listener {
                 Block clickedBlock = event.getClickedBlock();
                 if (clickedBlock == null) return;
 
-                Location spawnLocation = calculateSpawnLocation(clickedBlock, event.getBlockFace());
+                Location spawnLocation = LocationUtils.getInstance().calculateSpawnLocation(clickedBlock, event.getBlockFace());
 
                 Vector direction = player.getLocation().toVector().subtract(spawnLocation.toVector());
                 spawnLocation.setDirection(direction);
@@ -93,39 +94,11 @@ public class MonstersEggListener implements Listener {
 
                 messages.forEach(player::sendMessage);
                 manageStack(player);
+                player.setCompassTarget(spawnLocation);
 
                 event.setCancelled(true);
             }
         }
-    }
-
-    private Location calculateSpawnLocation(Block block, BlockFace face) {
-        Location location = block.getLocation();
-
-        location.add(0.5, 0, 0.5);
-
-        switch (face) {
-            case UP:
-                location.add(0, 1, 0);
-                break;
-            case NORTH:
-                location.add(0, 0, -1);
-                break;
-            case SOUTH:
-                location.add(0, 0, 1);
-                break;
-            case WEST:
-                location.add(-1, 0, 0);
-                break;
-            case EAST:
-                location.add(1, 0, 0);
-                break;
-            case DOWN:
-                location.add(0, -1, 0);
-                break;
-        }
-
-        return location;
     }
 
     private void manageStack(Player player) {
