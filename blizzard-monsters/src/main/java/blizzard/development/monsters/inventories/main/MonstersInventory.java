@@ -2,6 +2,7 @@ package blizzard.development.monsters.inventories.main;
 
 import blizzard.development.monsters.builders.hologram.HologramBuilder;
 import blizzard.development.monsters.inventories.main.items.MonstersItems;
+import blizzard.development.monsters.inventories.tools.RadarInventory;
 import blizzard.development.monsters.monsters.enums.Locations;
 import blizzard.development.monsters.monsters.handlers.packets.MonstersPacketsHandler;
 import blizzard.development.monsters.monsters.handlers.tools.MonstersToolHandler;

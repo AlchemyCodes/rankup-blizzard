@@ -1,6 +1,5 @@
 package blizzard.development.monsters.listeners.packets;
 
-import blizzard.development.monsters.builders.hologram.HologramBuilder;
 import blizzard.development.monsters.database.cache.managers.MonstersCacheManager;
 import blizzard.development.monsters.database.storage.MonstersData;
 import blizzard.development.monsters.monsters.handlers.packets.entity.EntityRotation;
@@ -28,7 +27,7 @@ public class PlayersPacketMoveListener implements Listener {
                 Location location = LocationUtils.getInstance().deserializeLocation(monstersData.getLocation());
 
                 if (player.getLocation().distance(location) <= 5) {
-                    entityRotation.updateRotation(player, location, protocolManager);
+                    entityRotation.updateRotation(player, location, Integer.parseInt(monstersData.getId()), protocolManager);
                 }
             }
         }

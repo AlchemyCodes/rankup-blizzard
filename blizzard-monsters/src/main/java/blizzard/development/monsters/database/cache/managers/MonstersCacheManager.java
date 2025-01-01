@@ -1,26 +1,26 @@
 package blizzard.development.monsters.database.cache.managers;
 
-import blizzard.development.monsters.database.storage.ToolsData;
+import blizzard.development.monsters.database.storage.MonstersData;
 
 import java.util.concurrent.ConcurrentHashMap;
 
 public class MonstersCacheManager {
-    private static ToolsCacheManager instance;
+    private static MonstersCacheManager instance;
 
-    public final ConcurrentHashMap<String, ToolsData> toolsCache = new ConcurrentHashMap<>();
+    public final ConcurrentHashMap<String, MonstersData> monstersCache = new ConcurrentHashMap<>();
 
-    public void cacheToolData(String id, ToolsData toolsData) {
-        toolsCache.put(id, toolsData);
+    public void cacheMonsterData(String uuid, MonstersData monstersData) {
+        monstersCache.put(uuid, monstersData);
     }
-    public ToolsData getToolData(String id) {
-        return toolsCache.get(id);
+    public MonstersData getMonsterData(String uuid) {
+        return monstersCache.get(uuid);
     }
-    public void removeToolData(String id) {
-        toolsCache.remove(id);
+    public void removeMonsterData(String uuid) {
+        monstersCache.remove(uuid);
     }
 
-    public static ToolsCacheManager getInstance() {
-        if (instance == null) instance = new ToolsCacheManager();
+    public static MonstersCacheManager getInstance() {
+        if (instance == null) instance = new MonstersCacheManager();
         return instance;
     }
 }

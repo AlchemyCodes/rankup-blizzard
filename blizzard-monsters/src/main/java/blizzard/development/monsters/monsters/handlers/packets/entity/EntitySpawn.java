@@ -13,11 +13,11 @@ import java.util.UUID;
 public class EntitySpawn {
     private static EntitySpawn instance;
 
-    public void spawnEntity(Player player, Location location, UUID uuid, ProtocolManager protocolManager) {
+    public void spawnEntity(Player player, Location location, UUID uuid, Integer id, ProtocolManager protocolManager) {
         PacketContainer npc = protocolManager.createPacket(PacketType.Play.Server.SPAWN_ENTITY);
 
         npc.getIntegers()
-                .write(0, (int) Math.round(Math.random() * Integer.MAX_VALUE));
+                .write(0, id);
 
         npc.getUUIDs()
                 .write(0, uuid);

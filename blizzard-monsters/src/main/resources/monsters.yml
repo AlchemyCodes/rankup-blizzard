@@ -1,6 +1,6 @@
 monsters:
 
-  snow-golem:
+  snowgolem:
     type: "snowgolem"
 
     egg:
