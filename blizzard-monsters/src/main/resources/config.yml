@@ -1,5 +1,11 @@
 monsters:
 
-  max-player-level: 100
+  max-level: 100
+
+  initial-monsters-limit: 5
+  max-monsters-limit: 10
+
+  tasks:
+    distance-task: 3 # in seconds
 
 

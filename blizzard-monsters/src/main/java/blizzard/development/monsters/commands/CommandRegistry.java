@@ -1,4 +1,5 @@
 package blizzard.development.monsters.commands;
+import blizzard.development.monsters.commands.main.CageCommand;
 import blizzard.development.monsters.commands.subcommands.admins.GiveCommand;
 import blizzard.development.monsters.commands.subcommands.admins.LocationCommand;
 import blizzard.development.monsters.commands.subcommands.admins.ReloadCommand;
@@ -29,7 +30,8 @@ public class CommandRegistry {
                 new MonstersCommand(),
                 new JoinCommand(),
                 new LeaveCommand(),
-                new SwordCommand()
+                new SwordCommand(),
+                new CageCommand()
         ).forEach(paperCommandManager::registerCommand);
 
         paperCommandManager.getCommandCompletions().registerCompletion("monsters", set -> {

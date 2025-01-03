@@ -1,6 +1,7 @@
 package blizzard.development.monsters.inventories.main;
 
 import blizzard.development.monsters.builders.hologram.HologramBuilder;
+import blizzard.development.monsters.inventories.cage.CageInventory;
 import blizzard.development.monsters.inventories.main.items.MonstersItems;
 import blizzard.development.monsters.inventories.tools.RadarInventory;
 import blizzard.development.monsters.monsters.enums.Locations;
@@ -27,7 +28,8 @@ public class MonstersInventory {
         ChestGui inventory = new ChestGui(3, "§8Monstros");
         StaticPane pane = new StaticPane(0, 0, 9, 3);
 
-        GuiItem manageItem = new GuiItem(items.manage(), event -> {
+        GuiItem cageItem = new GuiItem(items.cage(), event -> {
+            CageInventory.getInstance().open(player, 1);
             event.setCancelled(true);
         });
 
@@ -53,7 +55,7 @@ public class MonstersInventory {
             event.setCancelled(true);
         });
 
-        pane.addItem(manageItem, Slot.fromIndex(10));
+        pane.addItem(cageItem, Slot.fromIndex(10));
         pane.addItem(rewardsItem, Slot.fromIndex(11));
         pane.addItem(goItem, Slot.fromIndex(13));
         pane.addItem(rankingItem, Slot.fromIndex(15));

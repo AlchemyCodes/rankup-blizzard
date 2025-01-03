@@ -82,7 +82,7 @@ public class MonstersDAO {
         String sql = "DELETE FROM monsters WHERE uuid = ?";
         executeUpdate(sql, statement -> {
             try {
-                statement.setString(1, monsterData.getId());
+                statement.setString(1, monsterData.getUuid());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }

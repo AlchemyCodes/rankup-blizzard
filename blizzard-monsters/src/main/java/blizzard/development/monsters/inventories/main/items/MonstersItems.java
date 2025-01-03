@@ -11,12 +11,13 @@ import java.util.Arrays;
 public class MonstersItems {
     private static MonstersItems instance;
 
-    public ItemStack manage() {
+    public ItemStack cage() {
         ItemStack item = new ItemStack(Material.SNOW_GOLEM_SPAWN_EGG);
         ItemMeta meta = item.getItemMeta();
-        meta.displayName(TextAPI.parse("§bGerenciar monstros"));
+        meta.displayName(TextAPI.parse("§bGaiola de monstros"));
         meta.setLore(Arrays.asList(
-                "§7Gerencie seus monstros",
+                "§7Gerencie todos os seus",
+                "§7monstros deixados de lado",
                 "",
                 "§bClique para visualizar."
         ));
