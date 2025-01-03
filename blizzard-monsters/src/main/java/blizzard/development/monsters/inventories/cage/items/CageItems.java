@@ -1,6 +1,7 @@
-package blizzard.development.monsters.inventories.tools.items;
+package blizzard.development.monsters.inventories.cage.items;
 
 import blizzard.development.monsters.builders.ItemBuilder;
+import blizzard.development.monsters.inventories.tools.items.RadarItems;
 import blizzard.development.monsters.monsters.handlers.eggs.MonstersEggHandler;
 import blizzard.development.monsters.utils.items.TextAPI;
 import org.bukkit.Material;
@@ -11,10 +12,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.Arrays;
 import java.util.List;
 
-public class RadarItems {
-    private static RadarItems instance;
+public class CageItems {
+    private static CageItems instance;
 
-    public ItemStack monster(String monster, String distance) {
+    public ItemStack monster(String monster) {
         MonstersEggHandler eggHandler = MonstersEggHandler.getInstance();
 
         Material material;
@@ -36,29 +37,27 @@ public class RadarItems {
 
         meta.displayName(TextAPI.parse(display));
         meta.setLore(Arrays.asList(
-                "§7Localize este monstro",
+                "§7Libere esse monstro.",
                 "",
-                "§f Distância:",
-                "§8  ▶§7 " + distance,
+                "§f Vai ter algo aqui",
                 "",
-                "§7Clique para localizar."
+                "§7Clique para liberar."
         ));
 
         item.setItemMeta(meta);
         return item;
     }
 
-    public ItemStack profile(Player player) {
-        ItemStack item = new ItemBuilder(player).build();
+    public ItemStack catchAll() {
+        ItemStack item = new ItemStack(Material.HOPPER_MINECART);
 
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName("§aSuas informações");
+        meta.setDisplayName("§aCapturar todos");
         meta.setLore(Arrays.asList(
-                "§7Visualize informações suas",
-                "§7para realizar compras.",
+                "§7Capture todos os monstros",
+                "§7que estão presos na gaiola",
                 "",
-                "§a Informações:",
-                "§8 ▶ §fLimite de Monstros: §b10"
+                "§aClique para capturar."
         ));
         item.setItemMeta(meta);
 
@@ -91,8 +90,8 @@ public class RadarItems {
         return item;
     }
 
-    public static RadarItems getInstance() {
-        if (instance == null) instance = new RadarItems();
+    public static CageItems getInstance() {
+        if (instance == null) instance = new CageItems();
         return instance;
     }
 }

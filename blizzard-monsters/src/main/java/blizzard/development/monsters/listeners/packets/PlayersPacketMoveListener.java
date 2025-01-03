@@ -13,23 +13,45 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 public class PlayersPacketMoveListener implements Listener {
     private final ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
+
+    private final Map<UUID, Long> moveCooldowns = new HashMap<>();
+    private final Map<String, Location> locationCache = new HashMap<>();
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
+
+        if (event.getFrom().getBlockX() == event.getTo().getBlockX() &&
+                event.getFrom().getBlockY() == event.getTo().getBlockY() &&
+                event.getFrom().getBlockZ() == event.getTo().getBlockZ()) {
+            return;
+        }
+
+        long now = System.currentTimeMillis();
+        if (moveCooldowns.getOrDefault(player.getUniqueId(), 0L) > now) {
+            return;
+        }
+        moveCooldowns.put(player.getUniqueId(), now + 1000);
+
         EntityRotation entityRotation = EntityRotation.getInstance();
 
         if (MonstersWorldHandler.getInstance().containsPlayer(player)) {
             for (MonstersData monstersData : MonstersCacheManager.getInstance().monstersCache.values()) {
-
-                Location location = LocationUtils.getInstance().deserializeLocation(monstersData.getLocation());
-
-                if (player.getLocation().distance(location) <= 5) {
+                Location location = getCachedLocation(monstersData.getLocation());
+                if (location != null && player.getLocation().distance(location) <= 5) {
                     entityRotation.updateRotation(player, location, Integer.parseInt(monstersData.getId()), protocolManager);
                 }
             }
         }
+    }
+
+    private Location getCachedLocation(String serializedLocation) {
+        return locationCache.computeIfAbsent(serializedLocation, LocationUtils.getInstance()::deserializeLocation);
     }
 }

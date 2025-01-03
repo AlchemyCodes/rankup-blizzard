@@ -5,6 +5,7 @@ import blizzard.development.monsters.database.dao.MonstersDAO;
 import blizzard.development.monsters.database.storage.MonstersData;
 import blizzard.development.monsters.utils.PluginImpl;
 import blizzard.development.monsters.utils.items.TextAPI;
+import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
@@ -27,6 +28,25 @@ public class MonstersHandler {
 
     public List<String> getMonsters(Player player) {
         return monsters.getOrDefault(player, new ArrayList<>());
+    }
+
+    public HashMap<Player, Location> monstersLocation = new HashMap<>();
+    public HashMap<Player, String> monstersDisplay = new HashMap<>();
+
+    public void addMonsterInfo(Player player, Location location, String displayName) {
+        monstersLocation.clear();
+        monstersDisplay.clear();
+
+        monstersLocation.put(player, location);
+        monstersDisplay.put(player, displayName);
+    }
+
+    public Location getMonstersLocation(Player player) {
+        return monstersLocation.getOrDefault(player, null);
+    }
+
+    public String getMonstersDisplay(Player player) {
+        return monstersDisplay.getOrDefault(player, null);
     }
 
     private final PluginImpl plugin = PluginImpl.getInstance();

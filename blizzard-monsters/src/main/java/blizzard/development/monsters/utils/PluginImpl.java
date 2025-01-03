@@ -1,5 +1,7 @@
 package blizzard.development.monsters.utils;
 
+import blizzard.development.monsters.builders.ItemBuilder;
+import blizzard.development.monsters.builders.hologram.HologramBuilder;
 import blizzard.development.monsters.commands.CommandRegistry;
 import blizzard.development.monsters.database.DatabaseConnection;
 import blizzard.development.monsters.database.cache.managers.MonstersCacheManager;
@@ -13,19 +15,27 @@ import blizzard.development.monsters.database.storage.PlayersData;
 import blizzard.development.monsters.database.storage.ToolsData;
 import blizzard.development.monsters.listeners.ListenerRegistry;
 import blizzard.development.monsters.managers.DataBatchManager;
-import blizzard.development.monsters.monsters.handlers.packets.MonstersPacketsHandler;
+import blizzard.development.monsters.monsters.handlers.tools.MonstersToolHandler;
+import blizzard.development.monsters.monsters.handlers.world.MonstersWorldHandler;
 import blizzard.development.monsters.tasks.monsters.MonstersSaveTask;
 import blizzard.development.monsters.tasks.players.PlayersSaveTask;
 import blizzard.development.monsters.tasks.tools.ToolsSaveTask;
 import blizzard.development.monsters.utils.config.ConfigUtils;
 import co.aikar.commands.Locales;
 import co.aikar.commands.PaperCommandManager;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
 import lombok.Getter;
 import lombok.SneakyThrows;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
+import java.util.UUID;
 
 public class PluginImpl {
     public final Plugin plugin;
@@ -36,6 +46,8 @@ public class PluginImpl {
     public MonstersDAO monstersDAO;
     public ToolsDAO toolsDAO;
 
+    public ProtocolManager protocolManager;
+
     public ConfigUtils Config;
     public ConfigUtils Database;
     public ConfigUtils Monsters;
@@ -45,6 +57,7 @@ public class PluginImpl {
     public PluginImpl(Plugin plugin) {
         this.plugin = plugin;
         instance = this;
+        protocolManager = ProtocolLibrary.getProtocolManager();
         Config = new ConfigUtils((JavaPlugin) plugin, "config.yml");
         Database = new ConfigUtils((JavaPlugin) plugin, "database.yml");
         Monsters = new ConfigUtils((JavaPlugin) plugin, "monsters.yml");
@@ -70,10 +83,7 @@ public class PluginImpl {
     }
 
     public void onDisable() {
-        MonstersPacketsHandler packetsHandler = MonstersPacketsHandler.getInstance();
-        packetsHandler.removeAllMonsters();
-        packetsHandler.clear();
-
+        disableMonsters();
         DatabaseConnection.getInstance().close();
     }
 
@@ -96,7 +106,7 @@ public class PluginImpl {
     }
 
     @SneakyThrows
-    public void setupData() {
+    private void setupData() {
         List<PlayersData> players = playersDAO.getAllPlayersData();
         for (PlayersData player : players) {
             PlayersCacheManager.getInstance().cachePlayerData(player.getNickname(), player);
@@ -111,6 +121,36 @@ public class PluginImpl {
         for (ToolsData tool : tools) {
             ToolsCacheManager.getInstance().cacheToolData(tool.getId(), tool);
         }
+    }
+
+    private void disableMonsters() {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (MonstersWorldHandler.getInstance().containsPlayer(player)) {
+
+                Location exit = LocationUtils.getInstance().getLocation(blizzard.development.monsters.monsters.enums.Locations.EXIT.getName());
+                if (exit != null) {
+                    player.teleportAsync(
+                            LocationUtils.getInstance().getLocation(blizzard.development.monsters.monsters.enums.Locations.EXIT.getName())
+                    );
+                }
+            }
+
+            for (MonstersData monstersData : MonstersCacheManager.getInstance().monstersCache.values()) {
+                if (monstersData.getOwner().equals(player.getName())) {
+                    HologramBuilder.getInstance().removeHologram(UUID.fromString(monstersData.getUuid()));
+                }
+            }
+
+            for (ItemStack item : player.getInventory().getContents()) {
+                if (item == null) continue;
+
+                if (ItemBuilder.hasPersistentData(PluginImpl.getInstance().plugin, item, "blizzard.monsters.compass")) {
+                    player.getInventory().remove(item);
+                }
+            }
+        }
+
+        protocolManager.removePacketListeners(plugin);
     }
 
     private void registerListeners() {

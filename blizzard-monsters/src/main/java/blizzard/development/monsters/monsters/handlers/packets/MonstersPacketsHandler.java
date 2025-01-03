@@ -3,6 +3,7 @@ package blizzard.development.monsters.monsters.handlers.packets;
 import blizzard.development.monsters.builders.hologram.HologramBuilder;
 import blizzard.development.monsters.database.cache.managers.MonstersCacheManager;
 import blizzard.development.monsters.database.storage.MonstersData;
+import blizzard.development.monsters.monsters.enums.Locations;
 import blizzard.development.monsters.monsters.handlers.monsters.MonstersHandler;
 import blizzard.development.monsters.monsters.handlers.packets.entity.EntitySpawn;
 import blizzard.development.monsters.monsters.handlers.packets.entity.EntityUpdate;
@@ -48,32 +49,6 @@ public class MonstersPacketsHandler {
         );
 
         monstersHandler.addMonster(player, List.of(uuid.toString()));
-    }
-
-//    public void removeMonster(Player player, UUID uuid) {
-//        EntityUpdate updateInfo = EntityUpdate.getInstance();
-//        EntitySpawn spawnEntity = EntitySpawn.getInstance();
-//
-//        updateInfo.removePlayerInfo(player, uuid, protocolManager);
-//
-//        spawnEntity.destroyEntity(player, uuid, protocolManager);
-//
-//        HologramBuilder.getInstance().removeHologram(uuid);
-//    }
-
-    public void clear() {
-        protocolManager.removePacketListeners(PluginImpl.getInstance().plugin);
-    }
-
-
-    public void removeAllMonsters() {
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            if (MonstersWorldHandler.getInstance().containsPlayer(player)) {
-                for (MonstersData monstersData : MonstersCacheManager.getInstance().monstersCache.values()) {
-                    HologramBuilder.getInstance().removeHologram(UUID.fromString(monstersData.getId()));
-                }
-            }
-        }
     }
 
     public static MonstersPacketsHandler getInstance() {

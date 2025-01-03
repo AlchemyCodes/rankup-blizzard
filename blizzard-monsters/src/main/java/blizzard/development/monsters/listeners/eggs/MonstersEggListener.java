@@ -4,6 +4,7 @@ import blizzard.development.monsters.builders.ItemBuilder;
 import blizzard.development.monsters.monsters.handlers.monsters.MonstersHandler;
 import blizzard.development.monsters.monsters.handlers.packets.MonstersPacketsHandler;
 import blizzard.development.monsters.monsters.handlers.world.MonstersWorldHandler;
+import blizzard.development.monsters.utils.CooldownUtils;
 import blizzard.development.monsters.utils.LocationUtils;
 import blizzard.development.monsters.utils.PluginImpl;
 import blizzard.development.monsters.utils.items.TextAPI;
@@ -23,6 +24,7 @@ import org.bukkit.util.Vector;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 public class MonstersEggListener implements Listener {
 
@@ -31,6 +33,7 @@ public class MonstersEggListener implements Listener {
     @EventHandler
     public void onEggInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
+        CooldownUtils cooldown = CooldownUtils.getInstance();
 
         if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
             MonstersHandler handler = MonstersHandler.getInstance();
@@ -56,7 +59,14 @@ public class MonstersEggListener implements Listener {
                 }
 
                 if (!monsters.contains(eggType)) {
-                    player.sendActionBar("§c§lEI! §cEste monstro não existe.");
+                    player.sendActionBar(TextAPI.parse("§c§lEI! §cEste monstro não existe."));
+                    return;
+                }
+
+                String cooldownName = "blizzard.monsters.egg-cooldown";
+
+                if (cooldown.isInCountdown(player, cooldownName) && !player.hasPermission("blizzard.monsters.admin")) {
+                    player.sendActionBar(TextAPI.parse("§c§lEI! §cAguarde um pouco antes de chocar um ovo."));
                     return;
                 }
 
@@ -94,7 +104,8 @@ public class MonstersEggListener implements Listener {
 
                 messages.forEach(player::sendMessage);
                 manageStack(player);
-                player.setCompassTarget(spawnLocation);
+
+                cooldown.createCountdown(player, cooldownName, 3, TimeUnit.SECONDS);
 
                 event.setCancelled(true);
             }

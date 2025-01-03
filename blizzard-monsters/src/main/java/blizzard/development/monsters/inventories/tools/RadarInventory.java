@@ -22,7 +22,7 @@ public class RadarInventory {
     private final MonstersHandler handler = MonstersHandler.getInstance();
 
     public void open(Player player, int page) {
-        ChestGui inventory = new ChestGui(5, "§8Gerenciar monstros (Página " + page + " )");
+        ChestGui inventory = new ChestGui(5, "§8Rastrear monstros (Página " + page + " )");
 
         StaticPane pane = new StaticPane(0, 0, 9, 5);
 
@@ -44,7 +44,9 @@ public class RadarInventory {
                 String monsterDisplay = handler.getDisplayName(monsterName);
                 Location monsterLocation = methods.getLocation(monsterUuid);
 
-                GuiItem monsterItem = new GuiItem(items.monster(monsterName), event -> {
+                String distance = Math.round(player.getLocation().distance(monsterLocation)) + " metro(s)";
+
+                GuiItem monsterItem = new GuiItem(items.monster(monsterName, distance), event -> {
                     setRadarLocation(player, monsterDisplay, monsterLocation);
                     event.setCancelled(true);
                 });
@@ -93,6 +95,9 @@ public class RadarInventory {
         messages.forEach(player::sendMessage);
 
         player.setCompassTarget(location);
+
+        MonstersHandler.getInstance().addMonsterInfo(player, location, displayName);
+
         player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_YES, 1.0f, 1.0f);
         player.getOpenInventory().close();
     }
