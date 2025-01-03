@@ -3,12 +3,14 @@ package blizzard.development.fishing.commands.subcommands;
 import blizzard.development.fishing.database.cache.methods.PlayersCacheMethod;
 import blizzard.development.fishing.database.cache.methods.RodsCacheMethod;
 import blizzard.development.fishing.enums.RodMaterials;
+import blizzard.development.fishing.utils.PluginImpl;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.Subcommand;
 import co.aikar.commands.annotation.Syntax;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 @CommandAlias("pesca")
@@ -92,6 +94,19 @@ public class SetCommands extends BaseCommand {
         }
     }
 
+    @Subcommand("setespecialista")
+    @Syntax("<jogador> <quantidade>")
+    @CommandPermission("pesca.admin")
+    public void setSpecialist(String targetName, int amount) {
+        Player target = Bukkit.getPlayer(targetName);
+        if (target != null) {
+            rodsMethod.setSpecialist(target, amount);
+            target.sendMessage("specialist foi atualizado para " + amount + ".");
+        } else {
+            System.out.println("Jogador não encontrado.");
+        }
+    }
+
     @Subcommand("setexperiente")
     @Syntax("<jogador> <quantidade>")
     @CommandPermission("pesca.admin")
@@ -135,5 +150,33 @@ public class SetCommands extends BaseCommand {
             rodsMethod.addMaterial(playerTarget, material);
             player.sendMessage("§fVocê deu o material " + material.name() + " para o jogador: " + playerTarget.getName() + "!");
         }
+    }
+
+    @Subcommand("setspawn")
+    @CommandPermission("pesca.admin")
+    public void setSpawn(Player player) {
+        YamlConfiguration locationsConfig = PluginImpl.getInstance().Locations.getConfig();
+
+        locationsConfig.set("spawn.world", player.getWorld().getName());
+        locationsConfig.set("spawn.x", player.getLocation().getX());
+        locationsConfig.set("spawn.y", player.getLocation().getY());
+        locationsConfig.set("spawn.z", player.getLocation().getZ());
+        locationsConfig.set("spawn.yaw", player.getLocation().getYaw());
+        locationsConfig.set("spawn.pitch", player.getLocation().getPitch());
+
+        PluginImpl.getInstance().Locations.saveConfig();
+    }
+
+    @Subcommand("setgeyser")
+    @CommandPermission("pesca.admin")
+    public void setGeyser(Player player) {
+        YamlConfiguration locationsConfig = PluginImpl.getInstance().Locations.getConfig();
+
+        locationsConfig.set("geyser.world", player.getWorld().getName());
+        locationsConfig.set("geyser.x", player.getLocation().getX());
+        locationsConfig.set("geyser.y", player.getLocation().getY());
+        locationsConfig.set("geyser.z", player.getLocation().getZ());
+
+        PluginImpl.getInstance().Locations.saveConfig();
     }
 }

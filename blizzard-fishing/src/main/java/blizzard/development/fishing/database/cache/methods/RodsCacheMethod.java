@@ -14,6 +14,19 @@ public class RodsCacheMethod {
 
     private final RodsCacheManager cache = RodsCacheManager.getInstance();
 
+    public int getSpecialist(Player player) {
+        RodsData data = RodsCacheManager.getInstance().getPlayerData(player);
+        return (data != null) ? data.getSpecialist() : 0;
+    }
+
+    public void setSpecialist(Player player, int specialist) {
+        RodsData data = RodsCacheManager.getInstance().getPlayerData(player);
+        if (data != null) {
+            data.setSpecialist(specialist);
+            cache.cachePlayerData(player, data);
+        }
+    }
+
     public int getStrength(Player player) {
         RodsData data = RodsCacheManager.getInstance().getPlayerData(player);
         return (data != null) ? data.getStrength() : 0;

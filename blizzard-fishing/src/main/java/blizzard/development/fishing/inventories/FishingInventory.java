@@ -6,6 +6,7 @@ import blizzard.development.fishing.handlers.FishingNetHandler;
 import blizzard.development.fishing.handlers.FishingRodHandler;
 import blizzard.development.fishing.handlers.FurnaceItemHandler;
 import blizzard.development.fishing.inventories.items.bucket.FishBucketInventory;
+import blizzard.development.fishing.utils.PluginImpl;
 import blizzard.development.fishing.utils.ProxyManager;
 import blizzard.development.fishing.utils.items.ItemBuilder;
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
@@ -13,8 +14,10 @@ import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
 import com.github.stefvanschie.inventoryframework.pane.util.Slot;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -28,14 +31,14 @@ public class FishingInventory {
         StaticPane pane = new StaticPane(0, 0, 9, 3);
 
         if (player.getWorld().getName().equals("pesca")) {
-            pane.addItem(createReturnButton(player), Slot.fromIndex(12));
+            pane.addItem(createReturnButton(player), Slot.fromIndex(13));
         } else {
-            pane.addItem(createGoButton(player), Slot.fromIndex(12));
+            pane.addItem(createGoButton(player), Slot.fromIndex(13));
         }
 
-        pane.addItem(createBucketItem(player), Slot.fromIndex(14));
-        pane.addItem(createBoosterButton(player), Slot.fromIndex(16));
-        pane.addItem(createMaterialsButton(player), Slot.fromIndex(10));
+        pane.addItem(createBucketItem(player), Slot.fromIndex(15));
+//        pane.addItem(createBoosterButton(player), Slot.fromIndex(16));
+        pane.addItem(createMaterialsButton(player), Slot.fromIndex(11));
 
         gui.addPane(pane);
         gui.show(player);
@@ -58,13 +61,25 @@ public class FishingInventory {
     }
 
     private static GuiItem createGoButton(Player player) {
-        World world = Bukkit.getWorld("pesca");
+        YamlConfiguration locationsConfig = PluginImpl.getInstance().Locations.getConfig();
+
+        Location location = new Location(
+                Bukkit.getWorld(locationsConfig.getString("spawn.world")),
+                locationsConfig.getDouble("spawn.x"),
+                locationsConfig.getDouble("spawn.y"),
+                locationsConfig.getDouble("spawn.z"),
+                (float) locationsConfig.getDouble("spawn.yaw"),
+                (float) locationsConfig.getDouble("spawn.pitch"));
 
         return new GuiItem(goFishing(), event -> {
             event.setCancelled(true);
 
-            assert world != null;
-            player.teleport(world.getSpawnLocation());
+            if (!isInventoryEmpty(player)) {
+                player.sendMessage("§cSeu inventário precisa estar vazio!");
+                return;
+            }
+
+            player.teleport(location);
 
             FishingRodHandler.setRod(player, 0);
             FishingNetHandler.setNet(player, 3);
@@ -73,12 +88,12 @@ public class FishingInventory {
         });
     }
 
-    private static GuiItem createBoosterButton(Player player) {
-        return new GuiItem(boosters(), event -> {
-            event.setCancelled(true);
-            BoosterInventory.openBooster(player);
-        });
-    }
+//    private static GuiItem createBoosterButton(Player player) {
+//        return new GuiItem(boosters(), event -> {
+//            event.setCancelled(true);
+//            BoosterInventory.openBooster(player);
+//        });
+//    }
 
     private static GuiItem createMaterialsButton(Player player) {
         return new GuiItem(materials(), event -> {

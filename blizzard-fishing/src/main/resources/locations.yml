@@ -1,0 +1,13 @@
+spawn:
+  world: "pesca"
+  x: 37
+  y: 21
+  z: 27
+  pitch: -47
+  yaw: 1
+
+geyser:
+  world: "pesca"
+  x: 3
+  y: 19
+  z: 22
