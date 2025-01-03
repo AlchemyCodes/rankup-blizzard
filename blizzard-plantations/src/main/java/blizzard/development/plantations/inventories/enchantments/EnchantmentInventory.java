@@ -4,6 +4,7 @@ import blizzard.development.plantations.Main;
 import blizzard.development.plantations.builder.ItemBuilder;
 import blizzard.development.plantations.database.cache.methods.PlayerCacheMethod;
 import blizzard.development.plantations.database.cache.methods.ToolCacheMethod;
+import blizzard.development.plantations.inventories.enchantments.upgrade.EnchantmentUpgradeInventory;
 import blizzard.development.plantations.managers.upgrades.blizzard.BlizzardManager;
 import blizzard.development.plantations.managers.upgrades.explosion.ExplosionManager;
 import blizzard.development.plantations.managers.upgrades.lightning.LightningManager;
@@ -54,123 +55,141 @@ public class EnchantmentInventory {
         int seeds = playerCacheMethod.getPlantations(player);
 
         GuiItem explosion = new GuiItem(explosion(id, player), event -> {
-            if (explosionCost > seeds) {
-                int subtraction = explosionCost - seeds;
+//            if (explosionCost > seeds) {
+//                int subtraction = explosionCost - seeds;
+//
+//                player.closeInventory();
+//                player.sendMessage("");
+//                player.sendMessage(" §c§lEI! §cVocê não possui sementes para evoluir.");
+//                player.sendMessage(" §cFaltam §l" + formatNumber(subtraction) + "§c sementes para executar a ação.");
+//                player.sendMessage("");
+//                return;
+//            }
+//
+//            toolCacheMethod.setExplosion(id, explosionEnchant + 1);
+//
+//            open(player);
+//            playerCacheMethod.setPlantations(player, seeds - explosionCost);
+//            player.sendActionBar("§a§lYAY! §aVocê evoluiu o encantamento ´§fExplosão§a´ com sucesso!");
 
-                player.closeInventory();
-                player.sendMessage("");
-                player.sendMessage(" §c§lEI! §cVocê não possui sementes para evoluir.");
-                player.sendMessage(" §cFaltam §l" + formatNumber(subtraction) + "§c sementes para executar a ação.");
-                player.sendMessage("");
-                return;
-            }
-
-            toolCacheMethod.setExplosion(id, explosionEnchant + 1);
-
-            open(player);
-            playerCacheMethod.setPlantations(player, seeds - explosionCost);
-            player.sendActionBar("§a§lYAY! §aVocê evoluiu o encantamento ´§fExplosão§a´ com sucesso!");
+            EnchantmentUpgradeInventory enchantmentUpgradeInventory = new EnchantmentUpgradeInventory();
+            enchantmentUpgradeInventory.open(player, "Explosão");
            event.setCancelled(true);
         });
 
         GuiItem agility = new GuiItem(agility(id, player), event -> {
-            if (toolCacheMethod.getAgility(id) == 2) {
-                player.sendActionBar("§c§lEI! §cA ferramenta já atingiu o nível máximo desse encantamento.");
-                player.closeInventory();
-                return;
-            }
+//            if (toolCacheMethod.getAgility(id) == 2) {
+//                player.sendActionBar("§c§lEI! §cA ferramenta já atingiu o nível máximo desse encantamento.");
+//                player.closeInventory();
+//                return;
+//            }
+//
+//            if (agilityCost > seeds) {
+//                int subtraction = agilityCost - seeds;
+//
+//                player.closeInventory();
+//                player.sendMessage("");
+//                player.sendMessage(" §c§lEI! §cVocê não possui sementes para evoluir.");
+//                player.sendMessage(" §cFaltam §l" + formatNumber(subtraction) + "§c sementes para executar a ação.");
+//                player.sendMessage("");
+//                return;
+//            }
+//
+//            toolCacheMethod.setAgility(id, agilityEnchant + 1);
+//
+//            open(player);
+//            player.sendActionBar("§a§lYAY! §aVocê evoluiu o encantamento ´§fAgilidade§a´ com sucesso!");
 
-            if (agilityCost > seeds) {
-                int subtraction = agilityCost - seeds;
-
-                player.closeInventory();
-                player.sendMessage("");
-                player.sendMessage(" §c§lEI! §cVocê não possui sementes para evoluir.");
-                player.sendMessage(" §cFaltam §l" + formatNumber(subtraction) + "§c sementes para executar a ação.");
-                player.sendMessage("");
-                return;
-            }
-
-            toolCacheMethod.setAgility(id, agilityEnchant + 1);
-
-            open(player);
-            player.sendActionBar("§a§lYAY! §aVocê evoluiu o encantamento ´§fAgilidade§a´ com sucesso!");
+            EnchantmentUpgradeInventory enchantmentUpgradeInventory = new EnchantmentUpgradeInventory();
+            enchantmentUpgradeInventory.open(player, "Agilidade");
             event.setCancelled(true);
         });
 
         GuiItem botany = new GuiItem(botany(id, player), event -> {
-            if (botanyCost > seeds) {
-                int subtraction = botanyCost - seeds;
+//            if (botanyCost > seeds) {
+//                int subtraction = botanyCost - seeds;
+//
+//                player.closeInventory();
+//                player.sendMessage("");
+//                player.sendMessage(" §c§lEI! §cVocê não possui sementes para evoluir.");
+//                player.sendMessage(" §cFaltam §l" + formatNumber(subtraction) + "§c sementes para executar a ação.");
+//                player.sendMessage("");
+//                return;
+//            }
+//
+//            toolCacheMethod.setBotany(id, botanyEnchant + 1);
+//
+//            open(player);
+//            player.sendActionBar("§a§lYAY! §aVocê evoluiu o encantamento ´§fBotânico§a´ com sucesso!");
 
-                player.closeInventory();
-                player.sendMessage("");
-                player.sendMessage(" §c§lEI! §cVocê não possui sementes para evoluir.");
-                player.sendMessage(" §cFaltam §l" + formatNumber(subtraction) + "§c sementes para executar a ação.");
-                player.sendMessage("");
-                return;
-            }
-
-            toolCacheMethod.setBotany(id, botanyEnchant + 1);
-
-            open(player);
-            player.sendActionBar("§a§lYAY! §aVocê evoluiu o encantamento ´§fBotânico§a´ com sucesso!");
+            EnchantmentUpgradeInventory enchantmentUpgradeInventory = new EnchantmentUpgradeInventory();
+            enchantmentUpgradeInventory.open(player, "Botânico");
             event.setCancelled(true);
         });
 
         GuiItem thunderstorm = new GuiItem(thunderstorm(id, player), event -> {
-            if (thunderstormCost > seeds) {
-                int subtraction = thunderstormCost - seeds;
+//            if (thunderstormCost > seeds) {
+//                int subtraction = thunderstormCost - seeds;
+//
+//                player.closeInventory();
+//                player.sendMessage("");
+//                player.sendMessage(" §c§lEI! §cVocê não possui sementes para evoluir.");
+//                player.sendMessage(" §cFaltam §l" + formatNumber(subtraction) + "§c sementes para executar a ação.");
+//                player.sendMessage("");
+//                return;
+//            }
+//
+//            toolCacheMethod.setThunderstorm(id, thunderstormEnchant + 1);
+//
+//            open(player);
+//            player.sendActionBar("§a§lYAY! §aVocê evoluiu o encantamento ´§fTrovoada§a´ com sucesso!");
 
-                player.closeInventory();
-                player.sendMessage("");
-                player.sendMessage(" §c§lEI! §cVocê não possui sementes para evoluir.");
-                player.sendMessage(" §cFaltam §l" + formatNumber(subtraction) + "§c sementes para executar a ação.");
-                player.sendMessage("");
-                return;
-            }
-
-            toolCacheMethod.setThunderstorm(id, thunderstormEnchant + 1);
-
-            open(player);
-            player.sendActionBar("§a§lYAY! §aVocê evoluiu o encantamento ´§fTrovoada§a´ com sucesso!");
+            EnchantmentUpgradeInventory enchantmentUpgradeInventory = new EnchantmentUpgradeInventory();
+            enchantmentUpgradeInventory.open(player, "Trovoada");
             event.setCancelled(true);
         });
 
         GuiItem xray = new GuiItem(xray(id, player), event -> {
-            if (xrayCost > seeds) {
-                int subtraction = xrayCost - seeds;
+//            if (xrayCost > seeds) {
+//                int subtraction = xrayCost - seeds;
+//
+//                player.closeInventory();
+//                player.sendMessage("");
+//                player.sendMessage(" §c§lEI! §cVocê não possui sementes para evoluir.");
+//                player.sendMessage(" §cFaltam §l" + formatNumber(subtraction) + "§c sementes para executar a ação.");
+//                player.sendMessage("");
+//                return;
+//            }
+//
+//            toolCacheMethod.setXray(id, xrayEnchant + 1);
+//
+//            open(player);
+//            player.sendActionBar("§a§lYAY! §aVocê evoluiu o encantamento ´§fRaio-X§a´ com sucesso!");
 
-                player.closeInventory();
-                player.sendMessage("");
-                player.sendMessage(" §c§lEI! §cVocê não possui sementes para evoluir.");
-                player.sendMessage(" §cFaltam §l" + formatNumber(subtraction) + "§c sementes para executar a ação.");
-                player.sendMessage("");
-                return;
-            }
-
-            toolCacheMethod.setXray(id, xrayEnchant + 1);
-
-            open(player);
-            player.sendActionBar("§a§lYAY! §aVocê evoluiu o encantamento ´§fRaio-X§a´ com sucesso!");
+            EnchantmentUpgradeInventory enchantmentUpgradeInventory = new EnchantmentUpgradeInventory();
+            enchantmentUpgradeInventory.open(player, "Raio-X");
             event.setCancelled(true);
         });
 
         GuiItem blizzard = new GuiItem(blizzard(id, player), event -> {
-            if (blizzardCost > seeds) {
-                int subtraction = blizzardCost - seeds;
+//            if (blizzardCost > seeds) {
+//                int subtraction = blizzardCost - seeds;
+//
+//                player.closeInventory();
+//                player.sendMessage("");
+//                player.sendMessage(" §c§lEI! §cVocê não possui sementes para evoluir.");
+//                player.sendMessage(" §cFaltam §l" + formatNumber(subtraction) + "§c sementes para executar a ação.");
+//                player.sendMessage("");
+//                return;
+//            }
+//
+//            toolCacheMethod.setBlizzard(id, blizzardEnchant + 1);
+//
+//            open(player);
+//            player.sendActionBar("§a§lYAY! §aVocê evoluiu o encantamento ´§fNevasca§a´ com sucesso!");
 
-                player.closeInventory();
-                player.sendMessage("");
-                player.sendMessage(" §c§lEI! §cVocê não possui sementes para evoluir.");
-                player.sendMessage(" §cFaltam §l" + formatNumber(subtraction) + "§c sementes para executar a ação.");
-                player.sendMessage("");
-                return;
-            }
-
-            toolCacheMethod.setBlizzard(id, blizzardEnchant + 1);
-
-            open(player);
-            player.sendActionBar("§a§lYAY! §aVocê evoluiu o encantamento ´§fNevasca§a´ com sucesso!");
+            EnchantmentUpgradeInventory enchantmentUpgradeInventory = new EnchantmentUpgradeInventory();
+            enchantmentUpgradeInventory.open(player, "Nevasca");
             event.setCancelled(true);
         });
 
@@ -209,18 +228,18 @@ public class EnchantmentInventory {
             "§cClique para evoluir."
         );
 
-        if (playerCacheMethod.getPlantations(player) < 1000) {
-            material = Material.RED_STAINED_GLASS_PANE;
-            displayName = "§cExplosão §l" + toolCacheMethod.getExplosion(id);
-            lore = Arrays.asList(
-                "§7Receba efeitos de",
-                "§7velocidade na estufa.",
-                "",
-                " §fCusto: §a✿50K",
-                "",
-                "§cSementes insuficientes."
-            );
-        }
+//        if (playerCacheMethod.getPlantations(player) < 1000) {
+//            material = Material.RED_STAINED_GLASS_PANE;
+//            displayName = "§cExplosão §l" + toolCacheMethod.getExplosion(id);
+//            lore = Arrays.asList(
+//                "§7Receba efeitos de",
+//                "§7velocidade na estufa.",
+//                "",
+//                " §fCusto: §a✿50K",
+//                "",
+//                "§cSementes insuficientes."
+//            );
+//        }
 
         return new ItemBuilder(material)
             .setDisplayName(displayName)
@@ -252,18 +271,18 @@ public class EnchantmentInventory {
             );
         }
 
-        if (playerCacheMethod.getPlantations(player) < 1000) {
-            material = Material.RED_STAINED_GLASS_PANE;
-            displayName = "§cAgilidade §l" + toolCacheMethod.getAgility(id);
-            lore = Arrays.asList(
-                "§7Receba efeitos de",
-                "§7velocidade na estufa.",
-                "",
-                " §7Custo: §a✿10K",
-                "",
-                "§cSementes insuficientes."
-            );
-        }
+//        if (playerCacheMethod.getPlantations(player) < 1000) {
+//            material = Material.RED_STAINED_GLASS_PANE;
+//            displayName = "§cAgilidade §l" + toolCacheMethod.getAgility(id);
+//            lore = Arrays.asList(
+//                "§7Receba efeitos de",
+//                "§7velocidade na estufa.",
+//                "",
+//                " §7Custo: §a✿10K",
+//                "",
+//                "§cSementes insuficientes."
+//            );
+//        }
 
         return new ItemBuilder(material)
             .setDisplayName(displayName)
@@ -285,18 +304,18 @@ public class EnchantmentInventory {
             "§aClique para evoluir."
         );
 
-        if (playerCacheMethod.getPlantations(player) < 1000) {
-            material = Material.RED_STAINED_GLASS_PANE;
-            displayName = "§cBotânico §l" + toolCacheMethod.getBotany(id);
-            lore = Arrays.asList(
-                "§7Ganhe mais sementes ao",
-                "§7reaproveitar as plantações.",
-                "",
-                " §fCusto: §a✿50K",
-                "",
-                "§cSementes insuficientes."
-            );
-        }
+//        if (playerCacheMethod.getPlantations(player) < 1000) {
+//            material = Material.RED_STAINED_GLASS_PANE;
+//            displayName = "§cBotânico §l" + toolCacheMethod.getBotany(id);
+//            lore = Arrays.asList(
+//                "§7Ganhe mais sementes ao",
+//                "§7reaproveitar as plantações.",
+//                "",
+//                " §fCusto: §a✿50K",
+//                "",
+//                "§cSementes insuficientes."
+//            );
+//        }
 
         return new ItemBuilder(material)
             .setDisplayName(displayName)
@@ -318,18 +337,18 @@ public class EnchantmentInventory {
             "<#00aaaa>Clique para evoluir.<#00aaaa>"
         );
 
-        if (playerCacheMethod.getPlantations(player) < 1000) {
-            material = Material.RED_STAINED_GLASS_PANE;
-            displayName = "§cTrovoada §l" + toolCacheMethod.getThunderstorm(id);
-            lore = Arrays.asList(
-                "§7Invoque uma trovoada para",
-                "§7quebrar suas plantações.",
-                "",
-                " §fCusto: §a✿50K",
-                "",
-                "§cSementes insuficientes."
-            );
-        }
+//        if (playerCacheMethod.getPlantations(player) < 1000) {
+//            material = Material.RED_STAINED_GLASS_PANE;
+//            displayName = "§cTrovoada §l" + toolCacheMethod.getThunderstorm(id);
+//            lore = Arrays.asList(
+//                "§7Invoque uma trovoada para",
+//                "§7quebrar suas plantações.",
+//                "",
+//                " §fCusto: §a✿50K",
+//                "",
+//                "§cSementes insuficientes."
+//            );
+//        }
 
         return new ItemBuilder(material)
             .setDisplayName(displayName)
@@ -340,7 +359,7 @@ public class EnchantmentInventory {
     private ItemStack xray(String id, Player player) {
 
         Material material = Material.FLINT;
-        String displayName = "<#555555>Ra<#737373><#737373>io-X!<#555555> §8§l" + toolCacheMethod.getXray(id);
+        String displayName = "<#555555>Ra<#737373><#737373>io-X<#555555> §8§l" + toolCacheMethod.getXray(id);
         List<String> lore = Arrays.asList(
             "§7Quebre em formato de X",
             "§7as suas plantações.",
@@ -351,18 +370,18 @@ public class EnchantmentInventory {
             "<#737373>Clique para evoluir.<#737373>"
         );
 
-        if (playerCacheMethod.getPlantations(player) < 1000) {
-            material = Material.RED_STAINED_GLASS_PANE;
-            displayName = "§cRaio-X §l" + toolCacheMethod.getXray(id);
-            lore = Arrays.asList(
-                "§7Quebre em formato de X",
-                "§7as suas plantações.",
-                "",
-                " §fCusto: §a✿50K",
-                "",
-                "§cSementes insuficientes."
-            );
-        }
+//        if (playerCacheMethod.getPlantations(player) < 1000) {
+//            material = Material.RED_STAINED_GLASS_PANE;
+//            displayName = "§cRaio-X §l" + toolCacheMethod.getXray(id);
+//            lore = Arrays.asList(
+//                "§7Quebre em formato de X",
+//                "§7as suas plantações.",
+//                "",
+//                " §fCusto: §a✿50K",
+//                "",
+//                "§cSementes insuficientes."
+//            );
+//        }
 
         return new ItemBuilder(material)
             .setDisplayName(displayName)
@@ -384,18 +403,18 @@ public class EnchantmentInventory {
             "<#72f7f7>Clique para evoluir.<#72f7f7>"
         );
 
-        if (playerCacheMethod.getPlantations(player) < 1000) {
-            material = Material.RED_STAINED_GLASS_PANE;
-            displayName = "§cNevasca §l" + toolCacheMethod.getBlizzard(id);
-            lore = Arrays.asList(
-                "§7Ganhe mais sementes a",
-                "§7cada plantação quebrada.",
-                "",
-                " §fCusto: §a✿50K",
-                "",
-                "§cSementes insuficientes."
-            );
-        }
+//        if (playerCacheMethod.getPlantations(player) < 1000) {
+//            material = Material.RED_STAINED_GLASS_PANE;
+//            displayName = "§cNevasca §l" + toolCacheMethod.getBlizzard(id);
+//            lore = Arrays.asList(
+//                "§7Ganhe mais sementes a",
+//                "§7cada plantação quebrada.",
+//                "",
+//                " §fCusto: §a✿50K",
+//                "",
+//                "§cSementes insuficientes."
+//            );
+//        }
 
         return new ItemBuilder(material)
             .setDisplayName(displayName)
