@@ -47,9 +47,7 @@ public class AreaAdapter implements AreaFactory {
                 i++;
 
                 if (i == 2) {
-                    player.teleport(location);
-                    String id = getPersistentData(Main.getInstance(), item, "ferramenta-id");
-                    AgilityManager.check(player, id);
+                    player.teleport(location.add(0, 2, 0));
                 }
 
                 if (i == 5) {
@@ -72,11 +70,17 @@ public class AreaAdapter implements AreaFactory {
                         );
 
                     player.clearActivePotionEffects();
+
+                    player.setAllowFlight(true);
+                    player.setFlying(true);
+                    String id = getPersistentData(Main.getInstance(), item, "ferramenta-id");
+                    AgilityManager.check(player, id);
+
                     this.cancel();
                 }
 
-                player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 2, 8));
-                player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20 * 2, 100000));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 3, 8));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20 * 3, 100000));
 
 //                if (player.hasPermission("*")) {
 //                    player.clearActivePotionEffects();

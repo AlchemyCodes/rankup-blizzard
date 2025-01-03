@@ -32,6 +32,7 @@ import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 import static blizzard.development.plantations.builder.ItemBuilder.getPersistentData;
+import static blizzard.development.plantations.utils.NumberFormat.formatNumber;
 
 public class FarmInventory {
 
@@ -39,8 +40,6 @@ public class FarmInventory {
     public void open(Player player) {
         ChestGui inventory = new ChestGui(3, "Estufa");
         StaticPane pane = new StaticPane(0, 0, 9, 3);
-
-        ItemStack item = player.getInventory().getItemInMainHand();
 
         Location location = LocationUtils.getPlantationSpawnLocation();
         Location spawn = LocationUtils.getSpawnLocation();
@@ -163,19 +162,22 @@ public class FarmInventory {
     }
 
     private ItemStack tool() {
-        return new ItemBuilder(Material.GOLDEN_HOE)
-            .setDisplayName("§6Ferramenta de Cultivo")
+        return new ItemBuilder(Material.WOODEN_HOE)
+            .setDisplayName("<#a88459>Cultivadora de Madeira<#a88459>")
             .setLore(Arrays.asList(
                 "§7Use esta ferramenta para",
                 "§7cultivar plantações.",
                 "",
-                " §6Encantamentos:",
+                " <#a88459>Encantamentos:<#a88459>",
                 "  §7Durabilidade §l∞",
                 "  §7Agilidade §l0",
-                "  §7Botânico §l0",
-                "  §7Explosão §l0",
+                "  §7Botânico §l1",
+                "  §7Explosão §l1",
+                "  §7Trovoada §l1",
+                "  §7Nevasca §l1",
+                "  §7Raio-X §l1",
                 "",
-                "§6Clique para resgatar."
+                "<#a88459>Pressione shift + b. direito.<#a88459>"
             ))
             .build();
     }

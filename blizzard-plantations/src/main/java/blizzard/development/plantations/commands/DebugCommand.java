@@ -18,6 +18,6 @@ public class DebugCommand extends BaseCommand {
         ItemStack item = player.getInventory().getItemInMainHand();
 
 
-        player.sendMessage("nbts: " + item.getItemMeta().getPersistentDataContainer().getKeys());
+        System.out.println("nbts: " + item.getItemMeta().getPersistentDataContainer().getKeys());
     }
 }

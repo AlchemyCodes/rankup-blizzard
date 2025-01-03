@@ -5,14 +5,11 @@ import blizzard.development.plantations.database.cache.methods.PlayerCacheMethod
 import blizzard.development.plantations.database.cache.methods.ToolCacheMethod;
 import blizzard.development.plantations.managers.AreaManager;
 import blizzard.development.plantations.managers.BlockManager;
-import blizzard.development.plantations.managers.PlantationManager;
 import blizzard.development.plantations.managers.upgrades.blizzard.BlizzardEffect;
 import blizzard.development.plantations.managers.upgrades.blizzard.BlizzardManager;
 import blizzard.development.plantations.managers.upgrades.explosion.ExplosionManager;
 import blizzard.development.plantations.managers.upgrades.lightning.LightningManager;
 import blizzard.development.plantations.managers.upgrades.xray.XrayManager;
-import blizzard.development.plantations.plantations.enums.PlantationEnum;
-import blizzard.development.plantations.plantations.enums.ToolsEnum;
 import blizzard.development.plantations.plantations.item.ToolBuildItem;
 import blizzard.development.plantations.tasks.PlantationRegenTask;
 import blizzard.development.plantations.utils.packets.PacketUtils;
@@ -34,7 +31,6 @@ import java.util.logging.Logger;
 
 import static blizzard.development.plantations.builder.ItemBuilder.getPersistentData;
 import static blizzard.development.plantations.builder.ItemBuilder.hasPersistentData;
-import static blizzard.development.plantations.tasks.HologramTask.initializeHologramTask;
 
 public class PlantationBreakListener extends PacketAdapter {
     private static final Logger LOGGER = Logger.getLogger(PlantationBreakListener.class.getName());
@@ -123,17 +119,18 @@ public class PlantationBreakListener extends PacketAdapter {
 
         plantations.put(player, plantationToRegen);
 
-        List<String> players = PlayerCacheMethod
+        List<String> friends = PlayerCacheMethod
             .getInstance()
             .getFriends(player);
 
-        for (String playerName : players) {
-            Player player1 = Bukkit.getPlayer(playerName);
-            if (player1 != null) {
+        for (String friend : friends) {
+            Player playerFriends = Bukkit.getPlayer(friend);
+
+            if (playerFriends != null) {
                 PacketUtils.getInstance().sendPacket(
-                    player1,
+                    playerFriends,
                     plantationToRegen,
-                    Material.getMaterial(AreaManager.getInstance().getAreaPlantation(player1))
+                    Material.getMaterial(AreaManager.getInstance().getAreaPlantation(playerFriends))
                 );
             }
         }
@@ -156,9 +153,15 @@ public class PlantationBreakListener extends PacketAdapter {
         XrayManager.check(player, plantationToRegen, id);
         BlizzardManager.check(player, id);
 
-        plantations.forEach((p, plantation) -> {
-            PlantationRegenTask.create(plantationToRegen, player, "LucwsH", 3);
-        });
+        for (String friend : friends) {
+            Player playerFriends = Bukkit.getPlayer(friend);
+
+            if (playerFriends != null) {
+                plantations.forEach((p, plantation) -> {
+                    PlantationRegenTask.create(plantationToRegen, player, playerFriends.getName(), 3);
+                });
+            }
+        }
 
 
         int seeds = 0;
@@ -215,75 +218,7 @@ public class PlantationBreakListener extends PacketAdapter {
         if (BlizzardEffect.getInstance().blizzard.containsKey(player)) {
             player.sendActionBar("§d§lEstufa! §8▼ §b§l+20 §b★ §8▶ §7[20% de Bônus] §8✎ §bNevasca ativada!");
         } else {
-            player.sendActionBar("§d§lEstufa! §8▼ §a§l+" + seeds + " §a★ §8▶ §7[20% de Bônus]");
+            player.sendActionBar("§d§lEstufa! §8▼ §a§l+" + seeds + " §a★ §8▶ §7[10% de Bônus]");
         }
     }
-
-//    private void updateTool(String id, Player player, int botany, int agility, int explosion, int thunderstorm, int xray, int blizzard) {
-//        ToolCacheMethod toolCacheMethod = ToolCacheMethod.getInstance();
-//
-//
-//        switch (toolCacheMethod.getSkin(id)) {
-//            case "WOODEN" -> player.getInventory().setItemInMainHand(ToolBuildItem.tool(
-//                id,
-//                ToolsEnum.WOODEN.getMaterial(),
-//                toolCacheMethod.getBlocks(id),
-//                botany,
-//                agility,
-//                explosion,
-//                thunderstorm,
-//                xray,
-//                blizzard,
-//                1
-//            ));
-//            case "STONE" -> player.getInventory().setItemInMainHand(ToolBuildItem.tool(
-//                id,
-//                ToolsEnum.STONE.getMaterial(),
-//                toolCacheMethod.getBlocks(id),
-//                botany,
-//                agility,
-//                explosion,
-//                thunderstorm,
-//                xray,
-//                blizzard,
-//                1
-//            ));
-//            case "IRON" -> player.getInventory().setItemInMainHand(ToolBuildItem.tool(
-//                id,
-//                ToolsEnum.IRON.getMaterial(),
-//                toolCacheMethod.getBlocks(id),
-//                botany,
-//                agility,
-//                explosion,
-//                thunderstorm,
-//                xray,
-//                blizzard,
-//                1
-//            ));
-//            case "GOLD" -> player.getInventory().setItemInMainHand(ToolBuildItem.tool(
-//                id,
-//                ToolsEnum.GOLD.getMaterial(),
-//                toolCacheMethod.getBlocks(id),
-//                botany,
-//                agility,
-//                explosion,
-//                thunderstorm,
-//                xray,
-//                blizzard,
-//                1
-//            ));
-//            case "DIAMOND" -> player.getInventory().setItemInMainHand(ToolBuildItem.tool(
-//                id,
-//                ToolsEnum.DIAMOND.getMaterial(),
-//                toolCacheMethod.getBlocks(id),
-//                botany,
-//                agility,
-//                explosion,
-//                thunderstorm,
-//                xray,
-//                blizzard,
-//                1
-//            ));
-//        }
-//      }
 }

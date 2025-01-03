@@ -10,6 +10,7 @@ import blizzard.development.plantations.managers.PlantationManager;
 import blizzard.development.plantations.managers.upgrades.agility.AgilityManager;
 import blizzard.development.plantations.plantations.adapters.AreaAdapter;
 import blizzard.development.plantations.plantations.adapters.ToolAdapter;
+import blizzard.development.plantations.plantations.enums.PlantationEnum;
 import blizzard.development.plantations.plantations.enums.ToolsEnum;
 import blizzard.development.plantations.plantations.item.ToolBuildItem;
 import blizzard.development.plantations.utils.CooldownUtils;
@@ -35,6 +36,8 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.time.Duration;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static blizzard.development.plantations.builder.ItemBuilder.getPersistentData;
@@ -263,6 +266,7 @@ public class FarmCommand extends BaseCommand {
         AreaManager areaManager = AreaManager.getInstance();
         areaManager.setArea(player, 10);
         areaManager.resetArea(player);
+        areaManager.setAreaPlantation(player, PlantationEnum.POTATO);
     }
 
 
@@ -331,6 +335,7 @@ public class FarmCommand extends BaseCommand {
         ToolCacheMethod toolCacheMethod = ToolCacheMethod.getInstance();
 
         switch (toolsEnum) {
+            case WOODEN -> toolCacheMethod.setSkin(id, ToolsEnum.WOODEN);
             case STONE -> toolCacheMethod.setSkin(id, ToolsEnum.STONE);
             case IRON -> toolCacheMethod.setSkin(id, ToolsEnum.IRON);
             case GOLD -> toolCacheMethod.setSkin(id, ToolsEnum.GOLD);
@@ -360,6 +365,19 @@ public class FarmCommand extends BaseCommand {
 
         if (target == null) {
             player.sendActionBar("§c§lEI! §cO jogador está offline ou não existe.");
+
+
+            List<String>  message = Arrays.asList(
+                "",
+                " §3§lMonstros! §3Capturamos todos os seus monstros.",
+                " §7Você pode pegá-los novamente no §7´§o§f/gaiola§7´.",
+                ""
+            );
+
+            for (String messages : message) {
+                player.sendMessage(messages);
+            }
+
             return;
         }
 
