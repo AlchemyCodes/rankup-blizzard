@@ -11,6 +11,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
@@ -18,6 +20,8 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.projectiles.ProjectileSource;
+
+import java.util.Objects;
 
 public final class FishingListener implements Listener {
 
@@ -77,6 +81,32 @@ public final class FishingListener implements Listener {
         FishingCacheManager.removeFisherman(player.getUniqueId());
         YamlConfiguration config = PluginImpl.getInstance().Messages.getConfig();
         player.sendTitle(config.getString("pesca.pararPescar.title"), config.getString("pesca.pararPescar.sub-title"));
+    }
+
+    @EventHandler
+    public void onDrop(PlayerDropItemEvent event) {
+        if (!event.getPlayer().getWorld().getName().equalsIgnoreCase("pesca")) return;
+
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onFish(PlayerFishEvent event) {
+        if (!event.getPlayer().getWorld().getName().equalsIgnoreCase("pesca")) return;
+
+        if (event.getCaught() == null) return;
+
+        event.getCaught().remove();
+        event.setExpToDrop(0);
+    }
+
+    @EventHandler
+    public void onInventoryInteract(InventoryClickEvent event) {
+        if (!event.getWhoClicked().getWorld().getName().equalsIgnoreCase("pesca")) return;
+
+        if (event.getClickedInventory() instanceof PlayerInventory) {
+            event.setCancelled(true);
+        }
     }
 
     @EventHandler

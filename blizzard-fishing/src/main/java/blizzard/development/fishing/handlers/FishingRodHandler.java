@@ -21,14 +21,24 @@ public class FishingRodHandler {
         Plugin plugin = PluginImpl.getInstance().plugin;
         RodsCacheMethod instance = RodsCacheMethod.getInstance();
 
-        ItemStack rod = new ItemBuilder(Material.FISHING_ROD)
+        ItemStack rod = getRod(player, instance, plugin);
+
+        ItemMeta meta = rod.getItemMeta();
+        meta.setUnbreakable(true);
+        rod.setItemMeta(meta);
+
+        player.getInventory().setItem(slot, rod);
+    }
+
+    public static ItemStack getRod(Player player, RodsCacheMethod instance, Plugin plugin) {
+        return new ItemBuilder(Material.FISHING_ROD)
                 .setDisplayName("§6Vara de Pesca")
                 .setLore(Arrays.asList(
                         "§7Utilize esse vara para",
                         "§7pescar uma varidade de peixes.",
                         "",
                         " §6Encantamentos:",
-                        "  §7XXXXXXXX §l{rod_enchant_xxxxxx}",
+                        "  §7Especialista §l" + instance.getSpecialist(player),
                         "  §7Experiente §l" + instance.getExperienced(player),
                         "  §7Sortudo §l" + instance.getLucky(player),
                         "",
@@ -37,12 +47,6 @@ public class FishingRodHandler {
                         ""))
                 .addPersistentData(plugin, key, 1)
                 .build();
-
-        ItemMeta meta = rod.getItemMeta();
-        meta.setUnbreakable(true);
-        rod.setItemMeta(meta);
-
-        player.getInventory().setItem(slot, rod);
     }
 
     public static boolean isRod(Player player) {

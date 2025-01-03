@@ -14,9 +14,13 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 public class FishingNetTask implements Runnable {
 
-    public static boolean isCatchingTrash = false;
+    private static final Map<UUID, Boolean> catchingTrashMap = new HashMap<>();
 
     public FishingNetTask(Plugin main) {
         main.getServer()
@@ -25,37 +29,53 @@ public class FishingNetTask implements Runnable {
                         20L * PluginImpl.getInstance().Enchantments.getConfig().getInt("enchantments.trash.cooldown"));
     }
 
+    public static boolean isCatchingTrash(Player player) {
+        return catchingTrashMap.getOrDefault(player.getUniqueId(), false);
+    }
+
+
+    public static void setCatchingTrash(Player player, boolean isCatchingTrash) {
+        catchingTrashMap.put(player.getUniqueId(), isCatchingTrash);
+    }
+
     @Override
     public void run() {
-        if (!(isCatchingTrash)) return;
-
         for (Player player : Bukkit.getOnlinePlayers()) {
+            UUID playerId = player.getUniqueId();
+
+            if (!catchingTrashMap.getOrDefault(playerId, false)) {
+                continue;
+            }
+
             PluginImpl instance = PluginImpl.getInstance();
             PlayersCacheMethod cacheMethod = PlayersCacheMethod.getInstance();
 
             YamlConfiguration config = PluginImpl.getInstance().Messages.getConfig();
-
             Random random = new Random();
 
             int chance = random.nextInt(101);
+            int trashChance = instance.Enchantments.getInt("enchantments.trash.chance");
+            int trashNecessary = instance.Enchantments.getInt("enchantments.trash.necessary");
 
-            if (chance <= instance.Enchantments.getInt("enchantments.trash.chance")) {
+            if (chance <= trashChance) {
                 player.sendMessage("§8[DEBUG] §fNão veio nada");
                 Countdown.getInstance().createCountdown(player, "trash",
                         instance.Enchantments.getInt("enchantments.trash.cooldown"),
                         TimeUnit.SECONDS);
-                return;
+                continue;
             }
 
-            if (cacheMethod.getTrash(player) >= instance.Enchantments.getInt("enchantments.trash.necessary")) {
+            int currentTrash = cacheMethod.getTrash(player);
+
+            if (currentTrash >= trashNecessary) {
                 upRandomUpgrade(player);
                 cacheMethod.setTrash(player, 0);
+            } else {
+                cacheMethod.setTrash(player, currentTrash + 1);
             }
 
             player.sendMessage("§8[DEBUG] §fVeio lixo");
             player.sendActionBar(config.getString("rede.achouLixo"));
-            cacheMethod.setTrash(player, cacheMethod.getTrash(player) + 1);
-
             FishingNetHandler.setNet(player, 3);
         }
     }
@@ -64,23 +84,40 @@ public class FishingNetTask implements Runnable {
         Random random = new Random();
         int eventIndex = random.nextInt(3);
 
-        RodsCacheMethod instance = RodsCacheMethod.getInstance();
+        RodsCacheMethod rodsCacheMethod = RodsCacheMethod.getInstance();
+
         YamlConfiguration config = PluginImpl.getInstance().Messages.getConfig();
+        YamlConfiguration enchantmentsConfig = PluginImpl.getInstance().Enchantments.getConfig();
 
         String baseMessage = Objects.requireNonNull(config.getString("rede.melhorouEncantamento"));
 
         switch (eventIndex) {
             case 0 -> {
-                String message = baseMessage.replace("{enchant}", "x");
+                if (rodsCacheMethod.getExperienced(player) >= enchantmentsConfig.getInt("enchantments.especialista.maxlevel")) {
+                    upRandomUpgrade(player);
+                    return;
+                }
+
+                String message = baseMessage.replace("{enchant}", "especialista");
                 player.sendMessage(message);
             }
             case 1 -> {
-                instance.setExperienced(player, instance.getExperienced(player) + 1);
+                if (rodsCacheMethod.getExperienced(player) >= enchantmentsConfig.getInt("enchantments.experiente.maxlevel")) {
+                    upRandomUpgrade(player);
+                    return;
+                }
+
+                rodsCacheMethod.setExperienced(player, rodsCacheMethod.getExperienced(player) + 1);
                 String message = baseMessage.replace("{enchant}", "experiente");
                 player.sendMessage(message);
             }
             case 2 -> {
-                instance.setLucky(player, instance.getLucky(player) + 1);
+                if (rodsCacheMethod.getLucky(player) >= enchantmentsConfig.getInt("enchantments.sortudo.maxlevel")) {
+                    upRandomUpgrade(player);
+                    return;
+                }
+
+                rodsCacheMethod.setLucky(player, rodsCacheMethod.getLucky(player) + 1);
                 String message = baseMessage.replace("{enchant}", "sortudo");
                 player.sendMessage(message);
             }

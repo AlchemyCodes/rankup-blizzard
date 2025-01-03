@@ -31,11 +31,11 @@ public class FishingNetListener implements Listener {
             List<Block> los = player.getLineOfSight(null, 5);
             for (Block b : los) {
                     if (b.getType() == Material.WATER) {
-                        if (FishingNetTask.isCatchingTrash) {
-                            FishingNetTask.isCatchingTrash = false;
+                        if (FishingNetTask.isCatchingTrash(player)) {
+                            FishingNetTask.setCatchingTrash(player, false);
                             player.sendTitle(config.getString("rede.pararPegarLixo.title"), config.getString("rede.pararPegarLixo.sub-title"));
                         } else {
-                            FishingNetTask.isCatchingTrash = true;
+                            FishingNetTask.setCatchingTrash(player, true);
                             player.sendTitle(config.getString("rede.comecarPegarLixo.title"), config.getString("rede.comecarPegarLixo.sub-title"));
                         }
                     }

@@ -32,9 +32,13 @@ public class EventsTask implements Runnable {
 
         YamlConfiguration config = PluginImpl.getInstance().Messages.getConfig();
 
-        isGeyserActive = true;
-
         for (Player player : Bukkit.getOnlinePlayers()) {
+            if (!worldHasPlayer(player)) {
+                System.out.println("Cancelando geyser pq nao tem player");
+                return;
+            }
+
+            isGeyserActive = true;
 
             List<String> messages = config.getStringList("eventos.começarEventoGeyser");
             messages.forEach(player::sendMessage);
@@ -72,8 +76,14 @@ public class EventsTask implements Runnable {
                     return;
                 }
 
-                World world = Bukkit.getWorld("pesca");
-                Location coneLocation = new Location(world, 3, -6, 21);
+                YamlConfiguration locationsConfig = PluginImpl.getInstance().Locations.getConfig();
+
+                World world = Bukkit.getWorld(locationsConfig.getString("geyser.world"));
+                Location coneLocation = new Location(
+                        world,
+                        locationsConfig.getDouble("geyser.x"),
+                        locationsConfig.getDouble("geyser.y"),
+                        locationsConfig.getDouble("geyser.z"));
 
                 double currentRadius = (height / coneHeight) * (coneWidth / 2);
                 int particleDensity = (int) (50 + 25 * Math.sin(tickCounter * 0.1));
@@ -131,6 +141,10 @@ public class EventsTask implements Runnable {
             geyserRunnable.cancel();
             geyserRunnable = null;
         }
+    }
+
+    public boolean worldHasPlayer(Player player) {
+        return player.getWorld().getName().equals("pesca");
     }
 
 }

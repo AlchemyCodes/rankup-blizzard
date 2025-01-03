@@ -18,7 +18,10 @@ pesca:
   pararPescar:
     title: "§c§lPescaria!"
     sub-title: "§cVocê parou de pescar."
-  action: "§b§l PESCA! §f+1 {fishname}§b🐟 §7/ §f+{xp} Xp"
+  action: "§3§lPecaria! §8▶ §fVocê pescou §l+{quantity} §f{fishname} §8▋ §7[ {xp}]"
+  specialist:
+    title: "§b§lEspecialista!"
+    sub-title: "§bO encantamento foi ativado!"
 
 rede:
   comecarPegarLixo:
@@ -31,17 +34,16 @@ rede:
   melhorouEncantamento: "§3§lYAY! §3O encantamento '§f{enchant}§3' foi aprimorado."
 
 fornalha:
-  começouDescongelar:  "§3§lYAY! §3A sua fornalha começou a descongelar os seus peixes."
+  comecouDescongelar:  "§3§lYAY! §3A sua fornalha começou a descongelar os seus peixes."
   parouDescongelar:  "§c§lEI! §cA sua fornalha parou de descongelar os peixes."
   estaDescongelando: "§c§lEI! §cVocê já está descongelando peixes."
   naoTemPeixeCongelado: "§c§lEI! §cVocê não possui peixe(s) congelado(s), continue pescando."
-  descongelouPeixe: "§8[DEBUG] §bSeu peixe descongelou e era um(a) {fishname} !"               #só se quiser manter
-  descongelouPeixeMoney: "§8[DEBUG] §bvc ganhou §a$§f {coins} §b de coins por descongelar"  #só se quiser manter
+  descongelouPeixe: "§3§lWOW! §3O seu peixe descongelou e era um(a) {fishname}."
 
 balde:
-  naoTemForca:  "§c§lEI! §cVocê não tem força para lidar com esse peixe."
-  naoTemPeixe: "vc nao tem {fishname} para vender"
-  vendeuPeixe: "vc vendeu {quantity} {fishname} por {coins} moedas."
+  naoTemForca:  "§c§lEI! §cVocê não possui força para lidar com esse peixe."
+  naoTemPeixe: "§c§lEI! §cVocê não possui o peixe ´§f{fishname}§c´ para vender."
+  vendeuPeixe: "§3§lWOW! §3VocÊ vendeu §l{quantity} §3{fishname}(s) por {coins} moedas."
 
   melhorias:
     melhorou: "§b§lGG! §bO seu armazém foi aumentado em §l+50§b."
