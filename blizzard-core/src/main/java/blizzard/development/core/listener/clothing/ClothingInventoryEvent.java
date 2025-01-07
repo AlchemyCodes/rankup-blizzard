@@ -18,7 +18,7 @@ public class ClothingInventoryEvent implements Listener {
         String[] clothingsData = { "manto.couro", "manto.malha", "manto.ferro", "manto.diamante" };
 
         for (String clothing : clothingsData) {
-            if (ItemBuilder.hasPersistentData((Plugin) Main.getInstance(), itemStack, clothing)) {
+            if (ItemBuilder.hasPersistentData(Main.getInstance(), itemStack, clothing)) {
                 event.setCancelled(true);
                 break;
             }

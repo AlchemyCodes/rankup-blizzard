@@ -9,9 +9,6 @@ public class LegendaryClothingAdapter implements ClothingActivatorFactory {
     public void active(Player player) {
         LegendaryClothingBuildItem legendaryClothingBuildItem = new LegendaryClothingBuildItem();
 
-        player.getInventory().setHelmet(legendaryClothingBuildItem.buildLegendaryClothing(Material.DIAMOND_HELMET));
         player.getInventory().setChestplate(legendaryClothingBuildItem.buildLegendaryClothing(Material.DIAMOND_CHESTPLATE));
-        player.getInventory().setLeggings(legendaryClothingBuildItem.buildLegendaryClothing(Material.DIAMOND_LEGGINGS));
-        player.getInventory().setBoots(legendaryClothingBuildItem.buildLegendaryClothing(Material.DIAMOND_BOOTS));
     }
 }

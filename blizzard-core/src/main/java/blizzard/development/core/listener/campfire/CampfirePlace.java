@@ -2,15 +2,9 @@ package blizzard.development.core.listener.campfire;
 
 import blizzard.development.core.api.CoreAPI;
 import blizzard.development.core.handler.FurnaceItemHandler;
-import blizzard.development.core.managers.CampfireManager;
+import blizzard.development.core.managers.GeneratorManager;
 import blizzard.development.core.managers.SchematicManager;
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.BlockPosition;
-import com.comphenix.protocol.wrappers.WrappedBlockData;
-import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -37,7 +31,7 @@ public class CampfirePlace implements Listener {
                 return;
             }
 
-            if (CampfireManager.hasCampfire(player)) {
+            if (GeneratorManager.hasGenerator(player)) {
                 event.setCancelled(true);
                 player.sendMessage("Você já tem uma fogueira!");
                 return;
@@ -45,16 +39,19 @@ public class CampfirePlace implements Listener {
 
             Block blockBelow = block.getLocation().add(0, -1, 0).getBlock();
 
-            if (!CampfireManager.isBlockLegit(blockBelow.getWorld().getName(), blockBelow.getX(), blockBelow.getY(), blockBelow.getZ())) {
+            if (!GeneratorManager.isBlockLegit(blockBelow.getWorld().getName(), blockBelow.getX(), blockBelow.getY(), blockBelow.getZ())) {
                 return;
             }
 
-            CampfireManager.placeCampfire(player, campfirePosition);
-
             SchematicManager schematicManager = new SchematicManager();
-            schematicManager.pasteSchematicForPlayer(player, block.getLocation());
+            schematicManager.pasteSchematicForPlayer(player, block.getLocation().add(-5,-1, -5));
+            player.teleport(block.getLocation().add(-10,-1, -10));
+
+            GeneratorManager.placeGenerator(player, campfirePosition);
 
             player.getInventory().setItem(player.getInventory().getHeldItemSlot(), null);
+
+            event.setCancelled(true);
         }
     }
 }

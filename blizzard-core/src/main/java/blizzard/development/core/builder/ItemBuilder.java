@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import blizzard.development.core.utils.items.TextUtil;
 import blizzard.development.core.utils.items.skulls.SkullAPI;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
@@ -14,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
@@ -132,5 +134,11 @@ public class ItemBuilder {
             return Arrays.toString(pdc.getKeys().toArray());
         }
         return null;
+    }
+
+    public ItemBuilder setColor(Color color) {
+        LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) itemMeta;
+        leatherArmorMeta.setColor(color);
+        return this;
     }
 }

@@ -19,7 +19,7 @@ public class MysticClothingBuildItem {
                         " <#e6e3dc>categoria mística.<#e6e3dc>",
                         ""
                 ))
-                .addPersistentData((Plugin) Main.getInstance(), "manto.ferro")
+                .addPersistentData(Main.getInstance(), "manto.ferro")
                 .build();
     }
 }

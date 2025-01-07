@@ -1,7 +1,6 @@
 package blizzard.development.core.tasks;
 
 import blizzard.development.core.api.CoreAPI;
-import blizzard.development.core.managers.CampfireManager;
 import blizzard.development.core.utils.PluginImpl;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
