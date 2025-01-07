@@ -19,7 +19,7 @@ public class LegendaryClothingBuildItem {
                         " §bcategoria lendária.",
                         ""
                 ))
-                .addPersistentData((Plugin) Main.getInstance(), "manto.diamante")
+                .addPersistentData(Main.getInstance(), "manto.diamante")
                 .build();
     }
 }

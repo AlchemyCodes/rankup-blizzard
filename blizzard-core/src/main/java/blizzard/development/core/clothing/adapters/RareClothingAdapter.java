@@ -9,9 +9,6 @@ public class RareClothingAdapter implements ClothingActivatorFactory {
     public void active(Player player) {
         RareClothingBuildItem rareClothingBuildItem = new RareClothingBuildItem();
 
-        player.getInventory().setHelmet(rareClothingBuildItem.buildRareClothing(Material.CHAINMAIL_HELMET));
         player.getInventory().setChestplate(rareClothingBuildItem.buildRareClothing(Material.CHAINMAIL_CHESTPLATE));
-        player.getInventory().setLeggings(rareClothingBuildItem.buildRareClothing(Material.CHAINMAIL_LEGGINGS));
-        player.getInventory().setBoots(rareClothingBuildItem.buildRareClothing(Material.CHAINMAIL_BOOTS));
     }
 }

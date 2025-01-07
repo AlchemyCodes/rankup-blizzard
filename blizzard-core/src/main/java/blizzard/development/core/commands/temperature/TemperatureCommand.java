@@ -11,6 +11,6 @@ public class TemperatureCommand extends BaseCommand {
 
     @Default
     public void onCommand(Player player, double temperature) {
-        PlayersCacheManager.setTemperature(player, temperature);
+        PlayersCacheManager.getInstance().setTemperature(player, temperature);
     }
 }

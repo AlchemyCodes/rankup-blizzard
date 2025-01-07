@@ -5,7 +5,7 @@ import blizzard.development.core.database.dao.PlayersDAO;
 import blizzard.development.core.listener.campfire.CampfirePlace;
 import blizzard.development.core.listener.clothing.ClothingActivatorInteractEvent;
 import blizzard.development.core.listener.clothing.ClothingInventoryEvent;
-import blizzard.development.core.listener.geral.TrafficListener;
+
 import java.util.Arrays;
 
 import blizzard.development.core.listener.packet.PacketListener;
