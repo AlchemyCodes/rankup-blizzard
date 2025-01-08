@@ -1,6 +1,7 @@
 package blizzard.development.plantations.listeners.geral;
 
 import blizzard.development.plantations.database.cache.PlayerCacheManager;
+import blizzard.development.plantations.database.cache.methods.PlayerCacheMethod;
 import blizzard.development.plantations.database.dao.PlayerDAO;
 import blizzard.development.plantations.database.storage.PlayerData;
 import blizzard.development.plantations.plantations.adapters.ToolAdapter;
@@ -11,6 +12,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -44,6 +46,18 @@ public class PlayerListener implements Listener{
         }
 
         playerCacheManager.cachePlayerData(player.getUniqueId().toString(), playerData);
+    }
+
+    @EventHandler
+    public void onTeleport(PlayerTeleportEvent event) {
+        Player player = event.getPlayer();
+
+        PlayerCacheMethod playerCacheMethod = PlayerCacheMethod.getInstance();
+
+        if (playerCacheMethod.isInPlantation(player)) {
+            player.sendTitle("§c§lEstufa!", "§cVocê saiu da estufa.", 10, 70, 20);
+           playerCacheMethod.removeInPlantation(player);
+        }
     }
 
     @EventHandler

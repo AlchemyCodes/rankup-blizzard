@@ -269,28 +269,6 @@ public class FarmCommand extends BaseCommand {
         areaManager.setAreaPlantation(player, PlantationEnum.POTATO);
     }
 
-
-    @Subcommand("giveseed")
-    @Syntax("<player> <key>")
-    @CommandPermission("alchemy.plantations.giveseed")
-    public void onGiveSeed(CommandSender commandSender, String playerTarget, int amount) {
-        Player player = (Player) commandSender;
-        Player target = Bukkit.getPlayer(playerTarget);
-
-        if (target == null) {
-            player.sendActionBar("§c§lEI! §cO jogador está offline ou não existe.");
-            return;
-        }
-
-        PlayerCacheMethod playerCacheMethod = PlayerCacheMethod.getInstance();
-        playerCacheMethod.setPlantations(target, playerCacheMethod.getPlantations(target) + amount);
-
-        player.sendActionBar("§a§lYAY! §aVocê adicionou " + formatNumber(amount) + " sementes na conta do jogador " + target.getName());
-
-        player.sendMessage("suas sementes: " + playerCacheMethod.getPlantations(player));
-        player.sendMessage("sementes do jogador " + target.getName() + ": " + playerCacheMethod.getPlantations(target));
-    }
-
     @Subcommand("ir")
     @Syntax("<player>")
     @CommandCompletion("@players")
@@ -384,35 +362,6 @@ public class FarmCommand extends BaseCommand {
         PlayerCacheMethod
             .getInstance()
             .addFriend(player, target.getName());
-
-
-        //        HarvestEffect harvestEffect = new HarvestEffect();
-//        harvestEffect.executeHarvestWave(player, 20);
-
-//        TornadoEffect tornadoEffect = new TornadoEffect();
-//        tornadoEffect.startTornadoEffect(player);
-
-
-//        PacketUtils.getInstance()
-//            .sendEntityPacket(
-//                player.getLocation(),
-//                player
-//            );
-
-//        player.getInventory().addItem(
-//            new ItemBuilder("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWU0NjVkZTI2Y2FmYjk0YTM0Y2U5Mjc5ZGY2NzlhYzI4OWQxY2M4NzQxMmZlYWNkYTkwZGI5MjYyMzA3ODJlZSJ9fX0=")
-//                .setDisplayName("§6Abatedouro §l✂ §7Nível §l1")
-//                .setLore(Arrays.asList(
-//                    "§7Mate os mobs do seu",
-//                    "§7gerador mais facilmente.",
-//                    "",
-//                    " §fÁrea: §35x5",
-//                    " §fCooldown: §c1 minuto",
-//                    "",
-//                    "§6Clique no chão para colocar."
-//                ))
-//                .build()
-//        );
     }
 
 }

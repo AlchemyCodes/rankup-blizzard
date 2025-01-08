@@ -1,6 +1,8 @@
 package blizzard.development.plantations.utils.placeholder;
 
+import blizzard.development.plantations.database.cache.methods.PlayerCacheMethod;
 import blizzard.development.plantations.managers.AreaManager;
+import blizzard.development.plantations.utils.NumberFormat;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -56,8 +58,11 @@ public class PlaceholderRegistry extends PlaceholderExpansion {
                 throw new IllegalStateException("Unexpected value: " + AreaManager.getInstance().getAreaPlantation(player));
         };
 
+        int seeds = PlayerCacheMethod.getInstance().getPlantations(player);
+
         return switch (identifier) {
             case "area" -> String.valueOf(area);
+            case "seeds" -> NumberFormat.formatNumber(seeds);
             case "plantacao" -> plantation;
               default -> throw new IllegalStateException("Unexpected value: " + identifier);
         };

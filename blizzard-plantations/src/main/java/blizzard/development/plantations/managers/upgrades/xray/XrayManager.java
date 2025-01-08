@@ -4,6 +4,7 @@ import blizzard.development.plantations.database.cache.methods.ToolCacheMethod;
 import blizzard.development.plantations.managers.AreaManager;
 import blizzard.development.plantations.utils.LocationUtils;
 import blizzard.development.plantations.utils.TextUtils;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -33,10 +34,16 @@ public class XrayManager {
 
             XrayEffect.startXrayEffect(player, LocationUtils.getCenterLocation().getBlock().getLocation().add(randomX, 0, randomZ));
 
-            player.sendMessage("");
-            player.sendMessage(TextUtils.parse(" <bold><#555555>Ra<#737373><#737373>io-X!<#555555></bold> <#737373>Confira o relatório:<#737373>"));
-            player.sendMessage(" §fO X-ray quebrou §l32§f plantações em forma de X!");
-            player.sendMessage("");
+
+            Component hoverText = TextUtils.parse("§a32 plantações quebradas.");
+            Component mainMessage = TextUtils.parse("§8(Passe o mouse para mais detalhes)")
+                .hoverEvent(hoverText);
+
+            Component fullMessage = TextUtils.parse(" <bold><#555555>Ra<#737373><#737373>io-X!<#555555></bold> §7✈ §f§l+§a32§l✿ §7♦ §fBônus: §71.1§lx ")
+                .append(mainMessage);
+
+            player.sendMessage(fullMessage);
+
 
             player.showTitle(
                 Title.title(
