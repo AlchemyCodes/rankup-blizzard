@@ -286,7 +286,7 @@ public class PlantationUpgradeInventory {
     }
 
     public static ItemStack plantations() {
-        return new ItemBuilder(Material.BARRIER)
+        return new ItemBuilder(Material.REDSTONE)
             .setDisplayName("§cPlantações")
             .setLore(Arrays.asList(
                 "§7Gerencia as plantações",

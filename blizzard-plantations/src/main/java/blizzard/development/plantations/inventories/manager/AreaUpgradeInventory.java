@@ -210,7 +210,7 @@ public class AreaUpgradeInventory {
     }
 
     public static ItemStack area() {
-        return new ItemBuilder(Material.BARRIER)
+        return new ItemBuilder(Material.REDSTONE)
             .setDisplayName("§cÀrea de Plantações")
             .setLore(Arrays.asList(
                 "§7Gerencia o tamanho",
