@@ -2,23 +2,37 @@ vip-inventory:
   rows: 5
   title: "Inventário Vips"
   items:
-    - vip-name: "ouro"
+    - vip-name: "Ouro"
       material: "GOLD_INGOT"
       display-name: "§6Vip Ouro"
       lore:
         - "§7Clique para trocar para esse vip!"
-      slot: 20
+      slot: 29
 
-    - vip-name: "diamante"
+    - vip-name: "Diamante"
       material: "DIAMOND"
       display-name: "§bVip Diamante"
       lore:
         - "§7Clique para trocar para esse vip!"
-      slot: 24
+      slot: 31
 
-    - vip-name: "esmeralda"
+    - vip-name: "Esmeralda"
       material: "EMERALD"
       display-name: "§aVip Esmeralda"
       lore:
         - "§7Clique para trocar para esse vip!"
-      slot: 13
+      slot: 33
+
+    - vip-name: "Blizzard"
+      material: "BLUE_ICE"
+      display-name: "§bVip Blizzard"
+      lore:
+        - "§7Clique para trocar para esse vip!"
+      slot: 12
+
+    - vip-name: "Alchemy"
+      material: "AMETHYST_CLUSTER"
+      display-name: "§5Vip Alchemy"
+      lore:
+        - "§7Clique para trocar para esse vip!"
+      slot: 14
