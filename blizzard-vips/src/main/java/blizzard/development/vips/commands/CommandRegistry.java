@@ -49,7 +49,7 @@ public class CommandRegistry {
                 .map(Player::getName)
                 .collect(Collectors.toList()));
 
-        String[] vipNames = {"ouro", "diamante", "esmeralda"};
+        String[] vipNames = {"ouro", "diamante", "esmeralda", "blizzard", "alchemy"};
         manager.getCommandCompletions().registerAsyncCompletion
                 ("vipName", c -> List.of(vipNames));
 

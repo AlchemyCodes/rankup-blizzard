@@ -11,6 +11,7 @@ import co.aikar.commands.annotation.CommandCompletion;
 import co.aikar.commands.annotation.Default;
 import co.aikar.commands.annotation.Syntax;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
@@ -30,7 +31,7 @@ public class GiveVip extends BaseCommand {
     @Default
     @Syntax("<player> <vip> <tempo>")
     @CommandCompletion("@playerName @vipName @vipDate")
-    public void onCommand(Player sender, String playerName, String vipName, String durationInput) throws SQLException {
+    public void onCommand(CommandSender sender, String playerName, String vipName, String durationInput) throws SQLException {
         VipUtils vipUtils = VipUtils.getInstance();
         Player targetPlayer = Bukkit.getPlayerExact(playerName);
 
@@ -42,7 +43,7 @@ public class GiveVip extends BaseCommand {
         long duration = vipUtils.getDuration(durationInput);
 
         if (vipUtils.hasVip(playerName, vipName)) {
-            vipUtils.extendVip(sender, targetPlayer.getName(), vipName, vipUtils, duration);
+            vipUtils.extendVip(targetPlayer, targetPlayer.getName(), vipName, vipUtils, duration);
             return;
         }
 
