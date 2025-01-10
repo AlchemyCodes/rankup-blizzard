@@ -1,5 +1,7 @@
 package blizzard.development.monsters.commands.subcommands.admins;
 
+import blizzard.development.monsters.database.cache.methods.MonstersCacheMethods;
+import blizzard.development.monsters.database.cache.methods.PlayersCacheMethods;
 import blizzard.development.monsters.monsters.handlers.eggs.MonstersEggHandler;
 import blizzard.development.monsters.monsters.handlers.monsters.MonstersHandler;
 import blizzard.development.monsters.utils.items.TextAPI;
@@ -20,7 +22,7 @@ public class GiveCommand extends BaseCommand {
     @Subcommand("give|dar")
     @CommandCompletion("@players @monsters @amount @amount")
     @Syntax("<jogador> <monstro> <quantia> <stack>")
-    public void onCommand(CommandSender sender, String player, String monster, Integer stack) {
+    public void onGiveMonster(CommandSender sender, String player, String monster, Integer stack) {
         MonstersHandler monstersHandler = MonstersHandler.getInstance();
         MonstersEggHandler eggHandler = MonstersEggHandler.getInstance();
 
@@ -54,5 +56,49 @@ public class GiveCommand extends BaseCommand {
                     ""
             ).forEach(sender::sendMessage);
         }
+    }
+
+    @Subcommand("givelimit|darlimite")
+    @CommandCompletion("@players @amount")
+    @Syntax("<jogador> <quantia>")
+    public void onGiveLimit(CommandSender sender, String player, Integer amount) {
+        PlayersCacheMethods methods = PlayersCacheMethods.getInstance();
+
+        Player target = Bukkit.getPlayer(player);
+        if (target == null) {
+            sender.sendActionBar(TextAPI.parse("§c§lEI! §cO jogador está offline ou é inválido."));
+            return;
+        }
+
+        methods.addMonstersLimit(target, amount);
+
+        sender.sendActionBar(TextAPI.parse(
+                "§a§lYAY! §aVocê deu §7x" + amount
+                        + "§a limites de monstros"
+                        + "§a para o jogador §7"
+                        + target.getName() + "§a."
+        ));
+    }
+
+    @Subcommand("removelimit|removerlimite")
+    @CommandCompletion("@players @amount")
+    @Syntax("<jogador> <quantia>")
+    public void onRemoveLimit(CommandSender sender, String player, Integer amount) {
+        PlayersCacheMethods methods = PlayersCacheMethods.getInstance();
+
+        Player target = Bukkit.getPlayer(player);
+        if (target == null) {
+            sender.sendActionBar(TextAPI.parse("§c§lEI! §cO jogador está offline ou é inválido."));
+            return;
+        }
+
+        methods.removeMonstersLimit(target, amount);
+
+        sender.sendActionBar(TextAPI.parse(
+                "§a§lYAY! §aVocê removeu §7x" + amount
+                        + "§a limites de monstros"
+                        + "§a do jogador §7"
+                        + target.getName() + "§a."
+        ));
     }
 }

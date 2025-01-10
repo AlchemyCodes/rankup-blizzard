@@ -14,7 +14,6 @@ import org.bukkit.plugin.PluginManager;
 import java.util.Arrays;
 
 public class ListenerRegistry {
-
     private static ListenerRegistry instance;
 
     public void register() {

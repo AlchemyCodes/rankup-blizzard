@@ -9,7 +9,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
 
 public class ClothingActivatorInteractEvent implements Listener {
     @EventHandler
@@ -22,7 +21,7 @@ public class ClothingActivatorInteractEvent implements Listener {
         String[] activators = { "ativador.comum", "ativador.raro", "ativador.mistico", "ativador.lendario" };
 
         for (String activator : activators) {
-            if (ItemBuilder.hasPersistentData((Plugin) Main.getInstance(), item, activator)) {
+            if (ItemBuilder.hasPersistentData(Main.getInstance(), item, activator)) {
                 event.setCancelled(true);
 
                 SelectInventory selectInventory = new SelectInventory();

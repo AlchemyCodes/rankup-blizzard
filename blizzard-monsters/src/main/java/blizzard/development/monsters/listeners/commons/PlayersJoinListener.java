@@ -3,6 +3,7 @@ package blizzard.development.monsters.listeners.commons;
 import blizzard.development.monsters.database.cache.managers.PlayersCacheManager;
 import blizzard.development.monsters.database.dao.PlayersDAO;
 import blizzard.development.monsters.database.storage.PlayersData;
+import blizzard.development.monsters.utils.PluginImpl;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,7 +20,11 @@ public class PlayersJoinListener implements Listener {
         Player player = event.getPlayer();
         PlayersData playersData = database.findPlayerData(player.getUniqueId().toString());
         if (playersData == null) {
-            playersData = new PlayersData(player.getUniqueId().toString(), player.getName());
+            playersData = new PlayersData(
+                    player.getUniqueId().toString(),
+                    player.getName(),
+                    PluginImpl.getInstance().Config.getInt("monsters.initial-monsters-limit")
+                    );
             try {
                 database.createPlayerData(playersData);
             } catch(Exception err) {

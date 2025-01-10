@@ -57,7 +57,7 @@ public class LightningEffect {
 
                 playerCacheMethod.setPlantations(
                     player,
-                    25
+                    playerCacheMethod.getPlantations(player) + 25
                 );
 
                 PlantationManager.getInstance()

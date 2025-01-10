@@ -19,7 +19,7 @@ public class RareClothingBuildItem {
                         " <#c4c4c4>categoria rara.<#c4c4c4>",
                         ""
                 ))
-                .addPersistentData((Plugin) Main.getInstance(), "manto.malha")
+                .addPersistentData(Main.getInstance(), "manto.malha")
                 .build();
     }
 }
