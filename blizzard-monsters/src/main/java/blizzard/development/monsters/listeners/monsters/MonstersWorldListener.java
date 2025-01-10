@@ -4,6 +4,7 @@ import blizzard.development.monsters.builders.ItemBuilder;
 import blizzard.development.monsters.builders.hologram.HologramBuilder;
 import blizzard.development.monsters.database.cache.managers.MonstersCacheManager;
 import blizzard.development.monsters.database.storage.MonstersData;
+import blizzard.development.monsters.listeners.packets.PlayersPacketMoveListener;
 import blizzard.development.monsters.monsters.enums.Locations;
 import blizzard.development.monsters.monsters.handlers.monsters.MonstersHandler;
 import blizzard.development.monsters.monsters.handlers.tools.MonstersToolHandler;
@@ -90,6 +91,8 @@ public class MonstersWorldListener implements Listener {
                     HologramBuilder.getInstance().removeHologram(UUID.fromString(monstersData.getUuid()));
                 }
             }
+
+            MonstersHandler.getInstance().monstersLocation.remove(player);
         }
     }
 }

@@ -49,6 +49,17 @@ public class MonstersHandler {
         return monstersDisplay.getOrDefault(player, null);
     }
 
+    public boolean isMonster(Player player, String id) {
+        for (MonstersData monstersData : MonstersCacheManager.getInstance().monstersCache.values()) {
+            if (monstersData.getOwner().equals(player.getName())) {
+                if (monstersData.getId().equals(id)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     private final PluginImpl plugin = PluginImpl.getInstance();
 
     public String getType(String monsterName) {

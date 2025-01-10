@@ -15,7 +15,8 @@ public class PlayersDAO {
 
             String sql_player = "CREATE TABLE IF NOT EXISTS monsters_users (" +
                     "uuid VARCHAR(36) PRIMARY KEY, " +
-                    "nickname VARCHAR(36)" +
+                    "nickname VARCHAR(36), " +
+                    "monsters_limit INTEGER" +
                     ")";
             stat.execute(sql_player);
         } catch (SQLException e) {
@@ -44,7 +45,8 @@ public class PlayersDAO {
                 if (resultSet.next()) {
                     return new PlayersData(
                             resultSet.getString("uuid"),
-                            resultSet.getString("nickname")
+                            resultSet.getString("nickname"),
+                            resultSet.getInt("monsters_limit")
                     );
                 }
             }
@@ -55,11 +57,12 @@ public class PlayersDAO {
     }
 
     public void createPlayerData(PlayersData playerData) throws SQLException {
-        String sql = "INSERT INTO monsters_users (uuid, nickname) VALUES (?, ?)";
+        String sql = "INSERT INTO monsters_users (uuid, nickname, monsters_limit) VALUES (?, ?, ?)";
         executeUpdate(sql, statement -> {
             try {
                 statement.setString(1, playerData.getUuid());
                 statement.setString(2, playerData.getNickname());
+                statement.setInt(3, playerData.getMonstersLimit());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -78,11 +81,12 @@ public class PlayersDAO {
     }
 
     public void updatePlayerData(PlayersData playerData) throws SQLException {
-        String sql = "UPDATE monsters_users SET nickname = ? WHERE uuid = ?";
+        String sql = "UPDATE monsters_users SET nickname = ?, monsters_limit = ? WHERE uuid = ?";
         executeUpdate(sql, statement -> {
             try {
                 statement.setString(1, playerData.getNickname());
-                statement.setString(2, playerData.getUuid());
+                statement.setInt(2, playerData.getMonstersLimit());
+                statement.setString(3, playerData.getUuid());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -100,7 +104,8 @@ public class PlayersDAO {
             while (resultSet.next()) {
                 playersDataList.add(new PlayersData(
                         resultSet.getString("uuid"),
-                        resultSet.getString("nickname")
+                        resultSet.getString("nickname"),
+                        resultSet.getInt("monsters_limit")
                 ));
             }
         } catch (SQLException e) {

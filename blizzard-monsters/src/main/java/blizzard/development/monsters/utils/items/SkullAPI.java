@@ -1,6 +1,5 @@
 package blizzard.development.monsters.utils.items;
 
-import blizzard.development.monsters.builders.skulls.SkullBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -59,12 +58,5 @@ public class SkullAPI {
     private static void notNull(Object o, String name) {
         if (o == null)
             throw new NullPointerException(name + " should not be null!");
-    }
-
-    public static ItemStack createSkullItem(String texture, String name, String... lore) {
-        return new SkullBuilder(texture)
-                .name(name)
-                .lore(lore)
-                .build();
     }
 }

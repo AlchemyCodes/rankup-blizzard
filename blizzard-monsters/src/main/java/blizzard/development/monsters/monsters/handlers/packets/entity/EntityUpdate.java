@@ -1,11 +1,9 @@
     package blizzard.development.monsters.monsters.handlers.packets.entity;
 
-    import blizzard.development.monsters.utils.PluginImpl;
     import com.comphenix.protocol.PacketType;
     import com.comphenix.protocol.ProtocolManager;
     import com.comphenix.protocol.events.PacketContainer;
     import com.comphenix.protocol.wrappers.*;
-    import org.bukkit.Bukkit;
     import org.bukkit.entity.Player;
 
     import java.util.*;
