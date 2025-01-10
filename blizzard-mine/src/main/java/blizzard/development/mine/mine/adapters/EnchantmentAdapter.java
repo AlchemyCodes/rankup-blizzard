@@ -5,6 +5,7 @@ import blizzard.development.mine.utils.text.TextUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
 import org.bukkit.Location;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 import java.time.Duration;
@@ -25,6 +26,7 @@ public class EnchantmentAdapter implements EnchantmentFactory {
 
         int area = 10; // tamanho da mina
         Location location = player.getLocation(); // pegar a localização do bloco que o player quebrou.
+        player.getWorld().spawnEntity(location.getBlock().getLocation().add(0, 1, 0), EntityType.CHICKEN);
 
         if (random <= activation(digger)) {
 
@@ -58,6 +60,7 @@ public class EnchantmentAdapter implements EnchantmentFactory {
 
         int area = 10; // tamanho da mina
         Location location = player.getLocation(); // pegar a localização do bloco que o player quebrou.
+        player.getWorld().spawnEntity(location.getBlock().getLocation().add(0, 1, 0), EntityType.CHICKEN);
 
         if (random <= activation(meteor)) {
 
