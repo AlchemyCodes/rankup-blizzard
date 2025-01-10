@@ -1,6 +1,7 @@
 package blizzard.development.mine.utils;
 
 import blizzard.development.mine.commands.CommandRegistry;
+import blizzard.development.mine.database.dao.PlayerDAO;
 import blizzard.development.mine.listeners.ListenerRegistry;
 import blizzard.development.visuals.utils.config.ConfigUtils;
 import co.aikar.commands.Locales;
@@ -13,6 +14,7 @@ public class PluginImpl {
     public final Plugin plugin;
     private static PluginImpl instance;
     private static PaperCommandManager commandManager;
+    private PlayerDAO playerDAO;
     public ConfigUtils Config;
     public ConfigUtils Locations;
     public ConfigUtils Ranking;
@@ -21,6 +23,7 @@ public class PluginImpl {
     public PluginImpl(Plugin plugin) {
         this.plugin = plugin;
         instance = this;
+        playerDAO = new PlayerDAO();
         commandManager = new PaperCommandManager(plugin);
         commandManager.getLocales().setDefaultLocale(Locales.PORTUGUESE);
         Config = new ConfigUtils((JavaPlugin) plugin, "config.yml");
@@ -52,11 +55,14 @@ public class PluginImpl {
     }
 
     public void registerDatabase() {
+        playerDAO = new PlayerDAO();
+        playerDAO.initializeDatabase();
     }
 
     private void registerListeners() {
-        ListenerRegistry listenerRegistry = new ListenerRegistry();
+        ListenerRegistry listenerRegistry = new ListenerRegistry(playerDAO);
         listenerRegistry.register();
+        listenerRegistry.registerPacket();
     }
 
     private void registerTasks() {
