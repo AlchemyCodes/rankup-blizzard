@@ -1,7 +1,9 @@
 package blizzard.development.monsters.inventories.tools.items;
 
 import blizzard.development.monsters.builders.ItemBuilder;
+import blizzard.development.monsters.database.cache.methods.PlayersCacheMethods;
 import blizzard.development.monsters.monsters.handlers.eggs.MonstersEggHandler;
+import blizzard.development.monsters.utils.NumberFormatter;
 import blizzard.development.monsters.utils.items.TextAPI;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -53,12 +55,15 @@ public class RadarItems {
 
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName("§aSuas informações");
+
+        int monstersLimit = PlayersCacheMethods.getInstance().getMonstersLimit(player);
+
         meta.setLore(Arrays.asList(
                 "§7Visualize informações suas",
                 "§7para realizar compras.",
                 "",
                 "§a Informações:",
-                "§8 ▶ §fLimite de Monstros: §b10"
+                "§8 ▶ §fLimite de Monstros: §b" + NumberFormatter.getInstance().formatNumber(monstersLimit)
         ));
         item.setItemMeta(meta);
 

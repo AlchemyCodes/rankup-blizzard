@@ -1,8 +1,11 @@
 package blizzard.development.monsters.inventories.cage.items;
 
 import blizzard.development.monsters.builders.ItemBuilder;
+import blizzard.development.monsters.database.cache.managers.MonstersCacheManager;
+import blizzard.development.monsters.database.storage.MonstersData;
 import blizzard.development.monsters.inventories.tools.items.RadarItems;
 import blizzard.development.monsters.monsters.handlers.eggs.MonstersEggHandler;
+import blizzard.development.monsters.utils.NumberFormatter;
 import blizzard.development.monsters.utils.items.TextAPI;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -15,7 +18,7 @@ import java.util.List;
 public class CageItems {
     private static CageItems instance;
 
-    public ItemStack monster(String monster) {
+    public ItemStack monster(Player player, String monster) {
         MonstersEggHandler eggHandler = MonstersEggHandler.getInstance();
 
         Material material;
@@ -37,12 +40,26 @@ public class CageItems {
 
         meta.displayName(TextAPI.parse(display));
         meta.setLore(Arrays.asList(
-                "§7Libere esse monstro.",
+                "§7Capture este monstro.",
                 "",
-                "§f Vai ter algo aqui",
+                "§8 ▶ §fQuantia: §7" + NumberFormatter.getInstance().formatNumber(getMonstersAmount(player, monster)),
                 "",
-                "§7Clique para liberar."
+                "§f Opções disponíveis:",
+                "§8  ■ §fBotão Esquerdo: §7Capture um.",
+                "§8  ■ §fBotão Direito: §7Capture todos.",
+                ""
         ));
+
+        int monstersAmount;
+        if (getMonstersAmount(player, monster) <= 0) {
+            monstersAmount = 1;
+        } else if (getMonstersAmount(player, monster) >= 64) {
+            monstersAmount = 64;
+        } else {
+            monstersAmount = getMonstersAmount(player, monster);
+        }
+
+        item.setAmount(monstersAmount);
 
         item.setItemMeta(meta);
         return item;
@@ -55,7 +72,7 @@ public class CageItems {
         meta.setDisplayName("§aCapturar todos");
         meta.setLore(Arrays.asList(
                 "§7Capture todos os monstros",
-                "§7que estão presos na gaiola",
+                "§7que estão presos na gaiola.",
                 "",
                 "§aClique para capturar."
         ));
@@ -88,6 +105,18 @@ public class CageItems {
         meta.setLore(List.of("§7Clique aqui para avançar."));
         item.setItemMeta(meta);
         return item;
+    }
+
+    private int getMonstersAmount(Player player, String monster) {
+        int playerMonsters = 0;
+        for (MonstersData data : MonstersCacheManager.getInstance().monstersCache.values()) {
+            if (data.getOwner().equals(player.getName())) {
+                if (data.getType().equals(monster)) {
+                    playerMonsters++;
+                }
+            }
+        }
+        return playerMonsters;
     }
 
     public static CageItems getInstance() {

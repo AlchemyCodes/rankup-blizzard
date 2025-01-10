@@ -17,7 +17,7 @@ public class MonstersItems {
         meta.displayName(TextAPI.parse("§bGaiola de monstros"));
         meta.setLore(Arrays.asList(
                 "§7Gerencie todos os seus",
-                "§7monstros deixados de lado",
+                "§7monstros deixados de lado.",
                 "",
                 "§bClique para visualizar."
         ));
@@ -33,7 +33,7 @@ public class MonstersItems {
         meta.displayName(TextAPI.parse("§aRecompensas"));
         meta.setLore(Arrays.asList(
                 "§7Visualize tudo o que você",
-                "§7adquiriu ao derrotar monstros",
+                "§7adquiriu ao derrotar monstros.",
                 "",
                 "§aClique para visualizar."
         ));
@@ -53,7 +53,7 @@ public class MonstersItems {
             meta.displayName(TextAPI.parse("§cSair do mundo"));
             meta.setLore(Arrays.asList(
                     "§7Tire uma folga, saia",
-                    "§7do mundo de monstros",
+                    "§7do mundo de monstros.",
                     "",
                     "§cClique para sair."
             ));
@@ -67,7 +67,7 @@ public class MonstersItems {
             meta.displayName(TextAPI.parse("§aIr ao mundo"));
             meta.setLore(Arrays.asList(
                     "§7Crie coragem e vá à",
-                    "§7caça de monstros",
+                    "§7caça de monstros.",
                     "",
                     "§aClique para ir."
             ));
@@ -85,7 +85,7 @@ public class MonstersItems {
         meta.displayName(TextAPI.parse("§eClassificação"));
         meta.setLore(Arrays.asList(
                 "§7Confira os jogadores que",
-                "§7mais se destacam no servidor",
+                "§7mais se destacam no servidor.",
                 "",
                 "§eClique para visualizar."
         ));

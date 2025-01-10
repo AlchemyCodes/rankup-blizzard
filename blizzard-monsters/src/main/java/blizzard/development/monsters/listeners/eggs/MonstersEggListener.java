@@ -1,6 +1,9 @@
 package blizzard.development.monsters.listeners.eggs;
 
 import blizzard.development.monsters.builders.ItemBuilder;
+import blizzard.development.monsters.database.cache.managers.MonstersCacheManager;
+import blizzard.development.monsters.database.cache.methods.PlayersCacheMethods;
+import blizzard.development.monsters.database.storage.MonstersData;
 import blizzard.development.monsters.monsters.handlers.monsters.MonstersHandler;
 import blizzard.development.monsters.monsters.handlers.packets.MonstersPacketsHandler;
 import blizzard.development.monsters.monsters.handlers.world.MonstersWorldHandler;
@@ -63,6 +66,11 @@ public class MonstersEggListener implements Listener {
                     return;
                 }
 
+                if (getMonstersAmount(player) + 1 > PlayersCacheMethods.getInstance().getMonstersLimit(player)) {
+                    player.sendActionBar(TextAPI.parse("§c§lEI! §cVocê atingiu a quantia máxima de monstros simultâneos."));
+                    return;
+                }
+
                 String cooldownName = "blizzard.monsters.egg-cooldown";
 
                 if (cooldown.isInCountdown(player, cooldownName) && !player.hasPermission("blizzard.monsters.admin")) {
@@ -119,5 +127,9 @@ public class MonstersEggListener implements Listener {
         } else {
             player.getInventory().setItemInMainHand(null);
         }
+    }
+
+    private int getMonstersAmount(Player player) {
+        return MonstersHandler.getInstance().getMonsters(player).size();
     }
 }

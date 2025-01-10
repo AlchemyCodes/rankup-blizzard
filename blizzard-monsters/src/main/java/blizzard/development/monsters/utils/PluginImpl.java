@@ -14,6 +14,7 @@ import blizzard.development.monsters.database.storage.MonstersData;
 import blizzard.development.monsters.database.storage.PlayersData;
 import blizzard.development.monsters.database.storage.ToolsData;
 import blizzard.development.monsters.listeners.ListenerRegistry;
+import blizzard.development.monsters.listeners.monsters.MonstersDamageListener;
 import blizzard.development.monsters.managers.DataBatchManager;
 import blizzard.development.monsters.monsters.handlers.tools.MonstersToolHandler;
 import blizzard.development.monsters.monsters.handlers.world.MonstersWorldHandler;
@@ -41,7 +42,6 @@ public class PluginImpl {
     public final Plugin plugin;
 
     private static @Getter PluginImpl instance;
-
     public PlayersDAO playersDAO;
     public MonstersDAO monstersDAO;
     public ToolsDAO toolsDAO;
@@ -114,7 +114,7 @@ public class PluginImpl {
 
         List<MonstersData> monsters = monstersDAO.getAllMonstersData();
         for (MonstersData monster : monsters) {
-            MonstersCacheManager.getInstance().cacheMonsterData(monster.getId(), monster);
+            MonstersCacheManager.getInstance().cacheMonsterData(monster.getUuid(), monster);
         }
 
         List<ToolsData> tools = toolsDAO.getAllToolsData();
@@ -147,6 +147,7 @@ public class PluginImpl {
                 if (ItemBuilder.hasPersistentData(PluginImpl.getInstance().plugin, item, "blizzard.monsters.compass")) {
                     player.getInventory().remove(item);
                 }
+
             }
         }
 
@@ -155,6 +156,7 @@ public class PluginImpl {
 
     private void registerListeners() {
         ListenerRegistry.getInstance().register();
+        MonstersDamageListener.getInstance(plugin);
     }
 
     private void registerCommands() {

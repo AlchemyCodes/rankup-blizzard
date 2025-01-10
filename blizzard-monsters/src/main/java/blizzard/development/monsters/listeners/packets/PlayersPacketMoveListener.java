@@ -20,8 +20,8 @@ import java.util.UUID;
 public class PlayersPacketMoveListener implements Listener {
     private final ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
 
-    private final Map<UUID, Long> moveCooldowns = new HashMap<>();
-    private final Map<String, Location> locationCache = new HashMap<>();
+    public final Map<UUID, Long> moveCooldowns = new HashMap<>();
+    public final Map<String, Location> locationCache = new HashMap<>();
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
