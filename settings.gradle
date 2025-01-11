@@ -17,4 +17,7 @@ include 'blizzard-monsters'
 include 'blizzard-events'
 include 'blizzard-vips'
 include 'blizzard-utils'
+include 'blizzard-visuals'
+include 'blizzard-mail'
+include 'blizzard-mine'
 

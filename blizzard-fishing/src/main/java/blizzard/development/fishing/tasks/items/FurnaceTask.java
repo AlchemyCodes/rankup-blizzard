@@ -3,6 +3,7 @@ package blizzard.development.fishing.tasks.items;
 import blizzard.development.currencies.api.CurrenciesAPI;
 import blizzard.development.currencies.enums.Currencies;
 import blizzard.development.fishing.database.cache.methods.PlayersCacheMethod;
+import blizzard.development.fishing.database.cache.methods.RodsCacheMethod;
 import blizzard.development.fishing.utils.PluginImpl;
 import blizzard.development.fishing.utils.fish.FishesUtils;
 import blizzard.development.fishing.utils.items.ItemBuilder;
@@ -46,6 +47,7 @@ public class FurnaceTask implements Runnable {
             Integer progress = unfreezing.get(player);
 
             PlayersCacheMethod playersCacheMethod = PlayersCacheMethod.getInstance();
+            RodsCacheMethod rodsCacheMethod = RodsCacheMethod.getInstance();
             YamlConfiguration config = PluginImpl.getInstance().Messages.getConfig();
 
             int coins = config.getInt("unfreeze.value");
@@ -84,18 +86,20 @@ public class FurnaceTask implements Runnable {
                     FishesUtils fishesUtils = FishesUtils.getInstance();
 
                     String randomFish = fishesUtils.getRandomFish();
-                    fishesUtils.giveFish(player, randomFish, PlayersCacheMethod.getInstance());
+                    fishesUtils.giveFish(player, randomFish, PlayersCacheMethod.getInstance(), fishesUtils.fishQuantity(player, rodsCacheMethod));
 
                     playersCacheMethod.setFrozenFish(player, playersCacheMethod.getFrozenFish(player) - 1);
                     CurrenciesAPI.getInstance().addBalance(player, Currencies.COINS, coins);
 
-                    String fishMessage = Objects.requireNonNull(config.getString("rede.descongelouPeixe"))
+                    randomFish = FishesUtils.getInstance().getFishName(randomFish);
+
+                    String fishMessage = Objects.requireNonNull(config.getString("fornalha.descongelouPeixe"))
                             .replace("{fishname}", randomFish);
-                    String moneyMessage = Objects.requireNonNull(config.getString("rede.descongelouPeixeMoney"))
-                            .replace("{coins}", String.valueOf(coins));
+//                    String moneyMessage = Objects.requireNonNull(config.getString("fornalha.descongelouPeixeMoney"))
+//                            .replace("{coins}", String.valueOf(coins));
 
                     player.sendMessage(fishMessage);
-                    player.sendMessage(moneyMessage);
+//                    player.sendMessage(moneyMessage);
                 }
 
             }

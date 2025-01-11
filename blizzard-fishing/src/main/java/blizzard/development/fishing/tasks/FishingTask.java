@@ -5,6 +5,7 @@ import blizzard.development.fishing.database.cache.FishingCacheManager;
 import blizzard.development.fishing.database.cache.methods.PlayersCacheMethod;
 import blizzard.development.fishing.database.cache.methods.RodsCacheMethod;
 import blizzard.development.fishing.handlers.FishBucketHandler;
+import blizzard.development.fishing.utils.NumberFormat;
 import blizzard.development.fishing.utils.PluginImpl;
 import blizzard.development.fishing.utils.fish.FishesUtils;
 import org.bukkit.Bukkit;
@@ -51,19 +52,23 @@ public final class FishingTask implements Runnable {
     private void giveFish(Player player) {
         PlayersCacheMethod cacheMethod = PlayersCacheMethod.getInstance();
         RodsCacheMethod rodsCacheMethod = RodsCacheMethod.getInstance();
+
         FishesUtils fishesUtils = FishesUtils.getInstance();
 
-        YamlConfiguration config = PluginImpl.getInstance().Messages.getConfig();
+        YamlConfiguration messagesConfig = PluginImpl.getInstance().Messages.getConfig();
+        YamlConfiguration config = PluginImpl.getInstance().Config.getConfig();
 
         int playerStrength = RodsCacheMethod.getInstance().getStrength(player);
         String rarity = fishesUtils.getRarity(playerStrength);
 
-        if (cacheMethod.getFishes(player) >= cacheMethod.getStorage(player)) {
-            player.sendMessage("§cBalde cheio");
-            return;
-        }
+        int fishQuantity = fishesUtils.fishQuantity(player, rodsCacheMethod);
 
-        if (fishesUtils.giveChanceFrozenFish(player, cacheMethod)) {
+        fishesUtils.startDiamondRain(player, rodsCacheMethod);
+
+        if (isStorageFull(player, cacheMethod)) return;
+
+        if (CoreAPI.getInstance().isIsBlizzard() || new Random().nextInt() >= config.getInt("frozenFishChance")) {
+            fishesUtils.giveFrozenFish(player, cacheMethod, rodsCacheMethod, fishQuantity);
             return;
         }
 
@@ -72,18 +77,27 @@ public final class FishingTask implements Runnable {
         if (!availableFishes.isEmpty()) {
             String caughtFish = availableFishes.get(new Random().nextInt(availableFishes.size()));
 
-            fishesUtils.giveFish(player, caughtFish, cacheMethod);
+            fishesUtils.giveFish(player, caughtFish, cacheMethod, fishQuantity);
             fishesUtils.giveXp(player, rarity, rodsCacheMethod);
-            double xp = fishesUtils.getXp(player, rarity, rodsCacheMethod);
+            double xp = fishesUtils.getXp(player, rarity);
             FishBucketHandler.setBucket(player, 8);
 
-            String message = config.getString("pesca.action");
-            if (message != null) {
-                player.sendActionBar(message
-                        .replace("{fishname}", caughtFish)
-                        .replace("{xp}", String.valueOf(xp)));
-            }
+            String fishName = fishesUtils.getFishName(caughtFish);
+
+            fishesUtils.getFishMessage(player, messagesConfig, fishName, xp, fishQuantity);
+            player.sendMessage(
+                    "§7[DEBUG] §fSeu xp: §a" + NumberFormat.getInstance().formatNumber(rodsCacheMethod.getXp(player)));
 
         }
     }
+
+    private static boolean isStorageFull(Player player, PlayersCacheMethod cacheMethod) {
+        if (cacheMethod.getFishes(player) >= cacheMethod.getStorage(player)) {
+            player.sendMessage("§cBalde cheio");
+            return true;
+        }
+        return false;
+    }
+
+
 }

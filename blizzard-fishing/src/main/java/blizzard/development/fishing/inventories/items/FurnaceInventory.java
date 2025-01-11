@@ -38,8 +38,6 @@ public class FurnaceInventory {
         GuiItem startUnfreezing = new GuiItem(startUnfreezing(), event -> {
             event.setCancelled(true);
 
-
-
             if (FurnaceTask.isUnfreezing(player)) {
                 player.sendActionBar(config.getString("fornalha.estaDescongelando"));
                 return;

@@ -1,5 +1,6 @@
 package blizzard.development.plantations.managers.upgrades.xray;
 
+import blizzard.development.plantations.api.SeedAPI;
 import blizzard.development.plantations.database.cache.methods.PlayerCacheMethod;
 import blizzard.development.plantations.managers.PlantationManager;
 import blizzard.development.plantations.utils.packets.PacketUtils;
@@ -17,11 +18,9 @@ public class XrayEffect {
 
     public static void startXrayEffect(Player player, Location location) {
         int centerX = location.getBlockX();
-        int centerY = location.getBlockY();
         int centerZ = location.getBlockZ();
 
         int distance = 7;
-        int plantationsBroken = 0;
 
         for (int i = 0; i <= distance; i++) {
             createXrayEffect(player, location, centerX + i + 2, centerZ + i + 2);
@@ -29,8 +28,6 @@ public class XrayEffect {
 
             createXrayEffect(player, location, centerX + i + 2, centerZ - i);
             createXrayEffect(player, location, centerX - i, centerZ + i + 2);
-
-            plantationsBroken += 20;
         }
 
     }
@@ -75,7 +72,7 @@ public class XrayEffect {
                 EntityType.SNOWBALL
             );
 
-
-        playerCacheMethod.setPlantations(player, 5);
+        SeedAPI seedAPI = SeedAPI.getInstance();
+        seedAPI.addSeed(player, 32);
     }
 }

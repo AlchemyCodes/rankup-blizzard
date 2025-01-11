@@ -108,14 +108,14 @@ public class FishBucketInventory {
             pane.addItem(item, Slot.fromIndex(fishData.getSlot()));
         });
 
-//        GuiItem backButton = new GuiItem(new ItemBuilder(Material.RED_DYE)
-//                .setDisplayName("§cVoltar")
-//                .setLore(List.of("§7Volte ao menu anterior."))
-//                .build(),
-//
-//                event -> {
-//                    event.setCancelled(true);
-//                });
+        GuiItem backButton = new GuiItem(new ItemBuilder(Material.RED_DYE)
+                .setDisplayName("§cVoltar")
+                .setLore(List.of("§7Volte ao menu anterior."))
+                .build(),
+
+                event -> {
+                    event.setCancelled(true);
+                });
 
         GuiItem upgradesButton = new GuiItem(new ItemBuilder(Material.LIME_DYE)
                 .setDisplayName("§aMelhorias")
@@ -138,6 +138,34 @@ public class FishBucketInventory {
                     event.setCancelled(true);
                 });
 
+        GuiItem sellAll = new GuiItem(new ItemBuilder(Material.GREEN_CANDLE)
+                .setDisplayName("§aVender tudo")
+                .setLore(List.of("§fClique aqui para vender todos os peixes."))
+                .build(),
+
+                event -> {
+                    event.setCancelled(true);
+
+                    fishMap.forEach((fishName, fishData) -> {
+                        int quantity = cacheMethod.getFishAmount(player, fishName);
+
+                        int fishValue = fishesUtils.getFishValue(fishData.getRarity());
+                        int totalValue = fishValue * quantity;
+
+                        currenciesAPI.addBalance(player, coins, totalValue);
+                        cacheMethod.setFishAmount(player, fishName, 0);
+
+                        String soldFishMessage = configMessages.getString("balde.vendeuPeixe");
+                        if (soldFishMessage != null) {
+                            player.sendMessage("§7[DEBUG]" + soldFishMessage
+                                            .replace("{quantity}", String.valueOf(quantity))
+                                            .replace("{fishname}", fishName)
+                                            .replace("{coins}", String.valueOf(totalValue))
+                            );
+                        }
+                    });
+                });
+
         GuiItem none = new GuiItem(new ItemBuilder(Material.BARRIER)
                 .setDisplayName("")
                 .setLore(List.of(""))
@@ -152,8 +180,9 @@ public class FishBucketInventory {
         }
 
         pane.addItem(frozenFish, Slot.fromIndex(25));
-//        pane.addItem(backButton, Slot.fromIndex(46));
-        pane.addItem(upgradesButton, Slot.fromIndex(48));
+        pane.addItem(backButton, Slot.fromIndex(45));
+        pane.addItem(sellAll, Slot.fromIndex(47));
+        pane.addItem(upgradesButton, Slot.fromIndex(49));
 
         inventory.addPane(pane);
         inventory.show(player);

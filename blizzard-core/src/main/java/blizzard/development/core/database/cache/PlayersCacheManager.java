@@ -7,22 +7,25 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.bukkit.entity.Player;
 
 public class PlayersCacheManager {
-    public static final ConcurrentHashMap<String, PlayersData> playersCache = new ConcurrentHashMap<>();
-    private static final PlayersDAO playersDAO = new PlayersDAO();
 
-    public static PlayersData getPlayerData(Player player) {
+    private static PlayersCacheManager instance;
+
+    public final ConcurrentHashMap<String, PlayersData> playersCache = new ConcurrentHashMap<>();
+    private final PlayersDAO playersDAO = new PlayersDAO();
+
+    public PlayersData getPlayerData(Player player) {
         return getPlayerDataByName(player.getName());
     }
 
-    public static void cachePlayerData(Player player, PlayersData playerData) {
+    public void cachePlayerData(Player player, PlayersData playerData) {
         playersCache.put(player.getName(), playerData);
     }
 
-    public static void cachePlayerDataByName(String player, PlayersData playerData) {
+    public void cachePlayerDataByName(String player, PlayersData playerData) {
         playersCache.put(player, playerData);
     }
 
-    public static PlayersData getPlayerDataByName(String playerName) {
+    public PlayersData getPlayerDataByName(String playerName) {
         PlayersData data = playersCache.get(playerName);
 
         if (data == null) {
@@ -35,7 +38,7 @@ public class PlayersCacheManager {
         return data;
     }
 
-    public static void setTemperature(Player player, double temperature) {
+    public void setTemperature(Player player, double temperature) {
         PlayersData data = getPlayerData(player);
         if (data != null) {
             data.setTemperature(temperature);
@@ -43,7 +46,7 @@ public class PlayersCacheManager {
         }
     }
 
-    public static double getTemperature(Player player) {
+    public double getTemperature(Player player) {
         PlayersData data = getPlayerData(player);
         if (data != null) {
             return data.getTemperature();
@@ -51,7 +54,7 @@ public class PlayersCacheManager {
         return 0.0D;
     }
 
-    public static void setPlayerClothing(Player player, ClothingType clothingType) {
+    public void setPlayerClothing(Player player, ClothingType clothingType) {
         PlayersData data = getPlayerData(player);
 
         if (data != null) {
@@ -60,7 +63,7 @@ public class PlayersCacheManager {
         }
     }
 
-    public static String getPlayerClothing(Player player) {
+    public String getPlayerClothing(Player player) {
         PlayersData data = getPlayerData(player);
 
         if (data != null) {
@@ -68,5 +71,12 @@ public class PlayersCacheManager {
         }
 
         return "Inválido";
+    }
+
+    public static PlayersCacheManager getInstance() {
+        if (instance == null) {
+            instance = new PlayersCacheManager();
+        }
+        return instance;
     }
 }

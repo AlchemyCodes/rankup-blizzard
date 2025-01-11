@@ -17,6 +17,7 @@
             <option value="$PROJECT_DIR$/blizzard-events" />
             <option value="$PROJECT_DIR$/blizzard-excavation" />
             <option value="$PROJECT_DIR$/blizzard-fishing" />
+            <option value="$PROJECT_DIR$/blizzard-mine" />
             <option value="$PROJECT_DIR$/blizzard-monsters" />
             <option value="$PROJECT_DIR$/blizzard-plantations" />
             <option value="$PROJECT_DIR$/blizzard-rankup" />
@@ -25,6 +26,7 @@
             <option value="$PROJECT_DIR$/blizzard-time" />
             <option value="$PROJECT_DIR$/blizzard-tops" />
             <option value="$PROJECT_DIR$/blizzard-vips" />
+            <option value="$PROJECT_DIR$/blizzard-visuals" />
           </set>
         </option>
       </GradleProjectSettings>

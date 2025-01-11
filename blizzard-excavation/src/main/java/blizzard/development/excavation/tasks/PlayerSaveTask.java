@@ -25,7 +25,5 @@ public class PlayerSaveTask extends BukkitRunnable {
                 throw new RuntimeException(e);
             }
         });
-
-        Bukkit.getConsoleSender().sendMessage("§a[Escavação] §aSalvando " + Bukkit.getOnlinePlayers().size() + " jogadores do cache na database.");
     }
 }

@@ -3,7 +3,8 @@ blizzard:
   duration: 5
 
 temperature:
-  max: 20
+  max: 15
+  maxWithBlizzard: 3
   initialTemperature: 10
   freezingTemperature: 0
   timeToDecay: 10
@@ -19,9 +20,6 @@ clothes:
     percentage: 25
   legendary:
     percentage: 35
-
-campfires:
-  spawnCampfire:
 
 schem:
   name: "core.schem"

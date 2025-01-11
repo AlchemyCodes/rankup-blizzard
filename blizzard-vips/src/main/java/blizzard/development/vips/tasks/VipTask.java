@@ -29,16 +29,16 @@ public class VipTask extends BukkitRunnable {
 
                 for (PlayersData playerVip : allPlayerVips) {
                     long vipDuration = playerVip.getVipDuration();
+                    String vipName = playerVip.getVipName();
 
-                    if (vipDuration <= 0) return;
+                    if (vipDuration <= 0) continue;
 
                     if (vipDuration <= 2) {
-                        playerVip.setVipName("");
-                        playerVip.setVipActivationDate("");
-                        playerVip.setVipId("");
-                        playerVip.setVipDuration(0);
-                        playersDAO.updatePlayerData(playerVip);
-                        return;
+                        playersDAO.deletePlayerVip(playerVip);
+
+                        Bukkit.dispatchCommand(
+                                Bukkit.getConsoleSender(), "lp user " + player.getName() + " parent remove " + vipName.toLowerCase());
+                        continue;
                     }
 
                     playerVip.setVipDuration(vipDuration - 1);

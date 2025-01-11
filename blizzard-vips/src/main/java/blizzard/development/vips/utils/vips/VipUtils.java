@@ -104,6 +104,9 @@ public class VipUtils {
         playersDAO.createPlayerData(newPlayerData);
 
         PlayersCacheManager.getInstance().cachePlayerData(targetPlayer.getName(), newPlayerData);
+
+        Bukkit.dispatchCommand(
+                Bukkit.getConsoleSender(), "lp user " + targetPlayer.getName() + " parent add " + vipName);
     }
 
     public void sendVipMessage(String playerName, String vipName) {

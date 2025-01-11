@@ -21,6 +21,7 @@ public class RodsDAO {
                     + "nickname VARCHAR(36), "
                     + "strength INT DEFAULT 1, "
                     + "xp DOUBLE DEFAULT 0, "
+                    + "specialist INT DEFAULT 0, "
                     + "experienced INT DEFAULT 0, "
                     + "lucky INT DEFAULT 0, "
                     + "material VARCHAR(36))";
@@ -61,6 +62,7 @@ public class RodsDAO {
                             resultSet.getString("nickname"),
                             resultSet.getInt("strength"),
                             resultSet.getDouble("xp"),
+                            resultSet.getInt("specialist"),
                             resultSet.getInt("experienced"),
                             resultSet.getInt("lucky"),
                             materials);
@@ -73,16 +75,17 @@ public class RodsDAO {
     }
 
     public void createRodsData(RodsData rodsData) throws SQLException {
-        String sql = "INSERT INTO fishing_rods (uuid, nickname, strength, xp, experienced, lucky, material) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO fishing_rods (uuid, nickname, strength, xp, specialist, experienced, lucky, material) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         executeUpdate(sql, (statement) -> {
             try {
                 statement.setString(1, rodsData.getUuid());
                 statement.setString(2, rodsData.getNickname());
                 statement.setInt(3, rodsData.getStrength());
                 statement.setDouble(4, rodsData.getXp());
-                statement.setInt(5, rodsData.getExperienced());
-                statement.setInt(6, rodsData.getLucky());
-                statement.setString(7, rodsData.getRodMaterials().stream().map(Enum::name).collect(Collectors.joining(",")));
+                statement.setInt(5, rodsData.getSpecialist());
+                statement.setInt(6, rodsData.getExperienced());
+                statement.setInt(7, rodsData.getLucky());
+                statement.setString(8, rodsData.getRodMaterials().stream().map(Enum::name).collect(Collectors.joining(",")));
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -101,16 +104,17 @@ public class RodsDAO {
     }
 
     public void updateRodsData(RodsData rodsData) throws SQLException {
-        String sql = "UPDATE fishing_rods SET nickname = ?, strength = ?, xp = ?, experienced = ?, lucky = ?, material = ? WHERE uuid = ?";
+        String sql = "UPDATE fishing_rods SET nickname = ?, strength = ?, xp = ?, specialist = ?, experienced = ?, lucky = ?, material = ? WHERE uuid = ?";
         executeUpdate(sql, statement -> {
             try {
                 statement.setString(1, rodsData.getNickname());
                 statement.setInt(2, rodsData.getStrength());
                 statement.setDouble(3, rodsData.getXp());
-                statement.setInt(4, rodsData.getExperienced());
-                statement.setInt(5, rodsData.getLucky());
-                statement.setString(6, rodsData.getRodMaterials().stream().map(Enum::name).collect(Collectors.joining(",")));
-                statement.setString(7, rodsData.getUuid());
+                statement.setInt(4, rodsData.getSpecialist());
+                statement.setInt(5, rodsData.getExperienced());
+                statement.setInt(6, rodsData.getLucky());
+                statement.setString(7, rodsData.getRodMaterials().stream().map(Enum::name).collect(Collectors.joining(",")));
+                statement.setString(8, rodsData.getUuid());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }

@@ -85,7 +85,7 @@ public class PlayersDAO {
         String sql = "DELETE FROM vip_users WHERE uuid = ?";
         executeUpdate(sql, statement -> {
             try {
-                statement.setString(1, playerData.getUuid());
+                statement.setString(1, playerData.getVipId());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -105,13 +105,13 @@ public class PlayersDAO {
     }
 
     public void updatePlayerData(PlayersData playerData) throws SQLException {
-        String sql = "UPDATE vip_users SET id = ?, nickname = ?, vipActivationDate = ?, vipId = ?, vipName = ?, vipDuration = ? WHERE vipId = ?";
+        String sql = "UPDATE vip_users SET uuid = ?, id = ?, nickname = ?, vipActivationDate = ?, vipName = ?, vipDuration = ? WHERE vipId = ?";
         executeUpdate(sql, statement -> {
             try {
-                statement.setInt(1, playerData.getId());
-                statement.setString(2, playerData.getNickname());
-                statement.setString(3, playerData.getVipActivationDate());
-                statement.setString(4, playerData.getVipId());
+                statement.setString(1, playerData.getUuid());
+                statement.setInt(2, playerData.getId());
+                statement.setString(3, playerData.getNickname());
+                statement.setString(4, playerData.getVipActivationDate());
                 statement.setString(5, playerData.getVipName());
                 statement.setLong(6, playerData.getVipDuration());
                 statement.setString(7, playerData.getVipId());
@@ -120,6 +120,7 @@ public class PlayersDAO {
             }
         });
     }
+
 
     public List<PlayersData> getAllPlayerVips(String playerName) throws SQLException {
         String query = "SELECT * FROM vip_users WHERE nickname = ?";

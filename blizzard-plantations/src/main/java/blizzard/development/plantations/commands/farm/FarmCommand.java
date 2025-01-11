@@ -1,27 +1,46 @@
 package blizzard.development.plantations.commands.farm;
 
 import blizzard.development.plantations.Main;
+import blizzard.development.plantations.api.CoreAPI;
 import blizzard.development.plantations.database.cache.methods.PlayerCacheMethod;
+import blizzard.development.plantations.database.cache.methods.ToolCacheMethod;
 import blizzard.development.plantations.inventories.FarmInventory;
 import blizzard.development.plantations.managers.AreaManager;
 import blizzard.development.plantations.managers.PlantationManager;
+import blizzard.development.plantations.managers.upgrades.agility.AgilityManager;
+import blizzard.development.plantations.plantations.adapters.AreaAdapter;
 import blizzard.development.plantations.plantations.adapters.ToolAdapter;
+import blizzard.development.plantations.plantations.enums.PlantationEnum;
+import blizzard.development.plantations.plantations.enums.ToolsEnum;
+import blizzard.development.plantations.plantations.item.ToolBuildItem;
 import blizzard.development.plantations.utils.CooldownUtils;
 import blizzard.development.plantations.utils.LocationUtils;
 import blizzard.development.plantations.utils.PluginImpl;
 import blizzard.development.plantations.utils.displayentity.DisplayEntityUtils;
+import blizzard.development.plantations.utils.packets.PacketUtils;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Sound;
+import org.bukkit.WeatherType;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Horse;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.time.Duration;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static blizzard.development.plantations.builder.ItemBuilder.getPersistentData;
 import static blizzard.development.plantations.utils.NumberFormat.formatNumber;
 
 @CommandAlias("estufa|plantar")
@@ -245,65 +264,104 @@ public class FarmCommand extends BaseCommand {
         Player player = (Player) commandSender;
 
         AreaManager areaManager = AreaManager.getInstance();
-        areaManager.setArea(player, 20);
+        areaManager.setArea(player, 10);
         areaManager.resetArea(player);
+        areaManager.setAreaPlantation(player, PlantationEnum.POTATO);
     }
 
+    @Subcommand("ir")
+    @Syntax("<player>")
+    @CommandCompletion("@players")
+    public void onGoCommand(CommandSender commandSender, @Optional String playerTarget) {
+        if (playerTarget == null) {
+            Player player = (Player) commandSender;
 
-    @Subcommand("giveseed")
-    @Syntax("<player> <key>")
-    @CommandPermission("alchemy.plantations.giveseed")
-    public void onGiveSeed(CommandSender commandSender, String playerTarget, int amount) {
+            AreaAdapter
+                .getInstance()
+                .teleportToArea(player);
+            return;
+        }
+
         Player player = (Player) commandSender;
         Player target = Bukkit.getPlayer(playerTarget);
+
+        Location location = LocationUtils.getPlantationSpawnLocation();
+
+        if (location == null) {
+            player.sendActionBar("§c§lEI! §cO spawn da estufa ainda não foi setado.");
+            return;
+        }
 
         if (target == null) {
             player.sendActionBar("§c§lEI! §cO jogador está offline ou não existe.");
             return;
         }
 
-        PlayerCacheMethod playerCacheMethod = PlayerCacheMethod.getInstance();
-        playerCacheMethod.setPlantations(target, playerCacheMethod.getPlantations(target) + amount);
+        AreaAdapter
+            .getInstance()
+            .teleportToFriendArea(player, target);
+    }
 
-        player.sendActionBar("§a§lYAY! §aVocê adicionou " + formatNumber(amount) + " sementes na conta do jogador " + target.getName());
+    @Subcommand("testes")
+    @CommandPermission("alchemy.plantations.giveseed")
+    public void onTest(CommandSender commandSender, ToolsEnum toolsEnum) {
+        Player player = (Player) commandSender;
 
-        player.sendMessage("suas sementes: " + playerCacheMethod.getPlantations(player));
-        player.sendMessage("sementes do jogador " + target.getName() + ": " + playerCacheMethod.getPlantations(target));
+        ItemStack item = player.getInventory().getItemInMainHand();
+        String id = getPersistentData(Main.getInstance(), item, "ferramenta-id");
+
+        ToolCacheMethod toolCacheMethod = ToolCacheMethod.getInstance();
+
+        switch (toolsEnum) {
+            case WOODEN -> toolCacheMethod.setSkin(id, ToolsEnum.WOODEN);
+            case STONE -> toolCacheMethod.setSkin(id, ToolsEnum.STONE);
+            case IRON -> toolCacheMethod.setSkin(id, ToolsEnum.IRON);
+            case GOLD -> toolCacheMethod.setSkin(id, ToolsEnum.GOLD);
+            case DIAMOND -> toolCacheMethod.setSkin(id, ToolsEnum.DIAMOND);
+            default -> player.sendMessage("nao tem");
+        }
+
+        player.getInventory().setItemInMainHand(ToolBuildItem.tool(
+            id,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+        ));
     }
 
     @Subcommand("devs")
     @CommandPermission("alchemy.plantations.giveseed")
-    public void onDev(CommandSender commandSender) {
+    public void onDev(CommandSender commandSender, String playerTarget) {
         Player player = (Player) commandSender;
-
-        player.teleport(LocationUtils.getCenterLocation());
-//        HarvestEffect harvestEffect = new HarvestEffect();
-//        harvestEffect.executeHarvestWave(player, 20);
-
-//        TornadoEffect tornadoEffect = new TornadoEffect();
-//        tornadoEffect.startTornadoEffect(player);
+        Player target = Bukkit.getPlayer(playerTarget);
 
 
-//        PacketUtils.getInstance()
-//            .sendEntityPacket(
-//                player.getLocation(),
-//                player
-//            );
+        if (target == null) {
+            player.sendActionBar("§c§lEI! §cO jogador está offline ou não existe.");
 
-//        player.getInventory().addItem(
-//            new ItemBuilder("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWU0NjVkZTI2Y2FmYjk0YTM0Y2U5Mjc5ZGY2NzlhYzI4OWQxY2M4NzQxMmZlYWNkYTkwZGI5MjYyMzA3ODJlZSJ9fX0=")
-//                .setDisplayName("§6Abatedouro §l✂ §7Nível §l1")
-//                .setLore(Arrays.asList(
-//                    "§7Mate os mobs do seu",
-//                    "§7gerador mais facilmente.",
-//                    "",
-//                    " §fÁrea: §35x5",
-//                    " §fCooldown: §c1 minuto",
-//                    "",
-//                    "§6Clique no chão para colocar."
-//                ))
-//                .build()
-//        );
+
+            List<String>  message = Arrays.asList(
+                "",
+                " §3§lMonstros! §3Capturamos todos os seus monstros.",
+                " §7Você pode pegá-los novamente no §7´§o§f/gaiola§7´.",
+                ""
+            );
+
+            for (String messages : message) {
+                player.sendMessage(messages);
+            }
+
+            return;
+        }
+
+        PlayerCacheMethod
+            .getInstance()
+            .addFriend(player, target.getName());
     }
 
 }

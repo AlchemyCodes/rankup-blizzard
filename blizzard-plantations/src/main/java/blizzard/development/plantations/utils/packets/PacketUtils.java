@@ -1,5 +1,6 @@
 package blizzard.development.plantations.utils.packets;
 
+import blizzard.development.plantations.managers.AreaManager;
 import blizzard.development.plantations.managers.BlockManager;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
@@ -12,6 +13,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.Ageable;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -31,7 +33,14 @@ public class PacketUtils {
 
             PacketContainer packet = new PacketContainer(PacketType.Play.Server.BLOCK_CHANGE);
 
-            BlockData blockData = Bukkit.createBlockData("minecraft:potatoes");
+            BlockData blockData = switch (AreaManager.getInstance().getAreaPlantation(player)) {
+                case "POTATOES" -> Bukkit.createBlockData("minecraft:potatoes[age=7]");
+                case "CARROTS" -> Bukkit.createBlockData("minecraft:carrots[age=7]");
+                case "BEETROOTS" -> Bukkit.createBlockData("minecraft:beetroots[age=3]");
+                case "WHEAT" -> Bukkit.createBlockData("minecraft:wheat[age=7]");
+                default -> throw new IllegalStateException("Unexpected value to switch PacketUtils:java51");
+            };
+
             WrappedBlockData wrappedBlockData = WrappedBlockData.createData(blockData);
 
             BlockPosition blockPosition = new BlockPosition(
@@ -62,6 +71,12 @@ public class PacketUtils {
             PacketContainer packet = new PacketContainer(PacketType.Play.Server.BLOCK_CHANGE);
 
             BlockData blockData = Bukkit.createBlockData(material);
+            if (blockData instanceof Ageable) {
+                Ageable ageable = (Ageable) blockData;
+                ageable.setAge(0);
+                blockData = ageable;
+            }
+
             WrappedBlockData wrappedBlockData = WrappedBlockData.createData(blockData);
 
             BlockPosition blockPosition = new BlockPosition(
@@ -74,6 +89,9 @@ public class PacketUtils {
             packet.getBlockPositionModifier().write(0, blockPosition);
 
             BlockManager.placePlantation(player, blockPosition);
+
+            packet.setMeta("manual_update", true);
+            packet.setMeta("growth", true);
 
             ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet);
         } catch (Exception e) {

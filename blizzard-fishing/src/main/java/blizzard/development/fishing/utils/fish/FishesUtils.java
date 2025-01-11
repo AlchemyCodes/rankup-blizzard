@@ -1,23 +1,54 @@
 package blizzard.development.fishing.utils.fish;
 
-import blizzard.development.core.api.CoreAPI;
 import blizzard.development.fishing.database.cache.methods.PlayersCacheMethod;
 import blizzard.development.fishing.database.cache.methods.RodsCacheMethod;
 import blizzard.development.fishing.enums.RodMaterials;
+import blizzard.development.fishing.utils.NumberFormat;
 import blizzard.development.fishing.utils.PluginImpl;
+import com.comphenix.protocol.ProtocolManager;
+import com.comphenix.protocol.events.PacketContainer;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class FishesUtils {
 
     private static FishesUtils instance;
+    Plugin plugin = PluginImpl.getInstance().plugin;
     private final Random random = new Random();
     private final YamlConfiguration config = PluginImpl.getInstance().Config.getConfig();
+    private final YamlConfiguration enchantmentsConfig = PluginImpl.getInstance().Enchantments.getConfig();
+
+    public HashMap<RodMaterials, Player> activeSkin = new HashMap<>();
+
+    public void setActiveSkin(Player player, RodMaterials material) {
+        activeSkin.entrySet().removeIf(entry -> entry.getValue().equals(player));
+
+        activeSkin.put(material, player);
+    }
+
+    public boolean getActiveSkin(RodMaterials material) {
+        return activeSkin.containsKey(material);
+    }
+
+    public RodMaterials getPlayerMaterial(Player player) {
+        for (RodMaterials material : activeSkin.keySet()) {
+            if (activeSkin.get(material).equals(player)) {
+                return material;
+            }
+        }
+        return null;
+    }
 
     public int getStrengthNecessary(String rarity) {
         return switch (rarity.toLowerCase()) {
@@ -78,14 +109,11 @@ public class FishesUtils {
     public List<String> getFishes(String rarity) {
         List<String> fishes = new ArrayList<>();
 
-        if (CoreAPI.getInstance().isIsBlizzard()) {
-            fishes.add("congelado");
-            return fishes;
-        }
-
         for (String fish : config.getConfigurationSection("fishes").getKeys(false)) {
+
             String fishRarity = config.getString("fishes." + fish + ".rarity");
             assert fishRarity != null;
+
             if (fishRarity.equalsIgnoreCase(rarity)) {
                 fishes.add(fish);
             }
@@ -94,17 +122,32 @@ public class FishesUtils {
         return fishes;
     }
 
-    public void giveFish(Player player, String fish, PlayersCacheMethod cacheMethod) {
+    public String getFishName(String fish) {
+        switch (fish) {
+            case "bacalhau" -> fish = "Bacalhau";
+            case "salmao" -> fish = "Salmão";
+            case "caranguejo" -> fish = "Caranguejo";
+            case "lagosta" -> fish = "Lagosta";
+            case "lula" -> fish = "Lula";
+            case "lula_brilhante" -> fish = "Lula Brilhante";
+            case "tubarao" -> fish = "Tubarão";
+            case "baleia" -> fish = "Baleia";
+            case "congelado" -> fish = "Peixe Congelado";
+        }
+        return fish;
+    }
+
+    public void giveFish(Player player, String fish, PlayersCacheMethod cacheMethod, int fishQuantity) {
             switch (fish) {
-                case "bacalhau" -> cacheMethod.setBacalhau(player, cacheMethod.getBacalhau(player) + 1);
-                case "salmao" ->  cacheMethod.setSalmao(player, cacheMethod.getSalmao(player) + 1);
-                case "caranguejo" -> cacheMethod.setCaranguejo(player, cacheMethod.getCaranguejo(player) + 1);
-                case "lagosta" -> cacheMethod.setLagosta(player, cacheMethod.getLagosta(player) + 1);
-                case "lula" -> cacheMethod.setLula(player, cacheMethod.getLula(player) + 1);
-                case "lula_brilhante" -> cacheMethod.setLulaBrilhante(player, cacheMethod.getLulaBrilhante(player) + 1);
-                case "tubarao" -> cacheMethod.setTubarao(player, cacheMethod.getTubarao(player) + 1);
-                case "baleia" -> cacheMethod.setBaleia(player, cacheMethod.getBaleia(player) + 1);
-                case "congelado" -> cacheMethod.setFrozenFish(player, cacheMethod.getFrozenFish(player) + 1);
+                case "bacalhau" -> cacheMethod.setBacalhau(player, cacheMethod.getBacalhau(player) + fishQuantity);
+                case "salmao" ->  cacheMethod.setSalmao(player, cacheMethod.getSalmao(player) + fishQuantity);
+                case "caranguejo" -> cacheMethod.setCaranguejo(player, cacheMethod.getCaranguejo(player) + fishQuantity);
+                case "lagosta" -> cacheMethod.setLagosta(player, cacheMethod.getLagosta(player) + fishQuantity);
+                case "lula" -> cacheMethod.setLula(player, cacheMethod.getLula(player) + fishQuantity);
+                case "lula_brilhante" -> cacheMethod.setLulaBrilhante(player, cacheMethod.getLulaBrilhante(player) + fishQuantity);
+                case "tubarao" -> cacheMethod.setTubarao(player, cacheMethod.getTubarao(player) + fishQuantity);
+                case "baleia" -> cacheMethod.setBaleia(player, cacheMethod.getBaleia(player) + fishQuantity);
+                case "congelado" -> cacheMethod.setFrozenFish(player, cacheMethod.getFrozenFish(player) + fishQuantity);
             }
     }
 
@@ -116,32 +159,103 @@ public class FishesUtils {
     }
 
     public void giveXp(Player player, String rarity, RodsCacheMethod rodsCacheMethod) {
-        double xp = FishesUtils.getInstance().getFishXp(rarity);
-
-        xp = xp * rodsCacheMethod.getBestMaterial(player).getBonus();
-
-        rodsCacheMethod.setXp(player, xp);
+        rodsCacheMethod.setXp(player, getXp(player, rarity));
     }
 
-    public double getXp(Player player, String rarity, RodsCacheMethod rodsCacheMethod) {
+    public double getXp(Player player, String rarity) {
+        RodsCacheMethod rodsCacheMethod = new RodsCacheMethod();
+
         double xp = FishesUtils.getInstance().getFishXp(rarity);
 
-        xp = xp * rodsCacheMethod.getBestMaterial(player).getBonus();
+        xp = (xp + rodsCacheMethod.getExperienced(player)) * getPlayerMaterial(player).getBonus();
 
         return xp;
     }
 
-    public boolean giveChanceFrozenFish(Player player, PlayersCacheMethod cacheMethod) {;
-        int chance = random.nextInt(101);
+    public void giveFrozenFish(Player player, PlayersCacheMethod cacheMethod, RodsCacheMethod rodsCacheMethod, int quantity) {
+        YamlConfiguration messagesConfig = PluginImpl.getInstance().Messages.getConfig();
 
-        if (chance >= 50) {
-            player.sendMessage("tinha chance baixa e ganhou peixe congelado");
-            cacheMethod.setFrozenFish(player,cacheMethod.getFrozenFish(player) + 1);
-            return true;
-        }
-
-        return false;
+        getFishMessage(player, messagesConfig, "§bPeixe Congelado§f", getXp(player, "frozen"), quantity);
+        cacheMethod.setFrozenFish(player, cacheMethod.getFrozenFish(player) + fishQuantity(player, rodsCacheMethod));
+        giveXp(player, "frozen", rodsCacheMethod);
+        player.sendMessage("§7[DEBUG] §fSeu xp: §a" + rodsCacheMethod.getXp(player));
     }
+
+    public void getFishMessage(Player player, YamlConfiguration config, String caughtFish, double xp, int quantity) {
+        String message = config.getString("pesca.action");
+        if (message != null) {
+            player.sendActionBar(message
+                    .replace("{quantity}", quantity + "")
+                    .replace("{fishname}", caughtFish)
+                    .replace("{xp}", NumberFormat.getInstance().formatNumber(xp)));
+        }
+    }
+
+    public int fishQuantity(Player player, RodsCacheMethod rodsCacheMethod) {
+        int rand = new Random().nextInt(101);
+
+        if (rand <= enchantmentsConfig.getInt("enchantments.rod.sortudo.chance") * rodsCacheMethod.getLucky(player)) {
+            return 2;
+        }
+        return 1;
+    }
+
+    public void startDiamondRain(Player player, RodsCacheMethod rodsCacheMethod) {
+        YamlConfiguration messagesConfig = PluginImpl.getInstance().Messages.getConfig();
+        int rand = new Random().nextInt(101);
+
+        if (rand <= enchantmentsConfig.getInt("enchantments.rod.especialista.chance") * rodsCacheMethod.getSpecialist(player)) {
+
+            player.sendTitle(messagesConfig.getString("pesca.specialist.title"),
+                    messagesConfig.getString("pesca.specialist.sub-title"));
+
+            createDiamondRain(player);
+        }
+    }
+
+
+    public void createDiamondRain(Player player) {
+        Location playerLoc = player.getLocation();
+        World world = player.getWorld();
+
+        new BukkitRunnable() {
+            int timeElapsed = 0;
+
+            @Override
+            public void run() {
+                if (timeElapsed >= 5 * 20) {
+                    this.cancel();
+                    return;
+                }
+
+                if (timeElapsed % (20 /2) == 0) {
+                    int diamondsPerWave = 20;
+
+                    for (int i = 0; i < diamondsPerWave; i++) {
+                        double x = playerLoc.getX() + (Math.random() * 20) - 10;
+                        double z = playerLoc.getZ() + (Math.random() * 20) - 10;
+                        double y = playerLoc.getY() + 15;
+
+                        Location diamondLoc = new Location(world, x, y, z);
+
+                        Item fakeDiamond = world.dropItem(diamondLoc, new ItemStack(Material.DIAMOND));
+                        fakeDiamond.setPickupDelay(Integer.MAX_VALUE);
+
+                        for (Player p : Bukkit.getOnlinePlayers()) {
+                            if (p != player) {
+                                p.hideEntity(plugin, fakeDiamond);
+                            }
+                        }
+
+                        Bukkit.getScheduler().runTaskLater(plugin, fakeDiamond::remove, 60L);
+                    }
+                }
+
+                timeElapsed++;
+            }
+        }.runTaskTimer(plugin, 0L, 1L);
+    }
+
 
     public static FishesUtils getInstance() {
         if (instance == null) {

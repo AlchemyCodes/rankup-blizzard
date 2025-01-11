@@ -14,6 +14,8 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
 
+import static blizzard.development.plantations.utils.NumberFormat.formatNumber;
+
 public class AreaUpgradeInventory {
 
     public void open(Player player) {
@@ -23,11 +25,78 @@ public class AreaUpgradeInventory {
         AreaManager areaManager = AreaManager.getInstance();
         PlayerCacheMethod playerCacheMethod = PlayerCacheMethod.getInstance();
 
-        GuiItem radius20 = new GuiItem(radius(player, Material.SMALL_AMETHYST_BUD, 20), event -> {;
+        int radius40Cost = 1000;
+        int radius60Cost = 1000;
+        int radius80Cost = 1000;
+        int radius100Cost = 1000;
+
+        int seeds = playerCacheMethod.getPlantations(player);
+
+        GuiItem radius20 = new GuiItem(radius(player, Material.SMALL_AMETHYST_BUD, 10), event -> {;
             event.setCancelled(true);
         });
 
-        GuiItem radius40 = new GuiItem(radius(player, Material.MEDIUM_AMETHYST_BUD, 40), event -> {
+        GuiItem radius40 = new GuiItem(radius(player, Material.MEDIUM_AMETHYST_BUD, 20), event -> {
+            int radius = areaManager.getArea(player);
+            if (radius == 50) {
+                player.closeInventory();
+                player.sendActionBar("§c§lEI! §cA sua área já está no level máximo.");
+                return;
+            }
+
+            if (radius40Cost > seeds) {
+                int subtraction = radius40Cost - seeds;
+
+                player.closeInventory();
+                player.sendMessage("");
+                player.sendMessage(" §c§lEI! §cVocê não possui sementes para evoluir.");
+                player.sendMessage(" §cFaltam §l" + formatNumber(subtraction) + "§c sementes para executar a ação.");
+                player.sendMessage("");
+            }
+            areaManager.setArea(player, 20);
+            areaManager.applyAreaUpgrade(player);
+
+            open(player);
+            event.setCancelled(true);
+        });
+
+        GuiItem radius60 = new GuiItem(radius(player, Material.LARGE_AMETHYST_BUD, 30), event -> {
+            int radius = areaManager.getArea(player);
+
+            if (radius == 50) {
+                player.closeInventory();
+                player.sendActionBar("§c§lEI! §cA sua área já está no level máximo.");
+                return;
+            }
+
+            if (radius != 20) {
+                player.closeInventory();
+                player.sendActionBar("§c§lEI! §cA sua área não está no nível anterior.");
+                return;
+            }
+
+            areaManager.setArea(player, 30);
+            areaManager.applyAreaUpgrade(player);
+
+            open(player);
+            event.setCancelled(true);
+        });
+
+        GuiItem radius80 = new GuiItem(radius(player, Material.AMETHYST_CLUSTER, 40), event -> {
+            int radius = areaManager.getArea(player);
+
+            if (radius == 50) {
+                player.closeInventory();
+                player.sendActionBar("§c§lEI! §cA sua área já está no level máximo.");
+                return;
+            }
+
+            if (radius != 30) {
+                player.closeInventory();
+                player.sendActionBar("§c§lEI! §cA sua área não está no nível anterior.");
+                return;
+            }
+
             areaManager.setArea(player, 40);
             areaManager.applyAreaUpgrade(player);
 
@@ -35,48 +104,16 @@ public class AreaUpgradeInventory {
             event.setCancelled(true);
         });
 
-        GuiItem radius60 = new GuiItem(radius(player, Material.LARGE_AMETHYST_BUD, 60), event -> {
+        GuiItem radius100 = new GuiItem(radius(player, Material.AMETHYST_SHARD, 50), event -> {
             int radius = areaManager.getArea(player);
 
-            if (radius != 40) {
-                player.closeInventory();
-                player.sendActionBar("§c§lEI! §cA sua área não está no nível anterior.");
-                return;
-            }
-
-            areaManager.setArea(player, 60);
-            areaManager.applyAreaUpgrade(player);
-
-            open(player);
-            event.setCancelled(true);
-        });
-
-        GuiItem radius80 = new GuiItem(radius(player, Material.AMETHYST_CLUSTER, 80), event -> {
-            int radius = areaManager.getArea(player);
-
-            if (radius != 60) {
-                player.closeInventory();
-                player.sendActionBar("§c§lEI! §cA sua área não está no nível anterior.");
-                return;
-            }
-
-            areaManager.setArea(player, 80);
-            areaManager.applyAreaUpgrade(player);
-
-            open(player);
-            event.setCancelled(true);
-        });
-
-        GuiItem radius100 = new GuiItem(radius(player, Material.AMETHYST_SHARD, 100), event -> {
-            int radius = areaManager.getArea(player);
-
-            if (radius == 100) {
+            if (radius == 50) {
                 player.closeInventory();
                 player.sendActionBar("§c§lEI! §cA sua área já está no level máximo.");
                 return;
             }
 
-            areaManager.setArea(player, 100);
+            areaManager.setArea(player, 50);
             areaManager.applyAreaUpgrade(player);
 
             open(player);
@@ -116,14 +153,32 @@ public class AreaUpgradeInventory {
         PlayerCacheMethod playerCacheMethod = PlayerCacheMethod.getInstance();
         int currentRadius = playerCacheMethod.getArea(player);
 
-        if (currentRadius >= radius) {
+        int parseCurrentRadius = switch (currentRadius) {
+            case 10 -> 20;
+            case 20 -> 40;
+            case 30 -> 60;
+            case 40 -> 80;
+            case 50 -> 100;
+            default -> throw new IllegalStateException("Unexpected value: " + currentRadius);
+        };
+
+        int parse = switch (radius) {
+            case 10 -> 20;
+            case 20 -> 40;
+            case 30 -> 60;
+            case 40 -> 80;
+            case 50 -> 100;
+            default -> throw new IllegalStateException("Unexpected value: " + radius);
+        };
+
+        if (parseCurrentRadius >= parse) {
             return new ItemBuilder(Material.BARRIER)
                 .setDisplayName("§cNível desbloqueado!")
                 .setLore(Arrays.asList(
                     "§7Você já possui este",
                     "§7nível ou um superior.",
                     "",
-                    " §fRaio Atual: §c" + currentRadius + "x",
+                    " §fRaio Atual: §c" + parseCurrentRadius + "x",
                     "",
                     "§cMelhoria não disponível."
                 ))
@@ -131,12 +186,12 @@ public class AreaUpgradeInventory {
         }
 
         return new ItemBuilder(material)
-            .setDisplayName("§dAumentar raio §l" + radius + "§dx")
+            .setDisplayName("§dAumentar raio §l" + parse + "§dx")
             .setLore(Arrays.asList(
                 "§7Aumente o raio de",
                 "§7plantações da estufa.",
                 "",
-                " §fRaio: §d" + radius + "x",
+                " §fRaio: §d" + parse + "x",
                 " §fCusto: §a✿15K",
                 "",
                 "§dClique para upar."
@@ -155,7 +210,7 @@ public class AreaUpgradeInventory {
     }
 
     public static ItemStack area() {
-        return new ItemBuilder(Material.BARRIER)
+        return new ItemBuilder(Material.REDSTONE)
             .setDisplayName("§cÀrea de Plantações")
             .setLore(Arrays.asList(
                 "§7Gerencia o tamanho",

@@ -78,7 +78,7 @@ public class FishBucketUpgrades {
                         ("§7Aumente a capacidade",
                                 "§7de peixes do seu balde.",
                                 "",
-                                "§7Preço: §f" + NumberFormat.formatNumber(capacityPrice(playersCacheMethod, player)) + "§a$",
+                                "§7Preço: §f" + NumberFormat.getInstance().formatNumber(capacityPrice(playersCacheMethod, player)) + "§a$",
                                 "",
                                 "§6Clique para melhorar.")).build();
     }

@@ -44,6 +44,7 @@ public class PlayerCacheManager {
                 .sorted((p1, p2) -> Integer.compare(p2.getPlantations(), p1.getPlantations()))
                 .limit(topCount)
                 .collect(Collectors.toList());
+
     }
 
     public List<PlayerData> getTopBlocks(int topCount) {

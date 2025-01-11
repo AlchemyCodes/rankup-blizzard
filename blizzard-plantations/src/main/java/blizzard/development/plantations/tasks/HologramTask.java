@@ -20,7 +20,7 @@ import java.util.UUID;
 
 public class HologramTask {
 
-    public static void initializeHologramTask(Player player, Block block, Material material) {
+    public static void initializeHologramTask(Player player, Block block) {
         Location initialLocation = block.getLocation().add(0.5, 1.9, 0.5);
         UUID hologramUUID = HologramBuilder.hologram(player, block);
 

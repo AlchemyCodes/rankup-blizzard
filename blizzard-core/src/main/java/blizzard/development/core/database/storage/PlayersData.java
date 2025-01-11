@@ -1,7 +1,11 @@
 package blizzard.development.core.database.storage;
 
 import blizzard.development.core.clothing.ClothingType;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class PlayersData {
     private String uuid;
     private String nickname;
@@ -12,30 +16,6 @@ public class PlayersData {
         this.uuid = uuid;
         this.nickname = nickname;
         this.temperature = temperature;
-        this.clothingType = clothingType;
-    }
-
-    public String getUuid() {
-        return this.uuid;
-    }
-
-    public String getNickname() {
-        return this.nickname;
-    }
-
-    public double getTemperature() {
-        return this.temperature;
-    }
-
-    public void setTemperature(double temperature) {
-        this.temperature = temperature;
-    }
-
-    public ClothingType getClothingType() {
-        return this.clothingType;
-    }
-
-    public void setClothingType(ClothingType clothingType) {
         this.clothingType = clothingType;
     }
 }

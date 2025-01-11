@@ -5,13 +5,11 @@ import blizzard.development.plantations.database.cache.methods.PlayerCacheMethod
 import blizzard.development.plantations.database.cache.methods.ToolCacheMethod;
 import blizzard.development.plantations.managers.AreaManager;
 import blizzard.development.plantations.managers.BlockManager;
-import blizzard.development.plantations.managers.PlantationManager;
 import blizzard.development.plantations.managers.upgrades.blizzard.BlizzardEffect;
 import blizzard.development.plantations.managers.upgrades.blizzard.BlizzardManager;
 import blizzard.development.plantations.managers.upgrades.explosion.ExplosionManager;
 import blizzard.development.plantations.managers.upgrades.lightning.LightningManager;
 import blizzard.development.plantations.managers.upgrades.xray.XrayManager;
-import blizzard.development.plantations.plantations.enums.PlantationEnum;
 import blizzard.development.plantations.plantations.item.ToolBuildItem;
 import blizzard.development.plantations.tasks.PlantationRegenTask;
 import blizzard.development.plantations.utils.packets.PacketUtils;
@@ -19,6 +17,7 @@ import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.BlockPosition;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -26,14 +25,12 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static blizzard.development.plantations.builder.ItemBuilder.getPersistentData;
 import static blizzard.development.plantations.builder.ItemBuilder.hasPersistentData;
-import static blizzard.development.plantations.tasks.HologramTask.initializeHologramTask;
 
 public class PlantationBreakListener extends PacketAdapter {
     private static final Logger LOGGER = Logger.getLogger(PlantationBreakListener.class.getName());
@@ -83,16 +80,16 @@ public class PlantationBreakListener extends PacketAdapter {
             return;
         }
 
+        if (!BlockManager.isPlantation(blockX, blockY, blockZ)) {
+            return;
+        }
+
         if (player.getGameMode() == GameMode.SURVIVAL) {
             if (!hasPersistentData(Main.getInstance(), item, "ferramenta")) {
                 player.sendActionBar("§c§lEI! §cUse uma ferramenta da estufa para isso.");
-                event.setCancelled(true);
+                PacketUtils.getInstance().sendPacket(player, plantationToRegen);
                 return;
             }
-        }
-
-        if (!BlockManager.isPlantation(blockX, blockY, blockZ)) {
-            return;
         }
 
         if (block.getType() == Material.FARMLAND) {
@@ -101,7 +98,7 @@ public class PlantationBreakListener extends PacketAdapter {
 
         String id = getPersistentData(Main.getInstance(), item, "ferramenta-id");
         if (id == null || id.isEmpty()) {
-            LOGGER.log(Level.WARNING, "Ferramenta sem ID encontrada para o jogador: " + player.getName());
+            LOGGER.log(Level.SEVERE, "Ferramenta sem ID encontrada para o jogador: " + player.getName());
             event.setCancelled(true);
             return;
         }
@@ -122,12 +119,21 @@ public class PlantationBreakListener extends PacketAdapter {
 
         plantations.put(player, plantationToRegen);
 
-        initializeHologramTask(player, plantationToRegen, Material.POTATOES);
-        PacketUtils.getInstance().sendPacket(
-            player,
-            plantationToRegen,
-            Material.getMaterial(AreaManager.getInstance().getAreaPlantation(player)
-            ));
+        List<String> friends = PlayerCacheMethod
+            .getInstance()
+            .getFriends(player);
+
+        for (String friend : friends) {
+            Player playerFriends = Bukkit.getPlayer(friend);
+
+            if (playerFriends != null) {
+                PacketUtils.getInstance().sendPacket(
+                    playerFriends,
+                    plantationToRegen,
+                    Material.getMaterial(AreaManager.getInstance().getAreaPlantation(playerFriends))
+                );
+            }
+        }
 
 
         player.getInventory().setItemInMainHand(ToolBuildItem.tool(
@@ -147,14 +153,16 @@ public class PlantationBreakListener extends PacketAdapter {
         XrayManager.check(player, plantationToRegen, id);
         BlizzardManager.check(player, id);
 
-        plantations.forEach((p, plantation) -> {
-            PlantationRegenTask.create(plantationToRegen, player, 5);
-            PlantationManager.getInstance()
-                .growthDelay(
-                    player,
-                    plantationToRegen
-                );
-        });
+        for (String friend : friends) {
+            Player playerFriends = Bukkit.getPlayer(friend);
+
+            if (playerFriends != null) {
+                plantations.forEach((p, plantation) -> {
+                    PlantationRegenTask.create(plantationToRegen, player, playerFriends.getName(), 3);
+                });
+            }
+        }
+
 
         int seeds = 0;
 
@@ -210,7 +218,7 @@ public class PlantationBreakListener extends PacketAdapter {
         if (BlizzardEffect.getInstance().blizzard.containsKey(player)) {
             player.sendActionBar("§d§lEstufa! §8▼ §b§l+20 §b★ §8▶ §7[20% de Bônus] §8✎ §bNevasca ativada!");
         } else {
-            player.sendActionBar("§d§lEstufa! §8▼ §a§l+" + seeds + " §a★ §8▶ §7[20% de Bônus]");
+            player.sendActionBar("§d§lEstufa! §8▼ §a§l+" + seeds + " §a★ §8▶ §7[10% de Bônus]");
         }
     }
 }

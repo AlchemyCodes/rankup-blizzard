@@ -1,8 +1,8 @@
 enchantments:
   rod:
-    x:
-      perlevel: 1
-      # tanto que aumenta por level
+    especialista:
+      chance: 1
+
       maxlevel: 10
 
     sortudo:

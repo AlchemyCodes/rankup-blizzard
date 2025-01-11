@@ -30,22 +30,22 @@ public class SelectInventory {
         GuiItem accept = new GuiItem(accept(), event -> {
             event.setCancelled(true);
 
-            if (ItemBuilder.hasPersistentData((Plugin) Main.getInstance(), item, "ativador.lendario")) {
+            if (ItemBuilder.hasPersistentData(Main.getInstance(), item, "ativador.lendario")) {
                 activateClothing(player, item, new LegendaryClothingAdapter(), ClothingType.LEGENDARY, "lendária");
                 return;
             }
 
-            if (ItemBuilder.hasPersistentData((Plugin) Main.getInstance(), item, "ativador.mistico")) {
+            if (ItemBuilder.hasPersistentData(Main.getInstance(), item, "ativador.mistico")) {
                 activateClothing(player, item, new MysticClothingAdapter(), ClothingType.MYSTIC, "mística");
                 return;
             }
 
-            if (ItemBuilder.hasPersistentData((Plugin) Main.getInstance(), item, "ativador.raro")) {
+            if (ItemBuilder.hasPersistentData(Main.getInstance(), item, "ativador.raro")) {
                 activateClothing(player, item, new RareClothingAdapter(), ClothingType.RARE, "rara");
                 return;
             }
 
-            if (ItemBuilder.hasPersistentData((Plugin) Main.getInstance(), item, "ativador.comum")) {
+            if (ItemBuilder.hasPersistentData(Main.getInstance(), item, "ativador.comum")) {
                 activateClothing(player, item, new CommonClothingAdapter(), ClothingType.COMMON, "comum");
             }
         });
@@ -63,7 +63,7 @@ public class SelectInventory {
         pane.addItem(cancel, Slot.fromIndex(16));
 
         inventory.addPane(pane);
-        inventory.show((HumanEntity) player);
+        inventory.show(player);
     }
 
 
@@ -80,7 +80,7 @@ public class SelectInventory {
             ((CommonClothingAdapter) adapter).active(player);
         }
 
-        PlayersCacheManager.setPlayerClothing(player, clothingType);
+        PlayersCacheManager.getInstance().setPlayerClothing(player, clothingType);
         player.closeInventory();
         player.sendTitle("§b§lWOW!", "§bVocê ativou uma roupa da categoria " + clothingName + ".", 10, 70, 20);
 

@@ -1,0 +1,16 @@
+items:
+  sla:
+   material: "OAK_HANGING_SIGN"
+   displayName: "§6teste"
+   lore:
+     - " "
+     - "§7teste"
+     - " "
+     -
+  sla2:
+    material: "ACACIA_HANGING_SIGN"
+    displayName: "§6teste2"
+    lore:
+      - " "
+      - "§7teste2"
+      - " "

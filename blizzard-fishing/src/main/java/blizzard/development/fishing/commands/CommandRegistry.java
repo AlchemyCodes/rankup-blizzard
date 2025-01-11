@@ -15,7 +15,6 @@ public class CommandRegistry {
                 new FishingCommand(),
                 new SetCommands(),
                 new GiveItemsCommand(),
-                new Geyser(),
                 new ReloadConfig()
         ).forEach(paperCommandManager::registerCommand);
     }

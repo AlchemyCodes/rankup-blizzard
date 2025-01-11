@@ -41,7 +41,9 @@ public class SlaughterhouseInteractListener implements Listener {
                     }
                 }
 
-                if (!LocationUtil.interactVerify(player, slaughterhouseBlock)) {
+                if (!LocationUtil.interactVerify(player, slaughterhouseBlock) && data != null && slaughterhouseBlock.getLocation().equals(
+                        LocationUtil.deserializeLocation(data.getLocation())
+                )) {
                     event.setCancelled(true);
                     return;
                 }

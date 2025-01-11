@@ -24,12 +24,15 @@ public class PlantationUpgradeInventory {
         ChestGui inventory = new ChestGui(5, "§8Plantações");
         StaticPane pane = new StaticPane(0, 0, 9, 5);
 
-
         GuiItem potato = new GuiItem(potato(), event -> {
             event.setCancelled(true);
         });
 
-        GuiItem carrot = new GuiItem(carrot(), event -> {
+        GuiItem carrot = new GuiItem(carrot(player), event -> {
+            if (currentPlantationLevel(player) >= PlantationEnum.CARROT.getLevel()) {
+                event.setCancelled(true);
+                return;
+            }
 
             AreaManager.getInstance()
                 .setAreaPlantation(
@@ -38,10 +41,10 @@ public class PlantationUpgradeInventory {
                 );
 
             PlantationManager.getInstance()
-                    .transform(
-                        player,
-                        AreaManager.getInstance().getArea(player)
-                    );
+                .transform(
+                    player,
+                    AreaManager.getInstance().getArea(player)
+                );
 
             player.closeInventory();
             player.showTitle(
@@ -55,7 +58,11 @@ public class PlantationUpgradeInventory {
             event.setCancelled(true);
         });
 
-        GuiItem tomato = new GuiItem(tomato(), event -> {
+        GuiItem tomato = new GuiItem(tomato(player), event -> {
+            if (currentPlantationLevel(player) >= PlantationEnum.TOMATO.getLevel()) {
+                event.setCancelled(true);
+                return;
+            }
 
             AreaManager.getInstance()
                 .setAreaPlantation(
@@ -81,7 +88,11 @@ public class PlantationUpgradeInventory {
             event.setCancelled(true);
         });
 
-        GuiItem corn = new GuiItem(corn(), event -> {
+        GuiItem corn = new GuiItem(corn(player), event -> {
+            if (currentPlantationLevel(player) >= PlantationEnum.CORN.getLevel()) {
+                event.setCancelled(true);
+                return;
+            }
 
             AreaManager.getInstance()
                 .setAreaPlantation(
@@ -107,7 +118,6 @@ public class PlantationUpgradeInventory {
             event.setCancelled(true);
         });
 
-
         GuiItem area = new GuiItem(area(), event -> {
             AreaUpgradeInventory areaUpgradeInventory = new AreaUpgradeInventory();
             areaUpgradeInventory.open(player);
@@ -122,7 +132,6 @@ public class PlantationUpgradeInventory {
             event.setCancelled(true);
         });
 
-
         pane.addItem(potato, Slot.fromIndex(11));
         pane.addItem(carrot, Slot.fromIndex(12));
         pane.addItem(tomato, Slot.fromIndex(14));
@@ -136,22 +145,44 @@ public class PlantationUpgradeInventory {
         player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.5f, 0.5f);
     }
 
+    private int currentPlantationLevel(Player player) {
+        String currentPlantation = AreaManager.getInstance().getAreaPlantation(player);
+        return PlantationEnum.getByName(currentPlantation).getLevel();
+    }
+
     public static ItemStack potato() {
-        return new ItemBuilder("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvY2Y0NjI0ZWJmN2Q0MTlhMTFlNDNlZDBjMjAzOGQzMmNkMDlhZDFkN2E2YzZlMjBmNjMzOWNiY2ZlMzg2ZmQxYyJ9fX0")
-            .setDisplayName("§ePlantação de §lBatata")
+        return new ItemBuilder(Material.BARRIER)
+            .setDisplayName("§cPlantação de §lBatata")
             .setLore(Arrays.asList(
                 "§7Transforme as suas",
                 "§7plantações em batata.",
                 "",
-                " §fCusto: §a✿15K",
                 " §fPreço de venda: §a3",
                 "",
-                "§eClique para upar."
+                "§cVocê já possui essa plantação."
             ))
             .build();
     }
 
-    public static ItemStack carrot() {
+    public static ItemStack carrot(Player player) {
+        int currentLevel = PlantationEnum.getByName(
+            AreaManager.getInstance().getAreaPlantation(player)
+        ).getLevel();
+
+        if (currentLevel >= PlantationEnum.CARROT.getLevel()) {
+            return new ItemBuilder(Material.BARRIER)
+                .setDisplayName("§cPlantação de Cenoura")
+                .setLore(Arrays.asList(
+                    "§7Transforme as suas",
+                    "§7plantações em cenoura.",
+                    "",
+                    " §fPreço de venda: §a8",
+                    "",
+                    "§cVocê já possui essa plantação."
+                ))
+                .build();
+        }
+
         return new ItemBuilder("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNGQzYTZiZDk4YWMxODMzYzY2NGM0OTA5ZmY4ZDJkYzYyY2U4ODdiZGNmM2NjNWIzODQ4NjUxYWU1YWY2YiJ9fX0")
             .setDisplayName("§6Plantação de §lCenoura")
             .setLore(Arrays.asList(
@@ -166,12 +197,30 @@ public class PlantationUpgradeInventory {
             .build();
     }
 
-    public static ItemStack tomato() {
+    public static ItemStack tomato(Player player) {
+        int currentLevel = PlantationEnum.getByName(
+            AreaManager.getInstance().getAreaPlantation(player)
+        ).getLevel();
+
+        if (currentLevel >= PlantationEnum.TOMATO.getLevel()) {
+            return new ItemBuilder(Material.BARRIER)
+                .setDisplayName("§cPlantação de Tomate")
+                .setLore(Arrays.asList(
+                    "§7Transforme as suas",
+                    "§7plantações em tomate.",
+                    "",
+                    " §fPreço de venda: §a12",
+                    "",
+                    "§cVocê já possui essa plantação."
+                ))
+                .build();
+        }
+
         return new ItemBuilder("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNGYxNGI1OGYzZGY2NWEwYzZiOTBlZTE5NDY0YjI1NTdjODNhZTJjOWZhMWI1NzM4YmIxMTM2NGNkOWY1YjNlMSJ9fX0")
             .setDisplayName("§cPlantação de §lTomate")
             .setLore(Arrays.asList(
                 "§7Transforme as suas",
-                "§7plantações em cenoura.",
+                "§7plantações em tomate.",
                 "",
                 " §fCusto: §a✿45K",
                 " §fPreço de venda: §a12",
@@ -181,12 +230,30 @@ public class PlantationUpgradeInventory {
             .build();
     }
 
-    public static ItemStack corn() {
+    public static ItemStack corn(Player player) {
+        int currentLevel = PlantationEnum.getByName(
+            AreaManager.getInstance().getAreaPlantation(player)
+        ).getLevel();
+
+        if (currentLevel >= PlantationEnum.CORN.getLevel()) {
+            return new ItemBuilder(Material.BARRIER)
+                .setDisplayName("§cPlantação de Milho")
+                .setLore(Arrays.asList(
+                    "§7Transforme as suas",
+                    "§7plantações em milho.",
+                    "",
+                    " §fPreço de venda: §a16",
+                    "",
+                    "§cVocê já possui essa plantação."
+                ))
+                .build();
+        }
+
         return new ItemBuilder("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDNhNmIwOTljZDQwMWUzYTBkNjRkOWExNmY0NmNkMGM1Y2E1ZjdlNDVlNmE2OWMyN2QyZTQ3Mzc3NWIyNWZlIn19fQ")
             .setDisplayName("§ePlantação de §lMilho")
             .setLore(Arrays.asList(
                 "§7Transforme as suas",
-                "§7plantações em cenoura.",
+                "§7plantações em milho.",
                 "",
                 " §fCusto: §a✿65K",
                 " §fPreço de venda: §a16",
@@ -219,7 +286,7 @@ public class PlantationUpgradeInventory {
     }
 
     public static ItemStack plantations() {
-        return new ItemBuilder(Material.BARRIER)
+        return new ItemBuilder(Material.REDSTONE)
             .setDisplayName("§cPlantações")
             .setLore(Arrays.asList(
                 "§7Gerencia as plantações",

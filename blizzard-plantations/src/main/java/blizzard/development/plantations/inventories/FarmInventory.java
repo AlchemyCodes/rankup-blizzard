@@ -1,6 +1,7 @@
 package blizzard.development.plantations.inventories;
 
 import blizzard.development.plantations.Main;
+import blizzard.development.plantations.api.CoreAPI;
 import blizzard.development.plantations.builder.ItemBuilder;
 import blizzard.development.plantations.database.cache.methods.PlayerCacheMethod;
 import blizzard.development.plantations.inventories.manager.AreaUpgradeInventory;
@@ -8,6 +9,8 @@ import blizzard.development.plantations.inventories.ranking.RankingSeedsInventor
 import blizzard.development.plantations.inventories.shop.ShopInventory;
 import blizzard.development.plantations.managers.AreaManager;
 import blizzard.development.plantations.managers.PlantationManager;
+import blizzard.development.plantations.managers.upgrades.agility.AgilityManager;
+import blizzard.development.plantations.plantations.adapters.AreaAdapter;
 import blizzard.development.plantations.plantations.adapters.ToolAdapter;
 import blizzard.development.plantations.utils.CooldownUtils;
 import blizzard.development.plantations.utils.LocationUtils;
@@ -28,13 +31,15 @@ import java.time.Duration;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
+import static blizzard.development.plantations.builder.ItemBuilder.getPersistentData;
+import static blizzard.development.plantations.utils.NumberFormat.formatNumber;
+
 public class FarmInventory {
 
 
     public void open(Player player) {
         ChestGui inventory = new ChestGui(3, "Estufa");
         StaticPane pane = new StaticPane(0, 0, 9, 3);
-
 
         Location location = LocationUtils.getPlantationSpawnLocation();
         Location spawn = LocationUtils.getSpawnLocation();
@@ -65,62 +70,12 @@ public class FarmInventory {
                 PlayerCacheMethod.
                     getInstance()
                     .removeInPlantation(player);
+
+                AgilityManager.clearEffect(player);
             } else {
                 player.closeInventory();
 
-                new BukkitRunnable() {
-
-                    int i = 0;
-                    @Override
-                    public void run() {
-                        i++;
-
-                        if (i == 5) {
-                            player.teleport(location);
-                        }
-
-                        if (i == 10) {
-
-                            player.sendTitle("§a§lEstufa!", "§aVocê entrou na estufa.", 10, 70, 20);
-
-                            for (Player players : Bukkit.getOnlinePlayers()) {
-                                player.hidePlayer(Main.getInstance(), players);
-                            }
-
-                            PlayerCacheMethod.
-                                getInstance()
-                                .setInPlantation(player);
-
-                            PlantationManager
-                                .getInstance()
-                                .transform(
-                                    player,
-                                    AreaManager.getInstance().getArea(player)
-                                );
-
-                            player.clearActivePotionEffects();
-                            this.cancel();
-                        }
-
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 2, 8));
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20 * 2, 100000));
-
-                        if (player.hasPermission("*")) {
-                            player.clearActivePotionEffects();
-                        }
-
-                        player.showTitle(
-                            Title.title(
-                                Component.text("§c§lAguarde!"),
-                                Component.text("§cEstamos carregando a sua área."),
-                                Title.Times.times(Duration.ZERO, Duration.ofSeconds(2), Duration.ofSeconds(3))
-                            )
-                        );
-                        player.playSound(player, Sound.BLOCK_NOTE_BLOCK_PLING, 5L, 1L);
-                    }
-                }.runTaskTimer(Main.getInstance(), 0L, 20L);
-
-
+                AreaAdapter.getInstance().teleportToArea(player);
             }
         });
 
@@ -207,19 +162,22 @@ public class FarmInventory {
     }
 
     private ItemStack tool() {
-        return new ItemBuilder(Material.GOLDEN_HOE)
-            .setDisplayName("§6Ferramenta de Cultivo")
+        return new ItemBuilder(Material.WOODEN_HOE)
+            .setDisplayName("<#a88459>Cultivadora de Madeira<#a88459>")
             .setLore(Arrays.asList(
                 "§7Use esta ferramenta para",
                 "§7cultivar plantações.",
                 "",
-                " §6Encantamentos:",
+                " <#a88459>Encantamentos:<#a88459>",
                 "  §7Durabilidade §l∞",
                 "  §7Agilidade §l0",
-                "  §7Botânico §l0",
-                "  §7Explosão §l0",
+                "  §7Botânico §l1",
+                "  §7Explosão §l1",
+                "  §7Trovoada §l1",
+                "  §7Nevasca §l1",
+                "  §7Raio-X §l1",
                 "",
-                "§6Clique para resgatar."
+                "<#a88459>Pressione shift + b. direito.<#a88459>"
             ))
             .build();
     }

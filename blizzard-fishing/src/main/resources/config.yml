@@ -1,6 +1,8 @@
 fishing:
   taskTime: 3
 
+frozenFishChance: 50
+
 fishes:
   bacalhau:
     rarity: "common"

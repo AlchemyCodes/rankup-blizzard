@@ -5,6 +5,9 @@ import blizzard.development.plantations.database.storage.PlayerData;
 import blizzard.development.plantations.plantations.enums.PlantationEnum;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PlayerCacheMethod {
 
     private final PlayerCacheManager playerCacheManager = PlayerCacheManager.getInstance();
@@ -81,6 +84,32 @@ public class PlayerCacheMethod {
     public boolean isInPlantation(Player player) {
         PlayerData playerData = playerCacheManager.getPlayerData(player);
         return playerData != null && playerData.getIsInPlantation();
+    }
+
+    public void addFriend(Player player, String friend) {
+        PlayerData playerData = playerCacheManager.getPlayerData(player);
+        if (playerData != null) {
+            List<String> friends = playerData.getFriends();
+
+            friends.add(friend);
+            playerData.setFriends(friends);
+            playerCacheManager.cachePlayerData(player.getUniqueId().toString(), playerData);
+        }
+    }
+    public List<String> getFriends(Player player) {
+        PlayerData playerData = playerCacheManager.getPlayerData(player);
+        return playerData.getFriends();
+    }
+
+    public void removeFriend(Player player, String friend) {
+        PlayerData playerData = playerCacheManager.getPlayerData(player);
+        if (playerData != null) {
+            List<String> friends = playerData.getFriends();
+
+            friends.remove(friend);
+            playerData.setFriends(friends);
+            playerCacheManager.cachePlayerData(player.getUniqueId().toString(), playerData);
+        }
     }
 
     public static PlayerCacheMethod getInstance() {
