@@ -1,26 +1,20 @@
-package blizzard.development.monsters.monsters.handlers.packets;
+package blizzard.development.monsters.monsters.managers.packets;
 
 import blizzard.development.monsters.builders.hologram.HologramBuilder;
-import blizzard.development.monsters.database.cache.managers.MonstersCacheManager;
-import blizzard.development.monsters.database.storage.MonstersData;
-import blizzard.development.monsters.monsters.enums.Locations;
-import blizzard.development.monsters.monsters.handlers.monsters.MonstersHandler;
-import blizzard.development.monsters.monsters.handlers.packets.entity.EntitySpawn;
-import blizzard.development.monsters.monsters.handlers.packets.entity.EntityUpdate;
-import blizzard.development.monsters.monsters.handlers.world.MonstersWorldHandler;
+import blizzard.development.monsters.monsters.managers.monsters.MonstersGeneralManager;
+import blizzard.development.monsters.monsters.managers.packets.entity.EntitySpawn;
+import blizzard.development.monsters.monsters.managers.packets.entity.EntityUpdate;
 import blizzard.development.monsters.utils.LocationUtils;
-import blizzard.development.monsters.utils.PluginImpl;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.UUID;
 
-public class MonstersPacketsHandler {
-    private static MonstersPacketsHandler instance;
+public class MonstersPacketsManager {
+    private static MonstersPacketsManager instance;
 
     private final ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
 
@@ -37,9 +31,9 @@ public class MonstersPacketsHandler {
 
         String serializedLocation = LocationUtils.getInstance().getSerializedLocation(location);
 
-        MonstersHandler monstersHandler = MonstersHandler.getInstance();
+        MonstersGeneralManager monstersManager = MonstersGeneralManager.getInstance();
 
-        monstersHandler.createData(
+        monstersManager.createData(
                 player,
                 uuid.toString(),
                 id.toString(),
@@ -48,11 +42,11 @@ public class MonstersPacketsHandler {
                 life
         );
 
-        monstersHandler.addMonster(player, List.of(uuid.toString()));
+        monstersManager.addMonster(player, List.of(uuid.toString()));
     }
 
-    public static MonstersPacketsHandler getInstance() {
-        if (instance == null) instance = new MonstersPacketsHandler();
+    public static MonstersPacketsManager getInstance() {
+        if (instance == null) instance = new MonstersPacketsManager();
         return instance;
     }
 }

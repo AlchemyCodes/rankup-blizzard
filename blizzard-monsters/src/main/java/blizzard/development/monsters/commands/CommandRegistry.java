@@ -7,7 +7,7 @@ import blizzard.development.monsters.commands.main.MonstersCommand;
 import blizzard.development.monsters.commands.subcommands.users.JoinCommand;
 import blizzard.development.monsters.commands.subcommands.users.LeaveCommand;
 import blizzard.development.monsters.commands.subcommands.users.SwordCommand;
-import blizzard.development.monsters.monsters.handlers.monsters.MonstersHandler;
+import blizzard.development.monsters.monsters.managers.monsters.MonstersGeneralManager;
 import blizzard.development.monsters.utils.PluginImpl;
 import co.aikar.commands.PaperCommandManager;
 
@@ -35,7 +35,7 @@ public class CommandRegistry {
         ).forEach(paperCommandManager::registerCommand);
 
         paperCommandManager.getCommandCompletions().registerCompletion("monsters", set -> {
-            Set<String> monsters = MonstersHandler.getInstance().getAll();
+            Set<String> monsters = MonstersGeneralManager.getInstance().getAll();
             if (monsters != null && !monsters.isEmpty()) {
                 return monsters;
             }

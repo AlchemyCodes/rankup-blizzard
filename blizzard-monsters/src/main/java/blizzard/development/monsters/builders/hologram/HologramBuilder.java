@@ -25,11 +25,22 @@ public class HologramBuilder {
                 "§c❤" + life
         );
 
+        hologram.update(player);
+
         lines.forEach(line -> DHAPI.addHologramLine(hologram, line));
     }
 
     public Hologram getHologram(UUID uuid) {
         return hologram.get(uuid);
+    }
+
+    public void updateHologram(Player player, UUID id, String display, Integer life) {
+        Hologram holo = hologram.get(id);
+        if (holo != null) {
+            DHAPI.setHologramLine(holo, 0, display);
+            DHAPI.setHologramLine(holo, 1, "§c❤" + life);
+            holo.update(player);
+        }
     }
 
     public void removeHologram(UUID uuid) {

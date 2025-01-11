@@ -1,9 +1,8 @@
 package blizzard.development.monsters.commands.subcommands.admins;
 
-import blizzard.development.monsters.database.cache.methods.MonstersCacheMethods;
 import blizzard.development.monsters.database.cache.methods.PlayersCacheMethods;
-import blizzard.development.monsters.monsters.handlers.eggs.MonstersEggHandler;
-import blizzard.development.monsters.monsters.handlers.monsters.MonstersHandler;
+import blizzard.development.monsters.monsters.managers.eggs.MonstersEggManager;
+import blizzard.development.monsters.monsters.managers.monsters.MonstersGeneralManager;
 import blizzard.development.monsters.utils.items.TextAPI;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
@@ -23,11 +22,11 @@ public class GiveCommand extends BaseCommand {
     @CommandCompletion("@players @monsters @amount @amount")
     @Syntax("<jogador> <monstro> <quantia> <stack>")
     public void onGiveMonster(CommandSender sender, String player, String monster, Integer stack) {
-        MonstersHandler monstersHandler = MonstersHandler.getInstance();
-        MonstersEggHandler eggHandler = MonstersEggHandler.getInstance();
+        MonstersGeneralManager monstersManager = MonstersGeneralManager.getInstance();
+        MonstersEggManager eggHandler = MonstersEggManager.getInstance();
 
-        ConfigurationSection monstersSection = monstersHandler.getSection();
-        Set<String> monsters = monstersHandler.getAll();
+        ConfigurationSection monstersSection = monstersManager.getSection();
+        Set<String> monsters = monstersManager.getAll();
 
         if (monstersSection == null || monsters == null) {
             sender.sendActionBar(TextAPI.parse("§c§lEI! §cOcorreu um erro ao encontrar os monstros na configuração."));

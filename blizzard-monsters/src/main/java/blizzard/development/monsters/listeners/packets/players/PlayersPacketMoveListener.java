@@ -1,9 +1,9 @@
-package blizzard.development.monsters.listeners.packets;
+package blizzard.development.monsters.listeners.packets.players;
 
 import blizzard.development.monsters.database.cache.managers.MonstersCacheManager;
 import blizzard.development.monsters.database.storage.MonstersData;
-import blizzard.development.monsters.monsters.handlers.packets.entity.EntityRotation;
-import blizzard.development.monsters.monsters.handlers.world.MonstersWorldHandler;
+import blizzard.development.monsters.monsters.managers.packets.entity.EntityRotation;
+import blizzard.development.monsters.monsters.managers.world.MonstersWorldManager;
 import blizzard.development.monsters.utils.LocationUtils;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
@@ -41,7 +41,7 @@ public class PlayersPacketMoveListener implements Listener {
 
         EntityRotation entityRotation = EntityRotation.getInstance();
 
-        if (MonstersWorldHandler.getInstance().containsPlayer(player)) {
+        if (MonstersWorldManager.getInstance().containsPlayer(player)) {
             for (MonstersData monstersData : MonstersCacheManager.getInstance().monstersCache.values()) {
                 Location location = getCachedLocation(monstersData.getLocation());
                 if (location != null && player.getLocation().distance(location) <= 5) {

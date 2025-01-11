@@ -1,4 +1,4 @@
-    package blizzard.development.monsters.monsters.handlers.packets.entity;
+    package blizzard.development.monsters.monsters.managers.packets.entity;
 
     import com.comphenix.protocol.PacketType;
     import com.comphenix.protocol.ProtocolManager;

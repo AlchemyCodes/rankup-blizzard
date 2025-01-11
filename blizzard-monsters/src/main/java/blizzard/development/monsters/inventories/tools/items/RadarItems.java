@@ -2,7 +2,7 @@ package blizzard.development.monsters.inventories.tools.items;
 
 import blizzard.development.monsters.builders.ItemBuilder;
 import blizzard.development.monsters.database.cache.methods.PlayersCacheMethods;
-import blizzard.development.monsters.monsters.handlers.eggs.MonstersEggHandler;
+import blizzard.development.monsters.monsters.managers.eggs.MonstersEggManager;
 import blizzard.development.monsters.utils.NumberFormatter;
 import blizzard.development.monsters.utils.items.TextAPI;
 import org.bukkit.Material;
@@ -17,7 +17,7 @@ public class RadarItems {
     private static RadarItems instance;
 
     public ItemStack monster(String monster, String distance) {
-        MonstersEggHandler eggHandler = MonstersEggHandler.getInstance();
+        MonstersEggManager eggHandler = MonstersEggManager.getInstance();
 
         Material material;
         if (eggHandler.getMaterial(monster) != null) {

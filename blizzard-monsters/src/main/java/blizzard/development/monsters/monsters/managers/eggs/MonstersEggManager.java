@@ -1,7 +1,7 @@
-package blizzard.development.monsters.monsters.handlers.eggs;
+package blizzard.development.monsters.monsters.managers.eggs;
 
 import blizzard.development.monsters.builders.ItemBuilder;
-import blizzard.development.monsters.monsters.handlers.monsters.MonstersHandler;
+import blizzard.development.monsters.monsters.managers.monsters.MonstersGeneralManager;
 import blizzard.development.monsters.utils.NumberFormatter;
 import blizzard.development.monsters.utils.PluginImpl;
 import org.bukkit.Material;
@@ -12,17 +12,17 @@ import org.bukkit.inventory.ItemStack;
 import java.util.List;
 import java.util.Set;
 
-public class MonstersEggHandler {
-    private static MonstersEggHandler instance;
+public class MonstersEggManager {
+    private static MonstersEggManager instance;
 
     private final PluginImpl plugin = PluginImpl.getInstance();
 
     public void giveEgg(Player player, String monster, Integer stack) {
-        MonstersHandler monstersHandler = MonstersHandler.getInstance();
+        MonstersGeneralManager monstersManager = MonstersGeneralManager.getInstance();
 
         String eggType = "blizzard.monsters.monster";
 
-        Set<String> monsters = monstersHandler.getAll();
+        Set<String> monsters = monstersManager.getAll();
 
         ItemStack item;
 
@@ -31,8 +31,8 @@ public class MonstersEggHandler {
             List<String> lore = getLore(monster);
 
             lore.replaceAll(line -> line
-                    .replace("{life}", NumberFormatter.getInstance().formatNumber(monstersHandler.getLife(monster)))
-                    .replace("{damage}", NumberFormatter.getInstance().formatNumber(monstersHandler.getAttackDamage(monster)))
+                    .replace("{life}", NumberFormatter.getInstance().formatNumber(monstersManager.getLife(monster)))
+                    .replace("{damage}", NumberFormatter.getInstance().formatNumber(monstersManager.getAttackDamage(monster)))
             );
 
             String displayName = getDisplayName(monster);
@@ -75,8 +75,8 @@ public class MonstersEggHandler {
         return plugin.Monsters.getConfig().getStringList("monsters." + monsterName + ".egg.lore");
     }
 
-    public static MonstersEggHandler getInstance() {
-        if (instance == null) instance = new MonstersEggHandler();
+    public static MonstersEggManager getInstance() {
+        if (instance == null) instance = new MonstersEggManager();
         return instance;
     }
 }

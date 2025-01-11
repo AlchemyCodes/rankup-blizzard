@@ -2,7 +2,7 @@ package blizzard.development.monsters.listeners.monsters;
 
 import blizzard.development.monsters.builders.ItemBuilder;
 import blizzard.development.monsters.inventories.tools.RadarInventory;
-import blizzard.development.monsters.monsters.handlers.world.MonstersWorldHandler;
+import blizzard.development.monsters.monsters.managers.world.MonstersWorldManager;
 import blizzard.development.monsters.utils.PluginImpl;
 import blizzard.development.monsters.utils.items.TextAPI;
 import org.bukkit.entity.Player;
@@ -18,7 +18,7 @@ public class MonstersToolListener implements Listener {
     public void onDropItem(PlayerDropItemEvent event) {
         Player player = event.getPlayer();
 
-        if (MonstersWorldHandler.getInstance().containsPlayer(player)) {
+        if (MonstersWorldManager.getInstance().containsPlayer(player)) {
             event.setCancelled(true);
         }
     }
@@ -31,7 +31,7 @@ public class MonstersToolListener implements Listener {
             ItemStack item = player.getInventory().getItemInMainHand();
 
             if (ItemBuilder.hasPersistentData(PluginImpl.getInstance().plugin, item, "blizzard.monsters.compass")) {
-                if (MonstersWorldHandler.getInstance().containsPlayer(player)) {
+                if (MonstersWorldManager.getInstance().containsPlayer(player)) {
                     RadarInventory.getInstance().open(player, 1);
                 } else {
                     player.sendActionBar(TextAPI.parse("§c§lEI! §cVocê só pode interagir com isso no mundo de monstros."));

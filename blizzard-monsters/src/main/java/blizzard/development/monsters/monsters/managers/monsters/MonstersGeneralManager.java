@@ -1,4 +1,4 @@
-package blizzard.development.monsters.monsters.handlers.monsters;
+package blizzard.development.monsters.monsters.managers.monsters;
 
 import blizzard.development.monsters.database.cache.managers.MonstersCacheManager;
 import blizzard.development.monsters.database.dao.MonstersDAO;
@@ -14,8 +14,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-public class MonstersHandler {
-    private static MonstersHandler instance;
+public class MonstersGeneralManager {
+    private static MonstersGeneralManager instance;
 
     public HashMap<Player, List<String>> monsters = new HashMap<>();
 
@@ -128,8 +128,8 @@ public class MonstersHandler {
         }
     }
 
-    public static MonstersHandler getInstance() {
-        if (instance == null) instance = new MonstersHandler();
+    public static MonstersGeneralManager getInstance() {
+        if (instance == null) instance = new MonstersGeneralManager();
         return instance;
     }
 }

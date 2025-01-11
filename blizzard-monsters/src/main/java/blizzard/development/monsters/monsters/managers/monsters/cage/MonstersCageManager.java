@@ -1,10 +1,10 @@
-package blizzard.development.monsters.managers.monsters;
+package blizzard.development.monsters.monsters.managers.monsters.cage;
 
 import blizzard.development.monsters.database.cache.managers.MonstersCacheManager;
 import blizzard.development.monsters.database.dao.MonstersDAO;
 import blizzard.development.monsters.database.storage.MonstersData;
-import blizzard.development.monsters.monsters.handlers.eggs.MonstersEggHandler;
-import blizzard.development.monsters.monsters.handlers.monsters.MonstersHandler;
+import blizzard.development.monsters.monsters.managers.eggs.MonstersEggManager;
+import blizzard.development.monsters.monsters.managers.monsters.MonstersGeneralManager;
 import blizzard.development.monsters.utils.NumberFormatter;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -29,7 +29,7 @@ public class MonstersCageManager {
             }
         }
 
-        String monsterDisplay = MonstersHandler.getInstance().getDisplayName(monsterType);
+        String monsterDisplay = MonstersGeneralManager.getInstance().getDisplayName(monsterType);
 
         if (monstersToRemove.isEmpty()) {
             player.sendActionBar("§c§lEI! §cVocê não possui monstros do tipo §7" + monsterDisplay + "§c para capturar.");
@@ -52,12 +52,12 @@ public class MonstersCageManager {
                     dao.deleteMonsterData(monster);
                 }
 
-                MonstersEggHandler.getInstance().giveEgg(player, monster.getType(), 1);
+                MonstersEggManager.getInstance().giveEgg(player, monster.getType(), 1);
             }
 
             Arrays.asList(
                     "",
-                    " §3§lMonstros! §7Você capturou os monstros.",
+                    " §b§lMonstros! §7Você capturou os monstros.",
                     " §7O total de §f" + NumberFormatter.getInstance().formatNumber(totalToCatch) + "§7 monstro(s) do tipo",
                     " §f" + monsterDisplay + "§7 foram capturados com sucesso.",
                     ""
@@ -107,12 +107,12 @@ public class MonstersCageManager {
                     }
                 }
 
-                MonstersEggHandler.getInstance().giveEgg(player, monsterType, monsters.size());
+                MonstersEggManager.getInstance().giveEgg(player, monsterType, monsters.size());
             }
 
             Arrays.asList(
                     "",
-                    " §3§lMonstros! §7Você capturou todos os monstros.",
+                    " §b§lMonstros! §7Você capturou todos os monstros.",
                     " §7O total de §f" + NumberFormatter.getInstance().formatNumber(totalMonsters) + "§7 monstros foram",
                     " §7capturados com sucesso.",
                     ""
