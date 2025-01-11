@@ -1,11 +1,11 @@
-package blizzard.development.monsters.monsters.handlers.world;
+package blizzard.development.monsters.monsters.managers.world;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 
 
-public class MonstersWorldHandler {
-    private static MonstersWorldHandler instance;
+public class MonstersWorldManager {
+    private static MonstersWorldManager instance;
 
     private final HashMap<Player, Boolean> monstersWorldCache = new HashMap<>();
 
@@ -21,8 +21,8 @@ public class MonstersWorldHandler {
         return monstersWorldCache.containsKey(player);
     }
 
-    public static MonstersWorldHandler getInstance() {
-        if (instance == null) instance = new MonstersWorldHandler();
+    public static MonstersWorldManager getInstance() {
+        if (instance == null) instance = new MonstersWorldManager();
         return instance;
     }
 }

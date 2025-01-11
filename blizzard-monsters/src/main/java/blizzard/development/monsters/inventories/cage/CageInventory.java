@@ -1,22 +1,14 @@
 package blizzard.development.monsters.inventories.cage;
 
-import blizzard.development.monsters.database.cache.managers.MonstersCacheManager;
-import blizzard.development.monsters.database.dao.MonstersDAO;
-import blizzard.development.monsters.database.storage.MonstersData;
 import blizzard.development.monsters.inventories.cage.items.CageItems;
-import blizzard.development.monsters.managers.monsters.MonstersCageManager;
-import blizzard.development.monsters.monsters.handlers.eggs.MonstersEggHandler;
-import blizzard.development.monsters.monsters.handlers.monsters.MonstersHandler;
-import blizzard.development.monsters.utils.NumberFormatter;
+import blizzard.development.monsters.monsters.managers.monsters.cage.MonstersCageManager;
+import blizzard.development.monsters.monsters.managers.monsters.MonstersGeneralManager;
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
 import com.github.stefvanschie.inventoryframework.pane.util.Slot;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
-import java.sql.SQLException;
 import java.util.*;
 
 public class CageInventory {
@@ -29,7 +21,7 @@ public class CageInventory {
 
         StaticPane pane = new StaticPane(0, 0, 9, 5);
 
-        List<String> monsters = MonstersHandler.getInstance().getAll().stream().toList();
+        List<String> monsters = MonstersGeneralManager.getInstance().getAll().stream().toList();
 
         String[] slots = {"11", "12", "13", "14", "15", "20", "21", "22", "23", "24"};
 

@@ -6,7 +6,7 @@ import blizzard.development.monsters.listeners.commons.PlayersQuitListener;
 import blizzard.development.monsters.listeners.eggs.MonstersEggListener;
 import blizzard.development.monsters.listeners.monsters.MonstersToolListener;
 import blizzard.development.monsters.listeners.monsters.MonstersWorldListener;
-import blizzard.development.monsters.listeners.packets.PlayersPacketMoveListener;
+import blizzard.development.monsters.listeners.packets.players.PlayersPacketMoveListener;
 import blizzard.development.monsters.utils.PluginImpl;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;

@@ -1,12 +1,10 @@
-package blizzard.development.monsters.monsters.handlers.tools;
+package blizzard.development.monsters.monsters.managers.tools;
 
 import blizzard.development.monsters.builders.ItemBuilder;
 import blizzard.development.monsters.database.cache.managers.ToolsCacheManager;
 import blizzard.development.monsters.database.storage.ToolsData;
 import blizzard.development.monsters.managers.DataBatchManager;
 import blizzard.development.monsters.monsters.enums.Tools;
-import blizzard.development.monsters.monsters.handlers.monsters.MonstersHandler;
-import blizzard.development.monsters.monsters.handlers.packets.MonstersPacketsHandler;
 import blizzard.development.monsters.utils.PluginImpl;
 import blizzard.development.monsters.utils.items.TextAPI;
 import org.bukkit.Material;
@@ -17,8 +15,8 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Arrays;
 import java.util.UUID;
 
-public class MonstersToolHandler {
-    private static MonstersToolHandler instance;
+public class MonstersToolManager {
+    private static MonstersToolManager instance;
 
     public void giveSword(Player player, Integer damage, Integer experienced) {
         String swordId = UUID.randomUUID().toString().substring(0, 10);
@@ -95,8 +93,8 @@ public class MonstersToolHandler {
         }
     }
 
-    public static MonstersToolHandler getInstance() {
-        if (instance == null) instance = new MonstersToolHandler();
+    public static MonstersToolManager getInstance() {
+        if (instance == null) instance = new MonstersToolManager();
         return instance;
     }
 }

@@ -14,10 +14,9 @@ import blizzard.development.monsters.database.storage.MonstersData;
 import blizzard.development.monsters.database.storage.PlayersData;
 import blizzard.development.monsters.database.storage.ToolsData;
 import blizzard.development.monsters.listeners.ListenerRegistry;
-import blizzard.development.monsters.listeners.monsters.MonstersDamageListener;
+import blizzard.development.monsters.listeners.packets.monsters.MonstersDamageListener;
 import blizzard.development.monsters.managers.DataBatchManager;
-import blizzard.development.monsters.monsters.handlers.tools.MonstersToolHandler;
-import blizzard.development.monsters.monsters.handlers.world.MonstersWorldHandler;
+import blizzard.development.monsters.monsters.managers.world.MonstersWorldManager;
 import blizzard.development.monsters.tasks.monsters.MonstersSaveTask;
 import blizzard.development.monsters.tasks.players.PlayersSaveTask;
 import blizzard.development.monsters.tasks.tools.ToolsSaveTask;
@@ -125,7 +124,7 @@ public class PluginImpl {
 
     private void disableMonsters() {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            if (MonstersWorldHandler.getInstance().containsPlayer(player)) {
+            if (MonstersWorldManager.getInstance().containsPlayer(player)) {
 
                 Location exit = LocationUtils.getInstance().getLocation(blizzard.development.monsters.monsters.enums.Locations.EXIT.getName());
                 if (exit != null) {

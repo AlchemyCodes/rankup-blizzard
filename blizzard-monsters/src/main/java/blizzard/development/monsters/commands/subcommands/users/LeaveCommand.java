@@ -1,8 +1,8 @@
 package blizzard.development.monsters.commands.subcommands.users;
 
 import blizzard.development.monsters.monsters.enums.Locations;
-import blizzard.development.monsters.monsters.handlers.tools.MonstersToolHandler;
-import blizzard.development.monsters.monsters.handlers.world.MonstersWorldHandler;
+import blizzard.development.monsters.monsters.managers.tools.MonstersToolManager;
+import blizzard.development.monsters.monsters.managers.world.MonstersWorldManager;
 import blizzard.development.monsters.utils.LocationUtils;
 import blizzard.development.monsters.utils.items.TextAPI;
 import co.aikar.commands.BaseCommand;
@@ -18,9 +18,9 @@ public class LeaveCommand extends BaseCommand {
 
     @Subcommand("sair|leave|exit")
     public void onCommand(Player player) {
-        MonstersWorldHandler handler = MonstersWorldHandler.getInstance();
+        MonstersWorldManager worldManager = MonstersWorldManager.getInstance();
 
-        if (handler.containsPlayer(player)) {
+        if (worldManager.containsPlayer(player)) {
             Location location = LocationUtils.getInstance().getLocation(Locations.EXIT.getName());
 
             if (location == null) {
@@ -28,8 +28,8 @@ public class LeaveCommand extends BaseCommand {
                 return;
             }
 
-            handler.removePlayer(player);
-            MonstersToolHandler.getInstance().removeRadar(player);
+            worldManager.removePlayer(player);
+            MonstersToolManager.getInstance().removeRadar(player);
 
             player.teleport(location);
             player.sendActionBar(TextAPI.parse("§a§lYAY! §aVocê saiu do mundo de monstros."));

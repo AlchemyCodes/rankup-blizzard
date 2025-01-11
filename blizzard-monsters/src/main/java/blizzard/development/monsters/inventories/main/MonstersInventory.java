@@ -1,13 +1,10 @@
 package blizzard.development.monsters.inventories.main;
 
-import blizzard.development.monsters.builders.hologram.HologramBuilder;
 import blizzard.development.monsters.inventories.cage.CageInventory;
 import blizzard.development.monsters.inventories.main.items.MonstersItems;
-import blizzard.development.monsters.inventories.tools.RadarInventory;
 import blizzard.development.monsters.monsters.enums.Locations;
-import blizzard.development.monsters.monsters.handlers.packets.MonstersPacketsHandler;
-import blizzard.development.monsters.monsters.handlers.tools.MonstersToolHandler;
-import blizzard.development.monsters.monsters.handlers.world.MonstersWorldHandler;
+import blizzard.development.monsters.monsters.managers.tools.MonstersToolManager;
+import blizzard.development.monsters.monsters.managers.world.MonstersWorldManager;
 import blizzard.development.monsters.utils.LocationUtils;
 import blizzard.development.monsters.utils.items.TextAPI;
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
@@ -21,7 +18,7 @@ public class MonstersInventory {
     private static MonstersInventory instance;
 
     private final MonstersItems items = MonstersItems.getInstance();
-    private final MonstersWorldHandler handler = MonstersWorldHandler.getInstance();
+    private final MonstersWorldManager worldManager = MonstersWorldManager.getInstance();
 
     public void open(Player player) {
 
@@ -29,6 +26,11 @@ public class MonstersInventory {
         StaticPane pane = new StaticPane(0, 0, 9, 3);
 
         GuiItem cageItem = new GuiItem(items.cage(), event -> {
+            if (MonstersWorldManager.getInstance().containsPlayer(player)) {
+                player.sendActionBar("§c§lEI! §cVocê só pode utilizar isso estando fora do mundo de monstros. §7(/monstros sair)");
+                event.setCancelled(true);
+                return;
+            }
             CageInventory.getInstance().open(player, 1);
             event.setCancelled(true);
         });
@@ -38,7 +40,7 @@ public class MonstersInventory {
         });
 
         GuiItem goItem = new GuiItem(items.go(
-                handler.containsPlayer(player)
+                worldManager.containsPlayer(player)
         ), event -> {
             sendToWorld(player);
             player.getInventory().close();
@@ -68,7 +70,7 @@ public class MonstersInventory {
     private void sendToWorld(Player player) {
         LocationUtils utils = LocationUtils.getInstance();
 
-        if (handler.containsPlayer(player)) {
+        if (worldManager.containsPlayer(player)) {
             Location exit = utils.getLocation(Locations.EXIT.getName());
 
             if (exit == null) {
@@ -76,8 +78,8 @@ public class MonstersInventory {
                 return;
             }
 
-            handler.removePlayer(player);
-            MonstersToolHandler.getInstance().removeRadar(player);
+            worldManager.removePlayer(player);
+            MonstersToolManager.getInstance().removeRadar(player);
 
             player.teleport(exit);
             player.sendActionBar(TextAPI.parse("§a§lYAY! §aVocê saiu do mundo de monstros."));
@@ -94,10 +96,10 @@ public class MonstersInventory {
                 return;
             }
 
-            handler.addPlayer(player);
+            worldManager.addPlayer(player);
 
             player.teleport(entry);
-            MonstersToolHandler.getInstance().giveRadar(player);
+            MonstersToolManager.getInstance().giveRadar(player);
 
             player.sendActionBar(TextAPI.parse("§a§lYAY! §aVocê entrou no mundo de monstros."));
         }
@@ -110,7 +112,7 @@ public class MonstersInventory {
         }
 
         player.sendActionBar(TextAPI.parse("§a§lYAY! §aVocê recebeu uma aniquiladora."));
-        MonstersToolHandler.getInstance().giveSword(player, 2, 1);
+        MonstersToolManager.getInstance().giveSword(player, 2, 1);
     }
 
     public static MonstersInventory getInstance() {

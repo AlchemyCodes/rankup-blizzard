@@ -1,8 +1,8 @@
 package blizzard.development.monsters.commands.subcommands.users;
 
 import blizzard.development.monsters.monsters.enums.Locations;
-import blizzard.development.monsters.monsters.handlers.tools.MonstersToolHandler;
-import blizzard.development.monsters.monsters.handlers.world.MonstersWorldHandler;
+import blizzard.development.monsters.monsters.managers.tools.MonstersToolManager;
+import blizzard.development.monsters.monsters.managers.world.MonstersWorldManager;
 import blizzard.development.monsters.utils.LocationUtils;
 import blizzard.development.monsters.utils.items.TextAPI;
 import co.aikar.commands.BaseCommand;
@@ -18,9 +18,9 @@ public class JoinCommand extends BaseCommand {
 
     @Subcommand("entrar|ir|go")
     public void onCommand(Player player) {
-        MonstersWorldHandler handler = MonstersWorldHandler.getInstance();
+        MonstersWorldManager worldManager = MonstersWorldManager.getInstance();
 
-        if (!handler.containsPlayer(player)) {
+        if (!worldManager.containsPlayer(player)) {
             Location location = LocationUtils.getInstance().getLocation(Locations.ENTRY.getName());
 
             if (location == null) {
@@ -33,10 +33,10 @@ public class JoinCommand extends BaseCommand {
                 return;
             }
 
-            handler.addPlayer(player);
+            worldManager.addPlayer(player);
 
             player.teleport(location);
-            MonstersToolHandler.getInstance().giveRadar(player);
+            MonstersToolManager.getInstance().giveRadar(player);
 
             player.sendActionBar(TextAPI.parse("§a§lYAY! §aVocê entrou no mundo de monstros."));
         } else {

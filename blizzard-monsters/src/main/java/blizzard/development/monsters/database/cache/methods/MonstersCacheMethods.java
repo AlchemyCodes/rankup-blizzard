@@ -10,6 +10,14 @@ public class MonstersCacheMethods {
 
     private final MonstersCacheManager cache = MonstersCacheManager.getInstance();
 
+    public void setLife(String uuid, int life) {
+        MonstersData data = cache.getMonsterData(uuid);
+        if (data != null) {
+            data.setLife(life);
+            cache.cacheMonsterData(uuid, data);
+        }
+    }
+
     public String getType(String uuid) {
         MonstersData data = cache.getMonsterData(uuid);
         if (data != null) {

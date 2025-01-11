@@ -2,7 +2,7 @@ package blizzard.development.monsters.inventories.tools;
 
 import blizzard.development.monsters.database.cache.methods.MonstersCacheMethods;
 import blizzard.development.monsters.inventories.tools.items.RadarItems;
-import blizzard.development.monsters.monsters.handlers.monsters.MonstersHandler;
+import blizzard.development.monsters.monsters.managers.monsters.MonstersGeneralManager;
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
@@ -19,14 +19,14 @@ public class RadarInventory {
     private static RadarInventory instance;
 
     private final RadarItems items = RadarItems.getInstance();
-    private final MonstersHandler handler = MonstersHandler.getInstance();
+    private final MonstersGeneralManager generalManager = MonstersGeneralManager.getInstance();
 
     public void open(Player player, int page) {
         ChestGui inventory = new ChestGui(5, "§8Rastrear monstros (Página " + page + " )");
 
         StaticPane pane = new StaticPane(0, 0, 9, 5);
 
-        List<String> monsters = handler.getMonsters(player);
+        List<String> monsters = generalManager.getMonsters(player);
 
         String[] slots = {"11", "12", "13", "14", "15", "20", "21", "22", "23", "24"};
 
@@ -41,7 +41,7 @@ public class RadarInventory {
                 MonstersCacheMethods methods = MonstersCacheMethods.getInstance();
 
                 String monsterName = methods.getType(monsterUuid);
-                String monsterDisplay = handler.getDisplayName(monsterName);
+                String monsterDisplay = generalManager.getDisplayName(monsterName);
                 Location monsterLocation = methods.getLocation(monsterUuid);
 
                 String distance = Math.round(player.getLocation().distance(monsterLocation)) + " metro(s)";
@@ -96,7 +96,7 @@ public class RadarInventory {
 
         player.setCompassTarget(location);
 
-        MonstersHandler.getInstance().addMonsterInfo(player, location, displayName);
+        MonstersGeneralManager.getInstance().addMonsterInfo(player, location, displayName);
 
         player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_YES, 1.0f, 1.0f);
         player.getOpenInventory().close();

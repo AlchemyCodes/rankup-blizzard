@@ -3,8 +3,7 @@ package blizzard.development.monsters.inventories.cage.items;
 import blizzard.development.monsters.builders.ItemBuilder;
 import blizzard.development.monsters.database.cache.managers.MonstersCacheManager;
 import blizzard.development.monsters.database.storage.MonstersData;
-import blizzard.development.monsters.inventories.tools.items.RadarItems;
-import blizzard.development.monsters.monsters.handlers.eggs.MonstersEggHandler;
+import blizzard.development.monsters.monsters.managers.eggs.MonstersEggManager;
 import blizzard.development.monsters.utils.NumberFormatter;
 import blizzard.development.monsters.utils.items.TextAPI;
 import org.bukkit.Material;
@@ -19,7 +18,7 @@ public class CageItems {
     private static CageItems instance;
 
     public ItemStack monster(Player player, String monster) {
-        MonstersEggHandler eggHandler = MonstersEggHandler.getInstance();
+        MonstersEggManager eggHandler = MonstersEggManager.getInstance();
 
         Material material;
         if (eggHandler.getMaterial(monster) != null) {

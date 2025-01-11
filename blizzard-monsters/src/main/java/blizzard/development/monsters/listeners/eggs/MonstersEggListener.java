@@ -1,19 +1,16 @@
 package blizzard.development.monsters.listeners.eggs;
 
 import blizzard.development.monsters.builders.ItemBuilder;
-import blizzard.development.monsters.database.cache.managers.MonstersCacheManager;
 import blizzard.development.monsters.database.cache.methods.PlayersCacheMethods;
-import blizzard.development.monsters.database.storage.MonstersData;
-import blizzard.development.monsters.monsters.handlers.monsters.MonstersHandler;
-import blizzard.development.monsters.monsters.handlers.packets.MonstersPacketsHandler;
-import blizzard.development.monsters.monsters.handlers.world.MonstersWorldHandler;
+import blizzard.development.monsters.monsters.managers.monsters.MonstersGeneralManager;
+import blizzard.development.monsters.monsters.managers.packets.MonstersPacketsManager;
+import blizzard.development.monsters.monsters.managers.world.MonstersWorldManager;
 import blizzard.development.monsters.utils.CooldownUtils;
 import blizzard.development.monsters.utils.LocationUtils;
 import blizzard.development.monsters.utils.PluginImpl;
 import blizzard.development.monsters.utils.items.TextAPI;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -39,22 +36,22 @@ public class MonstersEggListener implements Listener {
         CooldownUtils cooldown = CooldownUtils.getInstance();
 
         if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-            MonstersHandler handler = MonstersHandler.getInstance();
-            MonstersPacketsHandler packetsHandler = MonstersPacketsHandler.getInstance();
+            MonstersGeneralManager generalManager = MonstersGeneralManager.getInstance();
+            MonstersPacketsManager packetsManager = MonstersPacketsManager.getInstance();
 
             ItemStack item = player.getInventory().getItemInMainHand();
             boolean isMonsterEgg = ItemBuilder.hasPersistentData(plugin, item, "blizzard.monsters.monster");
             String eggType = ItemBuilder.getPersistentData(plugin, item, "blizzard.monsters.monster");
 
             if (isMonsterEgg) {
-                if (!MonstersWorldHandler.getInstance().containsPlayer(player)) {
+                if (!MonstersWorldManager.getInstance().containsPlayer(player)) {
                     player.sendActionBar(TextAPI.parse("§c§lEI! §cVocê só pode chocar este ovo no mundo de monstros."));
                     event.setCancelled(true);
                     return;
                 }
 
-                ConfigurationSection monstersSection = handler.getSection();
-                Set<String> monsters = handler.getAll();
+                ConfigurationSection monstersSection = generalManager.getSection();
+                Set<String> monsters = generalManager.getAll();
 
                 if (monstersSection == null || monsters == null) {
                     player.sendActionBar(TextAPI.parse("§c§lEI! §cOcorreu um erro ao encontrar os monstros na configuração."));
@@ -86,13 +83,13 @@ public class MonstersEggListener implements Listener {
                 Vector direction = player.getLocation().toVector().subtract(spawnLocation.toVector());
                 spawnLocation.setDirection(direction);
 
-                String type = handler.getType(eggType);
-                String displayName = handler.getDisplayName(eggType);
-                Integer life = handler.getLife(eggType);
-                String value = handler.getSkinValue(eggType);
-                String signature = handler.getSkinSignature(eggType);
+                String type = generalManager.getType(eggType);
+                String displayName = generalManager.getDisplayName(eggType);
+                Integer life = generalManager.getLife(eggType);
+                String value = generalManager.getSkinValue(eggType);
+                String signature = generalManager.getSkinSignature(eggType);
 
-                packetsHandler.spawnMonster(
+                packetsManager.spawnMonster(
                         player,
                         type,
                         spawnLocation,
@@ -130,6 +127,6 @@ public class MonstersEggListener implements Listener {
     }
 
     private int getMonstersAmount(Player player) {
-        return MonstersHandler.getInstance().getMonsters(player).size();
+        return MonstersGeneralManager.getInstance().getMonsters(player).size();
     }
 }
