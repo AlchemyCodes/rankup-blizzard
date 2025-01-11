@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id 'com.gradleup.shadow' version '8.3.5'
 }
 
 allprojects {
@@ -50,7 +50,7 @@ allprojects {
 subprojects {
 
     apply plugin: "java"
-    apply plugin: "com.github.johnrengelman.shadow"
+    apply plugin: "com.gradleup.shadow"
 
     dependencies {
         implementation "co.aikar:acf-paper:0.5.1-SNAPSHOT"
@@ -59,7 +59,7 @@ subprojects {
     }
 
     java {
-        toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+        toolchain.languageVersion.set(JavaLanguageVersion.of(21))
     }
 
 }

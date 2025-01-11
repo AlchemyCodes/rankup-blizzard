@@ -1,0 +1,4 @@
+name: blizzard-utils
+version: '${version}'
+main: blizzard.development.Main
+api-version: '1.20'
