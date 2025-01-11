@@ -1,0 +1,6 @@
+ground-drop-blacklist:
+  metadata:
+    - "dropItem"
+  items:
+    Teste:
+      id: "STONE"
