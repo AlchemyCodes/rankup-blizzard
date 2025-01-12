@@ -1,6 +1,8 @@
 package blizzard.development.mail.inventories;
 
+import blizzard.development.mail.Main;
 import blizzard.development.mail.database.methods.PlayerMethods;
+import blizzard.development.mail.utils.MailUtils;
 import blizzard.development.mail.utils.PluginImpl;
 import blizzard.development.mail.utils.items.ItemBuilder;
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
@@ -13,8 +15,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class MailInventory {
     public static void openMailInventory(Player player) {
@@ -22,18 +24,25 @@ public class MailInventory {
         StaticPane pane = new StaticPane(0, 0, 9, 5);
 
         PlayerMethods playerMethods = PlayerMethods.getInstance();
-        YamlConfiguration config = PluginImpl.getInstance().Config.getConfig();
 
-        Set<String> itemsConfig = config.getConfigurationSection("items").getKeys(false);
         List<String> playerItems = playerMethods.getItemList(player);
 
-        if (playerItems != null) {
-            int slotIndex = 10;
-            for (String playerItem : playerItems) {
-                if (itemsConfig.contains(playerItem) && slotIndex <= 16) {
-                    pane.addItem(createItem(playerItem), Slot.fromIndex(slotIndex));
-                    slotIndex++;
-                }
+        HashSet<String> processedItems = new HashSet<>();
+
+        int slotIndex = 10;
+
+        for (String itemName : playerItems) {
+            if (processedItems.contains(itemName)) {
+                continue;
+            }
+
+            int itemCount = getItemAmount(itemName, playerItems);
+
+            if (slotIndex <= 16) {
+                pane.addItem(createItem(player, itemName, itemCount), Slot.fromIndex(slotIndex));
+                slotIndex++;
+
+                processedItems.add(itemName);
             }
         }
 
@@ -41,20 +50,49 @@ public class MailInventory {
         inventory.show(player);
     }
 
-    private static GuiItem createItem(String itemName) {
-        YamlConfiguration config = PluginImpl.getInstance().Config.getConfig();
-        String itemPath = "items." + itemName;
 
-        Material material = Material.getMaterial(config.getString(itemPath + ".material"));
-        String displayName = config.getString(itemPath + ".displayName");
-        List<String> lore = Arrays.asList(config.getStringList(itemPath + ".lore").toArray(new String[0]));
+    private static GuiItem createItem(Player player, String itemName, int amount) {
+        MailUtils mailUtils = MailUtils.getInstance();
+
+        Material material = mailUtils.getItemMaterial(itemName);
+        if (material == null) {
+            material = Material.STONE;
+        }
+        String displayName = mailUtils.getItemDisplayName(itemName) + " §7[" + amount + "]";
+        List<String> lore = mailUtils.getItemLore(itemName);
+        String pdc = mailUtils.getItemPdc(itemName);
 
         ItemStack itemStack = new ItemBuilder(material)
                 .setDisplayName(displayName)
                 .setLore(lore)
+                .addPersistentData(PluginImpl.getInstance().plugin, pdc, pdc)
                 .build();
 
-        return new GuiItem(itemStack, event -> event.setCancelled(true));
+        Material finalMaterial = material;
+        return new GuiItem(itemStack, event -> {
+            event.setCancelled(true);
+            PlayerMethods.getInstance().removeFromList(player, itemName);
+
+            ItemStack item = new ItemBuilder(finalMaterial)
+                    .setDisplayName(mailUtils.getItemDisplayName(itemName))
+                    .setLore(lore)
+                    .addPersistentData(PluginImpl.getInstance().plugin, pdc, pdc)
+                    .build();
+
+            player.getInventory().addItem(item);
+
+            openMailInventory(player);});
+    }
+
+
+    private static int getItemAmount(String itemName, List<String> playerItems) {
+        int count = 0;
+        for (String item : playerItems) {
+            if (item.equals(itemName)) {
+                count++;
+            }
+        }
+        return count;
     }
 }
 

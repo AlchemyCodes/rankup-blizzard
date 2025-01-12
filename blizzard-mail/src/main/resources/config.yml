@@ -6,7 +6,7 @@ items:
      - " "
      - "§7teste"
      - " "
-     -
+   pdc: "teste"
   sla2:
     material: "ACACIA_HANGING_SIGN"
     displayName: "§6teste2"
@@ -14,3 +14,4 @@ items:
       - " "
       - "§7teste2"
       - " "
+    pdc: "teste2"
