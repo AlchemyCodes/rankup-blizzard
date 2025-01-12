@@ -14,7 +14,8 @@ public class ListenerRegistry {
         PlayerDao playerDao = new PlayerDao();
 
         Arrays.asList(
-            new TrafficListener(playerDao)
+            new TrafficListener(playerDao),
+                new ItemsListener()
         ).forEach(listener -> pluginManager.registerEvents(listener, Main.getInstance()));
     }
 }

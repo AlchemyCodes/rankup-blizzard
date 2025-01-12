@@ -11,11 +11,11 @@ public class PlayerMethods {
 
     private PlayerCacheManager cacheManager = PlayerCacheManager.getInstance();
 
-    public void addToList(Player player, List<String> itemName) {
+    public void addToList(Player player, String itemName) {
         PlayerData data = PlayerCacheManager.getInstance().getPlayerData(player.getName());
         if (data != null) {
             List<String> items = data.getItems();
-            items.addAll(itemName);
+            items.add(itemName);
             data.setItems(items);
             cacheManager.cachePlayerData(player.getName(), data);
         }
@@ -27,6 +27,14 @@ public class PlayerMethods {
             return data.getItems();
         }
         return null;
+    }
+
+    public void removeFromList(Player player, String itemName) {
+        PlayerData data = PlayerCacheManager.getInstance().getPlayerData(player.getName());
+        if (data != null) {
+            List<String> items = data.getItems();
+            items.remove(itemName);
+        }
     }
 
 
