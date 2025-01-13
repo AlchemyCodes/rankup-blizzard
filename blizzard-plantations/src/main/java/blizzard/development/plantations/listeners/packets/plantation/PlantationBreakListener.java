@@ -117,23 +117,7 @@ public class PlantationBreakListener extends PacketAdapter {
             return;
         }
 
-        plantations.put(player, plantationToRegen);
-
-        List<String> friends = PlayerCacheMethod
-            .getInstance()
-            .getFriends(player);
-
-        for (String friend : friends) {
-            Player playerFriends = Bukkit.getPlayer(friend);
-
-            if (playerFriends != null) {
-                PacketUtils.getInstance().sendPacket(
-                    playerFriends,
-                    plantationToRegen,
-                    Material.getMaterial(AreaManager.getInstance().getAreaPlantation(playerFriends))
-                );
-            }
-        }
+        PacketUtils.getInstance().sendPacket(player, plantationToRegen, Material.getMaterial(AreaManager.getInstance().getAreaPlantation(player)));
 
 
         player.getInventory().setItemInMainHand(ToolBuildItem.tool(
@@ -153,16 +137,9 @@ public class PlantationBreakListener extends PacketAdapter {
         XrayManager.check(player, plantationToRegen, id);
         BlizzardManager.check(player, id);
 
-        for (String friend : friends) {
-            Player playerFriends = Bukkit.getPlayer(friend);
-
-            if (playerFriends != null) {
-                plantations.forEach((p, plantation) -> {
-                    PlantationRegenTask.create(plantationToRegen, player, playerFriends.getName(), 3);
-                });
-            }
-        }
-
+        plantations.forEach((p, plantation) -> {
+            PlantationRegenTask.create(plantationToRegen, player, 3);
+        });
 
         int seeds = 0;
 

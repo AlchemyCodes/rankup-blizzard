@@ -1,6 +1,7 @@
 package blizzard.development.plantations.listeners;
 
 import blizzard.development.plantations.Main;
+import blizzard.development.plantations.commands.farm.FarmCommand;
 import blizzard.development.plantations.database.dao.PlayerDAO;
 import blizzard.development.plantations.listeners.geral.PlayerListener;
 import blizzard.development.plantations.listeners.packets.PacketListener;
@@ -32,7 +33,8 @@ public class ListenerRegistry {
                 new PlantationDisplayListener(),
                 new ToolInteractListener(),
                 new PlantationListener(),
-                new VisualApplyListener()
+                new VisualApplyListener(),
+                new FarmCommand()
         ).forEach(listener -> pluginManager.registerEvents(listener, Main.getInstance()));
     }
 

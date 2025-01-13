@@ -1,13 +1,11 @@
 package blizzard.development.plantations.commands.farm;
 
 import blizzard.development.plantations.Main;
-import blizzard.development.plantations.api.CoreAPI;
 import blizzard.development.plantations.database.cache.methods.PlayerCacheMethod;
 import blizzard.development.plantations.database.cache.methods.ToolCacheMethod;
 import blizzard.development.plantations.inventories.FarmInventory;
 import blizzard.development.plantations.managers.AreaManager;
 import blizzard.development.plantations.managers.PlantationManager;
-import blizzard.development.plantations.managers.upgrades.agility.AgilityManager;
 import blizzard.development.plantations.plantations.adapters.AreaAdapter;
 import blizzard.development.plantations.plantations.adapters.ToolAdapter;
 import blizzard.development.plantations.plantations.enums.PlantationEnum;
@@ -17,34 +15,31 @@ import blizzard.development.plantations.utils.CooldownUtils;
 import blizzard.development.plantations.utils.LocationUtils;
 import blizzard.development.plantations.utils.PluginImpl;
 import blizzard.development.plantations.utils.displayentity.DisplayEntityUtils;
-import blizzard.development.plantations.utils.packets.PacketUtils;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Sound;
-import org.bukkit.WeatherType;
+import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Horse;
+import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 import java.time.Duration;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import static blizzard.development.plantations.builder.ItemBuilder.getPersistentData;
-import static blizzard.development.plantations.utils.NumberFormat.formatNumber;
 
 @CommandAlias("estufa|plantar")
-public class FarmCommand extends BaseCommand {
+public class FarmCommand extends BaseCommand implements Listener {
 
     private final PlayerCacheMethod playerCacheMethod = new PlayerCacheMethod();
 
@@ -345,7 +340,7 @@ public class FarmCommand extends BaseCommand {
             player.sendActionBar("§c§lEI! §cO jogador está offline ou não existe.");
 
 
-            List<String>  message = Arrays.asList(
+            List<String> message = Arrays.asList(
                 "",
                 " §3§lMonstros! §3Capturamos todos os seus monstros.",
                 " §7Você pode pegá-los novamente no §7´§o§f/gaiola§7´.",
@@ -362,6 +357,58 @@ public class FarmCommand extends BaseCommand {
         PlayerCacheMethod
             .getInstance()
             .addFriend(player, target.getName());
+    }
+
+    @Subcommand("devss")
+    @CommandPermission("alchemy.plantations.giveseed")
+    public void onDevss(CommandSender commandSender, String playerTarget) {
+        Player player = (Player) commandSender;
+        Player target = Bukkit.getPlayer(playerTarget);
+
+        if (target == null) {
+            airPlane(player);
+        }
+
+        airPlane(target);
+    }
+
+
+    private final HashMap<UUID, Minecart> playerAirplane = new HashMap<>();
+
+    private void airPlane(Player player) {
+        Location location = player.getLocation();
+        Minecart airPlane = (Minecart) location.getWorld().spawnEntity(location, EntityType.MINECART);
+
+        airPlane.setCustomNameVisible(false);
+        airPlane.setMaxSpeed(2.0);
+        airPlane.addPassenger(player);
+
+        playerAirplane.put(player.getUniqueId(), airPlane);
+        player.sendMessage("Você entrou no seu Chevrolet Astra 2011 140 cavalos");
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (!airPlane.isValid() || !player.isInsideVehicle() || !playerAirplane.containsKey(player.getUniqueId())) {
+                    cancel();
+                    playerAirplane.remove(player.getUniqueId());
+                    return;
+                }
+
+                Vector direction = player.getLocation().getDirection();
+                airPlane.setVelocity(direction.multiply(1.0));
+                airPlane.getWorld().spawnParticle(Particle.CLOUD, airPlane.getLocation().add(-2, 0, -2), 2, 0.2, 0.2, 0.2, 0.05);
+            }
+        }.runTaskTimerAsynchronously(PluginImpl.getInstance().plugin, 0L, 1L);
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (!playerAirplane.containsKey(player.getUniqueId())) {
+                    airPlane.remove();
+                }
+            }
+        }.runTaskTimer(PluginImpl.getInstance().plugin, 0L, 1L);
     }
 
 }
