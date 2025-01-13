@@ -12,6 +12,9 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
@@ -20,12 +23,12 @@ import java.util.UUID;
 
 public class MonstersWorldListener implements Listener {
 
+    private final MonstersWorldManager monstersWorldManager = MonstersWorldManager.getInstance();
+    private final MonstersGeneralManager monstersManager = MonstersGeneralManager.getInstance();
+
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
-
-        MonstersWorldManager monstersWorldManager = MonstersWorldManager.getInstance();
-        MonstersGeneralManager monstersManager = MonstersGeneralManager.getInstance();
 
         if (monstersWorldManager.containsPlayer(player)) {
             if (monstersManager.monstersLocation.containsKey(player)) {
@@ -65,7 +68,7 @@ public class MonstersWorldListener implements Listener {
             worldManager.removePlayer(player);
 
             MonstersToolManager.getInstance().removeRadar(player);
-            MonstersGeneralManager.getInstance().monsters.remove(player);
+            monstersManager.monsters.remove(player);
 
             int amount = 0;
             for (MonstersData data : MonstersCacheManager.getInstance().monstersCache.values()) {
@@ -89,7 +92,37 @@ public class MonstersWorldListener implements Listener {
                 }
             }
 
-            MonstersGeneralManager.getInstance().monstersLocation.remove(player);
+            monstersManager.monstersLocation.remove(player);
+        }
+    }
+
+    @EventHandler
+    public void onBlockBreak(BlockBreakEvent event) {
+        Player player = event.getPlayer();
+
+        if (monstersWorldManager.containsPlayer(player)
+                && !player.hasPermission("blizzard.monsters.admin")) {
+           event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onBlockPlace(BlockPlaceEvent event) {
+        Player player = event.getPlayer();
+
+        if (monstersWorldManager.containsPlayer(player)
+                && !player.hasPermission("blizzard.monsters.admin")) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onDamage(EntityDamageEvent event) {
+        if (event.getEntity() instanceof Player player) {
+            if (monstersWorldManager.containsPlayer(player)
+                    && !player.hasPermission("blizzard.monsters.admin")) {
+                event.setCancelled(true);
+            }
         }
     }
 }

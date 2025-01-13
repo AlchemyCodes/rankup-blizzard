@@ -1,12 +1,11 @@
 package blizzard.development.monsters.listeners.packets.monsters;
 
 import blizzard.development.monsters.builders.ItemBuilder;
-import blizzard.development.monsters.builders.hologram.HologramBuilder;
 import blizzard.development.monsters.database.cache.managers.MonstersCacheManager;
-import blizzard.development.monsters.database.cache.methods.MonstersCacheMethods;
 import blizzard.development.monsters.database.cache.methods.ToolsCacheMethods;
 import blizzard.development.monsters.database.storage.MonstersData;
 import blizzard.development.monsters.monsters.managers.monsters.MonstersGeneralManager;
+import blizzard.development.monsters.monsters.managers.monsters.life.MonstersDamageManager;
 import blizzard.development.monsters.utils.CooldownUtils;
 import blizzard.development.monsters.utils.LocationUtils;
 import blizzard.development.monsters.utils.PluginImpl;
@@ -19,12 +18,10 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import org.bukkit.Location;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 public class MonstersDamageListener {
@@ -92,7 +89,7 @@ public class MonstersDamageListener {
 
                         if (cooldown.isInCountdown(player, cooldownName)) return;
 
-                        attackMonster(player, uuid, monsterLocation, displayName, finalLife);
+                        MonstersDamageManager.getInstance().receiveDamage(player, monsterLocation, uuid, displayName, finalLife, damage);
 
                         cooldown.createCountdown(player, cooldownName, 500, TimeUnit.MILLISECONDS);
                     } else {
@@ -101,20 +98,6 @@ public class MonstersDamageListener {
                 }
             }
         });
-    }
-
-    private void attackMonster(Player player, String uuid, Location location, String displayName, Integer life) {
-        MonstersCacheMethods methods = MonstersCacheMethods.getInstance();
-
-        methods.setLife(uuid, life);
-
-        HologramBuilder hologram = HologramBuilder.getInstance();
-        UUID monsterUUID = UUID.fromString(uuid);
-
-        hologram.updateHologram(player, monsterUUID, displayName, life);
-
-        player.sendActionBar("vose ataco o momstro");
-        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_ATTACK_STRONG, 1.0f, 1.0f);
     }
 
     public static MonstersDamageListener getInstance(Plugin plugin) {

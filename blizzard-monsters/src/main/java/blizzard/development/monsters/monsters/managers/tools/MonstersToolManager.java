@@ -31,8 +31,7 @@ public class MonstersToolManager {
                         "",
                         " §fDano: §c❤" + damage,
                         " §fExperiente: §a★" + experienced,
-                        "",
-                        "§6Clique para resgatar."
+                        ""
                 ))
                 .addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
                 .addPersistentData(PluginImpl.getInstance().plugin, sword, swordId)

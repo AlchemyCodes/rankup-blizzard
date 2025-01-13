@@ -1,8 +1,6 @@
 package blizzard.development.monsters.tasks.tools;
 
-import blizzard.development.monsters.database.cache.managers.PlayersCacheManager;
 import blizzard.development.monsters.database.cache.managers.ToolsCacheManager;
-import blizzard.development.monsters.database.dao.PlayersDAO;
 import blizzard.development.monsters.database.dao.ToolsDAO;
 import org.bukkit.scheduler.BukkitRunnable;
 
