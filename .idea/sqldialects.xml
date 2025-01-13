@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="SqlDialectMappings">
-    <file url="file://$PROJECT_DIR$/blizzard-monsters/src/main/java/blizzard/development/monsters/database/dao/MonstersDAO.java" dialect="GenericSQL" />
-    <file url="file://$PROJECT_DIR$/blizzard-monsters/src/main/java/blizzard/development/monsters/database/dao/PlayersDAO.java" dialect="GenericSQL" />
-  </component>
-</project>

@@ -1,6 +1,7 @@
 package blizzard.development.monsters.monsters.managers.packets;
 
 import blizzard.development.monsters.builders.hologram.HologramBuilder;
+import blizzard.development.monsters.monsters.holograms.MonsterNameHologram;
 import blizzard.development.monsters.monsters.managers.monsters.MonstersGeneralManager;
 import blizzard.development.monsters.monsters.managers.packets.entity.EntitySpawn;
 import blizzard.development.monsters.monsters.managers.packets.entity.EntityUpdate;
@@ -27,7 +28,13 @@ public class MonstersPacketsManager {
 
         updateInfo.playerInfoUpdate(player, uuid, value, signature, protocolManager);
         spawnEntity.spawnEntity(player, location, uuid, id, protocolManager);
-        HologramBuilder.getInstance().createHologram(player, uuid, location.add(0, 2.5 ,0), displayName, life);
+
+        HologramBuilder.getInstance().createHologram(
+                player,
+                uuid,
+                location.add(0, 2.5 ,0),
+                MonsterNameHologram.getInstance().getLines(displayName, life)
+                );
 
         String serializedLocation = LocationUtils.getInstance().getSerializedLocation(location);
 

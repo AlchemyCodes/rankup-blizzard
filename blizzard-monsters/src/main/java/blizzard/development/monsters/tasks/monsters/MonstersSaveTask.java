@@ -1,9 +1,7 @@
 package blizzard.development.monsters.tasks.monsters;
 
 import blizzard.development.monsters.database.cache.managers.MonstersCacheManager;
-import blizzard.development.monsters.database.cache.managers.PlayersCacheManager;
 import blizzard.development.monsters.database.dao.MonstersDAO;
-import blizzard.development.monsters.database.dao.PlayersDAO;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.SQLException;

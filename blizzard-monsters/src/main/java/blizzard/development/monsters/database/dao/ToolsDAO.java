@@ -2,7 +2,6 @@ package blizzard.development.monsters.database.dao;
 
 import blizzard.development.monsters.database.DatabaseConnection;
 import blizzard.development.monsters.database.storage.ToolsData;
-import org.bukkit.Bukkit;
 
 import java.sql.*;
 import java.util.ArrayList;
