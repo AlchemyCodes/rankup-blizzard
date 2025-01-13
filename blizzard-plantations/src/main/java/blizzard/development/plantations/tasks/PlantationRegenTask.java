@@ -14,21 +14,20 @@ import java.util.Map;
 
 public class PlantationRegenTask {
 
-
     private static final BukkitScheduler scheduler = Bukkit.getScheduler();
     private static final Map<Long, List<Object[]>> tasks = new HashMap<>();
 
-    public static void create(Block block, Player player, String friend, int time) {
+    public static void create(Block block, Player player, int time) {
         long executionTime = System.currentTimeMillis() + (time * 1000L);
 
         synchronized (tasks) {
             tasks.computeIfAbsent(executionTime, k -> new ArrayList<>())
-                .add(new Object[]{block, player, friend});
+                .add(new Object[]{block, player});
         }
     }
 
     public static void start() {
-        scheduler.runTaskTimer(Main.getInstance(), () -> {
+        scheduler.runTaskTimerAsynchronously(Main.getInstance(), () -> {
             long currentTime = System.currentTimeMillis();
 
             List<Object[]> toProcess = new ArrayList<>();
@@ -46,21 +45,13 @@ public class PlantationRegenTask {
             for (Object[] entry : toProcess) {
                 Block block = (Block) entry[0];
                 Player player = (Player) entry[1];
-                String friend = (String) entry[2];
-                sendBlockUpdate(block, player, friend);
+                sendBlockUpdate(block, player);
             }
         }, 0L, 20L);
     }
 
-    private static void sendBlockUpdate(Block block, Player player, String friend) {
+    private static void sendBlockUpdate(Block block, Player player) {
         PacketUtils.getInstance().sendPacket(player, block);
-
-//        if (friend != null) {
-//            Player friendPlayer = Bukkit.getPlayer(friend);
-//            if (friendPlayer != null) {
-//                PacketUtils.getInstance().sendPacket(friendPlayer, block);
-//            }
-//        }
     }
 
 }
