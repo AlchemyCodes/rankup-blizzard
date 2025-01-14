@@ -11,6 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Arrays;
 import java.util.UUID;
@@ -33,9 +34,9 @@ public class MonstersToolManager {
                         " §fExperiente: §a★" + experienced,
                         ""
                 ))
-                .addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
+                .addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE)
                 .addPersistentData(PluginImpl.getInstance().plugin, sword, swordId)
-                .build();
+                .build(true);
 
         player.getInventory().addItem(item);
 
@@ -77,7 +78,7 @@ public class MonstersToolManager {
                 ))
                 .addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
                 .addPersistentData(PluginImpl.getInstance().plugin, radar, player.getName())
-                .build();
+                .build(false);
 
         player.getInventory().addItem(item);
     }

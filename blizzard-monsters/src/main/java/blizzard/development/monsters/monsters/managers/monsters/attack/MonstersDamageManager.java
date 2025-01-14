@@ -1,21 +1,32 @@
-package blizzard.development.monsters.monsters.managers.monsters.life;
+package blizzard.development.monsters.monsters.managers.monsters.attack;
 
 import blizzard.development.monsters.database.cache.methods.MonstersCacheMethods;
 import blizzard.development.monsters.monsters.holograms.MonsterNameHologram;
+import blizzard.development.monsters.monsters.managers.monsters.MonstersGeneralManager;
+import blizzard.development.monsters.utils.CooldownUtils;
+import blizzard.development.monsters.utils.PluginImpl;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 public class MonstersDamageManager {
     private static MonstersDamageManager instance;
 
+    MonstersGeneralManager manager = MonstersGeneralManager.getInstance();
+
     public void dispatchDamage(Player player, String uuid, String displayName, Integer life) {
     }
 
-    public void receiveDamage(Player player, Location location, String uuid, String displayName, Integer life, Integer damage) {
+    public void receiveDamage(Player player, Location location, String monster, String uuid, String displayName, Integer life, Integer damage) {
+        CooldownUtils cooldown = CooldownUtils.getInstance();
+        String cooldownName = "blizzard.monsters.hit-cooldown";
+
+        if (cooldown.isInCountdown(player, cooldownName)) return;
+
         MonstersCacheMethods methods = MonstersCacheMethods.getInstance();
 
         methods.setLife(uuid, life);
@@ -26,8 +37,16 @@ public class MonstersDamageManager {
 
         handleParticles(player, location);
 
-        player.sendActionBar("§3§lMonstros! §7✧ §fVocê removeu §c§l-§c" + damage + "§f da vida do monstro.");
-        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_ATTACK_STRONG, 1.0f, 1.0f);
+        player.sendActionBar("§3§lMonstros! §f✧ §7Você removeu §c§l-§c" + damage + "§7 da vida do monstro.");
+
+        handleSound(player, monster);
+
+        cooldown.createCountdown(
+                player,
+                cooldownName,
+                PluginImpl.getInstance().Config.getInt("monsters.hit-delay"),
+                TimeUnit.MILLISECONDS
+        );
     }
 
     private void handleParticles(Player player, Location location) {
@@ -47,6 +66,19 @@ public class MonstersDamageManager {
                     0
             );
         }
+    }
+
+    private void handleSound(Player player, String monster) {
+        String soundName = manager.getDamageSound(monster);
+
+        Sound sound;
+        if (soundName != null) {
+            sound = Sound.valueOf(soundName);
+        } else {
+            sound = Sound.ENTITY_ARROW_HIT;
+        }
+
+        player.playSound(player.getLocation(), sound, 1.0f, 1.0f);
     }
 
     public static MonstersDamageManager getInstance() {

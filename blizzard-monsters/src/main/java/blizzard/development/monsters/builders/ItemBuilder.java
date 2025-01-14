@@ -103,9 +103,9 @@ public class ItemBuilder {
         return this;
     }
 
-    public ItemStack build() {
+    public ItemStack build(boolean unbreakable) {
+        itemMeta.setUnbreakable(unbreakable);
         itemStack.setItemMeta(itemMeta);
-        itemMeta.setUnbreakable(true);
         return itemStack;
     }
 

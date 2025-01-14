@@ -6,8 +6,11 @@ import blizzard.development.monsters.monsters.managers.monsters.MonstersGeneralM
 import blizzard.development.monsters.monsters.managers.packets.entity.EntitySpawn;
 import blizzard.development.monsters.monsters.managers.packets.entity.EntityUpdate;
 import blizzard.development.monsters.utils.LocationUtils;
+import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
+import com.comphenix.protocol.events.PacketContainer;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -50,6 +53,16 @@ public class MonstersPacketsManager {
         );
 
         monstersManager.addMonster(player, List.of(uuid.toString()));
+    }
+
+    public void removeMonster(Player player, Integer entityId) {
+        PacketContainer destroyEntity = new PacketContainer(PacketType.Play.Server.ENTITY_DESTROY);
+        destroyEntity.getIntLists().write(0, new IntArrayList(new int[]{entityId}));
+        try {
+            protocolManager.sendServerPacket(player, destroyEntity);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static MonstersPacketsManager getInstance() {

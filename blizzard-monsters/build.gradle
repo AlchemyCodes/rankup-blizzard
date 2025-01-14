@@ -9,6 +9,8 @@ dependencies {
 
     compileOnly 'org.projectlombok:lombok:1.18.36'
     annotationProcessor 'org.projectlombok:lombok:1.18.36'
+
+    compileOnly project(":blizzard-currencies")
 }
 
 def targetJavaVersion = 17
