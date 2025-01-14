@@ -1,12 +1,15 @@
 package blizzard.development.monsters.monsters.managers.monsters.attack;
 
 import blizzard.development.monsters.builders.hologram.HologramBuilder;
+import blizzard.development.monsters.database.cache.managers.MonstersCacheManager;
 import blizzard.development.monsters.database.dao.MonstersDAO;
 import blizzard.development.monsters.database.storage.MonstersData;
+import blizzard.development.monsters.monsters.managers.monsters.MonstersGeneralManager;
 import blizzard.development.monsters.monsters.managers.packets.MonstersPacketsManager;
 import blizzard.development.monsters.utils.CooldownUtils;
 import blizzard.development.monsters.utils.PluginImpl;
 import lombok.SneakyThrows;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -27,9 +30,10 @@ public class MonstersDeathManager {
                 Integer.parseInt(monstersData.getId())
         );
 
-        handleData(monstersData);
+        handleData(player, monstersData);
 
         player.sendMessage("vose mato un monstro " + displayName);
+        player.playSound(player.getLocation(), Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, 1.0f, 1.0f);
 
         cooldown.createCountdown(
                 player,
@@ -40,9 +44,17 @@ public class MonstersDeathManager {
     }
 
     @SneakyThrows
-    private void handleData(MonstersData monstersData) {
-        MonstersDAO monstersDAO = new MonstersDAO();
-        monstersDAO.deleteMonsterData(monstersData);
+    private void handleData(Player player, MonstersData monstersData) {
+        MonstersCacheManager.getInstance().removeMonsterData(
+                monstersData.getUuid()
+        );
+        new MonstersDAO().deleteMonsterData(monstersData);
+        MonstersGeneralManager.getInstance().getMonsters(
+                player
+        ).remove(monstersData.getUuid());
+    }
+
+    private void handleReward() {
     }
 
     public static MonstersDeathManager getInstance() {

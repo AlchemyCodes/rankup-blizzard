@@ -81,7 +81,7 @@ public class MonstersWorldListener implements Listener {
                 Arrays.asList(
                         "",
                         " §b§lMonstros! §7Capturamos os seus monstros.",
-                        " §7Você pode pegá-los novamente no §f´/gaiola´§7.",
+                        " §7Você pode pegá-los novamente no §f´/jaula´§7.",
                         ""
                 ).forEach(player::sendMessage);
             }
