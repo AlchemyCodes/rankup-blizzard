@@ -27,7 +27,7 @@ public class CageItems {
             material = Material.EGG;
         }
 
-        ItemStack item = new ItemBuilder(material).build();
+        ItemStack item = new ItemBuilder(material).build(false);
         ItemMeta meta = item.getItemMeta();
 
         String display;

@@ -5,7 +5,8 @@ import blizzard.development.monsters.database.cache.managers.MonstersCacheManage
 import blizzard.development.monsters.database.cache.methods.ToolsCacheMethods;
 import blizzard.development.monsters.database.storage.MonstersData;
 import blizzard.development.monsters.monsters.managers.monsters.MonstersGeneralManager;
-import blizzard.development.monsters.monsters.managers.monsters.life.MonstersDamageManager;
+import blizzard.development.monsters.monsters.managers.monsters.attack.MonstersDamageManager;
+import blizzard.development.monsters.monsters.managers.monsters.attack.MonstersDeathManager;
 import blizzard.development.monsters.utils.CooldownUtils;
 import blizzard.development.monsters.utils.LocationUtils;
 import blizzard.development.monsters.utils.PluginImpl;
@@ -72,26 +73,30 @@ public class MonstersDamageListener {
                         String uuid = data.getUuid();
                         String displayName = monstersManager.getDisplayName(monster);
 
-                        String swordId = ItemBuilder.getPersistentData(PluginImpl.getInstance().plugin,
-                                item, "blizzard.monsters.sword");
+                        String swordId = ItemBuilder.getPersistentData(PluginImpl.getInstance().plugin, item, "blizzard.monsters.sword");
                         int damage = ToolsCacheMethods.getInstance().getDamage(swordId);
 
                         int life = data.getLife();
                         int finalLife = life - damage;
 
                         if (finalLife <= 0) {
-                            player.sendMessage("bobao ainda nao fiz o bagulho de morre");
-                            return;
+                            MonstersDeathManager.getInstance().killMonster(
+                                    player,
+                                    data,
+                                    displayName
+                            );
+
                         }
 
-                        CooldownUtils cooldown = CooldownUtils.getInstance();
-                        String cooldownName = "blizzard.monsters.hit-cooldown";
-
-                        if (cooldown.isInCountdown(player, cooldownName)) return;
-
-                        MonstersDamageManager.getInstance().receiveDamage(player, monsterLocation, uuid, displayName, finalLife, damage);
-
-                        cooldown.createCountdown(player, cooldownName, 500, TimeUnit.MILLISECONDS);
+                        MonstersDamageManager.getInstance().receiveDamage(
+                                player,
+                                monsterLocation,
+                                monster,
+                                uuid,
+                                displayName,
+                                finalLife,
+                                damage
+                        );
                     } else {
                         player.sendActionBar("§c§lEI! §cOcorreu um erro ao contrar esse monstro no banco de dados.");
                     }

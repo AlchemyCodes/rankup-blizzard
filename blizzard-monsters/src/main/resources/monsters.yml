@@ -10,7 +10,7 @@ monsters:
         - "§7Este monstro pode"
         - "§7te proporcionar;"
         - ""
-        - " §bRecompensas"
+        - " §3Recompensas"
         - "  §f3x §aChave Rara"
         - "  §f2x §bChave Mística"
         - "  §f1x §7Manto"
@@ -21,7 +21,7 @@ monsters:
         - " §fVida: §c❤{life}"
         - " §fDano: §4🗡{damage}"
         - ""
-        - "§bClique no chão para chocar."
+        - "§3Clique no chão para chocar."
 
     monster:
       display-name: "§3Golem de Gelo"
@@ -30,6 +30,7 @@ monsters:
       life: 1000
       attack-chance: 20 # in percentage
       attack-damage: 2 # int value
+      damage-sound: ENTITY_ZOMBIE_HURT
       rewards: [ "reward" ]
 
   snowmonster:
@@ -42,7 +43,7 @@ monsters:
         - "§7Este monstro pode"
         - "§7te proporcionar;"
         - ""
-        - " §bRecompensas"
+        - " §3Recompensas"
         - "  §f3x §aChave Rara"
         - "  §f2x §bChave Mística"
         - "  §f1x §7Manto"
@@ -53,7 +54,7 @@ monsters:
         - " §fVida: §c❤{life}"
         - " §fDano: §4🗡{damage}"
         - ""
-        - "§bClique no chão para chocar."
+        - "§3Clique no chão para chocar."
 
     monster:
       display-name: "§3Monstro das Neves"
@@ -62,4 +63,5 @@ monsters:
       life: 5000
       attack-chance: 50 # in percentage
       attack-damage: 10 # int value
+      damage-sound: ENTITY_ZOMBIE_HURT
       rewards: [ "reward" ]

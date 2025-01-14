@@ -38,14 +38,14 @@ public class MonstersWorldListener implements Listener {
                 String displayName = monstersManager.getMonstersDisplay(player);
 
                 if (distance <= 3) {
-                    player.sendActionBar("§b§lMONSTROS! §bVocê encontrou o monstro §l" + displayName + "§b.");
+                    player.sendActionBar("§3§lMonstros! §f✧ §bVocê encontrou o monstro §l" + displayName + "§3.");
                     monstersManager.monstersLocation.remove(player);
                     return;
                 }
 
                 String formatedDistance = Math.round(distance) + " metro(s)";
 
-                player.sendActionBar("§b§lMONSTROS! §bVocê está a §7" + formatedDistance + "§b de um §l" + displayName + "§b.");
+                player.sendActionBar("§3§lMonstros! §f✧ §bVocê está a §7" + formatedDistance + "§3 de um §l" + displayName + "§3");
             }
         }
     }
@@ -119,8 +119,7 @@ public class MonstersWorldListener implements Listener {
     @EventHandler
     public void onDamage(EntityDamageEvent event) {
         if (event.getEntity() instanceof Player player) {
-            if (monstersWorldManager.containsPlayer(player)
-                    && !player.hasPermission("blizzard.monsters.admin")) {
+            if (monstersWorldManager.containsPlayer(player)) {
                 event.setCancelled(true);
             }
         }

@@ -87,7 +87,7 @@ public class RadarInventory {
     private void setRadarLocation(Player player, String displayName, Location location) {
         List<String> messages = Arrays.asList(
                 "",
-                "§b§l Você localizou um monstro!",
+                "§3§lMonstros! §f✧ Você localizou um monstro!",
                 "§f O monstro " + displayName + "§f foi encontrado.",
                 ""
         );

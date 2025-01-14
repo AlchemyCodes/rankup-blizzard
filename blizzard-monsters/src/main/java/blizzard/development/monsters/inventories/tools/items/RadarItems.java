@@ -26,7 +26,7 @@ public class RadarItems {
             material = Material.EGG;
         }
 
-        ItemStack item = new ItemBuilder(material).build();
+        ItemStack item = new ItemBuilder(material).build(false);
         ItemMeta meta = item.getItemMeta();
 
         String display;
@@ -51,7 +51,7 @@ public class RadarItems {
     }
 
     public ItemStack profile(Player player) {
-        ItemStack item = new ItemBuilder(player).build();
+        ItemStack item = new ItemBuilder(player).build(false);
 
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName("§aSuas informações");

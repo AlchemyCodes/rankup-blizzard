@@ -1,10 +1,8 @@
 package blizzard.development.monsters.monsters.holograms;
 
 import blizzard.development.monsters.builders.hologram.HologramBuilder;
-import blizzard.development.monsters.monsters.managers.packets.MonstersPacketsManager;
 import eu.decentsoftware.holograms.api.DHAPI;
 import eu.decentsoftware.holograms.api.holograms.Hologram;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;

@@ -3,9 +3,8 @@ monsters:
   max-level: 100
 
   initial-monsters-limit: 5
-  max-monsters-limit: 10
 
-  tasks:
-    distance-task: 3 # in seconds
+  hit-delay: 250 # in milliseconds
+
 
 
