@@ -50,6 +50,10 @@ public class PlayerData {
         return area_block;
     }
 
+    public void setAreaBlock(String area_block) {
+        this.area_block = area_block;
+    }
+
     public void setAreaBlock(BlockEnum blockEnum) {
         this.area_block = blockEnum.getType();
     }
