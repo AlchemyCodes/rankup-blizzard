@@ -8,7 +8,7 @@ import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.Default;
 import org.bukkit.entity.Player;
 
-@CommandAlias("cage|cages|gaiola|gaiolas")
+@CommandAlias("cage|cages|jaula|jaulas")
 @CommandPermission("blizzard.monsters.basic")
 public class CageCommand extends BaseCommand {
 

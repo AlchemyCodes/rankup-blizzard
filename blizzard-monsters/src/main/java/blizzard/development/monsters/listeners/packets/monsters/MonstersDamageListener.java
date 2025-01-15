@@ -85,7 +85,7 @@ public class MonstersDamageListener {
                                     data,
                                     displayName
                             );
-
+                            return;
                         }
 
                         MonstersDamageManager.getInstance().receiveDamage(

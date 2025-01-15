@@ -108,7 +108,7 @@ public class PluginImpl {
     private void setupData() {
         List<PlayersData> players = playersDAO.getAllPlayersData();
         for (PlayersData player : players) {
-            PlayersCacheManager.getInstance().cachePlayerData(player.getNickname(), player);
+            PlayersCacheManager.getInstance().cachePlayerData(UUID.fromString(player.getUuid()), player);
         }
 
         List<MonstersData> monsters = monstersDAO.getAllMonstersData();
