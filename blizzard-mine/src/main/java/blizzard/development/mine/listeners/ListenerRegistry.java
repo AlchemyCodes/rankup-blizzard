@@ -4,6 +4,7 @@ import blizzard.development.mine.database.dao.PlayerDAO;
 import blizzard.development.mine.listeners.geral.PlayerListener;
 import blizzard.development.mine.listeners.mine.MineBlockBreakListener;
 import blizzard.development.mine.listeners.packets.mine.MineBlockBreakPacketListener;
+import blizzard.development.mine.listeners.packets.mine.MineBlockInteractPacketListener;
 import blizzard.development.mine.utils.PluginImpl;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
@@ -33,7 +34,8 @@ public class ListenerRegistry {
         ProtocolManager manager = ProtocolLibrary.getProtocolManager();
 
         Arrays.asList(
-            new MineBlockBreakPacketListener()
+            new MineBlockBreakPacketListener(),
+                new MineBlockInteractPacketListener()
         ).forEach(manager::addPacketListener);
     }
 }

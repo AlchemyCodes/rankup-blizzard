@@ -14,10 +14,9 @@ dependencies {
     compileOnly 'com.comphenix.protocol:ProtocolLib:5.1.0'
     compileOnly 'org.projectlombok:lombok:1.18.34'
     compileOnly 'com.google.code.gson:gson:2.10.1'
-    compileOnly 'me.clip:placeholderapi:2.11.1'
+    compileOnly 'me.clip:placeholderapi:2.11.6'
     compileOnly project(":blizzard-currencies")
     compileOnly project(":blizzard-core")
-    compileOnly project(":blizzard-visuals")
 }
 
 def targetJavaVersion = 21

@@ -6,41 +6,119 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.BlockPosition;
 import com.comphenix.protocol.wrappers.WrappedBlockData;
-import org.bukkit.Bukkit;
+import com.google.common.primitives.Shorts;
+import blizzard.development.mine.utils.Cuboid;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 
-public class PacketUtils {
+import java.util.ArrayList;
+import java.util.List;
 
+public class PacketUtils {
     private static final PacketUtils instance = new PacketUtils();
+
     public static PacketUtils getInstance() {
         return instance;
     }
 
-    public void sendPacket(Player player, Block block, Material material) {
-        try {
-            PacketContainer packet = new PacketContainer(PacketType.Play.Server.BLOCK_CHANGE);
+    private short getPackedPosition(int x, int y, int z) {
+        return (short) ((x & 15) << 8 | (z & 15) << 4 | y & 15);
+    }
 
-            BlockData blockData = Bukkit.createBlockData(material);
-            WrappedBlockData wrappedBlockData = WrappedBlockData.createData(blockData);
+    public void sendMultiBlockPacket(Player player, Cuboid cuboid, Material material) {
+        try {
+            // ALINHAR COM O CHUNK DDIVIDINDO POR 4
+            int chunkX = cuboid.getPoint1().getBlockX() >> 4;
+            int chunkZ = cuboid.getPoint1().getBlockZ() >> 4;
+
+            // LISTAS
+            List<Short> positions = new ArrayList<>();
+            List<WrappedBlockData> blockDataList = new ArrayList<>();
+            List<BlockPosition> blockPositions = new ArrayList<>();
+
+            // CALCULAR CHUNK VERTICALMENTE
+            int minSectionY = cuboid.getPoint1().getBlockY() >> 4;
+            int maxSectionY = cuboid.getPoint2().getBlockY() >> 4;
+
+            // CALCULAR AS SEÇÕES Y MÍNIMA E MÁXIMA BASEADO NO CUBOID
+            for (int sectionY = minSectionY; sectionY <= maxSectionY; sectionY++) {
+                positions.clear();
+                blockDataList.clear();
+                blockPositions.clear();
+
+                // CALCULAR O LIMITE DE Y
+                int minY = Math.max(cuboid.getPoint1().getBlockY(), sectionY << 4); // COMEÇO
+                int maxY = Math.min(cuboid.getPoint2().getBlockY(), (sectionY << 4) + 15); // FINAL
+
+                // LOOP SOBRE AS COORDENADAS DENTRO DO CHUNK
+                for (int x = 0; x < 16; x++) { // De 0 a 15 (16 blocos)
+                    for (int y = minY; y <= maxY; y++) {
+                        for (int z = 0; z < 16; z++) { // De 0 a 15 (16 blocos)
+                            // ADICIONAR A POSIÇÃO COMPACTADA DO BLOCO À LISTA
+                            positions.add(getPackedPosition(x, y % 16, z));
+                            blockDataList.add(WrappedBlockData.createData(material)); // esse é o codigo do multi? ss
+
+                            // CALCULAR POSIÇÃO DO BLOCO
+                            int absoluteX = (chunkX << 4) + x;
+                            int absoluteY = y;
+                            int absoluteZ = (chunkZ << 4) + z;
+                            BlockPosition blockPos = new BlockPosition(absoluteX, absoluteY, absoluteZ);
+                            blockPositions.add(blockPos);
+                        }
+                    }
+                }
+
+                if (!positions.isEmpty()) {
+                    PacketContainer packet = ProtocolLibrary.getProtocolManager()
+                            .createPacket(PacketType.Play.Server.MULTI_BLOCK_CHANGE);
+
+                    // DEFINIR A POSIÇÃO DA SEÇÃO DO CHUNK NO PACKET
+                    packet.getSectionPositions()
+                            .write(0, new BlockPosition(chunkX, sectionY, chunkZ));
+
+                    // DEFINIR AS POSIÇÕES DOS BLOCOS NO PACKET
+                    packet.getShortArrays()
+                            .write(0, Shorts.toArray(positions));
+
+                    // DEFINIR OS DADOS DOS BLOCOS NO PACKET
+                    packet.getBlockDataArrays()
+                            .write(0, blockDataList.toArray(new WrappedBlockData[0]));
+
+                    // REGISTRAR OS BLOCOS
+                    for (BlockPosition pos : blockPositions) {
+                        BlockManager.placeBlock(player, pos);
+                        BlockManager.placePlantation(player, pos);
+                    }
+
+                    // EENVIAR PACKET
+                    ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Erro ao enviar pacote: " + e.getMessage());
+        }
+    }
+
+    public void sendAirBlock(Player player, org.bukkit.block.Block block) {
+        try {
+            PacketContainer packet = ProtocolLibrary.getProtocolManager()
+                    .createPacket(PacketType.Play.Server.BLOCK_CHANGE);
 
             BlockPosition blockPosition = new BlockPosition(
-                block.getX(),
-                block.getY(),
-                block.getZ()
+                    block.getX(),
+                    block.getY(),
+                    block.getZ()
             );
 
-            packet.getBlockData().write(0, wrappedBlockData);
-            packet.getBlockPositionModifier().write(0, blockPosition);
+            WrappedBlockData airBlockData = WrappedBlockData.createData(Material.AIR);
 
-            BlockManager.placePlantation(player, blockPosition);
+            packet.getBlockPositionModifier().write(0, blockPosition);
+            packet.getBlockData().write(0, airBlockData);
 
             ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet);
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Erro ao enviar pacote: " + e.getMessage());
         }
     }
 }

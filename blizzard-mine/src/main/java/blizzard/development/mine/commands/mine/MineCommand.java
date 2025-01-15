@@ -64,8 +64,16 @@ public class MineCommand extends BaseCommand {
     public void onDevCommand(CommandSender commandSender) {
         Player player = (Player) commandSender;
 
-        PlayerCacheMethod.getInstance().setAreaBlock(player, BlockEnum.COBBLESTONE);
+        PlayerCacheMethod.getInstance().setAreaBlock(player, BlockEnum.COBBLESTONE.name());
 
+    }
+
+    @Subcommand("gerar")
+    @CommandPermission("alchemy.mine.dev")
+    public void onGenerateCommand(CommandSender commandSender) {
+        Player player = (Player) commandSender;
+
+        MineAdapter.getInstance().generateMine(player);
     }
 
     @Subcommand("dev2")
@@ -74,6 +82,6 @@ public class MineCommand extends BaseCommand {
         Player player = (Player) commandSender;
 
 
-        PlayerCacheMethod.getInstance().setAreaBlock(player, BlockEnum.ANDESITE);
+        PlayerCacheMethod.getInstance().setAreaBlock(player, BlockEnum.ANDESITE.name());
     }
 }
