@@ -6,5 +6,26 @@ monsters:
 
   hit-delay: 250 # in milliseconds
 
+  command-whitelist:
+    - "/spawn"
+    - "/lobby"
+    - "/l"
+    - "/monstros"
+    - "/monstros sair"
+    - "/monstro"
+    - "/monstro sair"
+    - "/bosses"
+    - "/bosses sair"
+    - "/boss"
+    - "/boss sair"
+    - "/g"
+    - "/l"
+    - "/global"
+    - "/local"
+
+
+
+
+
 
 
