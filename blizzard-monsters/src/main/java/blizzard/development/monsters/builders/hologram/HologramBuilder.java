@@ -12,18 +12,12 @@ public class HologramBuilder {
 
     private final Map<UUID, Hologram> hologram = new HashMap<>();
 
-    public void createHologram(Player player, UUID id, Location location, String display, Integer life) {
-
+    public void createHologram(Player player, UUID id, Location location, List<String> lines) {
         Hologram hologram = DHAPI.createHologram(id.toString(), location);
         this.hologram.put(id, hologram);
 
         hologram.setDefaultVisibleState(false);
         hologram.setShowPlayer(player);
-
-        List<String> lines = Arrays.asList(
-                display,
-                "§c❤" + life
-        );
 
         hologram.update(player);
 
@@ -32,15 +26,6 @@ public class HologramBuilder {
 
     public Hologram getHologram(UUID uuid) {
         return hologram.get(uuid);
-    }
-
-    public void updateHologram(Player player, UUID id, String display, Integer life) {
-        Hologram holo = hologram.get(id);
-        if (holo != null) {
-            DHAPI.setHologramLine(holo, 0, display);
-            DHAPI.setHologramLine(holo, 1, "§c❤" + life);
-            holo.update(player);
-        }
     }
 
     public void removeHologram(UUID uuid) {

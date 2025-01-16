@@ -101,9 +101,9 @@ public class MonstersEggListener implements Listener {
 
                 List<String> messages = Arrays.asList(
                         "",
-                        "§b§l Você chocou um monstro!",
-                        "§f O monstro " + displayName + "§f está a solta.",
-                        "§7 [Use o radar e descubra sua localização!]",
+                        "  §3§lMonstros! §f✧ §7Você chocou um monstro.",
+                        "  §7O monstro " + displayName + "§7 está a solta.",
+                        "  §8[Use o radar e descubra sua localização]",
                         ""
                 );
 

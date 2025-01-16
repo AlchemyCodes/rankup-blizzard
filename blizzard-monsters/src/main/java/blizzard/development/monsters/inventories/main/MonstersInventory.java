@@ -2,6 +2,7 @@ package blizzard.development.monsters.inventories.main;
 
 import blizzard.development.monsters.inventories.cage.CageInventory;
 import blizzard.development.monsters.inventories.main.items.MonstersItems;
+import blizzard.development.monsters.inventories.rewards.RewardsInventory;
 import blizzard.development.monsters.monsters.enums.Locations;
 import blizzard.development.monsters.monsters.managers.tools.MonstersToolManager;
 import blizzard.development.monsters.monsters.managers.world.MonstersWorldManager;
@@ -36,6 +37,7 @@ public class MonstersInventory {
         });
 
         GuiItem rewardsItem = new GuiItem(items.rewards(), event -> {
+            RewardsInventory.getInstance().open(player, 1);
             event.setCancelled(true);
         });
 

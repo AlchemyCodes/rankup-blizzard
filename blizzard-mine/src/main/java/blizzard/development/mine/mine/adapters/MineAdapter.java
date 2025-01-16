@@ -14,11 +14,12 @@ public class MineAdapter implements MineFactory {
 
     @Override
     public void sendToMine(Player player) {
-
         player.teleport(
             LocationUtils.getMineSpawnLocation()
         );
+    }
 
+    public void generateMine(Player player) {
         MineManager
             .getInstance()
             .transformArea(player);

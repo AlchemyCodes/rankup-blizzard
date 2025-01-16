@@ -1,0 +1,7 @@
+name: blizzard-mysteryboxes
+version: '1.0-SNAPSHOT'
+main: blizzard.development.mysteryboxes.Main
+api-version: '1.20'
+load: STARTUP
+authors: [swagviper]
+website: www.alchemynetwork.net

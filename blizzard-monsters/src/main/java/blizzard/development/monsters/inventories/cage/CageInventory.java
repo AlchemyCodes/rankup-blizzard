@@ -72,6 +72,11 @@ public class CageInventory {
         }
 
         GuiItem catchAllItem = new GuiItem(items.catchAll(), event -> {
+            if (!player.hasPermission("blizzard.monsters.vip")) {
+                player.sendActionBar("§c§lEI! §cVocê não possui permissão para utilizar isso.");
+                return;
+            }
+
             manager.catchAllMonsters(player);
             player.getInventory().close();
             event.setCancelled(true);

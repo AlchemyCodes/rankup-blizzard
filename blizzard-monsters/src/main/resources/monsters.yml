@@ -24,25 +24,26 @@ monsters:
         - "§bClique no chão para chocar."
 
     monster:
-      display-name: "§3Golem de Gelo"
+      display-name: "§bGolem de Gelo"
       skin-value: "ewogICJ0aW1lc3RhbXAiIDogMTY2MTAxOTUyMDY4NiwKICAicHJvZmlsZUlkIiA6ICJjOWRlZTM4MDUzYjg0YzI5YjZlZjA5YjJlMDM5OTc0ZiIsCiAgInByb2ZpbGVOYW1lIiA6ICJTQVJfRGVjZW1iZXI1IiwKICAic2lnbmF0dXJlUmVxdWlyZWQiIDogdHJ1ZSwKICAidGV4dHVyZXMiIDogewogICAgIlNLSU4iIDogewogICAgICAidXJsIiA6ICJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlLzIwNTlhNWI0NGRhZDM1ZmM3NzAwYjBhNjM1OTk0MzljMTkzZTUzNmI4ODI5OTk4OWUzZTlkOTVjNmJiZTk5ZjQiCiAgICB9CiAgfQp9"
       skin-signature: "hgk9saDDmB9i4OtGrEScfrDQpufsWnNGVa2Fd3W1dfAr9lQrbtuJu1VX4L/yHYFPxDCIFJspC819dVKHP2YWTLUSvcCbJm/+8jRkBXc4nk8Brlt7otUQpNEB02kwgABFtVHGKM08JAwuVx+J05JvC2UeKYgCSKryZ4iPxFEohr/Fq+zF3RcepPvbvkQ43tOOA6ZRdyyyF+8KXvoTtGR0Gf4I8VEvPh4+Z+JIWqHSohLpDleIcVUs59JfsodyPBid5+vXZMAGx05TNd96XTwRsD26k17cWGGesS67C/dBmFVbm8RBPn/hZPFpHvctw85tYRpQjYFQ0iYhOgxpdonW+3/U59J6oIMGdS4JXUVCGV+VKIJ6CaMYoVyxkjkHwMjOh7Gmj4O3I3AQOM+vvk+DepaJoq3IJh7m7nxU07XRpWeBvc2m8BAah6/9P0Ex4t3TYiS+1l4BgIb1SikmOBNUIscODMJ/PiTYDT/g4lDxMZolmH+HeKcL1dPYmcPgCjPh5hkXmX7Lt6jTIC143szruSEabgVokSKgGGJXjVEoV4vnY04C0txV1WCLNpGrlMmw6WdVmPZRGd24Xb+plZBMmX/B+b6m1Awe+Rk5WqHSdVd6EZGm+I/esaUhgp8NY55HxuKMuErWznxyPvDE+1TSNoEyfWWLjAVc+aPNpqY6XH0="
-      life: 1000
+      life: 10
       attack-chance: 20 # in percentage
       attack-damage: 2 # int value
-      rewards: [ "reward" ]
+      damage-sound: ENTITY_ZOMBIE_HURT
+      rewards: [ "1" ]
 
   snowmonster:
     type: "snowmonster"
 
     egg:
       material: ALLAY_SPAWN_EGG # material or head
-      display-name: "§bMonstro das Neves"
+      display-name: "§3Monstro das Neves"
       lore:
         - "§7Este monstro pode"
         - "§7te proporcionar;"
         - ""
-        - " §bRecompensas"
+        - " §3Recompensas"
         - "  §f3x §aChave Rara"
         - "  §f2x §bChave Mística"
         - "  §f1x §7Manto"
@@ -53,13 +54,14 @@ monsters:
         - " §fVida: §c❤{life}"
         - " §fDano: §4🗡{damage}"
         - ""
-        - "§bClique no chão para chocar."
+        - "§3Clique no chão para chocar."
 
     monster:
       display-name: "§3Monstro das Neves"
       skin-value: "ewogICJ0aW1lc3RhbXAiIDogMTY0NDc1ODU2Mzg2MSwKICAicHJvZmlsZUlkIiA6ICI0NWY3YTJlNjE3ODE0YjJjODAwODM5MmRmN2IzNWY0ZiIsCiAgInByb2ZpbGVOYW1lIiA6ICJfSnVzdERvSXQiLAogICJzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDg4NzEwMmI2OTRiNGJjNThjNjU1N2UzN2IzZDk1ZWE1NTQxNThmOTk0NDMyZWE2NmFiM2JhYzkyYTFjZjkyNCIKICAgIH0KICB9Cn0="
       skin-signature: "pbwEGLZmaseitSQkEZ7OD6MltcB6lpAUiZhY97OItmSRCQ275ghoc/zQVQjW3DDILhYLugB2S7MwuT/HEuSSmNow6e09OF4fQa79shDLQ3MMlMs9jpRKeOiXS8ynOzh/XEVLw8jeGIyguDVTxrC+N+N8UPt1XvCCEGHXiO3INYRIempxnYX4zA3bVHR6vZqi8M89qsYJdiQyhHuf9dMuIyIMFWWb85eDvZZQQpK8exH4AtnHvCUA4nhoqNpdjQ6PpHTElyN5MS34sSjsBeg9ZQdUPu63cCZltv6MiXFZ3KvEiv0VOuwPEDaFBzcPpVabRlim+fbcz8JTHRD7C96cxpT3NZJezYrjpL6RgLxQ5hzV3aUojqEaijmQlJcFcLSqqamkpePWQCI7kYSnpAHF6sesSsX4s4Gl036hFf3zuYYykszhfKrKeXpJ3o1sgMN4PV5F4FR1M7+Mc+l65sfTWRYRuqrmW/AdtX4TjAyidp1B7vUrWJ6zTG5m5qhwyQ4wb957RoZMJuiXnZov8OYhqORIxBvNlbz1ZFk7I4ts/fFbVbyGWB1KI251DM+c9ZhrocY+FzBP8EPtnDcVXHJtQ48Ku4UYoEqtN/dHNap1GTAUT0v3mrdg77DyB2hqIBN+N9MDhre4LH3FiPQg35Ra3rwnO0wHxMO/5riJCePbQp0="
-      life: 5000
+      life: 50
       attack-chance: 50 # in percentage
       attack-damage: 10 # int value
-      rewards: [ "reward" ]
+      damage-sound: ENTITY_ZOMBIE_HURT
+      rewards: [ "1" ]

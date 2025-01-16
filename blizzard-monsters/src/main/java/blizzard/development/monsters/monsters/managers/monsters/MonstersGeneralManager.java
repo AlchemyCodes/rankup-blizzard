@@ -90,6 +90,10 @@ public class MonstersGeneralManager {
         return plugin.Monsters.getConfig().getInt("monsters." + monsterName + ".monster.attack-damage");
     }
 
+    public String getDamageSound(String monsterName) {
+        return plugin.Monsters.getConfig().getString("monsters." + monsterName + ".monster.damage-sound");
+    }
+
     public List<String> getRewards(String monsterName) {
         return plugin.Monsters.getConfig().getStringList("monsters." + monsterName + ".monster.rewards");
     }

@@ -9,6 +9,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
+import java.util.ArrayList;
+
 public class PlayersJoinListener implements Listener {
     private final PlayersDAO database;
     public PlayersJoinListener(PlayersDAO database) {
@@ -23,7 +25,8 @@ public class PlayersJoinListener implements Listener {
             playersData = new PlayersData(
                     player.getUniqueId().toString(),
                     player.getName(),
-                    PluginImpl.getInstance().Config.getInt("monsters.initial-monsters-limit")
+                    PluginImpl.getInstance().Config.getInt("monsters.initial-monsters-limit"),
+                    new ArrayList<>()
                     );
             try {
                 database.createPlayerData(playersData);

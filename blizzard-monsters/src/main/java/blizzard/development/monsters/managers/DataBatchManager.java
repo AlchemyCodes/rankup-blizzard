@@ -2,7 +2,6 @@ package blizzard.development.monsters.managers;
 
 import blizzard.development.monsters.database.dao.ToolsDAO;
 import blizzard.development.monsters.database.storage.ToolsData;
-import blizzard.development.monsters.monsters.enums.Tools;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 

@@ -3,11 +3,12 @@ package blizzard.development.mine.utils;
 import blizzard.development.mine.commands.CommandRegistry;
 import blizzard.development.mine.database.dao.PlayerDAO;
 import blizzard.development.mine.listeners.ListenerRegistry;
-import blizzard.development.visuals.utils.config.ConfigUtils;
+import blizzard.development.mine.tasks.PlayerSaveTask;
+import blizzard.development.mine.utils.config.ConfigUtils; // era só trocar versao do placeholderapi vai se fuder placeholderapi porra  vsfdsddddddddd troca a versao porraa!!!!!!!!!!!!!!!!!!!
 import co.aikar.commands.Locales;
 import co.aikar.commands.PaperCommandManager;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.java.JavaPlugin; // a vsfd agora vc arruma ai
 
 public class PluginImpl {
 
@@ -57,6 +58,8 @@ public class PluginImpl {
     public void registerDatabase() {
         playerDAO = new PlayerDAO();
         playerDAO.initializeDatabase();
+
+        new PlayerSaveTask(playerDAO).runTaskTimerAsynchronously(plugin, 0, 20L * 3);
     }
 
     private void registerListeners() {

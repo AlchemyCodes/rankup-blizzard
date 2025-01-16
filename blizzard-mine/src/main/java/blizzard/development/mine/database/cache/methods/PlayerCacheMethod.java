@@ -30,10 +30,18 @@ public class PlayerCacheMethod {
         return playerData != null ? playerData.getAreaBlock() : "§c§lERRO!";
     }
 
-    public void setAreaBlock(Player player, BlockEnum blockEnum) {
+    public void setAreaBlockEnum(Player player, BlockEnum blockEnum) {
         PlayerData playerData = playerCacheManager.getPlayerData(player);
         if (playerData != null) {
             playerData.setAreaBlock(blockEnum);
+            playerCacheManager.cachePlayerData(player.getUniqueId().toString(), playerData);
+        }
+    }
+
+    public void setAreaBlock(Player player, String areaBlock) {
+        PlayerData playerData = playerCacheManager.getPlayerData(player);
+        if (playerData != null) {
+            playerData.setAreaBlock(areaBlock);
             playerCacheManager.cachePlayerData(player.getUniqueId().toString(), playerData);
         }
     }

@@ -46,7 +46,7 @@ public class MonstersEggManager {
                         .addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS)
                         .addPersistentData(plugin.plugin, eggType, monster)
                         .setAmount(stack)
-                        .build();
+                        .build(false);
 
                 player.getInventory().addItem(item);
             } else {
@@ -56,7 +56,7 @@ public class MonstersEggManager {
                         .addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS)
                         .addPersistentData(plugin.plugin, eggType, monster)
                         .setAmount(stack)
-                        .build();
+                        .build(false);
 
                 player.getInventory().addItem(item);
             }

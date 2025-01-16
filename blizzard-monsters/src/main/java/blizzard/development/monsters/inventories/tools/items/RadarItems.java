@@ -17,21 +17,21 @@ public class RadarItems {
     private static RadarItems instance;
 
     public ItemStack monster(String monster, String distance) {
-        MonstersEggManager eggHandler = MonstersEggManager.getInstance();
+        MonstersEggManager eggManager = MonstersEggManager.getInstance();
 
         Material material;
-        if (eggHandler.getMaterial(monster) != null) {
-            material = Material.getMaterial(eggHandler.getMaterial(monster));
+        if (eggManager.getMaterial(monster) != null) {
+            material = Material.getMaterial(eggManager.getMaterial(monster));
         } else {
             material = Material.EGG;
         }
 
-        ItemStack item = new ItemBuilder(material).build();
+        ItemStack item = new ItemBuilder(material).build(false);
         ItemMeta meta = item.getItemMeta();
 
         String display;
-        if (eggHandler.getDisplayName(monster) != null) {
-            display = eggHandler.getDisplayName(monster);
+        if (eggManager.getDisplayName(monster) != null) {
+            display = eggManager.getDisplayName(monster);
         } else {
             display = "§bMonstro corrompido";
         }
@@ -51,7 +51,7 @@ public class RadarItems {
     }
 
     public ItemStack profile(Player player) {
-        ItemStack item = new ItemBuilder(player).build();
+        ItemStack item = new ItemBuilder(player).build(false);
 
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName("§aSuas informações");

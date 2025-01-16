@@ -20,4 +20,5 @@ include 'blizzard-utils'
 include 'blizzard-visuals'
 include 'blizzard-mail'
 include 'blizzard-mine'
+include 'blizzard-mysteryboxes'
 
