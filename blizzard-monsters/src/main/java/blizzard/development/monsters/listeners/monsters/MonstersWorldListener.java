@@ -16,6 +16,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -105,7 +106,7 @@ public class MonstersWorldListener implements Listener {
 
         if (monstersWorldManager.containsPlayer(player)
                 && !player.hasPermission("blizzard.monsters.admin")) {
-           event.setCancelled(true);
+            event.setCancelled(true);
         }
     }
 
@@ -125,6 +126,16 @@ public class MonstersWorldListener implements Listener {
             if (monstersWorldManager.containsPlayer(player)) {
                 event.setCancelled(true);
             }
+        }
+    }
+
+    @EventHandler
+    public void onDeath(PlayerDeathEvent event) {
+        Player player = event.getEntity();
+
+        if (monstersWorldManager.containsPlayer(player)) {
+            monstersWorldManager.removePlayer(player);
+            event.setKeepInventory(true);
         }
     }
 

@@ -79,15 +79,15 @@ public class MonstersGeneralManager {
     }
 
     public Integer getLife(String monsterName) {
-        return plugin.Monsters.getConfig().getInt("monsters." + monsterName + ".monster.life");
+        return plugin.Monsters.getConfig().getInt("monsters." + monsterName + ".monster.life", 0);
     }
 
-    public Integer getAttackChance(String monsterName) {
-        return plugin.Monsters.getConfig().getInt("monsters." + monsterName + ".monster.attack-chance");
+    public Double getAttackChance(String monsterName) {
+        return plugin.Monsters.getConfig().getDouble("monsters." + monsterName + ".monster.attack-chance", 0.0);
     }
 
-    public Integer getAttackDamage(String monsterName) {
-        return plugin.Monsters.getConfig().getInt("monsters." + monsterName + ".monster.attack-damage");
+    public Double getAttackDamage(String monsterName) {
+        return plugin.Monsters.getConfig().getDouble("monsters." + monsterName + ".monster.attack-damage", 0.0);
     }
 
     public String getDamageSound(String monsterName) {

@@ -11,9 +11,7 @@ monsters:
         - "§7te proporcionar;"
         - ""
         - " §bRecompensas"
-        - "  §f3x §aChave Rara"
-        - "  §f2x §bChave Mística"
-        - "  §f1x §7Manto"
+        - "  {rewards}"
         - ""
         - " §7Algumas informações"
         - " §7sobre este monstro."
@@ -25,13 +23,13 @@ monsters:
 
     monster:
       display-name: "§bGolem de Gelo"
-      skin-value: "ewogICJ0aW1lc3RhbXAiIDogMTY2MTAxOTUyMDY4NiwKICAicHJvZmlsZUlkIiA6ICJjOWRlZTM4MDUzYjg0YzI5YjZlZjA5YjJlMDM5OTc0ZiIsCiAgInByb2ZpbGVOYW1lIiA6ICJTQVJfRGVjZW1iZXI1IiwKICAic2lnbmF0dXJlUmVxdWlyZWQiIDogdHJ1ZSwKICAidGV4dHVyZXMiIDogewogICAgIlNLSU4iIDogewogICAgICAidXJsIiA6ICJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlLzIwNTlhNWI0NGRhZDM1ZmM3NzAwYjBhNjM1OTk0MzljMTkzZTUzNmI4ODI5OTk4OWUzZTlkOTVjNmJiZTk5ZjQiCiAgICB9CiAgfQp9"
-      skin-signature: "hgk9saDDmB9i4OtGrEScfrDQpufsWnNGVa2Fd3W1dfAr9lQrbtuJu1VX4L/yHYFPxDCIFJspC819dVKHP2YWTLUSvcCbJm/+8jRkBXc4nk8Brlt7otUQpNEB02kwgABFtVHGKM08JAwuVx+J05JvC2UeKYgCSKryZ4iPxFEohr/Fq+zF3RcepPvbvkQ43tOOA6ZRdyyyF+8KXvoTtGR0Gf4I8VEvPh4+Z+JIWqHSohLpDleIcVUs59JfsodyPBid5+vXZMAGx05TNd96XTwRsD26k17cWGGesS67C/dBmFVbm8RBPn/hZPFpHvctw85tYRpQjYFQ0iYhOgxpdonW+3/U59J6oIMGdS4JXUVCGV+VKIJ6CaMYoVyxkjkHwMjOh7Gmj4O3I3AQOM+vvk+DepaJoq3IJh7m7nxU07XRpWeBvc2m8BAah6/9P0Ex4t3TYiS+1l4BgIb1SikmOBNUIscODMJ/PiTYDT/g4lDxMZolmH+HeKcL1dPYmcPgCjPh5hkXmX7Lt6jTIC143szruSEabgVokSKgGGJXjVEoV4vnY04C0txV1WCLNpGrlMmw6WdVmPZRGd24Xb+plZBMmX/B+b6m1Awe+Rk5WqHSdVd6EZGm+I/esaUhgp8NY55HxuKMuErWznxyPvDE+1TSNoEyfWWLjAVc+aPNpqY6XH0="
-      life: 10
-      attack-chance: 20 # in percentage
-      attack-damage: 2 # int value
+      skin-value: "ewogICJ0aW1lc3RhbXAiIDogMTcwMDczMTQzMTI2MCwKICAicHJvZmlsZUlkIiA6ICIwZDZjODU0ODA3ZGQ0NWZkYmMxZDEyMzY2OGY1ZWQwZiIsCiAgInByb2ZpbGVOYW1lIiA6ICJXcWxmZnhJcmt0IiwKICAic2lnbmF0dXJlUmVxdWlyZWQiIDogdHJ1ZSwKICAidGV4dHVyZXMiIDogewogICAgIlNLSU4iIDogewogICAgICAidXJsIiA6ICJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlLzk2OGVlZjBmODViYWQwMGNlZjZlNGQ0ZTIzMmRiMDM4M2U4ZDEzMmZiNWZjM2IzMzJkYTZiOTExM2UxZDg2ZWQiCiAgICB9CiAgfQp9"
+      skin-signature: "OfyA54WVtpu/ByAKNrFGPzGowdWtc3W511o2CfzgV9uEIaGGSbMjEhJDD58IokzCyX11Bmxyh7M/51tJBXkJo8k7I9nI/iS0zVkfnZ3mz7irOzpu+kTyQx9H2qCbrkuj+9xBMd6fh1EmVqKKO5Hb4uApAiduNIVsokGLMiy3P/JO5U5vrpKPv+BpkzbnfXcQiBVmLagn8Zsu/zCRJEFeUAPBbaPcsmzb2jSzQVqUSXPJTgVJcmM7Lyq+pjmG3ITfTe05VjNjpWynj+3WTOUjnjBUZFH9ZepmTHZiQycWVA0jB3+5+stXiQpetOF5ZHuPBbkTJyWkPuK8UTt522hRV8l6jwBMWKyITr/NFaz2EqIX9eC3ZRZXVnqEh7nCVVCAqB7fKNKE/yBRB0qdJTGO+M7PafkX/XU2u3KWvjr76jR92XdoHB8TVBila8TntWbdvfCqZUvxE9gKyafEnYPGNgV1GwoFS/dQG4VnMw2uNyIZOVvVxWx442ENRgN7T3Gf0T/GWTBmcPe2qF+HNrzvt/unoxGY3x/3XzzqXCNA2+NT8CvL30ZGPNcGSECXtXR3x8xYavGMpYJWPO7WQySRzUIE2hhQUEZyIoe43seVR+95LecXIgc7MYqPrLOc2mWWysfh698kKkhtTDm/bmcdK7n17Bp3VJs3Q1Le5kTk/8c="
+      life: 50
+      attack-chance: 0.5 # in percentage
+      attack-damage: 1.0 # double value
       damage-sound: ENTITY_ZOMBIE_HURT
-      rewards: [ "1" ]
+      rewards: [ "1", "2", "3" ]
 
   snowmonster:
     type: "snowmonster"
@@ -44,9 +42,7 @@ monsters:
         - "§7te proporcionar;"
         - ""
         - " §3Recompensas"
-        - "  §f3x §aChave Rara"
-        - "  §f2x §bChave Mística"
-        - "  §f1x §7Manto"
+        - "  {rewards}"
         - ""
         - " §7Algumas informações"
         - " §7sobre este monstro."
@@ -58,10 +54,41 @@ monsters:
 
     monster:
       display-name: "§3Monstro das Neves"
-      skin-value: "ewogICJ0aW1lc3RhbXAiIDogMTY0NDc1ODU2Mzg2MSwKICAicHJvZmlsZUlkIiA6ICI0NWY3YTJlNjE3ODE0YjJjODAwODM5MmRmN2IzNWY0ZiIsCiAgInByb2ZpbGVOYW1lIiA6ICJfSnVzdERvSXQiLAogICJzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDg4NzEwMmI2OTRiNGJjNThjNjU1N2UzN2IzZDk1ZWE1NTQxNThmOTk0NDMyZWE2NmFiM2JhYzkyYTFjZjkyNCIKICAgIH0KICB9Cn0="
-      skin-signature: "pbwEGLZmaseitSQkEZ7OD6MltcB6lpAUiZhY97OItmSRCQ275ghoc/zQVQjW3DDILhYLugB2S7MwuT/HEuSSmNow6e09OF4fQa79shDLQ3MMlMs9jpRKeOiXS8ynOzh/XEVLw8jeGIyguDVTxrC+N+N8UPt1XvCCEGHXiO3INYRIempxnYX4zA3bVHR6vZqi8M89qsYJdiQyhHuf9dMuIyIMFWWb85eDvZZQQpK8exH4AtnHvCUA4nhoqNpdjQ6PpHTElyN5MS34sSjsBeg9ZQdUPu63cCZltv6MiXFZ3KvEiv0VOuwPEDaFBzcPpVabRlim+fbcz8JTHRD7C96cxpT3NZJezYrjpL6RgLxQ5hzV3aUojqEaijmQlJcFcLSqqamkpePWQCI7kYSnpAHF6sesSsX4s4Gl036hFf3zuYYykszhfKrKeXpJ3o1sgMN4PV5F4FR1M7+Mc+l65sfTWRYRuqrmW/AdtX4TjAyidp1B7vUrWJ6zTG5m5qhwyQ4wb957RoZMJuiXnZov8OYhqORIxBvNlbz1ZFk7I4ts/fFbVbyGWB1KI251DM+c9ZhrocY+FzBP8EPtnDcVXHJtQ48Ku4UYoEqtN/dHNap1GTAUT0v3mrdg77DyB2hqIBN+N9MDhre4LH3FiPQg35Ra3rwnO0wHxMO/5riJCePbQp0="
-      life: 50
-      attack-chance: 50 # in percentage
-      attack-damage: 10 # int value
+      skin-value: "ewogICJ0aW1lc3RhbXAiIDogMTYxODUwODEwMDg0NCwKICAicHJvZmlsZUlkIiA6ICI0OWIzODUyNDdhMWY0NTM3YjBmN2MwZTFmMTVjMTc2NCIsCiAgInByb2ZpbGVOYW1lIiA6ICJiY2QyMDMzYzYzZWM0YmY4IiwKICAic2lnbmF0dXJlUmVxdWlyZWQiIDogdHJ1ZSwKICAidGV4dHVyZXMiIDogewogICAgIlNLSU4iIDogewogICAgICAidXJsIiA6ICJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlLzUwNDNhNDJhMjBkN2M0NzRkZjFiZDc0YzNhYzg1MDJlNDI3MDY0YTdkMDExMWJjODM0N2RjODQyMzY4ODgzNzciLAogICAgICAibWV0YWRhdGEiIDogewogICAgICAgICJtb2RlbCIgOiAic2xpbSIKICAgICAgfQogICAgfQogIH0KfQ=="
+      skin-signature: "kgFcx5EHda/Sukf2e1psukFxdKh5LcfilubpQCOXnVzXjJYlCw86T97FzZ6txbJ01MD1vZeklHW926avIrbYuh+6sMQvdQoOWjhlIkJnD24eP5UjWYwjmMHnibjtfCnYKzqxFRTFOMz5AAm7KBPwW3T9XuEx12JlLFnMvsZHeq0fPZp8ocCly/Fmdf4wP1ZahhOTiXCAt/DfKBeKEuUlV5DjUnhWHQzLIHGHZUJkVC/9bN1iTghqSn1fw0w0JPUdnwW0SUr6sYQ4hOnIp9qxbChX3cREU6SmRkQqQyBDtVSeap29mXUguSVbvNpNzoX/gOqKc3PvfBbBgH/kGhs9oIJXb9K3sNyjkyLm0E2nr3Wnt8exkAyGaQrZjyXXs+4Z+eAR7bm0+SQLhybh/hRtVD7whx3IVD4/f5Y11Pu9h3YYJalqQjYBZEBA1u8thZFULa7cq/kVBbXOVwbX7ZGvPKGGbYLnpDmLdKmR9Dk+y+Sis4cKBSxk4T4C5o82T51WSzueUf6sFKQHd9ju3b0196cO5f8swhVL/rs2gyzFjaynK5mbYWqes5uFDgsYnSNZc0rXIIIlTrgvhvt61mEyLWeQ/Mf1zI1AzaQ6DfcqNRyZVTzbaRmhexXvlsTt9w/QHQz0+LnBVYUrmaarGoXzvhnk8L2XCnJyq54D23Xwelc="
+      life: 100
+      attack-chance: 1.0 # in double percentage
+      attack-damage: 1.5 # double value
       damage-sound: ENTITY_ZOMBIE_HURT
-      rewards: [ "1" ]
+      rewards: [ "1", "2", "3" ]
+
+  bigfoot:
+    type: "bigfoot"
+
+    egg:
+      material: TURTLE_SPAWN_EGG # material or head
+      display-name: "§bPé Grande"
+      lore:
+        - "§7Este monstro pode"
+        - "§7te proporcionar;"
+        - ""
+        - " §bRecompensas"
+        - "  {rewards}"
+        - ""
+        - " §7Algumas informações"
+        - " §7sobre este monstro."
+        - ""
+        - " §fVida: §c❤{life}"
+        - " §fDano: §4🗡{damage}"
+        - ""
+        - "§bClique no chão para chocar."
+
+    monster:
+      display-name: "§bPé Grande"
+      skin-value: "ewogICJ0aW1lc3RhbXAiIDogMTY0MDkwMjg0MTQzNywKICAicHJvZmlsZUlkIiA6ICI2MTZiODhkNDMwNzM0ZTM3OWM3NDc1ODdlZTJkNzlmZCIsCiAgInByb2ZpbGVOYW1lIiA6ICJKZWxseUZpbiIsCiAgInNpZ25hdHVyZVJlcXVpcmVkIiA6IHRydWUsCiAgInRleHR1cmVzIiA6IHsKICAgICJTS0lOIiA6IHsKICAgICAgInVybCIgOiAiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS9jYjcxNmM5NWE5NTdmNDlmZjBlOWNmY2YzNjgyM2M2YjUwM2ViMjQwMjg5MGVkYWI1YzdkNjc2NjVmYWQ5ZWE2IgogICAgfQogIH0KfQ=="
+      skin-signature: "MARfrflVIWfvC7fHdjuhGlrrb1vCz4V06m+7puIRrVFrLcEqVGMFr6jSUTTLzoc7jG0CsTdHWz/W/+MRNZrVe1ztWEzhAGYrLbVTlyq6wgbQu1BwU88oliGYZJY/H+dJc0LjaDK0kANARx317ylwAnX4zUS6vO7K1nVLElVPiLjqjFh8WJxH0bpc6J3cOCHsw3uue5COngWQDspEm2S6CazcmQaK8kc68N+8/DFYVuir/anwGGoiERFDFRqZyiYp93PBbFkBF/74gv3kjm+agmxOzrOVAgkx4pZiamxhdmpDf2933lrids++ENjsuot8PI60QsnZ2bfOZkf3DEET0ZFdzbILJ2M02ahGhUuMQlM/u8k7U5yr6CgVRW9P1AJvI1K5fMieSqzDFcuhud8FhsDJrNzl3Gr99hN/7Mfd6X+RuTH0gG6+gdW0ksYAPQYcnZGJreEvN/DDdILj4tb1TRS/dUY0EEtAJQtk/rmynXYdYSRYCjCgDbF72/A1ZYSEaGItIhm8nVSlOcqABycT1ZqnmP+jnlvp8XZd0is+lsMVjsoDLGVBNOycFAIvuh+iF6uQuz6+Kvq1sxhRG4V5GPgMjlgalHMB4YB+f7n5T5WsAPszDr69uESnwPEDpb7gHTTn9yActXYHEK9RaA5cKP4Oj3ngIIyFyq8bE4XjU5E="
+      life: 150
+      attack-chance: 2.0 # in double percentage
+      attack-damage: 2.0 # double value
+      damage-sound: ENTITY_ZOMBIE_HURT
+      rewards: [ "1", "2", "3" ]

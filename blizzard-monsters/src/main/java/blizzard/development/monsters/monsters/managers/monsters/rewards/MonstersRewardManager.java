@@ -36,7 +36,10 @@ public class MonstersRewardManager {
 
         int totalToCollect = all ? matchingRewards.size() : 1;
 
-        if (!hasEmptySlots(player, totalToCollect)) {
+        Map<String, Integer> rewardsWithStackInfo = new HashMap<>();
+        rewardsWithStackInfo.put(rewardType, totalToCollect);
+
+        if (!hasEmptySlots(player, rewardsWithStackInfo)) {
             player.sendActionBar("§c§lEI! §cVocê não tem espaço suficiente no inventário para isso.");
             return;
         }
@@ -49,10 +52,10 @@ public class MonstersRewardManager {
 
         String commandTemplate = getCommand(rewardType);
         if (commandTemplate != null && !commandTemplate.isEmpty()) {
-            for (int i = 0; i < totalToCollect; i++) {
-                String command = commandTemplate.replace("{player}", player.getName());
-                player.getServer().dispatchCommand(player.getServer().getConsoleSender(), command);
-            }
+            String groupedCommand = commandTemplate
+                    .replace("{player}", player.getName())
+                    .replace("{amount}", String.valueOf(totalToCollect));
+            player.getServer().dispatchCommand(player.getServer().getConsoleSender(), groupedCommand);
         }
 
         Arrays.asList(
@@ -76,23 +79,23 @@ public class MonstersRewardManager {
         List<String> allRewards = new ArrayList<>(data.getRewards());
         int totalRewards = allRewards.size();
 
-        if (!hasEmptySlots(player, totalRewards)) {
+        Map<String, Integer> groupedRewards = allRewards.stream()
+                .collect(Collectors.groupingBy(reward -> reward, Collectors.summingInt(reward -> 1)));
+
+        if (!hasEmptySlots(player, groupedRewards)) {
             player.sendActionBar("§c§lEI! §cVocê não tem espaço suficiente no inventário para isso.");
             return;
         }
-
-        Map<String, Long> groupedRewards = allRewards.stream()
-                .collect(Collectors.groupingBy(reward -> reward, Collectors.counting()));
 
         cacheMethods.removeRewards(player, allRewards);
 
         groupedRewards.forEach((type, count) -> {
             String commandTemplate = getCommand(type);
             if (commandTemplate != null && !commandTemplate.isEmpty()) {
-                for (int i = 0; i < count; i++) {
-                    String command = commandTemplate.replace("{player}", player.getName());
-                    player.getServer().dispatchCommand(player.getServer().getConsoleSender(), command);
-                }
+                String groupedCommand = commandTemplate
+                        .replace("{player}", player.getName())
+                        .replace("{amount}", String.valueOf(count));
+                player.getServer().dispatchCommand(player.getServer().getConsoleSender(), groupedCommand);
             }
         });
 
@@ -105,8 +108,21 @@ public class MonstersRewardManager {
         ).forEach(player::sendMessage);
     }
 
-    public boolean hasEmptySlots(Player player, int rewards) {
-        int requiredSlots = (int) Math.ceil((double) rewards / 64);
+    public boolean hasEmptySlots(Player player, Map<String, Integer> rewardsWithStackInfo) {
+        int requiredSlots = 0;
+
+        for (Map.Entry<String, Integer> entry : rewardsWithStackInfo.entrySet()) {
+            String rewardName = entry.getKey();
+            int rewardCount = entry.getValue();
+
+            boolean withStack = isWithStack(rewardName);
+            if (withStack) {
+                requiredSlots++;
+            } else {
+                requiredSlots += (int) Math.ceil((double) rewardCount / 64);
+            }
+        }
+
         int emptySlots = 0;
 
         for (ItemStack item : player.getInventory().getStorageContents()) {
@@ -122,6 +138,7 @@ public class MonstersRewardManager {
         return false;
     }
 
+
     private final PluginImpl plugin = PluginImpl.getInstance();
 
     public String getMaterial(String rewardName) {
@@ -134,6 +151,10 @@ public class MonstersRewardManager {
 
     public List<String> getLore(String rewardName) {
         return plugin.Rewards.getConfig().getStringList("rewards." + rewardName + ".lore");
+    }
+
+    public Boolean isWithStack(String rewardName) {
+        return plugin.Rewards.getConfig().getBoolean("rewards." + rewardName + ".with-stack");
     }
 
     public String getCommand(String rewardName) {

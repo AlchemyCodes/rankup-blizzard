@@ -12,11 +12,9 @@ import org.bukkit.entity.Player;
 import java.util.*;
 
 public class CageInventory {
-    private static CageInventory instance;
+    private final static CageItems items = CageItems.getInstance();
 
-    private final CageItems items = CageItems.getInstance();
-
-    public void open(Player player, int page) {
+    public static void open(Player player, int page) {
         ChestGui inventory = new ChestGui(5, "§8Gaiola de monstros (Página " + page + ")");
 
         StaticPane pane = new StaticPane(0, 0, 9, 5);
@@ -86,10 +84,5 @@ public class CageInventory {
 
         inventory.addPane(pane);
         inventory.show(player);
-    }
-
-    public static CageInventory getInstance() {
-        if (instance == null) instance = new CageInventory();
-        return instance;
     }
 }
