@@ -32,12 +32,12 @@ public class MonstersInventory {
                 event.setCancelled(true);
                 return;
             }
-            CageInventory.getInstance().open(player, 1);
+            CageInventory.open(player, 1);
             event.setCancelled(true);
         });
 
         GuiItem rewardsItem = new GuiItem(items.rewards(), event -> {
-            RewardsInventory.getInstance().open(player, 1);
+            RewardsInventory.open(player, 1);
             event.setCancelled(true);
         });
 

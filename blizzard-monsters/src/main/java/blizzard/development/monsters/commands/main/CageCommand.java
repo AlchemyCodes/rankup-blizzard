@@ -19,6 +19,6 @@ public class CageCommand extends BaseCommand {
             return;
         }
 
-        CageInventory.getInstance().open(player, 1);
+        CageInventory.open(player, 1);
     }
 }

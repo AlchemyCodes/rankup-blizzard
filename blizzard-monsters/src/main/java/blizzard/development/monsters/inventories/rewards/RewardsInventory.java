@@ -12,11 +12,10 @@ import org.bukkit.entity.Player;
 import java.util.List;
 
 public class RewardsInventory {
-    private static RewardsInventory instance;
 
-    private final RewardsItems items = RewardsItems.getInstance();
+    private final static RewardsItems items = RewardsItems.getInstance();
 
-    public void open(Player player, int page) {
+    public static void open(Player player, int page) {
         ChestGui inventory = new ChestGui(5, "§8Recompensas (Página " + page + ")");
 
         StaticPane pane = new StaticPane(0, 0, 9, 5);
@@ -86,10 +85,5 @@ public class RewardsInventory {
 
         inventory.addPane(pane);
         inventory.show(player);
-    }
-
-    public static RewardsInventory getInstance() {
-        if (instance == null) instance = new RewardsInventory();
-        return instance;
     }
 }

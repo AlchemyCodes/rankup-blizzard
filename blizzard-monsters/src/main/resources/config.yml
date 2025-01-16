@@ -4,7 +4,7 @@ monsters:
 
   initial-monsters-limit: 5
 
-  hit-delay: 250 # in milliseconds
+  hit-delay: 350 # in milliseconds
 
   command-whitelist:
     - "/spawn"
@@ -22,10 +22,3 @@ monsters:
     - "/l"
     - "/global"
     - "/local"
-
-
-
-
-
-
-

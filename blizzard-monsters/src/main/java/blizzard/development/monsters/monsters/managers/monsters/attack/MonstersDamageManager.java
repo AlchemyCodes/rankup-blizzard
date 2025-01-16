@@ -10,15 +10,35 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 public class MonstersDamageManager {
     private static MonstersDamageManager instance;
 
-    MonstersGeneralManager manager = MonstersGeneralManager.getInstance();
+    private final MonstersGeneralManager manager = MonstersGeneralManager.getInstance();
 
-    public void dispatchDamage(Player player, String uuid, String displayName, Integer life) {
+    private final Map<String, Long> lastAttackTime = new HashMap<>();
+
+    public void dispatchDamage(Player player, String monster, String displayName) {
+        long currentTime = System.currentTimeMillis();
+        if (lastAttackTime.containsKey(monster)) {
+            long timeSinceLastAttack = currentTime - lastAttackTime.get(monster);
+            if (timeSinceLastAttack < 500) {
+                return;
+            }
+        }
+
+        double attackChance = manager.getAttackChance(monster);
+        if (attackChance != 0) {
+            double random = (Math.random() * 100);
+            if (random < attackChance) {
+                MonstersAttackManager.getInstance().attack(player, monster, displayName);
+            }
+            lastAttackTime.put(monster, currentTime);
+        }
     }
 
     public void receiveDamage(Player player, Location location, String monster, String uuid, String displayName, Integer life, Integer damage) {

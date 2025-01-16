@@ -1,8 +1,22 @@
 rewards:
-
   1:
     material: GRASS_BLOCK # material or head
     display-name: "§bLimite"
     lore:
       - "§7Este é um limite."
-    command: "clans give limite {player} 1 1"
+    with-stack: true
+    command: "clans give limite {player} 1 {amount}"
+  2:
+    material: OAK_LOG # material or head
+    display-name: "§cLimite"
+    lore:
+      - "§7Este é um limite."
+    with-stack: true
+    command: "clans give limite {player} 2 {amount}"
+  3:
+    material: OAK_DOOR # material or head
+    display-name: "§dLimite"
+    lore:
+      - "§7Este é um limite."
+    with-stack: true
+    command: "clans give limite {player} 3 {amount}"
