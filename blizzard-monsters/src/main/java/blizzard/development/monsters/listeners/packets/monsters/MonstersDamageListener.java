@@ -50,12 +50,12 @@ public class MonstersDamageListener {
                 MonstersWorldManager worldManager = MonstersWorldManager.getInstance();
                 MonstersGeneralManager monstersManager = MonstersGeneralManager.getInstance();
 
-                if (worldManager.containsPlayer(player)) {
-                    if (monstersManager.isMonster(player, entityId)) {
+                if (monstersManager.isMonster(player, entityId)) {
+                    if (worldManager.containsPlayer(player)) {
                         Bukkit.getScheduler().runTask(plugin, () -> handleMonsterDamage(player, entityId));
+                    } else {
+                        player.sendActionBar("§c§lEI! §cVocê só pode fazer isso no mundo de monstros.");
                     }
-                } else {
-                    player.sendActionBar("§c§lEI! §cVocê só pode fazer isso no mundo de monstros.");
                 }
             }
         });
