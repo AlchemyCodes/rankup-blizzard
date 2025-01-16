@@ -1,6 +1,6 @@
 name: blizzard-mysteryboxes
 version: '1.0-SNAPSHOT'
-main: blizzard.development.mysteryboxes.Main
+main: blizzard.development.mysterybox.Main
 api-version: '1.20'
 load: STARTUP
 authors: [swagviper]
