@@ -7,10 +7,15 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public class PlayerCacheMethod {
+public class PlayerCacheMethods {
+
+    private static PlayerCacheMethods instance;
+
+    public static PlayerCacheMethods getInstance() {
+        return instance;
+    }
 
     private final PlayerCacheManager playerCacheManager = PlayerCacheManager.getInstance();
-    private static PlayerCacheMethod instance;
 
     public Integer getArea(Player player) {
         PlayerData playerData = playerCacheManager.getPlayerData(player);
@@ -104,12 +109,5 @@ public class PlayerCacheMethod {
             playerData.setFriends(friends);
             playerCacheManager.cachePlayerData(player.getUniqueId().toString(), playerData);
         }
-    }
-
-    public static PlayerCacheMethod getInstance() {
-        if (instance == null) {
-            instance = new PlayerCacheMethod();
-        }
-        return instance;
     }
 }

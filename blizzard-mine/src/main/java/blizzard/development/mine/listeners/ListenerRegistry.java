@@ -1,7 +1,7 @@
 package blizzard.development.mine.listeners;
 
 import blizzard.development.mine.database.dao.PlayerDAO;
-import blizzard.development.mine.listeners.geral.PlayerListener;
+import blizzard.development.mine.listeners.commons.PlayerTrafficListener;
 import blizzard.development.mine.listeners.mine.MineBlockBreakListener;
 import blizzard.development.mine.listeners.packets.mine.MineBlockBreakPacketListener;
 import blizzard.development.mine.listeners.packets.mine.MineBlockInteractPacketListener;
@@ -25,17 +25,17 @@ public class ListenerRegistry {
         PluginManager pluginManager = Bukkit.getPluginManager();
 
         Arrays.asList(
-            new PlayerListener(playerDAO),
+            new PlayerTrafficListener(playerDAO),
             new MineBlockBreakListener()
         ).forEach(listener -> pluginManager.registerEvents(listener, PluginImpl.getInstance().plugin));
     }
 
     public void registerPacket() {
-        ProtocolManager manager = ProtocolLibrary.getProtocolManager();
+        ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
 
         Arrays.asList(
             new MineBlockBreakPacketListener(),
                 new MineBlockInteractPacketListener()
-        ).forEach(manager::addPacketListener);
+        ).forEach(protocolManager::addPacketListener);
     }
 }

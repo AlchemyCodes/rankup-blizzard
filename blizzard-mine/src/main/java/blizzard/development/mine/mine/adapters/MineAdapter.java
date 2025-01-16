@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 public class MineAdapter implements MineFactory {
 
     private static final MineAdapter instance = new MineAdapter();
+
     public static MineAdapter getInstance() {
         return instance;
     }
@@ -20,8 +21,6 @@ public class MineAdapter implements MineFactory {
     }
 
     public void generateMine(Player player) {
-        MineManager
-            .getInstance()
-            .transformArea(player);
+        MineManager.getInstance().transformArea(player);
     }
 }

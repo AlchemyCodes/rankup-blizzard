@@ -14,6 +14,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class EnchantmentAdapter implements EnchantmentFactory {
 
     private static final EnchantmentAdapter instance = new EnchantmentAdapter();
+
     public static EnchantmentAdapter getInstance() {
         return instance;
     }

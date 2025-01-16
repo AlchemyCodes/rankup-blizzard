@@ -3,11 +3,12 @@ package blizzard.development.mine.utils.packets;
 import blizzard.development.mine.managers.BlockManager;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.BlockPosition;
 import com.comphenix.protocol.wrappers.WrappedBlockData;
 import com.google.common.primitives.Shorts;
-import blizzard.development.mine.utils.Cuboid;
+import blizzard.development.mine.utils.apis.Cuboid;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -24,6 +25,8 @@ public class PacketUtils {
     private short getPackedPosition(int x, int y, int z) {
         return (short) ((x & 15) << 8 | (z & 15) << 4 | y & 15);
     }
+
+    private final ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
 
     public void sendMultiBlockPacket(Player player, Cuboid cuboid, Material material) {
         try {
@@ -60,16 +63,15 @@ public class PacketUtils {
 
                             // CALCULAR POSIÇÃO DO BLOCO
                             int absoluteX = (chunkX << 4) + x;
-                            int absoluteY = y;
                             int absoluteZ = (chunkZ << 4) + z;
-                            BlockPosition blockPos = new BlockPosition(absoluteX, absoluteY, absoluteZ);
+                            BlockPosition blockPos = new BlockPosition(absoluteX, y, absoluteZ);
                             blockPositions.add(blockPos);
                         }
                     }
                 }
 
                 if (!positions.isEmpty()) {
-                    PacketContainer packet = ProtocolLibrary.getProtocolManager()
+                    PacketContainer packet = protocolManager
                             .createPacket(PacketType.Play.Server.MULTI_BLOCK_CHANGE);
 
                     // DEFINIR A POSIÇÃO DA SEÇÃO DO CHUNK NO PACKET
@@ -85,24 +87,24 @@ public class PacketUtils {
                             .write(0, blockDataList.toArray(new WrappedBlockData[0]));
 
                     // REGISTRAR OS BLOCOS
+
                     for (BlockPosition pos : blockPositions) {
-                        BlockManager.placeBlock(player, pos);
-                        BlockManager.placePlantation(player, pos);
+                        BlockManager.getInstance().placeBlock(player, pos);
                     }
 
                     // EENVIAR PACKET
-                    ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet);
+                    protocolManager.sendServerPacket(player, packet);
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Erro ao enviar pacote: " + e.getMessage());
+            System.out.println("Error when send packet: " + e.getMessage());
         }
     }
 
     public void sendAirBlock(Player player, org.bukkit.block.Block block) {
         try {
-            PacketContainer packet = ProtocolLibrary.getProtocolManager()
+            PacketContainer packet = protocolManager
                     .createPacket(PacketType.Play.Server.BLOCK_CHANGE);
 
             BlockPosition blockPosition = new BlockPosition(
@@ -116,9 +118,10 @@ public class PacketUtils {
             packet.getBlockPositionModifier().write(0, blockPosition);
             packet.getBlockData().write(0, airBlockData);
 
-            ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet);
+            protocolManager.sendServerPacket(player, packet);
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println("Error when send packet: " + e.getMessage());
         }
     }
 }

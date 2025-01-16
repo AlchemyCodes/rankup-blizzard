@@ -4,16 +4,15 @@ import blizzard.development.mine.utils.PluginImpl;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Main extends JavaPlugin {
-
-    private PluginImpl pluginImpl;
+    private final PluginImpl pluginImpl = new PluginImpl(this);
 
     @Override
     public void onEnable() {
-        pluginImpl = new PluginImpl(this);
         pluginImpl.onEnable();
     }
 
     @Override
     public void onDisable() {
+        pluginImpl.onDisable();
     }
 }

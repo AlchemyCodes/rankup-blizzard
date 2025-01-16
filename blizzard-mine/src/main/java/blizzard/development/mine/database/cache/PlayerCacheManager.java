@@ -12,12 +12,13 @@ import java.util.stream.Collectors;
 public class PlayerCacheManager {
 
     private static final PlayerCacheManager instance = new PlayerCacheManager();
-    public final Map<String, PlayerData> playerCache = new ConcurrentHashMap<>();
-    public final PlayerDAO playerDAO = new PlayerDAO();
 
     public static PlayerCacheManager getInstance() {
         return instance;
     }
+
+    public final Map<String, PlayerData> playerCache = new ConcurrentHashMap<>();
+    public final PlayerDAO playerDAO = new PlayerDAO();
 
     public PlayerData getPlayerData(Player player) {
         return getPlayerDataByUUID(player.getUniqueId().toString());

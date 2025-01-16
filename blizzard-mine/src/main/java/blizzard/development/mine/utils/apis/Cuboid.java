@@ -1,4 +1,4 @@
-package blizzard.development.mine.utils;
+package blizzard.development.mine.utils.apis;
 
 import org.bukkit.Location;
 import org.bukkit.World;

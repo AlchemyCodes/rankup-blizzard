@@ -1,4 +1,4 @@
-package blizzard.development.mine.listeners.geral;
+package blizzard.development.mine.listeners.commons;
 
 import blizzard.development.mine.database.cache.PlayerCacheManager;
 import blizzard.development.mine.database.dao.PlayerDAO;
@@ -12,11 +12,11 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class PlayerListener implements Listener {
+public class PlayerTrafficListener implements Listener {
 
     private final PlayerDAO playerDAO;
 
-    public PlayerListener(PlayerDAO playerDAO) {
+    public PlayerTrafficListener(PlayerDAO playerDAO) {
         this.playerDAO = playerDAO;
     }
 
@@ -36,8 +36,9 @@ public class PlayerListener implements Listener {
             }
         }
 
-        PlayerCacheManager
-            .getInstance()
-            .cachePlayerData(player.getUniqueId().toString(), playerData);
+        PlayerCacheManager.getInstance().cachePlayerData(
+                player.getUniqueId().toString(),
+                playerData
+        );
     }
 }

@@ -15,20 +15,18 @@ public class MineBlockBreakListener implements Listener {
     public void onMineBlockBreak(MineBlockBreakEvent event) {
         Player player = event.getPlayer();
         Block block = event.getBlock();
-        final var event1 = new MineBlockBreakEvent(player, block);
 
-        if (!BlockManager.isBlock(block.getX(), block.getY(), block.getZ())) {
-            return;
-        }
+        MineBlockBreakEvent blockBreakEvent = new MineBlockBreakEvent(player, block);
 
-        if (event1.isCancelled()) {
-            return;
-        }
+        if (!BlockManager.getInstance().isBlock(block.getX(), block.getY(), block.getZ())) return;
 
-        PacketUtils.getInstance()
-                        .sendAirBlock(
-                                player, block
-                        );
+        if (blockBreakEvent.isCancelled()) return;
+
+        PacketUtils.getInstance().sendAirBlock(
+                player,
+                block
+        );
+
         player.sendActionBar("quebrado packet mina");
     }
 }
