@@ -69,7 +69,6 @@ public class LocationUtils {
         assert worldName != null;
         World world = Bukkit.getWorld(worldName);
 
-
         if (world != null) {
             return new Location(
                 world,

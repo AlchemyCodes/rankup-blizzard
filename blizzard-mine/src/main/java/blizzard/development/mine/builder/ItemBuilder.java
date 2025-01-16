@@ -1,7 +1,7 @@
 package blizzard.development.mine.builder;
 
-import blizzard.development.mine.utils.items.SkullAPI;
-import blizzard.development.mine.utils.items.TextAPI;
+import blizzard.development.core.utils.items.TextUtil;
+import blizzard.development.mine.utils.apis.Skull;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -32,25 +32,25 @@ public class ItemBuilder {
     }
 
     public ItemBuilder(String value) {
-        this.itemStack = SkullAPI.fromBase64(SkullAPI.Type.BLOCK, value);
+        this.itemStack = Skull.fromBase64(Skull.Type.BLOCK, value);
         this.itemMeta = itemStack.getItemMeta();
         this.pdc = itemMeta.getPersistentDataContainer();
     }
 
     public ItemBuilder(Player player) {
-        this.itemStack = SkullAPI.withName(new ItemStack(Material.PLAYER_HEAD), player.getName());
+        this.itemStack = Skull.withName(new ItemStack(Material.PLAYER_HEAD), player.getName());
         this.itemMeta = itemStack.getItemMeta();
         this.pdc = itemMeta.getPersistentDataContainer();
     }
 
     public ItemBuilder setDisplayName(String name) {
-        itemMeta.displayName(TextAPI.parse(name.replace("&", "§")));
+        itemMeta.displayName(TextUtil.parse(name.replace("&", "§")));
         return this;
     }
 
     public ItemBuilder setLore(List<String> lore) {
         List<Component> component = lore.stream()
-            .map(line -> TextAPI.parse(line.replace("&", "§")))
+            .map(line -> TextUtil.parse(line.replace("&", "§")))
             .collect(Collectors.toList());
         itemMeta.lore(component);
         return this;

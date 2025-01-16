@@ -1,6 +1,7 @@
 package blizzard.development.mine.utils;
 
 import blizzard.development.mine.commands.CommandRegistry;
+import blizzard.development.mine.database.DatabaseConnection;
 import blizzard.development.mine.database.dao.PlayerDAO;
 import blizzard.development.mine.listeners.ListenerRegistry;
 import blizzard.development.mine.tasks.PlayerSaveTask;
@@ -38,14 +39,14 @@ public class PluginImpl {
             commandManager = new PaperCommandManager(plugin);
             commandManager.getLocales().setDefaultLocale(Locales.PORTUGUESE);
         } catch (IllegalStateException e) {
-            throw new RuntimeException("Erro ao inicializar PaperCommandManager", e);
+            throw new RuntimeException("error when initializing command manager", e);
         }
-
 
         Config.saveDefaultConfig();
         Locations.saveDefaultConfig();
         Ranking.saveDefaultConfig();
         Database.saveDefaultConfig();
+
         registerDatabase();
         registerListeners();
         registerCommands();
@@ -53,6 +54,7 @@ public class PluginImpl {
     }
 
     public void onDisable() {
+        DatabaseConnection.getInstance().close();
     }
 
     public void registerDatabase() {

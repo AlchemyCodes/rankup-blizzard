@@ -1,7 +1,7 @@
 package blizzard.development.mine.commands.mine;
 
-import blizzard.development.mine.database.cache.methods.PlayerCacheMethod;
-import blizzard.development.mine.mine.adapters.EnchantmentAdapter;
+import blizzard.development.currencies.utils.CooldownUtils;
+import blizzard.development.mine.database.cache.methods.PlayerCacheMethods;
 import blizzard.development.mine.mine.adapters.MineAdapter;
 import blizzard.development.mine.mine.enums.BlockEnum;
 import blizzard.development.mine.utils.locations.LocationUtils;
@@ -13,75 +13,45 @@ import co.aikar.commands.annotation.Subcommand;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.concurrent.TimeUnit;
+
 @CommandAlias("mina|mineracao|mine")
+@CommandPermission("blizzard.mine.user")
 public class MineCommand extends BaseCommand {
 
+    private final CooldownUtils cooldown = CooldownUtils.getInstance();
+
     @Default
-    public void onMineCommand(CommandSender commandSender) {
-        Player player = (Player) commandSender;
+    public void onMineCommand(Player player) {
+        player.sendActionBar("mudei isso aqui para /mina ir por enquanto");
+    }
 
+    @Subcommand("ir|go|join")
+    public void onGoCommand(Player player) {
         MineAdapter
-            .getInstance()
-            .sendToMine(
-                player
-            );
+                .getInstance()
+                .sendToMine(
+                        player
+                );
     }
 
-    @Subcommand("setspawn")
-    @CommandPermission("alchemy.mine.setspawn")
-    public void onSetSpawnCommand(CommandSender commandSender) {
-        Player player = (Player) commandSender;
-
-        LocationUtils.setMineSpawnLocation(
-            player,
-            player.getWorld(),
-            (int) player.getX(),
-            (int) player.getY(),
-            (int) player.getZ(),
-            player.getYaw(),
-            player.getPitch()
-        );
+    @Subcommand("sair|leave")
+    public void onLeaveCommand(Player player) {
+        player.sendActionBar("ainda nao");
     }
 
-    @Subcommand("setcenterspawn")
-    @CommandPermission("alchemy.mine.setspawn")
-    public void onSetCenterSpawnCommand(CommandSender commandSender) {
-        Player player = (Player) commandSender;
+    @Subcommand("resetar|reset")
+    public void onResetCommand(Player player) {
+        String cooldownName = "blizzard.mine.reset-cooldown";
 
-        LocationUtils.setMineCenterLocation(
-            player,
-            player.getWorld(),
-            (int) player.getX(),
-            (int) player.getY(),
-            (int) player.getZ(),
-            player.getYaw(),
-            player.getPitch()
-        );
-    }
-
-    @Subcommand("dev")
-    @CommandPermission("alchemy.mine.dev")
-    public void onDevCommand(CommandSender commandSender) {
-        Player player = (Player) commandSender;
-
-        PlayerCacheMethod.getInstance().setAreaBlock(player, BlockEnum.COBBLESTONE.name());
-
-    }
-
-    @Subcommand("gerar")
-    @CommandPermission("alchemy.mine.dev")
-    public void onGenerateCommand(CommandSender commandSender) {
-        Player player = (Player) commandSender;
+        if (cooldown.isInCountdown(player, cooldownName)) {
+            player.sendActionBar("§c§lEI! §cAguarde um pouco antes de fazer isso novamentee.");
+            return;
+        }
 
         MineAdapter.getInstance().generateMine(player);
-    }
 
-    @Subcommand("dev2")
-    @CommandPermission("alchemy.mine.dev")
-    public void onDev2Command(CommandSender commandSender) {
-        Player player = (Player) commandSender;
-
-
-        PlayerCacheMethod.getInstance().setAreaBlock(player, BlockEnum.ANDESITE.name());
+        player.sendActionBar("§a§lYAY! §aVocê restou sua mina com sucesso.");
+        cooldown.createCountdown(player, cooldownName, 3, TimeUnit.MINUTES);
     }
 }

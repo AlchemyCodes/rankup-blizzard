@@ -1,6 +1,5 @@
-package blizzard.development.mine.utils.items;
+package blizzard.development.mine.utils.apis;
 
-import blizzard.development.mine.builder.skull.SkullBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -10,7 +9,7 @@ import java.net.URISyntaxException;
 import java.util.Base64;
 import java.util.UUID;
 
-public class SkullAPI {
+public class Skull {
 
     public static ItemStack withName(ItemStack item, String name) {
         notNull(item, "item");
@@ -60,12 +59,5 @@ public class SkullAPI {
     private static void notNull(Object o, String name) {
         if (o == null)
             throw new NullPointerException(name + " should not be null!");
-    }
-
-    public static ItemStack createSkullItem(String texture, String name, String... lore) {
-        return new SkullBuilder(texture)
-            .name(name)
-            .lore(lore)
-            .build();
     }
 }

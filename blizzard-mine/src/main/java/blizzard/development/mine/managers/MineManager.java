@@ -1,7 +1,7 @@
 package blizzard.development.mine.managers;
 
-import blizzard.development.mine.database.cache.methods.PlayerCacheMethod;
-import blizzard.development.mine.utils.Cuboid;
+import blizzard.development.mine.database.cache.methods.PlayerCacheMethods;
+import blizzard.development.mine.utils.apis.Cuboid;
 import blizzard.development.mine.utils.locations.LocationUtils;
 import blizzard.development.mine.utils.packets.PacketUtils;
 import org.bukkit.Location;
@@ -21,10 +21,10 @@ public class MineManager {
         int chunkZ = baseLocation.getBlockZ() >> 4;
 
         Location point1 = new Location(baseLocation.getWorld(), chunkX << 4, baseLocation.getBlockY(), chunkZ << 4);
-        Location point2 = point1.clone().add(16, -60, 16);
+        Location point2 = point1.clone().add(0, -35, 0);
 
         Cuboid cuboid = new Cuboid(point1, point2);
-        Material material = Material.getMaterial(PlayerCacheMethod.getInstance().getAreaBlock(player));
+        Material material = Material.getMaterial(PlayerCacheMethods.getInstance().getAreaBlock(player));
 
         PacketUtils.getInstance().sendMultiBlockPacket(player, cuboid, material);
     }
