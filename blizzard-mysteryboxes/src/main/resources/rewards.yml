@@ -1,0 +1,52 @@
+mysterybox:
+  rare:
+    rewards:
+      iron_sword:
+        legendary: true
+        name: "Espada dos Mendingos"
+        command:
+          - "give %player% minecraft:iron_sword"
+      iron:
+        legendary: false
+        name: "Ferro Comum"
+        command:
+          - "give %player% minecraft:iron_ingot"
+      iron_pickaxe:
+        legendary: false
+        name: "Picareta Comum"
+        command:
+          - "give %player% minecraft:iron_pickaxe"
+  legendary:
+    rewards:
+      golden_sword:
+        legendary: true
+        name: "Espada dos Deuses"
+        command:
+          - "give %player% minecraft:golden_sword"
+      golden:
+        legendary: false
+        name: "Ouro Comum"
+        command:
+          - "give %player% minecraft:gold_ingot"
+      golden_pickaxe:
+        legendary: false
+        name: "Picareta de ferro Comum"
+        command:
+          - "give %player% minecraft:golden_pickaxe"
+  blizzard:
+    rewards:
+      diamond_sword:
+        legendary: false
+        name: "Espada dos Ricos"
+        command:
+          - "give %player% minecraft:diamond_sword"
+      diamond:
+        legendary: false
+        name: "Diamante"
+        command:
+          - "give %player% minecraft:diamond"
+      diamond_pickaxe:
+        legendary: true
+        name: "Picareta de diamante"
+        command:
+          - "give %player% minecraft:diamond_pickaxe"
