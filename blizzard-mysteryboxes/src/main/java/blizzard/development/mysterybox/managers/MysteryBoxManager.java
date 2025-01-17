@@ -70,10 +70,11 @@ public class MysteryBoxManager {
                     player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);
                     player.spawnParticle(Particle.EXPLOSION_LARGE, display.getLocation(), 1);
 
-                    player.sendMessage("");
-                    player.sendMessage(" §d§lYeah! §8✧ §fVocê ganhou um `§7Avião caça-monstros§f`!");
-                    player.sendMessage(" §7Adquira §7mais §lcaixas§7 em §f§owww.alchemynetwork.net§7.");
-                    player.sendMessage("");
+                    RewardManager.getInstance()
+                        .reward(
+                            player,
+                            mysteryBoxEnum
+                        );
                     this.cancel();
                     return;
                 }

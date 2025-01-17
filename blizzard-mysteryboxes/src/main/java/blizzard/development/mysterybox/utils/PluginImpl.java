@@ -17,6 +17,7 @@ public class PluginImpl {
     public ConfigUtils Locations;
     public ConfigUtils Ranking;
     public ConfigUtils Database;
+    public ConfigUtils Rewards;
 
     public PluginImpl(Plugin plugin) {
         this.plugin = plugin;
@@ -27,6 +28,7 @@ public class PluginImpl {
         Locations = new ConfigUtils((JavaPlugin) plugin, "locations.yml");
         Ranking = new ConfigUtils((JavaPlugin) plugin, "ranking.yml");
         Database = new ConfigUtils((JavaPlugin) plugin, "database.yml");
+        Rewards = new ConfigUtils((JavaPlugin) plugin, "rewards.yml");
     }
 
     public void onEnable() {
@@ -42,6 +44,7 @@ public class PluginImpl {
         Locations.saveDefaultConfig();
         Ranking.saveDefaultConfig();
         Database.saveDefaultConfig();
+        Rewards.saveDefaultConfig();
         registerDatabase();
         registerListeners();
         registerCommands();
