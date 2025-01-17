@@ -63,7 +63,8 @@ public class RewardManager {
 
                 Component fullMessage = Component.text("\n§d§lCaixa Misteriosa! §8✧ §fO jogador `§7" + player.getName() + "§f` ganhou um item §d§lLENDÁRIO!§f.")
                     .appendNewline()
-                    .append(mainMessage);
+                    .append(mainMessage)
+                    .appendNewline();
 
                 onlinePlayer.sendMessage(fullMessage);
                 onlinePlayer.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_CELEBRATE, 1.0f, 1.0f);
