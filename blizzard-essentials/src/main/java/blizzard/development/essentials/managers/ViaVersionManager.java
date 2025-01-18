@@ -7,15 +7,16 @@ import org.bukkit.entity.Player;
 
 public class ViaVersionManager {
 
-    public static boolean isBelowVersion(Player player, ProtocolVersion targetVersion) {
+    public static boolean isBelowVersion(Player player) {
         if (player == null) {
             return false;
         }
 
         ViaAPI<?> api = Via.getAPI();
-        int playerVersion = api.getPlayerVersion(player.getUniqueId());
+        int playerProtocolVersion = api.getPlayerVersion(player.getUniqueId());
+        int targetProtocolVersion = ProtocolVersion.getProtocol(player.getProtocolVersion()).getVersion();
 
-        return playerVersion < targetVersion.getVersion();
+        return playerProtocolVersion < targetProtocolVersion;
     }
 
     public static boolean isExactVersion(Player player, ProtocolVersion targetVersion) {
