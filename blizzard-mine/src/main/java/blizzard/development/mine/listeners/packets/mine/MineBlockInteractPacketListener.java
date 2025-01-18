@@ -1,7 +1,7 @@
 package blizzard.development.mine.listeners.packets.mine;
 
 import blizzard.development.mine.database.cache.methods.PlayerCacheMethods;
-import blizzard.development.mine.managers.BlockManager;
+import blizzard.development.mine.managers.mine.BlockManager;
 import blizzard.development.mine.utils.PluginImpl;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketAdapter;

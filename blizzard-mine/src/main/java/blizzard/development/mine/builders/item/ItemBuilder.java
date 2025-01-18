@@ -1,4 +1,4 @@
-package blizzard.development.mine.builder;
+package blizzard.development.mine.builders.item;
 
 import blizzard.development.core.utils.items.TextUtil;
 import blizzard.development.mine.utils.apis.Skull;

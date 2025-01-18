@@ -1,32 +1,30 @@
-package blizzard.development.mine.mine.events;
+package blizzard.development.mine.mine.events.npc;
 
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
-public class MineBlockBreakEvent extends Event implements Cancellable {
-
+public class NPCInteractEvent extends Event implements Cancellable {
     private static final HandlerList HANDLERS = new HandlerList();
 
     private final Player player;
-    private final Block block;
+    private final int entityId;
     private boolean cancelled;
 
-    public MineBlockBreakEvent(@NotNull Player player, @NotNull Block block) {
+    public NPCInteractEvent(@NotNull Player player, int entityId) {
         super(true);
         this.player = player;
-        this.block = block;
+        this.entityId = entityId;
     }
 
     public @NotNull Player getPlayer() {
         return player;
     }
 
-    public @NotNull Block getBlock() {
-        return block;
+    public int getEntityId() {
+        return entityId;
     }
 
     @Override

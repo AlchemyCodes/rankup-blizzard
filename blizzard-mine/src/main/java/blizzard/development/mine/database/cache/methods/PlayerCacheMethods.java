@@ -6,10 +6,11 @@ import blizzard.development.mine.mine.enums.BlockEnum;
 import org.bukkit.entity.Player;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PlayerCacheMethods {
 
-    private static PlayerCacheMethods instance;
+    private static final PlayerCacheMethods instance = new PlayerCacheMethods();
 
     public static PlayerCacheMethods getInstance() {
         return instance;
@@ -26,7 +27,7 @@ public class PlayerCacheMethods {
         PlayerData playerData = playerCacheManager.getPlayerData(player);
         if (playerData != null) {
             playerData.setArea(radius);
-            playerCacheManager.cachePlayerData(player.getUniqueId().toString(), playerData);
+            playerCacheManager.cachePlayerData(player, playerData);
         }
     }
 
@@ -35,19 +36,11 @@ public class PlayerCacheMethods {
         return playerData != null ? playerData.getAreaBlock() : "§c§lERRO!";
     }
 
-    public void setAreaBlockEnum(Player player, BlockEnum blockEnum) {
-        PlayerData playerData = playerCacheManager.getPlayerData(player);
-        if (playerData != null) {
-            playerData.setAreaBlock(blockEnum);
-            playerCacheManager.cachePlayerData(player.getUniqueId().toString(), playerData);
-        }
-    }
-
-    public void setAreaBlock(Player player, String areaBlock) {
+    public void setAreaBlock(Player player, BlockEnum areaBlock) {
         PlayerData playerData = playerCacheManager.getPlayerData(player);
         if (playerData != null) {
             playerData.setAreaBlock(areaBlock);
-            playerCacheManager.cachePlayerData(player.getUniqueId().toString(), playerData);
+            playerCacheManager.cachePlayerData(player, playerData);
         }
     }
 
@@ -60,27 +53,27 @@ public class PlayerCacheMethods {
         PlayerData playerData = playerCacheManager.getPlayerData(player);
         if (playerData != null) {
             playerData.setBlocks(amount);
-            playerCacheManager.cachePlayerData(player.getUniqueId().toString(), playerData);
+            playerCacheManager.cachePlayerData(player, playerData);
         }
     }
 
     public void setInMine(Player player) {
         PlayerData playerData = playerCacheManager.getPlayerData(player);
         if (playerData != null) {
-            playerData.setInPlantation(true);
-            playerCacheManager.cachePlayerData(player.getUniqueId().toString(), playerData);
+            playerData.setInMine(true);
+            playerCacheManager.cachePlayerData(player, playerData);
         }
     }
 
-    public void removeInMine(Player player) {
+    public void removeFromMine(Player player) {
         PlayerData playerData = playerCacheManager.getPlayerData(player);
         if (playerData != null) {
-            playerData.setInPlantation(false);
-            playerCacheManager.cachePlayerData(player.getUniqueId().toString(), playerData);
+            playerData.setInMine(false);
+            playerCacheManager.cachePlayerData(player, playerData);
         }
     }
 
-    public boolean isInPlantation(Player player) {
+    public boolean isInMine(Player player) {
         PlayerData playerData = playerCacheManager.getPlayerData(player);
         return playerData != null && playerData.getIsInMine();
     }
@@ -92,7 +85,7 @@ public class PlayerCacheMethods {
 
             friends.add(friend);
             playerData.setFriends(friends);
-            playerCacheManager.cachePlayerData(player.getUniqueId().toString(), playerData);
+            playerCacheManager.cachePlayerData(player, playerData);
         }
     }
     public List<String> getFriends(Player player) {
@@ -107,7 +100,14 @@ public class PlayerCacheMethods {
 
             friends.remove(friend);
             playerData.setFriends(friends);
-            playerCacheManager.cachePlayerData(player.getUniqueId().toString(), playerData);
+            playerCacheManager.cachePlayerData(player, playerData);
         }
+    }
+
+    public List<PlayerData> getTopBlocks(int topCount) {
+        return playerCacheManager.playerCache.values().stream()
+                .sorted((p1, p2) -> Integer.compare(p2.getBlocks(), p1.getBlocks()))
+                .limit(topCount)
+                .collect(Collectors.toList());
     }
 }

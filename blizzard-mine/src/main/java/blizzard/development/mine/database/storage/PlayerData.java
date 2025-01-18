@@ -50,12 +50,8 @@ public class PlayerData {
         return area_block;
     }
 
-    public void setAreaBlock(String area_block) {
-        this.area_block = area_block;
-    }
-
     public void setAreaBlock(BlockEnum blockEnum) {
-        this.area_block = blockEnum.getType();
+        this.area_block = blockEnum.toString();
     }
 
     public Integer getBlocks() {
@@ -70,8 +66,8 @@ public class PlayerData {
         return isInMine;
     }
 
-    public void setInPlantation(Boolean inPlantation) {
-        isInMine = inPlantation;
+    public void setInMine(Boolean inMine) {
+        isInMine = inMine;
     }
 
     public List<String> getFriends() {
