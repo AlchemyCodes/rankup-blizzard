@@ -1,5 +1,7 @@
 package blizzard.development.mine.commands.mine.subcommands.admins;
 
+import blizzard.development.mine.managers.mine.DisplayManager;
+import blizzard.development.mine.mine.enums.LocationEnum;
 import blizzard.development.mine.utils.locations.LocationUtils;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
@@ -17,30 +19,34 @@ public class LocationsCommand extends BaseCommand {
     public void onSetSpawnCommand(CommandSender commandSender) {
         Player player = (Player) commandSender;
 
-        LocationUtils.setMineSpawnLocation(
+        LocationUtils.setLocation(
                 player,
-                player.getWorld(),
-                (int) player.getX(),
-                (int) player.getY(),
-                (int) player.getZ(),
-                player.getYaw(),
-                player.getPitch()
+                LocationEnum.SPAWN.getName(),
+                player.getLocation()
+        );
+    }
+
+    @Subcommand("setsaida")
+    @CommandPermission("blizzard.mine.admin")
+    public void onSetExitCommand(CommandSender commandSender) {
+        Player player = (Player) commandSender;
+
+        LocationUtils.setLocation(
+                player,
+                LocationEnum.EXIT.getName(),
+                player.getLocation()
         );
     }
 
     @Subcommand("setcenter")
     @CommandPermission("blizzard.mine.admin")
-    public void onSetCenterSpawnCommand(CommandSender commandSender) {
+    public void onSetCenterCommand(CommandSender commandSender) {
         Player player = (Player) commandSender;
 
-        LocationUtils.setMineCenterLocation(
+        LocationUtils.setLocation(
                 player,
-                player.getWorld(),
-                (int) player.getX(),
-                (int) player.getY(),
-                (int) player.getZ(),
-                player.getYaw(),
-                player.getPitch()
+                LocationEnum.CENTER.getName(),
+                player.getLocation()
         );
     }
 
@@ -48,6 +54,25 @@ public class LocationsCommand extends BaseCommand {
     @CommandPermission("blizzard.mine.admin")
     public void onSetNPCCommand(CommandSender commandSender) {
         Player player = (Player) commandSender;
-        player.sendActionBar("ainda nao tlg");
+
+        LocationUtils.setLocation(
+                player,
+                LocationEnum.NPC.getName(),
+                player.getLocation()
+        );
+    }
+
+    @Subcommand("setdisplay")
+    @CommandPermission("blizzard.mine.admin")
+    public void onSetDisplayCommand(CommandSender commandSender) {
+        Player player = (Player) commandSender;
+
+        LocationUtils.setLocation(
+                player,
+                LocationEnum.DISPLAY.getName(),
+                player.getLocation().add(0, 2, 0)
+        );
+
+        DisplayManager.getInstance().createPickaxeDisplay(player.getLocation().add(0, 2, 0));
     }
 }

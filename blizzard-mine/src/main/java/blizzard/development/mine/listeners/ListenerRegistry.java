@@ -1,10 +1,17 @@
 package blizzard.development.mine.listeners;
 
 import blizzard.development.mine.database.dao.PlayerDAO;
+import blizzard.development.mine.database.dao.ToolDAO;
 import blizzard.development.mine.listeners.commons.PlayerTrafficListener;
 import blizzard.development.mine.listeners.mine.MineBlockBreakListener;
+import blizzard.development.mine.listeners.mine.MineChatListener;
+import blizzard.development.mine.listeners.mine.MineGeneralListener;
+import blizzard.development.mine.listeners.mine.MineInventoryListener;
+import blizzard.development.mine.listeners.npc.NPCInteractListener;
+import blizzard.development.mine.listeners.npc.NPCRotationListener;
 import blizzard.development.mine.listeners.packets.mine.MineBlockBreakPacketListener;
 import blizzard.development.mine.listeners.packets.mine.MineBlockInteractPacketListener;
+import blizzard.development.mine.listeners.packets.npc.NPCInteractPacketListener;
 import blizzard.development.mine.utils.PluginImpl;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
@@ -16,17 +23,26 @@ import java.util.Arrays;
 public class ListenerRegistry {
 
     private final PlayerDAO playerDAO;
+    private final ToolDAO toolDAO;
 
-    public ListenerRegistry(PlayerDAO playerDAO) {
+    public ListenerRegistry(PlayerDAO playerDAO, ToolDAO toolDAO) {
         this.playerDAO = playerDAO;
+        this.toolDAO = toolDAO;
     }
 
     public void register() {
         PluginManager pluginManager = Bukkit.getPluginManager();
 
         Arrays.asList(
-            new PlayerTrafficListener(playerDAO),
-            new MineBlockBreakListener()
+                // mine
+                new PlayerTrafficListener(playerDAO, toolDAO),
+                new MineBlockBreakListener(),
+                new MineGeneralListener(),
+                new MineChatListener(),
+                new MineInventoryListener(),
+                // npc
+                new NPCInteractListener(),
+                new NPCRotationListener()
         ).forEach(listener -> pluginManager.registerEvents(listener, PluginImpl.getInstance().plugin));
     }
 
@@ -34,8 +50,9 @@ public class ListenerRegistry {
         ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
 
         Arrays.asList(
-            new MineBlockBreakPacketListener(),
-                new MineBlockInteractPacketListener()
+                new MineBlockBreakPacketListener(),
+                new MineBlockInteractPacketListener(),
+                new NPCInteractPacketListener()
         ).forEach(protocolManager::addPacketListener);
     }
 }

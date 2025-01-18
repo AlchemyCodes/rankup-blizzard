@@ -1,6 +1,6 @@
 package blizzard.development.mine.listeners.commons;
 
-import blizzard.development.mine.managers.BlockManager;
+import blizzard.development.mine.managers.mine.BlockManager;
 import io.papermc.paper.event.player.PlayerFailMoveEvent;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;

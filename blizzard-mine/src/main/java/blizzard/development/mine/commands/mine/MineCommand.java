@@ -2,6 +2,7 @@ package blizzard.development.mine.commands.mine;
 
 import blizzard.development.currencies.utils.CooldownUtils;
 import blizzard.development.mine.database.cache.methods.PlayerCacheMethods;
+import blizzard.development.mine.inventories.MineInventory;
 import blizzard.development.mine.mine.adapters.MineAdapter;
 import blizzard.development.mine.mine.enums.BlockEnum;
 import blizzard.development.mine.utils.locations.LocationUtils;
@@ -21,37 +22,53 @@ public class MineCommand extends BaseCommand {
 
     private final CooldownUtils cooldown = CooldownUtils.getInstance();
 
+    private final MineAdapter mineAdapter = MineAdapter.getInstance();
+    private final PlayerCacheMethods cacheMethods = PlayerCacheMethods.getInstance();
+
     @Default
     public void onMineCommand(Player player) {
-        player.sendActionBar("mudei isso aqui para /mina ir por enquanto");
+        new MineInventory().open(player);
     }
 
     @Subcommand("ir|go|join")
     public void onGoCommand(Player player) {
-        MineAdapter
-                .getInstance()
-                .sendToMine(
-                        player
-                );
+        String cooldownName = "blizzard.mine.go-cooldown";
+
+        if (!cacheMethods.isInMine(player)) {
+            if (cooldown.isInCountdown(player, cooldownName) && !player.hasPermission("blizzard.mine.cooldown-bypass")) {
+                player.sendActionBar("§c§lEI! §cAguarde um pouco antes de fazer isso novamente.");
+                return;
+            }
+
+            mineAdapter
+                    .sendToMine(
+                            player
+                    );
+
+            cooldown.createCountdown(player, cooldownName, 15, TimeUnit.SECONDS);
+        } else {
+            player.sendActionBar("§c§lEI! §cVocê já está na mina.");
+        }
     }
 
     @Subcommand("sair|leave")
     public void onLeaveCommand(Player player) {
-        player.sendActionBar("ainda nao");
-    }
+        String cooldownName = "blizzard.mine.go-cooldown";
 
-    @Subcommand("resetar|reset")
-    public void onResetCommand(Player player) {
-        String cooldownName = "blizzard.mine.reset-cooldown";
+        if (cacheMethods.isInMine(player)) {
+            if (cooldown.isInCountdown(player, cooldownName) && !player.hasPermission("blizzard.mine.cooldown-bypass")) {
+                player.sendActionBar("§c§lEI! §cAguarde um pouco antes de fazer isso novamente.");
+                return;
+            }
 
-        if (cooldown.isInCountdown(player, cooldownName)) {
-            player.sendActionBar("§c§lEI! §cAguarde um pouco antes de fazer isso novamentee.");
-            return;
+            mineAdapter
+                    .sendToExit(
+                            player
+                    );
+
+            cooldown.createCountdown(player, cooldownName, 15, TimeUnit.SECONDS);
+        } else {
+            player.sendActionBar("§c§lEI! §cVocê não está na mina.");
         }
-
-        MineAdapter.getInstance().generateMine(player);
-
-        player.sendActionBar("§a§lYAY! §aVocê restou sua mina com sucesso.");
-        cooldown.createCountdown(player, cooldownName, 3, TimeUnit.MINUTES);
     }
 }

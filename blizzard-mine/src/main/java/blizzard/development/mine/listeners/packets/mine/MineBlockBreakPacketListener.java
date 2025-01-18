@@ -1,6 +1,7 @@
 package blizzard.development.mine.listeners.packets.mine;
 
-import blizzard.development.mine.mine.events.MineBlockBreakEvent;
+import blizzard.development.mine.managers.mine.BlockManager;
+import blizzard.development.mine.mine.events.mine.MineBlockBreakEvent;
 import blizzard.development.mine.utils.PluginImpl;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
@@ -40,6 +41,8 @@ public class MineBlockBreakPacketListener extends PacketAdapter{
         int blockX = blockPosition.getX();
         int blockY = blockPosition.getY();
         int blockZ = blockPosition.getZ();
+
+        if (!BlockManager.getInstance().isBlock(blockX, blockY, blockZ)) return;
 
         event.setCancelled(true);
 
