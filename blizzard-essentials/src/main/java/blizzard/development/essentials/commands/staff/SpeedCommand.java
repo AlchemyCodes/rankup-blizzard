@@ -51,4 +51,17 @@ public class SpeedCommand extends BaseCommand {
 
         }
     }
+
+    @Subcommand("fly")
+    @CommandPermission("alchemy.essentials.staff")
+    public void onSpeedFlyCommand(CommandSender commandSender, float level) {
+        Player player = (Player) commandSender;
+
+        if (level > 1) {
+            player.sendActionBar("§c§lEI! §cA velocidade máxima permitida é de 1.");
+            return;
+        }
+
+        player.setFlySpeed(level);
+    }
 }

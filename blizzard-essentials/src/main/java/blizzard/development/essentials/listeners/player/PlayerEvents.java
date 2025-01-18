@@ -1,19 +1,19 @@
 package blizzard.development.essentials.listeners.player;
 
-import blizzard.development.essentials.Main;
 import blizzard.development.essentials.managers.BackManager;
-import blizzard.development.essentials.managers.ViaVersionManager;
-import blizzard.development.essentials.tasks.VersionTask;
 import blizzard.development.essentials.utils.CooldownUtils;
-import blizzard.development.essentials.utils.PluginImpl;
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
+import blizzard.development.essentials.utils.LocationUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.World;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.*;
+
+import java.util.Objects;
 
 public class PlayerEvents implements Listener {
 
@@ -23,30 +23,10 @@ public class PlayerEvents implements Listener {
 
         Player player = event.getPlayer();
 
-        String worldSpawn = PluginImpl.getInstance().Locations.getConfig().getString("spawn.location.world");
-        double x = PluginImpl.getInstance().Locations.getConfig().getDouble("spawn.location.x");
-        double y = PluginImpl.getInstance().Locations.getConfig().getDouble("spawn.location.y");
-        double z = PluginImpl.getInstance().Locations.getConfig().getDouble("spawn.location.z");
-        float yaw = (float) PluginImpl.getInstance().Locations.getConfig().getDouble("spawn.location.yaw");
-        float pitch = (float) PluginImpl.getInstance().Locations.getConfig().getDouble("spawn.location.pitch");
-
-        if (worldSpawn == null) return;
-
-        World world = Bukkit.getWorld(worldSpawn);
-
-        player.teleport(
-            new Location(
-                world,
-                x,
-                y,
-                z,
-                yaw,
-                pitch
-            )
-        );
+        player.teleport(Objects.requireNonNull(LocationUtils.getSpawnLocation()));
         player.sendTitle(
-            "§b§lBem vindo " + player.getName() + "!",
-            "§7Sua jornada começa agora.",
+            "§d§lBem vindo " + player.getName() + "!",
+            "§dSua jornada começa agora.",
             10,
             60,
             20
@@ -76,12 +56,7 @@ public class PlayerEvents implements Listener {
             }
         }
 
-        if (ViaVersionManager.isBelowVersion(player, ProtocolVersion.v1_16_4)) {
-            VersionTask versionTask = new VersionTask(player);
-            versionTask.runTaskTimer(Main.getInstance(), 0L, 20);
-
-            player.sendMessage("aaaaaaaaaa");
-        }
+        player.setFreezeTicks(2000);
     }
 
     @EventHandler
@@ -111,15 +86,62 @@ public class PlayerEvents implements Listener {
         BackManager.add(player, event.getFrom());
     }
 
-//    @EventHandler
-//    public void onPlayerMove(PlayerMoveEvent event) {
-//        Player player = event.getPlayer();
-//        Location spawnLocation = player.getWorld().getSpawnLocation();
-//
-//        if (event.getTo().getY() <= 0) {
-//            player.teleport(spawnLocation);
-//            player.setFallDistance(0);
-//        }
-//    }
+    @EventHandler
+    public void onPlayerMove(PlayerMoveEvent event) {
+        Player player = event.getPlayer();
+
+        if (event.getTo().getY() <= 0) {
+            player.teleport(Objects.requireNonNull(LocationUtils.getSpawnLocation()));
+            player.setFallDistance(0);
+        }
+    }
+
+    @EventHandler
+    public void onDeath(PlayerDeathEvent event) {
+        event.deathMessage(null);
+    }
+
+    @EventHandler
+    public void onRespawn(PlayerRespawnEvent event) {
+        Location location = LocationUtils.getSpawnLocation();
+        if (location != null) {
+            event.setRespawnLocation(location);
+        }
+    }
+
+    @EventHandler
+    public void onEntityDamage(EntityDamageEvent event) {
+        if (event.getEntity() instanceof Player) {
+            Player player = (Player) event.getEntity();
+
+            if (player.getHealth() - event.getFinalDamage() <= 0) {
+                event.setCancelled(true);
+
+                Player killer = ((Player) event.getEntity()).getKiller();
+
+                if (!(killer == null)) {
+                    for (Player onlinePlayers : Bukkit.getOnlinePlayers()) {
+                        onlinePlayers.sendActionBar("§cO jogador " + player.getName() + " morreu em um combate contra " + killer.getName() + ".");
+                    }
+                }
+
+                Location respawnLocation = LocationUtils.getSpawnLocation();
+                if (respawnLocation != null) {
+                    player.teleport(respawnLocation);
+                }
+
+                player.setHealth(20);
+                player.setFoodLevel(20);
+                player.setExp(0);
+
+                player.playSound(player, Sound.ENTITY_VILLAGER_HURT, 0.4f, 0.4f);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onAchievement(PlayerAdvancementDoneEvent event) {
+        event.message(null);
+    }
 
 }

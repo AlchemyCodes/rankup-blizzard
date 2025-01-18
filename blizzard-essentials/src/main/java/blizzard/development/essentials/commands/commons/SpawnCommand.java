@@ -42,5 +42,7 @@ public class SpawnCommand extends BaseCommand {
                         pitch
                 )
         );
+
+        player.sendActionBar("§d§lYAY! §dVocê foi teleportado para o spawn.");
     }
 }
