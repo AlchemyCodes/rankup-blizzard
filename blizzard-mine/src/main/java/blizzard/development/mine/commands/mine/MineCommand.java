@@ -4,14 +4,11 @@ import blizzard.development.currencies.utils.CooldownUtils;
 import blizzard.development.mine.database.cache.methods.PlayerCacheMethods;
 import blizzard.development.mine.inventories.MineInventory;
 import blizzard.development.mine.mine.adapters.MineAdapter;
-import blizzard.development.mine.mine.enums.BlockEnum;
-import blizzard.development.mine.utils.locations.LocationUtils;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.Default;
 import co.aikar.commands.annotation.Subcommand;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.concurrent.TimeUnit;
@@ -27,11 +24,6 @@ public class MineCommand extends BaseCommand {
 
     @Default
     public void onMineCommand(Player player) {
-        new MineInventory().open(player);
-    }
-
-    @Subcommand("ir|go|join")
-    public void onGoCommand(Player player) {
         String cooldownName = "blizzard.mine.go-cooldown";
 
         if (!cacheMethods.isInMine(player)) {
@@ -41,15 +33,36 @@ public class MineCommand extends BaseCommand {
             }
 
             mineAdapter
-                    .sendToMine(
-                            player
-                    );
+                .sendToMine(
+                    player
+                );
 
             cooldown.createCountdown(player, cooldownName, 15, TimeUnit.SECONDS);
         } else {
             player.sendActionBar("§c§lEI! §cVocê já está na mina.");
         }
     }
+
+//    @Subcommand("ir|go|join")
+//    public void onGoCommand(Player player) {
+//        String cooldownName = "blizzard.mine.go-cooldown";
+//
+//        if (!cacheMethods.isInMine(player)) {
+//            if (cooldown.isInCountdown(player, cooldownName) && !player.hasPermission("blizzard.mine.cooldown-bypass")) {
+//                player.sendActionBar("§c§lEI! §cAguarde um pouco antes de fazer isso novamente.");
+//                return;
+//            }
+//
+//            mineAdapter
+//                    .sendToMine(
+//                            player
+//                    );
+//
+//            cooldown.createCountdown(player, cooldownName, 15, TimeUnit.SECONDS);
+//        } else {
+//            player.sendActionBar("§c§lEI! §cVocê já está na mina.");
+//        }
+//    }
 
     @Subcommand("sair|leave")
     public void onLeaveCommand(Player player) {

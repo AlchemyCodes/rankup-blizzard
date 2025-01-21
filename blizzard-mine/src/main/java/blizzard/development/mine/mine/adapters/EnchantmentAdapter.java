@@ -1,37 +1,53 @@
 package blizzard.development.mine.mine.adapters;
 
+import blizzard.development.mine.managers.enchantments.meteor.MeteorEffect;
+import blizzard.development.mine.mine.enums.LocationEnum;
 import blizzard.development.mine.mine.factory.EnchantmentFactory;
+import blizzard.development.mine.utils.PluginImpl;
+import blizzard.development.mine.utils.locations.LocationUtils;
+import blizzard.development.mine.utils.packets.MinePacketUtils;
 import blizzard.development.mine.utils.text.TextUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.time.Duration;
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class EnchantmentAdapter implements EnchantmentFactory {
 
     private static final EnchantmentAdapter instance = new EnchantmentAdapter();
-
     public static EnchantmentAdapter getInstance() {
         return instance;
     }
 
     @Override
     public void digger(Player player) {
-        int digger = 10; // nível do encantamento
+        int digger = 10;
 
         double random = ThreadLocalRandom.current().nextDouble(0, 100);
 
-        int area = 10; // tamanho da mina
-        Location location = player.getLocation(); // pegar a localização do bloco que o player quebrou.
-        player.getWorld().spawnEntity(location.getBlock().getLocation().add(0, 1, 0), EntityType.CHICKEN);
+        int area = 32 - 5;
+
+        double randomX = new Random().nextDouble(-area, area);
+        double randomZ = new Random().nextDouble(-area, area);
+
+        Location location = player.getLocation();
+
+        int entityId = (int) Math.round(Math.random() * Integer.MAX_VALUE);
 
         if (random <= activation(digger)) {
-
-            // lógica do DiggerManager aqui;
+            MinePacketUtils.getInstance()
+                .sendEntityPacket(
+                    location.getBlock().getLocation().add(randomX, 58, randomZ),
+                    player,
+                    EntityType.MINECART_TNT,
+                    entityId
+                );
 
             Component hoverText = TextUtils.parse("§a32 blocos quebrados.");
             Component mainMessage = TextUtils.parse("§8(Passe o mouse para mais detalhes)")
@@ -55,17 +71,46 @@ public class EnchantmentAdapter implements EnchantmentFactory {
 
     @Override
     public void meteor(Player player) {
-        int meteor = 10; // nível do encantamento
+        int meteor = 10;
 
         double random = ThreadLocalRandom.current().nextDouble(0, 100);
 
-        int area = 10; // tamanho da mina
-        Location location = player.getLocation(); // pegar a localização do bloco que o player quebrou.
-        player.getWorld().spawnEntity(location.getBlock().getLocation().add(0, 1, 0), EntityType.CHICKEN);
+        int area = 20 - 5;
+
+        double randomX = new Random().nextDouble(-area, area);
+        double randomZ = new Random().nextDouble(-area, area);
+
+        Location location = LocationUtils.getLocation(LocationEnum.CENTER.getName());
+
+        int entityId = (int) Math.round(Math.random() * Integer.MAX_VALUE);
 
         if (random <= activation(meteor)) {
+            MinePacketUtils.getInstance()
+                .sendEntityPacket(
+                    location.getBlock().getLocation().add(randomX, 30, randomZ),
+                    player,
+                    EntityType.FIREBALL,
+                    entityId
+                );
 
-            // lógica do MeteorManager aqui;
+            new BukkitRunnable() {
+                int i = 0;
+                @Override
+                public void run() {
+                    i++;
+
+                    if (i == 2) {
+                        MeteorEffect.startMeteorBreak(player, location.getBlock().getLocation().add(randomX, 0, randomZ), 3, 4, 3);
+                        MinePacketUtils.getInstance()
+                            .removeEntity(
+                                player,
+                                entityId
+                            );
+
+                        this.cancel();
+                    }
+                }
+            }.runTaskTimer(PluginImpl.getInstance().plugin, 0L, 20L);
 
             Component hoverText = TextUtils.parse("§a25 blocos quebrados.");
             Component mainMessage = TextUtils.parse("§8(Passe o mouse para mais detalhes)")
@@ -86,6 +131,7 @@ public class EnchantmentAdapter implements EnchantmentFactory {
             );
         }
     }
+
 
     private double activation(int level) {
         double base = 0.002;

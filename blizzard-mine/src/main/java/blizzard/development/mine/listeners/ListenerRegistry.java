@@ -3,10 +3,7 @@ package blizzard.development.mine.listeners;
 import blizzard.development.mine.database.dao.PlayerDAO;
 import blizzard.development.mine.database.dao.ToolDAO;
 import blizzard.development.mine.listeners.commons.PlayerTrafficListener;
-import blizzard.development.mine.listeners.mine.MineBlockBreakListener;
-import blizzard.development.mine.listeners.mine.MineChatListener;
-import blizzard.development.mine.listeners.mine.MineGeneralListener;
-import blizzard.development.mine.listeners.mine.MineInventoryListener;
+import blizzard.development.mine.listeners.mine.*;
 import blizzard.development.mine.listeners.npc.NPCInteractListener;
 import blizzard.development.mine.listeners.npc.NPCRotationListener;
 import blizzard.development.mine.listeners.packets.mine.MineBlockBreakPacketListener;
@@ -40,6 +37,9 @@ public class ListenerRegistry {
                 new MineGeneralListener(),
                 new MineChatListener(),
                 new MineInventoryListener(),
+                new MineInteractListener(),
+                new MineExtractorListener(),
+                new MineJumpPadListener(),
                 // npc
                 new NPCInteractListener(),
                 new NPCRotationListener()

@@ -65,12 +65,24 @@ public class MineInventory {
         return new ItemBuilder(isInMine ? Material.REDSTONE : Material.COMPASS)
                 .setDisplayName(isInMine ? "§cSair da Mina." : "§aIr à Mina.")
                 .setLore(Arrays.asList(
-                        isInMine ? "§7Volte para a segurança" : "§7Minere blocos",
-                        isInMine ? "§7fora da mina." : "§7na sua área de mineração.",
+                        isInMine ? "§7Volte para a segurança" : "§7Minere blocos na",
+                        isInMine ? "§7fora da mina." : "§7sua área de mineração.",
                         "",
                         isInMine ? "§cClique para sair." : "§aClique para ir."
                 ))
                 .addEnchant(org.bukkit.enchantments.Enchantment.DURABILITY, 1, true)
                 .build();
+    }
+
+    private ItemStack ranking() {
+        return new ItemBuilder(Material.GOLD_INGOT)
+            .setDisplayName("§eClassificação")
+            .setLore(Arrays.asList(
+                "§7Confira agora os jogadores",
+                "§7que mais se destacam.",
+                "",
+                "§eClique para visualizar."
+            ))
+            .build();
     }
 }

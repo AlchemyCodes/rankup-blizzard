@@ -5,6 +5,7 @@ public enum LocationEnum {
     EXIT("exit"),
     CENTER("center"),
     DISPLAY("display"),
+    EXTRACTOR_NPC("extractor_npc"),
     NPC("npc");
 
     private final String name;

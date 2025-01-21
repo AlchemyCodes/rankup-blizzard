@@ -1,4 +1,17 @@
 package blizzard.development.mine.inventories.enchantments;
 
+import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
+import com.github.stefvanschie.inventoryframework.pane.StaticPane;
+import org.bukkit.entity.Player;
+
 public class EnchantmentInventory {
+
+    public void open(Player player) {
+        ChestGui inventory = new ChestGui(3, "Encantamentos");
+        StaticPane pane = new StaticPane(0, 0, 9, 3);
+
+        inventory.addPane(pane);
+        inventory.show(player);
+    }
+
 }

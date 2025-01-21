@@ -6,6 +6,7 @@ import blizzard.development.mine.database.cache.ToolCacheManager;
 import blizzard.development.mine.database.cache.methods.PlayerCacheMethods;
 import blizzard.development.mine.database.cache.methods.ToolCacheMethods;
 import blizzard.development.mine.managers.mine.BlockManager;
+import blizzard.development.mine.mine.adapters.EnchantmentAdapter;
 import blizzard.development.mine.mine.events.mine.MineBlockBreakEvent;
 import blizzard.development.mine.mine.item.ToolBuildItem;
 import blizzard.development.mine.utils.packets.MinePacketUtils;
@@ -50,10 +51,19 @@ public class MineBlockBreakListener implements Listener {
                 cacheMethods.getBlocks(player) + 1
         );
 
-        // swag eu tlgd q vc usa assim tb, mas ctz que tipo 100 pessoas na mina e floodando setar item vai lagar
+        PlayerCacheMethods playerCacheMethods = PlayerCacheMethods.getInstance();
+        playerCacheMethods.setBlocks(
+            player,
+            playerCacheMethods.getBlocks(player) + 1
+        );
 
-        player.getInventory().setItem(0, ToolBuildItem.tool(player));
+        player.getInventory().setItem(4, ToolBuildItem.tool(player));
 
-        player.sendActionBar("§e§lMineração! §7• §f+§a§l$§a200,00K ");
+        EnchantmentAdapter.getInstance()
+                .meteor(
+                    player
+                );
+
+        player.sendActionBar("§e§lMina! §7• §f§l+§a§l$§f1M §f§l+§b§l❒§b1 §8✷ §eBooster ativo §l2.2x §8✩ §7Bônus de 5.0§l%");
     }
 }
