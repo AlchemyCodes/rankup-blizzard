@@ -1,0 +1,8 @@
+name: blizzard-mine
+version: '1.0-SNAPSHOT'
+main: blizzard.development.mine.Main
+api-version: '1.20'
+load: STARTUP
+depend: [ProtocolLib]
+authors: [swagviper, LucwsH, zFligh_]
+website: www.alchemynetwork.net
