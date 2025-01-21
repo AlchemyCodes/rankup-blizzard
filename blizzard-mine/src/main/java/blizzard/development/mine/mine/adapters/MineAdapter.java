@@ -26,13 +26,13 @@ import java.util.Arrays;
 import java.util.UUID;
 
 public class MineAdapter implements MineFactory {
-    private static final MineAdapter instance = new MineAdapter();
 
+    private static final MineAdapter instance = new MineAdapter();
     public static MineAdapter getInstance() {
         return instance;
     }
 
-    ToolAdapter toolAdapter = ToolAdapter.getInstance();
+    private final ToolAdapter toolAdapter = ToolAdapter.getInstance();
 
     @Override
     public void sendToMine(Player player) {
@@ -93,17 +93,17 @@ public class MineAdapter implements MineFactory {
                                         uuid,
                                         npcLocation.add(0.0, 2.6, 0.0),
                                         Arrays.asList(
-                                                "§e§lMINERAÇÃO",
-                                                "§7Clique para gerenciar."
-                                        )
+                                                "§e§lMINERAÇÃO!",
+                                                "§bClique para gerenciar."
+                                        ),
+                                    true
                                 );
                             }
                         });
                     }, 20L);
                 }
 
-                player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 3, 8));
-                player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20 * 3, 100000));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 2, 8));
                 player.showTitle(
                         Title.title(
                                 Component.text("§c§lAguarde!"),
@@ -117,6 +117,8 @@ public class MineAdapter implements MineFactory {
                 if (i == 4) {
                     player.clearActivePotionEffects();
                     player.sendTitle("§e§lMina!", "§eVocê entrou na mina.", 10, 70, 20);
+                    player.playSound(player, Sound.ENTITY_PLAYER_LEVELUP, 5L, 1L);
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, PotionEffect.INFINITE_DURATION, 1));
                     this.cancel();
                 }
             }

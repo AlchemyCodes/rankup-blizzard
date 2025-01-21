@@ -1,6 +1,7 @@
 package blizzard.development.mine.utils;
 
 import blizzard.development.mine.builders.display.DisplayBuilder;
+import blizzard.development.mine.builders.display.ExtractorBuilder;
 import blizzard.development.mine.builders.hologram.HologramBuilder;
 import blizzard.development.mine.commands.CommandRegistry;
 import blizzard.development.mine.database.DatabaseConnection;
@@ -12,6 +13,7 @@ import blizzard.development.mine.database.storage.PlayerData;
 import blizzard.development.mine.database.storage.ToolData;
 import blizzard.development.mine.expansions.PlaceholderExpansion;
 import blizzard.development.mine.listeners.ListenerRegistry;
+import blizzard.development.mine.mine.adapters.PodiumAdapter;
 import blizzard.development.mine.tasks.PlayerSaveTask;
 import blizzard.development.mine.tasks.ToolSaveTask;
 import blizzard.development.mine.utils.config.ConfigUtils;
@@ -69,6 +71,8 @@ public class PluginImpl {
     public void onDisable() {
         DisplayBuilder.getInstance().removeCurrentDisplay();
         HologramBuilder.getInstance().removeAllHolograms();
+        ExtractorBuilder.getInstance().removeExtractor();
+        PodiumAdapter.getInstance().removeAllNPCs();
         setupDisableData();
     }
 

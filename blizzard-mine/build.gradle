@@ -6,6 +6,9 @@ repositories {
     maven { url = uri("https://maven.enginehub.org/repo/") }
     maven { url = uri("https://jitpack.io") }
     maven { url = uri("https://repo.dmulloy2.net/repository/public/") }
+    maven {
+        name = 'citizens-repo'
+        url = 'https://maven.citizensnpcs.co/repo'}
 }
 
 dependencies {
@@ -14,6 +17,10 @@ dependencies {
     compileOnly 'com.github.decentsoftware-eu:decentholograms:2.8.11'
     compileOnly 'com.comphenix.protocol:ProtocolLib:5.1.0'
     compileOnly 'me.clip:placeholderapi:2.11.6'
+    compileOnly 'com.mojang:authlib:1.5.25'
+    compileOnly('net.citizensnpcs:citizens-main:2.0.35-SNAPSHOT') {
+        exclude group: '*', module: '*'
+    }
 
     compileOnly('com.nickuc.chat:api:5.6')
 
