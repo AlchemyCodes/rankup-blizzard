@@ -1,6 +1,6 @@
-package blizzard.development.farm.builders.farm.adapters;
+package blizzard.development.farm.farm.adapters;
 
-import blizzard.development.farm.builders.farm.factory.ToolFactory;
+import blizzard.development.farm.farm.factory.ToolFactory;
 import org.bukkit.entity.Player;
 
 public class ToolAdapter implements ToolFactory {

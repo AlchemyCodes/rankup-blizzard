@@ -1,4 +1,4 @@
-package blizzard.development.farm.builders.farm.factory;
+package blizzard.development.farm.farm.factory;
 
 import org.bukkit.entity.Player;
 

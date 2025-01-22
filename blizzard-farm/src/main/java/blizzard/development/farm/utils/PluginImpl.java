@@ -1,15 +1,12 @@
 package blizzard.development.farm.utils;
 
+import blizzard.development.farm.commands.CommandRegistry;
+import blizzard.development.farm.listeners.ListenerRegistry;
 import blizzard.development.farm.utils.config.ConfigUtils;
 import co.aikar.commands.Locales;
 import co.aikar.commands.PaperCommandManager;
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.sql.SQLException;
-import java.util.List;
-import java.util.UUID;
 
 public class PluginImpl {
 
@@ -112,17 +109,16 @@ public class PluginImpl {
     }
 
     private void registerListeners() {
-//        ListenerRegistry listenerRegistry = new ListenerRegistry(playerDAO, toolDAO);
-//        listenerRegistry.register();
-//        listenerRegistry.registerPacket();
+        ListenerRegistry listenerRegistry = new ListenerRegistry();
+        listenerRegistry.register();
     }
 
     private void registerTasks() {
     }
 
     private void registerCommands() {
-//        CommandRegistry commandRegistry = new CommandRegistry();
-//        commandRegistry.register();
+        CommandRegistry commandRegistry = new CommandRegistry();
+        commandRegistry.register();
     }
 
     public void registerExpansions() {

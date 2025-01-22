@@ -1,4 +1,4 @@
-package blizzard.development.farm.builders.farm.events;
+package blizzard.development.farm.farm.events;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;

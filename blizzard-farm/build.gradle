@@ -14,6 +14,10 @@ dependencies {
     compileOnly 'com.comphenix.protocol:ProtocolLib:5.1.0'
     compileOnly 'me.clip:placeholderapi:2.11.6'
 
+    compileOnly(platform('com.intellectualsites.bom:bom-newest:1.47'))
+    compileOnly('com.intellectualsites.plotsquared:plotsquared-core')
+    compileOnly 'com.sk89q.worldedit:worldedit-bukkit:7.2.12'
+
     compileOnly('com.nickuc.chat:api:5.6')
 
     compileOnly project(":blizzard-currencies")
