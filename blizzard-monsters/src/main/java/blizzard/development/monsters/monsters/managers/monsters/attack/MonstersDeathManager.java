@@ -1,6 +1,7 @@
 package blizzard.development.monsters.monsters.managers.monsters.attack;
 
 import blizzard.development.monsters.builders.hologram.HologramBuilder;
+import blizzard.development.monsters.currencies.SoulsCurrency;
 import blizzard.development.monsters.database.cache.managers.MonstersCacheManager;
 import blizzard.development.monsters.database.cache.methods.PlayersCacheMethods;
 import blizzard.development.monsters.database.dao.MonstersDAO;
@@ -9,6 +10,7 @@ import blizzard.development.monsters.monsters.managers.monsters.MonstersGeneralM
 import blizzard.development.monsters.monsters.managers.monsters.rewards.MonstersRewardManager;
 import blizzard.development.monsters.monsters.managers.packets.MonstersPacketsManager;
 import blizzard.development.monsters.utils.CooldownUtils;
+import blizzard.development.monsters.utils.NumberFormatter;
 import lombok.SneakyThrows;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -47,6 +49,7 @@ public class MonstersDeathManager {
 
         player.playSound(player.getLocation(), Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, 1.0f, 1.0f);
 
+        handleSouls(player);
         handleRewards(player, monstersData.getType());
 
         cooldown.createCountdown(
@@ -88,6 +91,16 @@ public class MonstersDeathManager {
         PlayersCacheMethods.getInstance().addRewards(player, validRewardsList);
     }
 
+    public void handleSouls(Player player) {
+        // botar logica de contas aq
+
+        double souls = 1; // aq bbobbbbvcgfd
+        String formattedSouls = NumberFormatter.getInstance().formatNumber(souls);
+
+        SoulsCurrency.getInstance().addSouls(player, souls);
+
+        player.sendActionBar("§3§lMonstros! §f✧ §f§l+§d§l👻" + formattedSouls);
+    }
 
     public static MonstersDeathManager getInstance() {
         if (instance == null) instance = new MonstersDeathManager();

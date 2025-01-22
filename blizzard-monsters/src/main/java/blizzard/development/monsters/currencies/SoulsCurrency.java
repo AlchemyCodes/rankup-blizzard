@@ -1,8 +1,11 @@
 package blizzard.development.monsters.currencies;
 
 import blizzard.development.currencies.api.CurrenciesAPI;
+import blizzard.development.currencies.database.storage.PlayersData;
 import blizzard.development.currencies.enums.Currencies;
 import org.bukkit.entity.Player;
+
+import java.util.List;
 
 public class SoulsCurrency {
     private static SoulsCurrency instance;
@@ -20,6 +23,10 @@ public class SoulsCurrency {
 
     public void removeSouls(Player player, double amount) {
         currencies.removeBalance(player, soulsCurrency, amount);
+    }
+
+    public List<PlayersData> getRanking() {
+        return currencies.getTopPlayers(soulsCurrency);
     }
 
     public static SoulsCurrency getInstance() {

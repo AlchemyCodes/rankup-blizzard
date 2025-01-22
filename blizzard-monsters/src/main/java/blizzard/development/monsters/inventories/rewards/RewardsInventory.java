@@ -37,13 +37,14 @@ public class RewardsInventory {
                 String rewardType = rewards.get(rewardIndex);
 
                 GuiItem rewardItem = new GuiItem(items.reward(player, rewardType), event -> {
+                    event.setCancelled(true);
+                    player.getInventory().close();
+
                     if (event.isLeftClick()) {
                         manager.collectReward(player, rewardType, false);
                     } else if (event.isRightClick()) {
                         manager.collectReward(player, rewardType, true);
                     }
-                    player.getOpenInventory().close();
-                    event.setCancelled(true);
                 });
 
 
@@ -71,14 +72,15 @@ public class RewardsInventory {
         }
 
         GuiItem collectAllItem = new GuiItem(items.collectAll(), event -> {
+            event.setCancelled(true);
+            player.getInventory().close();
+
             if (!player.hasPermission("blizzard.monsters.vip")) {
                 player.sendActionBar("§c§lEI! §cVocê não possui permissão para utilizar isso.");
                 return;
             }
 
             manager.collectAllRewards(player);
-            player.getInventory().close();
-            event.setCancelled(true);
         });
 
         pane.addItem(collectAllItem, Slot.fromIndex(40));
