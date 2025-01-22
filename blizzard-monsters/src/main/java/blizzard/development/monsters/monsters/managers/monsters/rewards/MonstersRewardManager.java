@@ -149,10 +149,6 @@ public class MonstersRewardManager {
         return plugin.Rewards.getConfig().getString("rewards." + rewardName + ".display-name");
     }
 
-    public List<String> getLore(String rewardName) {
-        return plugin.Rewards.getConfig().getStringList("rewards." + rewardName + ".lore");
-    }
-
     public Boolean isWithStack(String rewardName) {
         return plugin.Rewards.getConfig().getBoolean("rewards." + rewardName + ".with-stack");
     }

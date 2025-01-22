@@ -36,13 +36,14 @@ public class CageInventory {
                 String monsterType = monsters.get(monsterIndex);
 
                 GuiItem monsterItem = new GuiItem(items.monster(player, monsterType), event -> {
+                    event.setCancelled(true);
+                    player.getInventory().close();
+
                     if (event.isLeftClick()) {
                         manager.catchMonster(player, monsterType, false);
                     } else if (event.isRightClick()) {
                         manager.catchMonster(player, monsterType, true);
                     }
-                    player.getOpenInventory().close();
-                    event.setCancelled(true);
                 });
 
 
@@ -70,14 +71,15 @@ public class CageInventory {
         }
 
         GuiItem catchAllItem = new GuiItem(items.catchAll(), event -> {
+            event.setCancelled(true);
+            player.getInventory().close();
+
             if (!player.hasPermission("blizzard.monsters.vip")) {
                 player.sendActionBar("§c§lEI! §cVocê não possui permissão para utilizar isso.");
                 return;
             }
 
             manager.catchAllMonsters(player);
-            player.getInventory().close();
-            event.setCancelled(true);
         });
 
         pane.addItem(catchAllItem, Slot.fromIndex(40));

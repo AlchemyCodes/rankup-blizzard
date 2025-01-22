@@ -2,6 +2,7 @@ package blizzard.development.monsters.inventories.main;
 
 import blizzard.development.monsters.inventories.cage.CageInventory;
 import blizzard.development.monsters.inventories.main.items.MonstersItems;
+import blizzard.development.monsters.inventories.ranking.SoulsInventory;
 import blizzard.development.monsters.inventories.rewards.RewardsInventory;
 import blizzard.development.monsters.monsters.enums.Locations;
 import blizzard.development.monsters.monsters.managers.tools.MonstersToolManager;
@@ -50,6 +51,7 @@ public class MonstersInventory {
         });
 
         GuiItem rankingItem = new GuiItem(items.ranking(), event -> {
+            SoulsInventory.getInstance().open(player);
             event.setCancelled(true);
         });
 
