@@ -33,6 +33,9 @@ public class FishingNetTask implements Runnable {
         return catchingTrashMap.getOrDefault(player.getUniqueId(), false);
     }
 
+    public static void removeCatchingTrash(Player player) {
+        catchingTrashMap.remove(player.getUniqueId());
+    }
 
     public static void setCatchingTrash(Player player, boolean isCatchingTrash) {
         catchingTrashMap.put(player.getUniqueId(), isCatchingTrash);

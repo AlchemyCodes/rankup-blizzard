@@ -137,7 +137,6 @@ public class EventsTask implements Runnable {
 
     public void cancelGeyserEvent() {
         if (geyserRunnable != null) {
-            Bukkit.getLogger().info("cancelando geyser");
             geyserRunnable.cancel();
             geyserRunnable = null;
         }

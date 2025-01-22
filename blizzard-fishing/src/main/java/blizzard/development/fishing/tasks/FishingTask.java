@@ -61,11 +61,11 @@ public final class FishingTask implements Runnable {
         int playerStrength = RodsCacheMethod.getInstance().getStrength(player);
         String rarity = fishesUtils.getRarity(playerStrength);
 
-        int fishQuantity = fishesUtils.fishQuantity(player, rodsCacheMethod);
+        int fishQuantity = fishesUtils.fishQuantity(player, rodsCacheMethod) * fishesUtils.valuesWithSpecialistActive(player);
 
         fishesUtils.startDiamondRain(player, rodsCacheMethod);
 
-        if (isStorageFull(player, cacheMethod)) return;
+        if (fishesUtils.isStorageFull(player, cacheMethod)) return;
 
         if (CoreAPI.getInstance().isIsBlizzard() || new Random().nextInt() >= config.getInt("frozenFishChance")) {
             fishesUtils.giveFrozenFish(player, cacheMethod, rodsCacheMethod, fishQuantity);
@@ -79,7 +79,7 @@ public final class FishingTask implements Runnable {
 
             fishesUtils.giveFish(player, caughtFish, cacheMethod, fishQuantity);
             fishesUtils.giveXp(player, rarity, rodsCacheMethod);
-            double xp = fishesUtils.getXp(player, rarity);
+            double xp = fishesUtils.getXp(player, rarity, rodsCacheMethod);
             FishBucketHandler.setBucket(player, 8);
 
             String fishName = fishesUtils.getFishName(caughtFish);
@@ -91,13 +91,7 @@ public final class FishingTask implements Runnable {
         }
     }
 
-    private static boolean isStorageFull(Player player, PlayersCacheMethod cacheMethod) {
-        if (cacheMethod.getFishes(player) >= cacheMethod.getStorage(player)) {
-            player.sendMessage("§cBalde cheio");
-            return true;
-        }
-        return false;
-    }
+
 
 
 }

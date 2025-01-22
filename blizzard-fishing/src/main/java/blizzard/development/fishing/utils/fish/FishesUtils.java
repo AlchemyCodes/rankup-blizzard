@@ -1,5 +1,6 @@
 package blizzard.development.fishing.utils.fish;
 
+import blizzard.development.fishing.Main;
 import blizzard.development.fishing.database.cache.methods.PlayersCacheMethod;
 import blizzard.development.fishing.database.cache.methods.RodsCacheMethod;
 import blizzard.development.fishing.enums.RodMaterials;
@@ -30,6 +31,7 @@ public class FishesUtils {
     private final YamlConfiguration enchantmentsConfig = PluginImpl.getInstance().Enchantments.getConfig();
 
     public HashMap<RodMaterials, Player> activeSkin = new HashMap<>();
+    public HashMap<Player, Boolean> specialistActive = new HashMap<>();
 
     public void setActiveSkin(Player player, RodMaterials material) {
         activeSkin.entrySet().removeIf(entry -> entry.getValue().equals(player));
@@ -159,13 +161,11 @@ public class FishesUtils {
     }
 
     public void giveXp(Player player, String rarity, RodsCacheMethod rodsCacheMethod) {
-        rodsCacheMethod.setXp(player, getXp(player, rarity));
+        rodsCacheMethod.setXp(player, getXp(player, rarity, rodsCacheMethod));
     }
 
-    public double getXp(Player player, String rarity) {
-        RodsCacheMethod rodsCacheMethod = new RodsCacheMethod();
-
-        double xp = FishesUtils.getInstance().getFishXp(rarity);
+    public double getXp(Player player, String rarity, RodsCacheMethod rodsCacheMethod) {
+        double xp = FishesUtils.getInstance().getFishXp(rarity) * fishQuantity(player, rodsCacheMethod) * valuesWithSpecialistActive(player);
 
         xp = (xp + rodsCacheMethod.getExperienced(player)) * getPlayerMaterial(player).getBonus();
 
@@ -175,8 +175,8 @@ public class FishesUtils {
     public void giveFrozenFish(Player player, PlayersCacheMethod cacheMethod, RodsCacheMethod rodsCacheMethod, int quantity) {
         YamlConfiguration messagesConfig = PluginImpl.getInstance().Messages.getConfig();
 
-        getFishMessage(player, messagesConfig, "§bPeixe Congelado§f", getXp(player, "frozen"), quantity);
-        cacheMethod.setFrozenFish(player, cacheMethod.getFrozenFish(player) + fishQuantity(player, rodsCacheMethod));
+        getFishMessage(player, messagesConfig, "§bPeixe Congelado§f", getXp(player, "frozen", rodsCacheMethod), quantity);
+        cacheMethod.setFrozenFish(player, cacheMethod.getFrozenFish(player) + fishQuantity(player, rodsCacheMethod) * valuesWithSpecialistActive(player));
         giveXp(player, "frozen", rodsCacheMethod);
         player.sendMessage("§7[DEBUG] §fSeu xp: §a" + rodsCacheMethod.getXp(player));
     }
@@ -204,15 +204,39 @@ public class FishesUtils {
         YamlConfiguration messagesConfig = PluginImpl.getInstance().Messages.getConfig();
         int rand = new Random().nextInt(101);
 
+        if (isStorageFull(player, PlayersCacheMethod.getInstance())) return;
+
         if (rand <= enchantmentsConfig.getInt("enchantments.rod.especialista.chance") * rodsCacheMethod.getSpecialist(player)) {
 
             player.sendTitle(messagesConfig.getString("pesca.specialist.title"),
                     messagesConfig.getString("pesca.specialist.sub-title"));
 
+            specialistActive.put(player, true);
+
+            new BukkitRunnable() {
+                public void run() {
+                    specialistActive.remove(player);
+                }
+            }.runTaskLater(Main.getInstance(), 20L * 10);
+
             createDiamondRain(player);
         }
     }
 
+    public int valuesWithSpecialistActive(Player player) {
+        if (specialistActive.containsKey(player)) {
+            return 2;
+        }
+        return 1;
+    }
+
+    public boolean isStorageFull(Player player, PlayersCacheMethod cacheMethod) {
+        if (cacheMethod.getFishes(player) >= cacheMethod.getStorage(player)) {
+            player.sendMessage("§cBalde cheio");
+            return true;
+        }
+        return false;
+    }
 
     public void createDiamondRain(Player player) {
         Location playerLoc = player.getLocation();
@@ -223,7 +247,7 @@ public class FishesUtils {
 
             @Override
             public void run() {
-                if (timeElapsed >= 5 * 20) {
+                if (timeElapsed >= 10 * 20) {
                     this.cancel();
                     return;
                 }

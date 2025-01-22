@@ -2,6 +2,7 @@ package blizzard.development.fishing.inventories;
 
 import blizzard.development.fishing.database.cache.methods.RodsCacheMethod;
 import blizzard.development.fishing.enums.RodMaterials;
+import blizzard.development.fishing.handlers.FishBucketHandler;
 import blizzard.development.fishing.handlers.FishingRodHandler;
 import blizzard.development.fishing.utils.PluginImpl;
 import blizzard.development.fishing.utils.fish.FishesUtils;
@@ -31,6 +32,12 @@ public class MaterialsInventory {
 
         pane.addItem(new GuiItem(createBackItem(), event -> {
             event.setCancelled(true);
+
+            if (!FishingRodHandler.isRod(player)) {
+                player.sendActionBar("§cVocê deve estar com a vara na mão para fazer essa melhoria!");
+                return;
+            }
+
             FishingInventory.openFishing(player);
         }), Slot.fromIndex(45));
 
@@ -77,7 +84,10 @@ public class MaterialsInventory {
     private static GuiItem createActivatedItem(Player player, FishesUtils fishesUtils) {
         RodMaterials activeMaterial = fishesUtils.getPlayerMaterial(player);
         ItemStack activatedStack = createActivatedMaterial(activeMaterial);
-        return new GuiItem(activatedStack, event -> event.setCancelled(true));
+        return new GuiItem(activatedStack, event ->  {
+            event.setCancelled(true);
+            player.sendMessage(String.valueOf(fishesUtils.getActiveSkin(activeMaterial)));
+        });
     }
 
     private static int getSlotForMaterial(RodMaterials material) {

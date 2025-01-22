@@ -35,6 +35,11 @@ public class FishBucketUpgrades {
         YamlConfiguration messagesConfig = PluginImpl.getInstance().Messages.getConfig();
 
         GuiItem capacity = new GuiItem(capacity(cacheMethod, player), event -> { event.setCancelled(true);
+            if (!FishBucketHandler.isBucket(player)) {
+                player.sendActionBar("§cVocê deve estar com o balde na mão para fazer essa melhoria!");
+                return;
+            }
+
             if (currenciesAPI.getBalance(player, coins) < capacityPrice(cacheMethod, player)) {
                 player.sendActionBar(messagesConfig.getString("balde.melhorias.naoTemMoney"));
                 return;
