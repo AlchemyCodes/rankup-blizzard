@@ -43,7 +43,7 @@ public class FishingRodHandler {
                         "  §7Sortudo §l" + instance.getLucky(player),
                         "",
                         "  §8▶ §fForça: §7" + instance.getStrength(player),
-                        "  §8■ §fMaterial: §7" + instance.getBestMaterial(player).getFancyName(),
+                        "  §8■ §fMaterial: §7" + FishesUtils.getInstance().getPlayerMaterial(player).getFancyName(),
                         ""))
                 .addPersistentData(plugin, key, 1)
                 .build();

@@ -90,6 +90,8 @@ public class TrafficListener implements Listener {
             Player player = event.getPlayer();
             player.getInventory().clear();
             FishingCacheManager.removeFisherman(player.getUniqueId());
+            FishingNetTask.removeCatchingTrash(player);
+            FurnaceTask.removePlayer(player);
         }
     }
 }
