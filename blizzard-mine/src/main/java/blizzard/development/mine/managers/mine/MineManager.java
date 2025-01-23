@@ -2,6 +2,7 @@ package blizzard.development.mine.managers.mine;
 
 import blizzard.development.core.Main;
 import blizzard.development.mine.database.cache.methods.PlayerCacheMethods;
+import blizzard.development.mine.managers.events.Avalanche;
 import blizzard.development.mine.mine.enums.LocationEnum;
 import blizzard.development.mine.utils.PluginImpl;
 import blizzard.development.mine.utils.apis.Cuboid;
@@ -28,7 +29,13 @@ public class MineManager {
         int startChunkX = centerChunkX - 1;
         int startChunkZ = centerChunkZ - 1;
 
-        Material material = Material.getMaterial(PlayerCacheMethods.getInstance().getAreaBlock(player));
+        Material material;
+
+        if (Avalanche.isAvalancheActive) {
+            material = Material.SNOW_BLOCK;
+        } else {
+            material = Material.getMaterial(PlayerCacheMethods.getInstance().getAreaBlock(player));
+        }
 
         processChunkBatch(player, centerLocation, startChunkX, startChunkZ, material, 0);
     }

@@ -6,11 +6,13 @@ public class ToolData {
 
     private String uuid, nickname;
     private Integer blocks;
+    private Integer meteor;
 
-    public ToolData(String uuid, String nickname, Integer blocks) {
+    public ToolData(String uuid, String nickname, Integer blocks, Integer meteor) {
         this.uuid = uuid;
         this.nickname = nickname;
         this.blocks = blocks;
+        this.meteor = meteor;
     }
 
     public String getUuid() {
@@ -35,5 +37,13 @@ public class ToolData {
 
     public void setBlocks(Integer blocks) {
         this.blocks = blocks;
+    }
+
+    public Integer getMeteor() {
+        return meteor;
+    }
+
+    public void setMeteor(Integer meteor) {
+        this.meteor = meteor;
     }
 }
