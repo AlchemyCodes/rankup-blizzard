@@ -30,7 +30,8 @@ public class PlayersJoinListener implements Listener {
                     config.getDouble("currencies.initial-balance.souls"),
                     config.getDouble("currencies.initial-balance.flakes"),
                     config.getDouble("currencies.initial-balance.fossils"),
-                    config.getDouble("currencies.initial-balance.spawners-limit")
+                    config.getDouble("currencies.initial-balance.spawners-limit"),
+                    config.getDouble("currencies.initial-balance.blocks")
             );
             try {
                 database.createPlayerData(playersData);
