@@ -5,7 +5,8 @@ public enum Currencies {
     SOULS("souls", "§d[👻]"),
     FLAKES("flakes", "§b[❄]"),
     FOSSILS("fossils", "§f[🦴]"),
-    SPAWNERSLIMIT("spawners_limits", "§e[∞]");
+    SPAWNERSLIMIT("spawners_limits", "§e[∞]"),
+    BLOCKS("blocks", "§b[❒]");
     
     private final String name, emoji;
 

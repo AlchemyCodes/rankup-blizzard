@@ -2,8 +2,6 @@ package blizzard.development.currencies.database.dao;
 
 import blizzard.development.currencies.database.DatabaseConnection;
 import blizzard.development.currencies.database.storage.PlayersData;
-import blizzard.development.currencies.enums.Currencies;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +19,8 @@ public class PlayersDAO {
                     "souls DOUBLE, " +
                     "flakes DOUBLE, " +
                     "fossils DOUBLE, " +
-                    "spawners_limit DOUBLE" +
+                    "spawners_limit DOUBLE, " +
+                    "blocks DOUBLE" +
                     ")";
             stat.execute(sql_player);
 
@@ -55,7 +54,8 @@ public class PlayersDAO {
                             resultSet.getDouble("souls"),
                             resultSet.getDouble("flakes"),
                             resultSet.getDouble("fossils"),
-                            resultSet.getDouble("spawners_limit")
+                            resultSet.getDouble("spawners_limit"),
+                            resultSet.getDouble("blocks")
                     );
                 }
             }
@@ -66,7 +66,7 @@ public class PlayersDAO {
     }
 
     public void createPlayerData(PlayersData playerData) throws SQLException {
-        String sql = "INSERT INTO currencies_users (uuid, nickname, souls, flakes, fossils, spawners_limit) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO currencies_users (uuid, nickname, souls, flakes, fossils, spawners_limit, blocks) VALUES (?, ?, ?, ?, ?, ?, ?)";
         executeUpdate(sql, statement -> {
             try {
                 statement.setString(1, playerData.getUuid());
@@ -75,6 +75,7 @@ public class PlayersDAO {
                 statement.setDouble(4, playerData.getFlakes());
                 statement.setDouble(5, playerData.getFossils());
                 statement.setDouble(6, playerData.getSpawnersLimit());
+                statement.setDouble(7, playerData.getBlocks());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -82,8 +83,8 @@ public class PlayersDAO {
     }
 
     public void deletePlayerData(PlayersData playerData) throws SQLException {
-        String sqlpar = "DELETE FROM currencies_users WHERE uuid = ?";
-        executeUpdate(sqlpar, statement -> {
+        String sql = "DELETE FROM currencies_users WHERE uuid = ?";
+        executeUpdate(sql, statement -> {
             try {
                 statement.setString(1, playerData.getUuid());
             } catch (SQLException e) {
@@ -93,7 +94,7 @@ public class PlayersDAO {
     }
 
     public void updatePlayerData(PlayersData playerData) throws SQLException {
-        String sql = "UPDATE currencies_users SET nickname = ?, souls = ?, flakes = ?, fossils = ?, spawners_limit = ? WHERE uuid = ?";
+        String sql = "UPDATE currencies_users SET nickname = ?, souls = ?, flakes = ?, fossils = ?, spawners_limit = ?, blocks = ? WHERE uuid = ?";
         executeUpdate(sql, statement -> {
             try {
                 statement.setString(1, playerData.getNickname());
@@ -101,7 +102,8 @@ public class PlayersDAO {
                 statement.setDouble(3, playerData.getFlakes());
                 statement.setDouble(4, playerData.getFossils());
                 statement.setDouble(5, playerData.getSpawnersLimit());
-                statement.setString(6, playerData.getUuid());
+                statement.setDouble(6, playerData.getBlocks());
+                statement.setString(7, playerData.getUuid());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -123,7 +125,8 @@ public class PlayersDAO {
                         resultSet.getDouble("souls"),
                         resultSet.getDouble("flakes"),
                         resultSet.getDouble("fossils"),
-                        resultSet.getDouble("spawners_limit")
+                        resultSet.getDouble("spawners_limit"),
+                        resultSet.getDouble("blocks")
                 );
                 players.add(player);
             }

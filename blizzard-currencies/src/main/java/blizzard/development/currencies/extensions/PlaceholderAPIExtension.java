@@ -69,6 +69,12 @@ public class PlaceholderAPIExtension extends PlaceholderExpansion {
                 }
                 return api.getFormattedBalance(player, Currencies.FOSSILS);
             }
+            case "blocks" -> {
+                if (cache.getPlayerData(player) == null) {
+                    return "0";
+                }
+                return api.getFormattedBalance(player, Currencies.BLOCKS);
+            }
         }
         return null;
     }

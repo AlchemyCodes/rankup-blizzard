@@ -7,6 +7,8 @@ import blizzard.development.currencies.commands.currencies.excavation.FossilsCom
 import blizzard.development.currencies.commands.currencies.excavation.subcommands.FossilsExchangeCommand;
 import blizzard.development.currencies.commands.currencies.limits.LimitsCommand;
 import blizzard.development.currencies.commands.currencies.limits.subcommands.LimitsExchangeCommand;
+import blizzard.development.currencies.commands.currencies.mine.BlocksCommand;
+import blizzard.development.currencies.commands.currencies.mine.subcommands.BlocksExchangeCommand;
 import blizzard.development.currencies.commands.currencies.rankup.FlakesCommand;
 import blizzard.development.currencies.commands.currencies.rankup.subcommands.FlakesExchangeCommand;
 import blizzard.development.currencies.utils.PluginImpl;
@@ -30,8 +32,9 @@ public class CommandRegistry {
                 new FlakesCommand(),
                 new FlakesExchangeCommand(),
                 new LimitsCommand(),
-                new LimitsExchangeCommand()
-
+                new LimitsExchangeCommand(),
+                new BlocksCommand(),
+                new BlocksExchangeCommand()
         ).forEach(paperCommandManager::registerCommand);
     }
 
