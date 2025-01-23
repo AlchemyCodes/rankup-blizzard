@@ -57,6 +57,14 @@ public class MineAdapter implements MineFactory {
         startTask(player);
     }
 
+    public void resendToMine(Player player) {
+        Location spawnLocation = LocationUtils.getLocation(LocationEnum.SPAWN.getName());
+
+        player.teleport(spawnLocation);
+
+        manageTool(player, false);
+    }
+
     @Override
     public void sendToExit(Player player) {
         Location exitLocation = LocationUtils.getLocation(LocationEnum.EXIT.getName());

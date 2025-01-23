@@ -38,7 +38,6 @@ public class PlayerTrafficListener implements Listener {
                     player.getName(),
                     15,
                     BlockEnum.STONE.name(),
-                    0,
                     false,
                     new ArrayList<>()
             );
@@ -60,6 +59,7 @@ public class PlayerTrafficListener implements Listener {
             toolData = new ToolData(
                     player.getUniqueId().toString(),
                     player.getName(),
+                    0,
                     0
             );
             try {

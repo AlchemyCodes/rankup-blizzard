@@ -4,6 +4,7 @@ import blizzard.development.core.Main;
 import blizzard.development.mine.builders.item.ItemBuilder;
 import blizzard.development.mine.database.cache.ToolCacheManager;
 import blizzard.development.mine.database.storage.ToolData;
+import blizzard.development.mine.managers.events.Avalanche;
 import blizzard.development.mine.utils.NumberFormat;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -18,7 +19,15 @@ public class ToolBuildItem {
 
         ToolData toolData = ToolCacheManager.getInstance().getToolData(player);
 
-        return new ItemBuilder(Material.WOODEN_PICKAXE)
+        Material material;
+
+        if (Avalanche.isAvalancheActive) {
+            material = Material.IRON_SHOVEL;
+        } else {
+            material = Material.WOODEN_PICKAXE;
+        }
+
+        return new ItemBuilder(material)
             .setDisplayName("<#a88459>Picareta de<#a88459> <bold><#a88459>Madeira<#a88459></bold><#a88459> §7[" + NumberFormat.formatNumber(toolData.getBlocks()) + "§7]")
             .setLore(Arrays.asList(
                     "§7Use esta picareta para",

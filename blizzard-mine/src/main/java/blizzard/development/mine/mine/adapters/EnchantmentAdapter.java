@@ -134,7 +134,7 @@ public class EnchantmentAdapter implements EnchantmentFactory {
 
 
     private double activation(int level) {
-        double base = 0.002;
+        double base = 0.002; //0.002
         double increase = 0.005;
 
         double result = base + (increase * level);

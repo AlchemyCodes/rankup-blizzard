@@ -57,7 +57,6 @@ public class PlayerDAO {
                         resultSet.getString("nickname"),
                         resultSet.getInt("area"),
                         resultSet.getString("area_block"),
-                        resultSet.getInt("blocks"),
                         resultSet.getBoolean("in_mine"),
                         friends
                     );
@@ -89,7 +88,6 @@ public class PlayerDAO {
                         resultSet.getString("nickname"),
                         resultSet.getInt("area"),
                         resultSet.getString("area_block"),
-                        resultSet.getInt("blocks"),
                         resultSet.getBoolean("in_mine"),
                         friends
                     );
@@ -110,9 +108,8 @@ public class PlayerDAO {
                 statement.setString(2, playerData.getNickname());
                 statement.setInt(3, playerData.getArea());
                 statement.setString(4, playerData.getAreaBlock());
-                statement.setInt(5, playerData.getBlocks());
-                statement.setBoolean(6, playerData.getIsInMine());
-                statement.setString(7, new Gson().toJson(playerData.getFriends()));
+                statement.setBoolean(5, playerData.getIsInMine());
+                statement.setString(6, new Gson().toJson(playerData.getFriends()));
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -137,10 +134,9 @@ public class PlayerDAO {
                 statement.setString(1, playerData.getNickname());
                 statement.setInt(2, playerData.getArea());
                 statement.setString(3, playerData.getAreaBlock());
-                statement.setInt(4, playerData.getBlocks());
-                statement.setBoolean(5, playerData.getIsInMine());
-                statement.setString(6, new Gson().toJson(playerData.getFriends()));
-                statement.setString(7, playerData.getUuid());
+                statement.setBoolean(4, playerData.getIsInMine());
+                statement.setString(5, new Gson().toJson(playerData.getFriends()));
+                statement.setString(6, playerData.getUuid());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -168,7 +164,6 @@ public class PlayerDAO {
                     resultSet.getString("nickname"),
                     resultSet.getInt("area"),
                     resultSet.getString("area_block"),
-                    resultSet.getInt("blocks"),
                     resultSet.getBoolean("in_mine"),
                     friends
                 ));

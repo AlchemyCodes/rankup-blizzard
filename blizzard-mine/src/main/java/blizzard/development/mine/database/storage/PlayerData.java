@@ -8,16 +8,15 @@ import java.util.List;
 public class PlayerData {
 
     private String uuid, nickname, area_block;
-    private Integer area, blocks;
+    private Integer area;
     private Boolean isInMine;
     private List<String> friends;
 
-    public PlayerData(String uuid, String nickname, Integer area, String area_block, Integer blocks, boolean isInMine, List<String> friends) {
+    public PlayerData(String uuid, String nickname, Integer area, String area_block, boolean isInMine, List<String> friends) {
         this.uuid = uuid;
         this.nickname = nickname;
         this.area = area;
         this.area_block = area_block;
-        this.blocks = blocks;
         this.isInMine = isInMine;
         this.friends = friends;
     }
@@ -52,14 +51,6 @@ public class PlayerData {
 
     public void setAreaBlock(BlockEnum blockEnum) {
         this.area_block = blockEnum.toString();
-    }
-
-    public Integer getBlocks() {
-        return blocks;
-    }
-
-    public void setBlocks(Integer blocks) {
-        this.blocks = blocks;
     }
 
     public Boolean getIsInMine() {

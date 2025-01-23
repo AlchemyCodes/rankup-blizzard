@@ -16,7 +16,8 @@ public class ToolDAO {
             String sql = "CREATE TABLE IF NOT EXISTS mine_tool (" +
                     "uuid VARCHAR(36) PRIMARY KEY, " +
                     "nickname VARCHAR(36), " +
-                    "blocks INT)";
+                    "blocks INT), " +
+                    "meteor INT)";
 
             statement.execute(sql);
 
@@ -49,7 +50,8 @@ public class ToolDAO {
                     return new ToolData(
                             resultSet.getString("uuid"),
                             resultSet.getString("nickname"),
-                            resultSet.getInt("blocks")
+                            resultSet.getInt("blocks"),
+                            resultSet.getInt("meteor")
                     );
                 }
             }
@@ -66,6 +68,7 @@ public class ToolDAO {
                 statement.setString(1, toolData.getUuid());
                 statement.setString(2, toolData.getNickname());
                 statement.setInt(3, toolData.getBlocks());
+                statement.setInt(4, toolData.getMeteor());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -84,12 +87,13 @@ public class ToolDAO {
     }
 
     public void updateToolData(ToolData toolData) throws SQLException {
-        String sql = "UPDATE mine_tool SET nickname = ?, blocks = ? WHERE uuid = ?";
+        String sql = "UPDATE mine_tool SET nickname = ?, blocks = ?, meteor = ? WHERE uuid = ?";
         executeUpdate(sql, statement -> {
             try {
                 statement.setString(1, toolData.getNickname());
                 statement.setInt(2, toolData.getBlocks());
-                statement.setString(3, toolData.getUuid());
+                statement.setInt(3, toolData.getMeteor());
+                statement.setString(4, toolData.getUuid());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -108,7 +112,8 @@ public class ToolDAO {
                 toolDataList.add(new ToolData(
                         resultSet.getString("uuid"),
                         resultSet.getString("nickname"),
-                        resultSet.getInt("blocks")
+                        resultSet.getInt("blocks"),
+                        resultSet.getInt("meteor")
                 ));
             }
         }

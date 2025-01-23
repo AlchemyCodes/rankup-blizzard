@@ -11,7 +11,7 @@ public class MineExtractorListener implements Listener {
 
     @EventHandler
     public void onExtractorInteract(PlayerInteractAtEntityEvent event) {
-        Player player = (Player) event.getPlayer();
+        Player player = event.getPlayer();
         Entity entity = event.getRightClicked();
 
         String extractor_metadata = "blizzard_mine_extractor-metadata";
