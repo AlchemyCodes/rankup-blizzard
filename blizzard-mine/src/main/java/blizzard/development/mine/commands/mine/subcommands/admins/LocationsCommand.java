@@ -2,6 +2,7 @@ package blizzard.development.mine.commands.mine.subcommands.admins;
 
 import blizzard.development.mine.builders.display.ExtractorBuilder;
 import blizzard.development.mine.builders.hologram.HologramBuilder;
+import blizzard.development.mine.listeners.mine.MineBlockBreakListener;
 import blizzard.development.mine.managers.mine.DisplayManager;
 import blizzard.development.mine.mine.adapters.PodiumAdapter;
 import blizzard.development.mine.mine.enums.LocationEnum;
@@ -16,6 +17,8 @@ import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 import java.util.UUID;
+
+import static blizzard.development.mine.listeners.mine.MineBlockBreakListener.extractorBlocks;
 
 @CommandAlias("mina|mineracao|mine")
 @CommandPermission("blizzard.mine.admin")
@@ -77,34 +80,43 @@ public class LocationsCommand extends BaseCommand {
         Player player = (Player) commandSender;
 
         LocationUtils.setLocation(
-            player,
-            LocationEnum.EXTRACTOR_NPC.getName(),
-            player.getLocation()
+                player,
+                LocationEnum.EXTRACTOR_NPC.getName(),
+                player.getLocation()
         );
 
         Location extractorLocation = LocationUtils.getLocation(LocationEnum.EXTRACTOR_NPC.getName());
 
         ExtractorBuilder.getInstance()
-            .createExtractor(
-                player
-            );
+                .createExtractor(
+                        player
+                );
+
+
+        int currentProgress = extractorBlocks.getOrDefault(player, 0);
+        int maxProgress = 200;
+        int greenBars = (int) ((currentProgress / (double) maxProgress) * 10);
+        int grayBars = 10 - greenBars;
+
+        String progressBar = "§a" + "|".repeat(greenBars) + "§7" + "|".repeat(grayBars);
 
         HologramBuilder.getInstance().createHologram(
-            player,
-            id,
-            extractorLocation.add(-0.5, 4.9, -0.5),
-            Arrays.asList(
-                "§e§lEXTRATORA!",
-                "§fQuebre blocos para conseguir",
-                "§fativar o poder da extratora.",
-                "",
-                " §bProgresso:",
-                " §a|||||||||||§7||||",
-                ""
-            ),
-            false
+                player,
+                id,
+                extractorLocation.add(-0.5, 4.9, -0.5),
+                Arrays.asList(
+                        "§e§lEXTRATORA!",
+                        "§fQuebre blocos para conseguir",
+                        "§fativar o poder da extratora.",
+                        "",
+                        " §bProgresso:",
+                        " " + progressBar,
+                        ""
+                ),
+                false
         );
     }
+
 
     @Subcommand("removeextractornpc")
     public void onRemoveExtractorNPC(CommandSender commandSender) {

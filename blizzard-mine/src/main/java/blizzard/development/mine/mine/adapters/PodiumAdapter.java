@@ -1,12 +1,10 @@
 package blizzard.development.mine.mine.adapters;
 
+import blizzard.development.currencies.database.storage.PlayersData;
 import blizzard.development.mine.builders.hologram.HologramBuilder;
 import blizzard.development.mine.database.cache.methods.PlayerCacheMethods;
-import blizzard.development.mine.database.storage.PlayerData;
 import blizzard.development.mine.mine.factory.PodiumFactory;
 import blizzard.development.mine.utils.NumberFormat;
-import com.destroystokyo.paper.profile.PlayerProfile;
-import com.destroystokyo.paper.profile.ProfileProperty;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.npc.NPCRegistry;
@@ -26,11 +24,11 @@ public class PodiumAdapter implements PodiumFactory {
     }
 
     private final PlayerCacheMethods playerCacheMethods = PlayerCacheMethods.getInstance();
-    private final List<PlayerData> top = playerCacheMethods.getTopBlocks(3);
+    private final List<PlayersData> top = playerCacheMethods.getTopBlocks();
     private final NPCRegistry registry = CitizensAPI.getNPCRegistry();
     private final Set<UUID> podiumNPCs = new HashSet<>();
 
-    private void createPodiumNPC(Player viewer, PlayerData playerData, List<String> hologramLines, Location location) {
+    private void createPodiumNPC(Player viewer, PlayersData playerData, List<String> hologramLines, Location location) {
         NPC npc = registry.createNPC(EntityType.PLAYER, playerData.getNickname());
         NPC npc1 = registry.createNPC(EntityType.MINECART, "");
 
@@ -59,12 +57,12 @@ public class PodiumAdapter implements PodiumFactory {
 
         createPodiumNPC(
             player,
-            top.get(0),
+            top.getFirst(),
             Arrays.asList(
                 "§e§lO MELHOR!",
                 "§f",
                 "§7Blocos quebrados:",
-                "§b§l❒§b" + NumberFormat.formatNumber(top.get(0).getBlocks())
+                "§b§l❒§b" + NumberFormat.formatNumber(top.getFirst().getBlocks())
             ),
             player.getLocation()
         );

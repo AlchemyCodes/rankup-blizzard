@@ -100,7 +100,7 @@ public class PlayerDAO {
     }
 
     public void createPlayerData(PlayerData playerData) throws SQLException {
-        String sql_par = "INSERT INTO mine_player (uuid, nickname, area, area_block, blocks, in_mine, friends) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql_par = "INSERT INTO mine_player (uuid, nickname, area, area_block, in_mine, friends) VALUES (?, ?, ?, ?, ?, ?)";
 
         executeUpdate(sql_par, (statement) -> {
             try {
@@ -128,7 +128,7 @@ public class PlayerDAO {
     }
 
     public void updatePlayerData(PlayerData playerData) throws SQLException {
-        String sqlpar = "UPDATE mine_player SET nickname = ?, area = ?, area_block = ?, blocks = ?, in_mine = ?, friends = ? WHERE uuid = ?";
+        String sqlpar = "UPDATE mine_player SET nickname = ?, area = ?, area_block = ?, in_mine = ?, friends = ? WHERE uuid = ?";
         executeUpdate(sqlpar, statement -> {
             try {
                 statement.setString(1, playerData.getNickname());

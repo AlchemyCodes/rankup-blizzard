@@ -1,5 +1,6 @@
 package blizzard.development.mine.listeners.commons;
 
+import blizzard.development.core.Main;
 import blizzard.development.mine.database.cache.PlayerCacheManager;
 import blizzard.development.mine.database.cache.ToolCacheManager;
 import blizzard.development.mine.database.dao.PlayerDAO;
@@ -12,6 +13,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -37,7 +39,7 @@ public class PlayerTrafficListener implements Listener {
                     player.getUniqueId().toString(),
                     player.getName(),
                     15,
-                    BlockEnum.STONE.name(),
+                    BlockEnum.ICE.name(),
                     false,
                     new ArrayList<>()
             );
@@ -73,6 +75,13 @@ public class PlayerTrafficListener implements Listener {
                 player.getUniqueId(),
                 toolData
         );
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                player.setFreezeTicks(0);
+            }
+        }.runTaskLater(Main.getInstance(), 40L);
     }
 
     @EventHandler

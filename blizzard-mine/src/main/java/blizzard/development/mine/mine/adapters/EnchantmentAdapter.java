@@ -1,5 +1,6 @@
 package blizzard.development.mine.mine.adapters;
 
+import blizzard.development.mine.database.cache.methods.ToolCacheMethods;
 import blizzard.development.mine.managers.enchantments.meteor.MeteorEffect;
 import blizzard.development.mine.mine.enums.LocationEnum;
 import blizzard.development.mine.mine.factory.EnchantmentFactory;
@@ -71,7 +72,7 @@ public class EnchantmentAdapter implements EnchantmentFactory {
 
     @Override
     public void meteor(Player player) {
-        int meteor = 10;
+        int meteor = ToolCacheMethods.getInstance().getMeteor(player);
 
         double random = ThreadLocalRandom.current().nextDouble(0, 100);
 

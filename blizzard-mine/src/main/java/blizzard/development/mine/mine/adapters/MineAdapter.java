@@ -59,9 +59,7 @@ public class MineAdapter implements MineFactory {
 
     public void resendToMine(Player player) {
         Location spawnLocation = LocationUtils.getLocation(LocationEnum.SPAWN.getName());
-
         player.teleport(spawnLocation);
-
         manageTool(player, false);
     }
 

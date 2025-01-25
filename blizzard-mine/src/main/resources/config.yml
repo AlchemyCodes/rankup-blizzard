@@ -1,3 +1,5 @@
 mine:
 
   y-blocks: -38 # mine y size
+  avalanche: 10
+  extractor: 200

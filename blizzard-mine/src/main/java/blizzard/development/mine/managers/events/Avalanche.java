@@ -4,6 +4,7 @@ import blizzard.development.core.Main;
 import blizzard.development.mine.database.cache.methods.PlayerCacheMethods;
 import blizzard.development.mine.mine.adapters.MineAdapter;
 import blizzard.development.mine.mine.enums.LocationEnum;
+import blizzard.development.mine.utils.PluginImpl;
 import blizzard.development.mine.utils.locations.LocationUtils;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
@@ -23,6 +24,7 @@ public class Avalanche extends BaseCommand {
     @Default
     public void onAvalanche() {
         PlayerCacheMethods cacheMethods = PlayerCacheMethods.getInstance();
+        int avalancheTime = PluginImpl.getInstance().Config.getConfig().getInt("mine.avalanche");
 
         isAvalancheActive = true;
 
@@ -45,7 +47,8 @@ public class Avalanche extends BaseCommand {
                     MineAdapter.getInstance().resendToMine(player);
                     Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> MineAdapter.getInstance().generateMine(player));
                 }
-             }.runTaskLater(Main.getInstance(), 20L * 10);
+             }.runTaskLater(Main.getInstance(),
+                    20L * avalancheTime);
         }
     }
 }

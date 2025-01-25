@@ -1,5 +1,7 @@
 package blizzard.development.mine.expansions;
 
+import blizzard.development.currencies.api.CurrenciesAPI;
+import blizzard.development.currencies.enums.Currencies;
 import blizzard.development.mine.database.cache.methods.PlayerCacheMethods;
 import blizzard.development.mine.mine.enums.BlockEnum;
 import blizzard.development.mine.utils.text.NumberUtils;
@@ -40,7 +42,7 @@ public class PlaceholderExpansion extends me.clip.placeholderapi.expansion.Place
 
         PlayerCacheMethods cacheMethods = PlayerCacheMethods.getInstance();
 
-        int blocks = cacheMethods.getBlocks(player);
+        double blocks = CurrenciesAPI.getInstance().getBalance(player, Currencies.BLOCKS);
 
         String area = BlockEnum.valueOf(
                 cacheMethods.getAreaBlock(player)
