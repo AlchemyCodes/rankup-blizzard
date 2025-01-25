@@ -1,12 +1,14 @@
 package blizzard.development.mine.database.cache.methods;
 
+import blizzard.development.currencies.api.CurrenciesAPI;
+import blizzard.development.currencies.database.storage.PlayersData;
+import blizzard.development.currencies.enums.Currencies;
 import blizzard.development.mine.database.cache.PlayerCacheManager;
 import blizzard.development.mine.database.storage.PlayerData;
 import blizzard.development.mine.mine.enums.BlockEnum;
 import org.bukkit.entity.Player;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class PlayerCacheMethods {
 
@@ -44,17 +46,12 @@ public class PlayerCacheMethods {
         }
     }
 
-    public Integer getBlocks(Player player) {
-        PlayerData playerData = playerCacheManager.getPlayerData(player);
-        return playerData != null ? playerData.getBlocks() : 0;
+    public Double getBlocks(Player player) {
+        return CurrenciesAPI.getInstance().getBalance(player, Currencies.BLOCKS);
     }
 
     public void setBlocks(Player player, int amount) {
-        PlayerData playerData = playerCacheManager.getPlayerData(player);
-        if (playerData != null) {
-            playerData.setBlocks(amount);
-            playerCacheManager.cachePlayerData(player, playerData);
-        }
+        CurrenciesAPI.getInstance().setBalance(player, Currencies.BLOCKS, amount);
     }
 
     public void setInMine(Player player) {
@@ -104,10 +101,7 @@ public class PlayerCacheMethods {
         }
     }
 
-    public List<PlayerData> getTopBlocks(int topCount) {
-        return playerCacheManager.playerCache.values().stream()
-                .sorted((p1, p2) -> Integer.compare(p2.getBlocks(), p1.getBlocks()))
-                .limit(topCount)
-                .collect(Collectors.toList());
+    public List<PlayersData> getTopBlocks() {
+        return CurrenciesAPI.getInstance().getTopPlayers(Currencies.BLOCKS);
     }
 }

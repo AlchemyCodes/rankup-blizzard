@@ -1,6 +1,7 @@
 package blizzard.development.mine.commands.mine.subcommands.admins;
 
 import blizzard.development.mine.database.cache.methods.PlayerCacheMethods;
+import blizzard.development.mine.database.cache.methods.ToolCacheMethods;
 import blizzard.development.mine.mine.enums.BlockEnum;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
@@ -46,4 +47,27 @@ public class SettersCommand extends BaseCommand {
             ).forEach(commandSender::sendMessage);
         }
     }
-}
+
+    @Subcommand("setmeteor")
+    @CommandPermission("blizzard.mine.admin")
+    @CommandCompletion("@players")
+    @Syntax("<jogador> <nivel>")
+    public void onSetMeteor(CommandSender commandSender, String target, int amount) {
+        Player targetPlayer = Bukkit.getPlayer(target);
+        if (targetPlayer == null) {
+            commandSender.sendActionBar(Component.text("§c§lEI! §cO jogador inserido é inválido ou não está online"));
+            return;
+        }
+
+        ToolCacheMethods.getInstance().setMeteor(targetPlayer, amount);
+
+        commandSender.sendActionBar(Component.text(
+                "§a§lYAY! §aVocê setou o encantamento do jogador §7"
+                        + targetPlayer.getName()
+                        + "§a para o nível §7"
+                        + amount + "§a."
+            ));
+
+        }
+    }
+

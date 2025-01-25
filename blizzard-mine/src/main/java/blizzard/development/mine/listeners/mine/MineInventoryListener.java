@@ -24,14 +24,14 @@ public class MineInventoryListener implements Listener {
         }
     }
 
-    @EventHandler
-    public void onInventoryClick(InventoryClickEvent event) {
-        Player player = (Player) event.getWhoClicked();
-
-        if (playerCacheMethods.isInMine(player)) {
-            event.setCancelled(true);
-        }
-    }
+//    @EventHandler
+//    public void onInventoryClick(InventoryClickEvent event) {
+//        Player player = (Player) event.getWhoClicked();
+//
+//        if (playerCacheMethods.isInMine(player)) {
+//            event.setCancelled(true);
+//        }
+//    }
 
     @EventHandler
     public void onInventoryDrag(InventoryDragEvent event) {

@@ -16,7 +16,7 @@ public class ToolDAO {
             String sql = "CREATE TABLE IF NOT EXISTS mine_tool (" +
                     "uuid VARCHAR(36) PRIMARY KEY, " +
                     "nickname VARCHAR(36), " +
-                    "blocks INT), " +
+                    "blocks INT, " +
                     "meteor INT)";
 
             statement.execute(sql);
@@ -62,7 +62,7 @@ public class ToolDAO {
     }
 
     public void createToolData(ToolData toolData) throws SQLException {
-        String sql = "INSERT INTO mine_tool (uuid, nickname, blocks) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO mine_tool (uuid, nickname, blocks, meteor) VALUES (?, ?, ?, ?)";
         executeUpdate(sql, statement -> {
             try {
                 statement.setString(1, toolData.getUuid());
