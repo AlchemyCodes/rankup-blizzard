@@ -1,17 +1,20 @@
 package blizzard.development.mine.mine.adapters;
 
-import blizzard.development.currencies.database.storage.PlayersData;
+import blizzard.development.core.Main;
 import blizzard.development.mine.builders.hologram.HologramBuilder;
-import blizzard.development.mine.database.cache.methods.PlayerCacheMethods;
+import blizzard.development.mine.database.cache.methods.ToolCacheMethods;
+import blizzard.development.mine.database.storage.ToolData;
+import blizzard.development.mine.mine.enums.LocationEnum;
 import blizzard.development.mine.mine.factory.PodiumFactory;
-import blizzard.development.mine.utils.NumberFormat;
+import blizzard.development.mine.tasks.mine.UpdatePodiumTask;
+import blizzard.development.mine.utils.locations.LocationUtils;
+import blizzard.development.mine.utils.text.NumberUtils;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.npc.NPCRegistry;
 import net.citizensnpcs.trait.SkinTrait;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
 
 import java.util.*;
 
@@ -23,84 +26,91 @@ public class PodiumAdapter implements PodiumFactory {
         return instance;
     }
 
-    private final PlayerCacheMethods playerCacheMethods = PlayerCacheMethods.getInstance();
-    private final List<PlayersData> top = playerCacheMethods.getTopBlocks();
+    private final ToolCacheMethods toolCacheMethods = ToolCacheMethods.getInstance();
+    private final List<ToolData> top = toolCacheMethods.getTopBlocks();
     private final NPCRegistry registry = CitizensAPI.getNPCRegistry();
     private final Set<UUID> podiumNPCs = new HashSet<>();
 
-    private void createPodiumNPC(Player viewer, PlayersData playerData, List<String> hologramLines, Location location) {
-        NPC npc = registry.createNPC(EntityType.PLAYER, playerData.getNickname());
+    private final NumberUtils numberUtils = NumberUtils.getInstance();
+
+    private void createPodiumNPC(ToolData toolData, List<String> hologramLines, Location location) {
+        NPC npc = registry.createNPC(EntityType.PLAYER, toolData.getNickname());
         NPC npc1 = registry.createNPC(EntityType.MINECART, "");
 
         SkinTrait skinTrait = npc.getOrAddTrait(SkinTrait.class);
-        skinTrait.setSkinName(playerData.getNickname());
-
-        viewer.sendMessage(skinTrait.getSkinName());
+        skinTrait.setSkinName(toolData.getNickname());
 
         npc.spawn(location);
         npc1.spawn(location);
         podiumNPCs.add(npc.getUniqueId());
         podiumNPCs.add(npc1.getUniqueId());
 
-        HologramBuilder.getInstance().createHologram(
-            viewer,
+        HologramBuilder.getInstance().createGlobalHologram(
             npc.getUniqueId(),
             location.add(0.0, 3.6, 0.0),
-            hologramLines,
-            false
+            hologramLines
         );
     }
 
     @Override
-    public void topOne(Player player) {
+    public void topOne(Location location) {
         if (top.isEmpty()) return;
 
         createPodiumNPC(
-            player,
             top.getFirst(),
             Arrays.asList(
                 "§e§lO MELHOR!",
                 "§f",
                 "§7Blocos quebrados:",
-                "§b§l❒§b" + NumberFormat.formatNumber(top.getFirst().getBlocks())
-            ),
-            player.getLocation()
+                "§b§l❒§b" + numberUtils.formatNumber(top.getFirst().getBlocks())
+            ), location
         );
     }
 
     @Override
-    public void topTwo(Player player) {
+    public void topTwo(Location location) {
         if (top.size() < 2) return;
 
         createPodiumNPC(
-            player,
             top.get(1),
             Arrays.asList(
                 "§e§lSEGUNDO MELHOR!",
                 "§f",
                 "§7Blocos quebrados:",
-                "§b§l❒§b" + NumberFormat.formatNumber(top.get(1).getBlocks())
-            ),
-            player.getLocation()
+                "§b§l❒§b" + numberUtils.formatNumber(top.get(1).getBlocks())
+            ), location
         );
     }
 
     @Override
-    public void topTree(Player player) {
+    public void topTree(Location location) {
         if (top.size() < 3) return;
 
         createPodiumNPC(
-            player,
             top.get(2),
             Arrays.asList(
                 "§e§lTERCEIRO MELHOR!",
                 "§f",
                 "§7Blocos quebrados:",
-                "§b§l❒§b" + NumberFormat.formatNumber(top.get(2).getBlocks())
-            ),
-            player.getLocation()
+                "§b§l❒§b" + numberUtils.formatNumber(top.get(2).getBlocks())
+            ), location
         );
+    }
 
+    public void createAllNPCs() {
+        Location topOneLocation = LocationUtils.getLocation(LocationEnum.TOP_ONE_NPC.getName());
+        Location topTwoLocation = LocationUtils.getLocation(LocationEnum.TOP_TWO_NPC.getName());
+        Location topTreeLocation = LocationUtils.getLocation(LocationEnum.TOP_TREE_NPC.getName());
+
+        if (topOneLocation != null && topTwoLocation != null && topTreeLocation != null
+        && podiumNPCs.isEmpty()
+        ) {
+            topOne(topOneLocation);
+            topTwo(topTwoLocation);
+            topTree(topTreeLocation);
+
+            new UpdatePodiumTask().runTaskTimer(Main.getInstance(), 20L * 300, 20L * 300);
+        }
     }
 
     public void removeAllNPCs() {

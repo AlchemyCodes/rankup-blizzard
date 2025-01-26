@@ -94,15 +94,14 @@ public class MineAdapter implements MineFactory {
                             Location npcLocation = LocationUtils.getLocation(LocationEnum.NPC.getName());
                             if (npcLocation != null) {
                                 UUID uuid = NPCManager.getInstance().spawnNPC(player, npcLocation);
-                                HologramBuilder.getInstance().createHologram(
+                                HologramBuilder.getInstance().createPlayerHologram(
                                         player,
                                         uuid,
                                         npcLocation.add(0.0, 2.6, 0.0),
                                         Arrays.asList(
                                                 "§e§lMINERAÇÃO!",
                                                 "§bClique para gerenciar."
-                                        ),
-                                    true
+                                        )
                                 );
                             }
                         });
@@ -125,6 +124,11 @@ public class MineAdapter implements MineFactory {
                     player.sendTitle("§e§lMina!", "§eVocê entrou na mina.", 10, 70, 20);
                     player.playSound(player, Sound.ENTITY_PLAYER_LEVELUP, 5L, 1L);
                     player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, PotionEffect.INFINITE_DURATION, 1));
+
+                    Bukkit.getScheduler().runTaskLater(Main.getInstance(), () -> {
+                        PodiumAdapter.getInstance().createAllNPCs();
+                    }, 20L * 5);
+
                     this.cancel();
                 }
             }

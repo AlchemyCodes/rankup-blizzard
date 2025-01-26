@@ -1,6 +1,6 @@
 package blizzard.development.mine.utils;
 
-import blizzard.development.mine.builders.display.DisplayBuilder;
+import blizzard.development.mine.builders.display.PickaxeBuilder;
 import blizzard.development.mine.builders.display.ExtractorBuilder;
 import blizzard.development.mine.builders.hologram.HologramBuilder;
 import blizzard.development.mine.commands.CommandRegistry;
@@ -16,6 +16,7 @@ import blizzard.development.mine.listeners.ListenerRegistry;
 import blizzard.development.mine.mine.adapters.PodiumAdapter;
 import blizzard.development.mine.tasks.PlayerSaveTask;
 import blizzard.development.mine.tasks.ToolSaveTask;
+import blizzard.development.mine.tasks.mine.UpdatePodiumTask;
 import blizzard.development.mine.utils.config.ConfigUtils;
 import co.aikar.commands.Locales;
 import co.aikar.commands.PaperCommandManager;
@@ -63,13 +64,12 @@ public class PluginImpl {
         registerDatabase();
         registerListeners();
         registerCommands();
-        registerTasks();
 
         registerExpansions();
     }
 
     public void onDisable() {
-        DisplayBuilder.getInstance().removeCurrentDisplay();
+        PickaxeBuilder.getInstance().removePickaxe();
         HologramBuilder.getInstance().removeAllHolograms();
         ExtractorBuilder.getInstance().removeExtractor();
         PodiumAdapter.getInstance().removeAllNPCs();
@@ -85,7 +85,7 @@ public class PluginImpl {
         setupEnableData();
 
         new PlayerSaveTask(playerDAO).runTaskTimerAsynchronously(plugin, 0, 20L * 3);
-        new ToolSaveTask(toolDAO).runTaskTimerAsynchronously(plugin, 0, 20 * 3);
+        new ToolSaveTask(toolDAO).runTaskTimerAsynchronously(plugin, 0, 20L * 3);
     }
 
     private void setupEnableData() {
@@ -135,9 +135,6 @@ public class PluginImpl {
         ListenerRegistry listenerRegistry = new ListenerRegistry(playerDAO, toolDAO);
         listenerRegistry.register();
         listenerRegistry.registerPacket();
-    }
-
-    private void registerTasks() {
     }
 
     private void registerCommands() {

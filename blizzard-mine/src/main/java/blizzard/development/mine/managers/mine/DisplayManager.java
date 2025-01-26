@@ -1,7 +1,7 @@
 package blizzard.development.mine.managers.mine;
 
 import blizzard.development.core.Main;
-import blizzard.development.mine.builders.display.DisplayBuilder;
+import blizzard.development.mine.builders.display.PickaxeBuilder;
 import blizzard.development.mine.mine.enums.LocationEnum;
 import blizzard.development.mine.utils.locations.LocationUtils;
 import org.bukkit.Bukkit;
@@ -20,10 +20,10 @@ public class DisplayManager {
     private final float speed = 0.1f;
 
     public void createPickaxeDisplay(Location location) {
-        DisplayBuilder displayBuilder = DisplayBuilder.getInstance();
+        PickaxeBuilder pickaxeBuilder = PickaxeBuilder.getInstance();
 
-        displayBuilder.removeCurrentDisplay();
-        displayBuilder.createItemWithRotation(
+        pickaxeBuilder.removePickaxe();
+        pickaxeBuilder.createPickaxe(
                 location,
                 pickaxe,
                 speed // Quanto menor, mais lento
@@ -37,7 +37,7 @@ public class DisplayManager {
             Bukkit.getScheduler().runTaskLater(
                     Main.getInstance(),
                     () -> {
-                        DisplayBuilder.getInstance().initializeItemWithRotation(
+                        PickaxeBuilder.getInstance().initializePickaxe(
                                 location,
                                 pickaxe,
                                 speed // Quanto menor, mais lento

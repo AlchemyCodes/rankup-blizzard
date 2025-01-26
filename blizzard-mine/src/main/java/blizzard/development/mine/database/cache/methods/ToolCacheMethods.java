@@ -1,8 +1,15 @@
 package blizzard.development.mine.database.cache.methods;
 
+import blizzard.development.currencies.api.CurrenciesAPI;
+import blizzard.development.currencies.database.cache.PlayersCacheManager;
+import blizzard.development.currencies.database.storage.PlayersData;
+import blizzard.development.currencies.enums.Currencies;
 import blizzard.development.mine.database.cache.ToolCacheManager;
 import blizzard.development.mine.database.storage.ToolData;
 import org.bukkit.entity.Player;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ToolCacheMethods {
     private static final ToolCacheMethods instance = new ToolCacheMethods();
@@ -37,5 +44,12 @@ public class ToolCacheMethods {
             toolData.setMeteor(amount);
             toolCacheManager.cacheToolData(player, toolData);
         }
+    }
+
+    public List<ToolData> getTopBlocks() {
+        return toolCacheManager.toolCache.values().stream()
+                .sorted((p1, p2) -> Double.compare(p2.getBlocks(), p1.getBlocks()))
+                .limit(10)
+                .collect(Collectors.toList());
     }
 }

@@ -16,6 +16,7 @@ import blizzard.development.mine.mine.item.ToolBuildItem;
 import blizzard.development.mine.utils.Countdown;
 import blizzard.development.mine.utils.PluginImpl;
 import blizzard.development.mine.utils.packets.MinePacketUtils;
+import blizzard.development.mine.utils.text.ProgressBarUtils;
 import blizzard.development.mine.utils.text.TextUtils;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -66,7 +67,6 @@ public class MineBlockBreakListener implements Listener {
                 cacheMethods.getBlocks(player) + 1
         );
 
-        // GIVE MONEY AND BLOCKS
         PlayerCacheMethods playerCacheMethods = PlayerCacheMethods.getInstance();
         CurrenciesAPI currenciesAPI = CurrenciesAPI.getInstance();
         int blockToAdd = 1;
@@ -78,13 +78,10 @@ public class MineBlockBreakListener implements Listener {
         }
         currenciesAPI.addBalance(player, Currencies.BLOCKS, blockToAdd);
         currenciesAPI.addBalance(player, Currencies.COINS, moneyToAdd);
-        // GIVE MONEY AND BLOCKS
 
-        // EXTRATORA
         int currentExtractorCount = extractorBlocks.getOrDefault(player, 0) + 1;
         addExtractorBlocks(player, currentExtractorCount);
         giveExtractorRewards(currentExtractorCount, player, block, currenciesAPI, blockToAdd, moneyToAdd);
-        // EXTRATORA
 
         player.getInventory().setItem(4, ToolBuildItem.tool(player));
 
@@ -95,10 +92,11 @@ public class MineBlockBreakListener implements Listener {
 
         double booster = 2.2;
         double bonus = 5.0;
+
         player.sendActionBar(
                 "§e§lMina! §7• §f§l+§a§l$§f" + moneyToAdd +
                 " §f§l+§b§l❒§b" + blockToAdd +
-                "§8✷ §eBooster ativo §l" + booster +
+                "§8 ✷ " + ProgressBarUtils.getInstance().extractor(player) + "§e Booster ativo §l" + booster +
                 "x §8✩ §7Bônus de " + bonus + "§l%");
     }
 

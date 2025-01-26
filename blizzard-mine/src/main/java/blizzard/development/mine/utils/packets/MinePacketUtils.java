@@ -194,9 +194,9 @@ public class MinePacketUtils {
 
         packetContainer.getIntegers().write(0, entityId);
         packetContainer.getDoubles()
-            .write(0, newLocation.getX()) // X
-            .write(1, newLocation.getY()) // Y
-            .write(2, newLocation.getZ()); // Z
+            .write(0, newLocation.getX())
+            .write(1, newLocation.getY())
+            .write(2, newLocation.getZ());
 
         packetContainer.getBytes()
             .write(0, (byte) ((newLocation.getYaw() % 360) * 256 / 360))

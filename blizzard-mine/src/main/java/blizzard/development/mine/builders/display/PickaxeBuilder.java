@@ -10,20 +10,17 @@ import org.bukkit.util.Transformation;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
-import java.util.HashMap;
-import java.util.Map;
+public class PickaxeBuilder {
 
-public class DisplayBuilder {
+    private static final PickaxeBuilder instance = new PickaxeBuilder();
 
-    private static final DisplayBuilder instance = new DisplayBuilder();
-
-    public static DisplayBuilder getInstance() {
+    public static PickaxeBuilder getInstance() {
         return instance;
     }
 
     private ItemDisplay currentDisplay;
 
-    public void removeCurrentDisplay() {
+    public void removePickaxe() {
         if (currentDisplay != null && currentDisplay.isValid()) {
             try {
                 currentDisplay.remove();
@@ -34,8 +31,8 @@ public class DisplayBuilder {
         }
     }
 
-    public ItemDisplay createItemWithRotation(Location location, Material material, float speed) {
-        removeCurrentDisplay();
+    public ItemDisplay createPickaxe(Location location, Material material, float speed) {
+        removePickaxe();
 
         currentDisplay = location.getWorld().spawn(location, ItemDisplay.class);
         currentDisplay.setItemStack(new ItemStack(material));
@@ -76,9 +73,9 @@ public class DisplayBuilder {
         return currentDisplay;
     }
 
-    public ItemDisplay initializeItemWithRotation(Location location, Material material, float speed) {
+    public ItemDisplay initializePickaxe(Location location, Material material, float speed) {
         if (currentDisplay == null) {
-            return createItemWithRotation(location, material, speed);
+            return createPickaxe(location, material, speed);
         }
         return currentDisplay;
     }

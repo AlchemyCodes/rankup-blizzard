@@ -7,6 +7,7 @@ import blizzard.development.mine.managers.mine.DisplayManager;
 import blizzard.development.mine.mine.adapters.PodiumAdapter;
 import blizzard.development.mine.mine.enums.LocationEnum;
 import blizzard.development.mine.utils.locations.LocationUtils;
+import blizzard.development.mine.utils.text.ProgressBarUtils;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.CommandPermission;
@@ -17,8 +18,6 @@ import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 import java.util.UUID;
-
-import static blizzard.development.mine.listeners.mine.MineBlockBreakListener.extractorBlocks;
 
 @CommandAlias("mina|mineracao|mine")
 @CommandPermission("blizzard.mine.admin")
@@ -92,15 +91,7 @@ public class LocationsCommand extends BaseCommand {
                         player
                 );
 
-
-        int currentProgress = extractorBlocks.getOrDefault(player, 0);
-        int maxProgress = 200;
-        int greenBars = (int) ((currentProgress / (double) maxProgress) * 10);
-        int grayBars = 10 - greenBars;
-
-        String progressBar = "§a" + "|".repeat(greenBars) + "§7" + "|".repeat(grayBars);
-
-        HologramBuilder.getInstance().createHologram(
+        HologramBuilder.getInstance().createPlayerHologram(
                 player,
                 id,
                 extractorLocation.add(-0.5, 4.9, -0.5),
@@ -110,10 +101,9 @@ public class LocationsCommand extends BaseCommand {
                         "§fativar o poder da extratora.",
                         "",
                         " §bProgresso:",
-                        " " + progressBar,
+                        " " + ProgressBarUtils.getInstance().extractor(player),
                         ""
-                ),
-                false
+                )
         );
     }
 
@@ -150,8 +140,14 @@ public class LocationsCommand extends BaseCommand {
 
         PodiumAdapter.getInstance()
             .topOne(
-                player
+                player.getLocation()
             );
+
+        LocationUtils.setLocation(
+                player,
+                LocationEnum.TOP_ONE_NPC.getName(),
+                player.getLocation()
+        );
     }
 
     @Subcommand("setpodiumtop2")
@@ -161,8 +157,14 @@ public class LocationsCommand extends BaseCommand {
 
         PodiumAdapter.getInstance()
             .topTwo(
-                player
+                player.getLocation()
             );
+
+        LocationUtils.setLocation(
+                player,
+                LocationEnum.TOP_TWO_NPC.getName(),
+                player.getLocation()
+        );
     }
 
     @Subcommand("setpodiumtop3")
@@ -172,8 +174,14 @@ public class LocationsCommand extends BaseCommand {
 
         PodiumAdapter.getInstance()
             .topTree(
-                player
+                 player.getLocation()
             );
+
+        LocationUtils.setLocation(
+                player,
+                LocationEnum.TOP_TREE_NPC.getName(),
+                player.getLocation()
+        );
     }
 
     @Subcommand("removepodiumtops")

@@ -16,17 +16,21 @@ public class HologramBuilder {
 
     private final Map<UUID, Hologram> hologram = new HashMap<>();
 
-    public void createHologram(Player player, UUID id, Location location, List<String> lines, boolean visible) {
+    public void createPlayerHologram(Player player, UUID id, Location location, List<String> lines) {
         Hologram hologram = DHAPI.createHologram(id.toString(), location);
         this.hologram.put(id, hologram);
 
-        if (visible) {
         hologram.setDefaultVisibleState(false);
         hologram.setShowPlayer(player);
-        }
 
         hologram.update(player);
 
+        lines.forEach(line -> DHAPI.addHologramLine(hologram, line));
+    }
+
+    public void createGlobalHologram(UUID id, Location location, List<String> lines) {
+        Hologram hologram = DHAPI.createHologram(id.toString(), location);
+        this.hologram.put(id, hologram);
         lines.forEach(line -> DHAPI.addHologramLine(hologram, line));
     }
 
