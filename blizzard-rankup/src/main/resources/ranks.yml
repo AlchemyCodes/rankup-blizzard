@@ -1,7 +1,7 @@
 ranks:
   pig16:
     order: 1
-    tag: '[PorcoXVI]'
+    tag: '§d[PorcoXVI]'
     name: 'Porco XVI'
     coinsPrice: 5000
     flakesPrice: 2000

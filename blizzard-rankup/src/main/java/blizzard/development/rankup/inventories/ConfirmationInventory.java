@@ -32,13 +32,13 @@ public class ConfirmationInventory {
 
         StaticPane pane = new StaticPane(0, 0, 9, size);
 
-        GuiItem information = new GuiItem(information(player), event -> { event.setCancelled(true);});
+        GuiItem information = new GuiItem(information(player), event -> { event.setCancelled(true); });
 
         GuiItem confirm = new GuiItem(confirm(), event -> { event.setCancelled(true);
-            processRankUp(player);});
+            processRankUp(player); });
 
         GuiItem deny = new GuiItem(deny(), event -> { event.setCancelled(true);
-            RankInventory.openRankInventory(player);});
+            RankInventory.openRankInventory(player); });
 
         pane.addItem(confirm, Slot.fromIndex(11));
         pane.addItem(information, Slot.fromIndex(13));
@@ -83,8 +83,8 @@ public class ConfirmationInventory {
                 .map(line -> {
                     assert currentRankSection != null;
                     return line.replace("{current_rank}", Objects.requireNonNull(RanksUtils.getCurrentRankName(ranksConfig, currentRank)))
-                            .replace("{next_rank}", RanksUtils.getNextRank(ranksConfig, currentRankSection)
-                                    != null ? Objects.requireNonNull(RanksUtils.getNextRank(ranksConfig, currentRankSection)) : "Nenhum");
+                            .replace("{next_rank}", RanksUtils.getNextRankName(ranksConfig, currentRankSection)
+                                    != null ? Objects.requireNonNull(RanksUtils.getNextRankName(ranksConfig, currentRankSection)) : "Nenhum");
                 })
                 .collect(Collectors.toList());
 
@@ -131,15 +131,19 @@ public class ConfirmationInventory {
             return;
         }
 
-        if (!hasMoneyForRankUp(player, nextRankSection, prestigeLevel, messagesConfig)) {
-            return;
-        }
-
-        if (!hasFlakesForRankup(player, nextRankSection, prestigeLevel, messagesConfig)) {
+        if (!canRankUp(player, nextRankSection, prestigeLevel)) {
+            sendMessage(player, messagesConfig, "chat.no-quantity-for-rank-up", nextRankSection, prestigeLevel);
             return;
         }
 
         applyRankUp(player, playersData, nextRankSection, messagesConfig, prestigeLevel);
+
+        CurrenciesAPI currenciesAPI = CurrenciesAPI.getInstance();
+        double rankUpCoinsPrice = getRankUpCoinsPrice(nextRankSection, prestigeLevel);
+        double rankUpFlakesPrice = getRankUpFlakesPrice(nextRankSection, prestigeLevel);
+
+        currenciesAPI.removeBalance(player, Currencies.COINS, rankUpCoinsPrice);
+        currenciesAPI.removeBalance(player, Currencies.FLAKES, rankUpFlakesPrice);
     }
 
     private static ConfigurationSection getNextRankSection(YamlConfiguration ranksConfig, String currentRank) {
@@ -148,31 +152,16 @@ public class ConfirmationInventory {
         return RanksUtils.getNextRankSection(ranksConfig, currentRankSection);
     }
 
-    private static boolean hasMoneyForRankUp(Player player, ConfigurationSection nextRankSection, int prestigeLevel, YamlConfiguration messagesConfig) {
-        CurrenciesAPI currenciesAPI = CurrenciesAPI.getInstance();
-        double rankUpPrice = getRankUpCoinsPrice(nextRankSection, prestigeLevel);
-
-        if (currenciesAPI.getBalance(player, Currencies.COINS) < rankUpPrice) {
-            sendMessage(player, messagesConfig, "chat.no-money-for-rank-up", nextRankSection, prestigeLevel);
-            return false;
-        }
-
-        currenciesAPI.removeBalance(player, Currencies.COINS , rankUpPrice);
-        return true;
-    }
-
-    private static boolean hasFlakesForRankup(Player player, ConfigurationSection nextRankSection, int prestigeLevel, YamlConfiguration messagesConfig) {
+    private static boolean canRankUp(Player player, ConfigurationSection nextRankSection, int prestigeLevel) {
         CurrenciesAPI currenciesAPI = CurrenciesAPI.getInstance();
 
-        double rankUpPrice = getRankUpFlakesPrice(nextRankSection, prestigeLevel);
+        double rankUpCoinsPrice = getRankUpCoinsPrice(nextRankSection, prestigeLevel);
+        double rankUpFlakesPrice = getRankUpFlakesPrice(nextRankSection, prestigeLevel);
 
-        if (currenciesAPI.getBalance(player, Currencies.FLAKES) < rankUpPrice) {
-            sendMessage(player, messagesConfig, "chat.no-flakes-for-rank-up", nextRankSection, prestigeLevel);
-            return false;
-        }
+        double playerCoins = currenciesAPI.getBalance(player, Currencies.COINS);
+        double playerFlakes = currenciesAPI.getBalance(player, Currencies.FLAKES);
 
-        currenciesAPI.removeBalance(player, Currencies.FLAKES , rankUpPrice);
-        return true;
+        return playerCoins >= rankUpCoinsPrice && playerFlakes >= rankUpFlakesPrice;
     }
 
     private static double getRankUpCoinsPrice(ConfigurationSection nextRankSection, int prestigeLevel) {
@@ -201,25 +190,28 @@ public class ConfirmationInventory {
     }
 
     private static void sendMessage(Player player, YamlConfiguration messagesConfig, String path, ConfigurationSection nextRankSection, int prestigeLevel) {
-        String message = messagesConfig.getString(path);
-        if (message != null) {
-            player.sendMessage(message.replace("{money}"
-                    , String.valueOf(missingMoney(player, nextRankSection, prestigeLevel)))
-                    .replace("{flakes}", String.valueOf(missingFlakes(player, nextRankSection, prestigeLevel))));
+        List<String> messages = messagesConfig.getStringList(path);
+        if (!messages.isEmpty()) {
+            for (String message : messages) {
+                player.sendMessage(message
+                        .replace("{money}", NumberFormat.formatNumber(Math.max(0, missingMoney(player, nextRankSection, prestigeLevel))))
+                        .replace("{flakes}", NumberFormat.formatNumber(Math.max(0, missingFlakes(player, nextRankSection, prestigeLevel))))
+                        .replace("{rank}", PlayersCacheMethod.getInstance().getRank(player)));
+            }
         }
     }
 
-    private static String missingMoney(Player player, ConfigurationSection nextRankSection, int prestigeLevel) {
+    private static double missingMoney(Player player, ConfigurationSection nextRankSection, int prestigeLevel) {
         CurrenciesAPI currenciesAPI = CurrenciesAPI.getInstance();
         Double balance = currenciesAPI.getBalance(player, Currencies.COINS);
 
-        return NumberFormat.formatNumber(getRankUpCoinsPrice(nextRankSection, prestigeLevel) - balance);
+        return getRankUpCoinsPrice(nextRankSection, prestigeLevel) - balance;
     }
 
-    private static String missingFlakes(Player player, ConfigurationSection nextRankSection, int prestigeLevel) {
+    private static double missingFlakes(Player player, ConfigurationSection nextRankSection, int prestigeLevel) {
         CurrenciesAPI currenciesAPI = CurrenciesAPI.getInstance();
         Double balance = currenciesAPI.getBalance(player, Currencies.FLAKES);
 
-        return NumberFormat.formatNumber(getRankUpFlakesPrice(nextRankSection, prestigeLevel) - balance) ;
+        return getRankUpFlakesPrice(nextRankSection, prestigeLevel) - balance;
     }
 }
