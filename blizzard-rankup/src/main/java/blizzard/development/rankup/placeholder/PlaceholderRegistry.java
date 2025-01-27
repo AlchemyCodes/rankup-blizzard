@@ -1,7 +1,6 @@
 package blizzard.development.rankup.placeholder;
 
 import blizzard.development.currencies.api.CurrenciesAPI;
-import blizzard.development.currencies.database.cache.PlayersCacheManager;
 import blizzard.development.currencies.enums.Currencies;
 import blizzard.development.rankup.Main;
 import blizzard.development.rankup.database.cache.method.PlayersCacheMethod;
@@ -57,6 +56,7 @@ public class PlaceholderRegistry extends PlaceholderExpansion {
 
         String rank = playersData.getRank(player);
         ConfigurationSection currentRankSection = RanksUtils.getCurrentRankSection(config, rank);
+
         assert currentRankSection != null;
         String nextRank = RanksUtils.getNextRank(config, currentRankSection);
 
@@ -70,8 +70,8 @@ public class PlaceholderRegistry extends PlaceholderExpansion {
         int coinsPrice = config.getInt("ranks." + nextRank + ".coinsPrice");
         int flakesPrice = config.getInt("ranks." + nextRank + ".flakesPrice");
 
-        double coinsProgress = Math.min(currentCoins / coinsPrice, 1.0);
-        double flakesProgress = Math.min(currentFlakes / flakesPrice, 1.0);
+        double coinsProgress = coinsPrice > 0 ? Math.min(currentCoins / coinsPrice, 1.0) : 1.0;
+        double flakesProgress = flakesPrice > 0 ? Math.min(currentFlakes / flakesPrice, 1.0) : 1.0;
 
         double totalProgress = (coinsProgress + flakesProgress) / 2.0;
         int percentage = (int) (totalProgress * 100);

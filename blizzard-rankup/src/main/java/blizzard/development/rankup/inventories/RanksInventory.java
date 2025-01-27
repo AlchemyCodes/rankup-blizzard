@@ -7,10 +7,7 @@ import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
 import com.github.stefvanschie.inventoryframework.pane.util.Slot;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -19,31 +16,35 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class RanksInventory {
-    private static final int[] SLOTS = new int[] { 10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25 };
-    private static final int MAX_ITEMS_PER_PAGE = SLOTS.length;
 
     public static void openRanksInventory(Player player) {
-        YamlConfiguration ranksConfig = (PluginImpl.getInstance()).Ranks.getConfig();
+        YamlConfiguration ranksConfig = PluginImpl.getInstance().Ranks.getConfig();
         Set<String> ranks = ranksConfig.getConfigurationSection("ranks").getKeys(false);
-        List<String> orderedRanks = ranks.stream().sorted(Comparator.comparingInt(rank -> ranksConfig.getInt("ranks." + rank + ".order"))).collect(Collectors.toList());
-        int totalPages = (int)Math.ceil(orderedRanks.size() / (double)MAX_ITEMS_PER_PAGE);
-        createRanksPage(player, orderedRanks, ranksConfig, 0, totalPages);
+
+
+        Map<Integer, List<String>> ranksByPage = ranks.stream()
+                .collect(Collectors.groupingBy(rank -> ranksConfig.getInt("ranks." + rank + ".gui.page")));
+
+        createRanksPage(player, ranksByPage, ranksConfig, 0);
     }
 
-    private static void createRanksPage(Player player, List<String> orderedRanks, YamlConfiguration ranksConfig, int page, int totalPages) {
-        ChestGui gui = new ChestGui(5, "Ranks - Página " + (page + 1));
+    private static void createRanksPage(Player player, Map<Integer, List<String>> ranksByPage, YamlConfiguration ranksConfig, int currentPage) {
+        ChestGui gui = new ChestGui(5, "Ranks - Página " + (currentPage + 1));
         StaticPane pane = new StaticPane(0, 0, 9, 5);
-        int start = page * MAX_ITEMS_PER_PAGE;
-        int end = Math.min(start + MAX_ITEMS_PER_PAGE, orderedRanks.size());
 
-        for (int i = start; i < end; i++) {
-            String rank = orderedRanks.get(i);
+        List<String> currentRanks = ranksByPage.getOrDefault(currentPage, Collections.emptyList());
+
+        for (String rank : currentRanks) {
+            int slot = ranksConfig.getInt("ranks." + rank + ".gui.slot", -1);
+            if (slot < 0 || slot >= 45) continue; // Slots inválidos são ignorados
+
             ItemStack rankItem = createRankItem(ranksConfig, rank);
             GuiItem guiItem = new GuiItem(rankItem, event -> event.setCancelled(true));
-            pane.addItem(guiItem, Slot.fromIndex(SLOTS[i - start]));
+            pane.addItem(guiItem, Slot.fromIndex(slot));
         }
 
-        if (page + 1 < totalPages) {
+        // Botão para próxima página
+        if (ranksByPage.containsKey(currentPage + 1)) {
             ItemStack nextPageItem = new ItemStack(Material.ARROW);
             ItemMeta nextPageMeta = nextPageItem.getItemMeta();
             nextPageMeta.setDisplayName("§aPróxima página");
@@ -51,12 +52,13 @@ public class RanksInventory {
 
             GuiItem nextPage = new GuiItem(nextPageItem, event -> {
                 event.setCancelled(true);
-                createRanksPage(player, orderedRanks, ranksConfig, page + 1, totalPages);
+                createRanksPage(player, ranksByPage, ranksConfig, currentPage + 1);
             });
             pane.addItem(nextPage, Slot.fromIndex(44));
         }
 
-        if (page > 0) {
+        // Botão para página anterior
+        if (currentPage > 0) {
             ItemStack previousPageItem = new ItemStack(Material.ARROW);
             ItemMeta previousPageMeta = previousPageItem.getItemMeta();
             previousPageMeta.setDisplayName("§cPágina anterior");
@@ -64,7 +66,7 @@ public class RanksInventory {
 
             GuiItem previousPage = new GuiItem(previousPageItem, event -> {
                 event.setCancelled(true);
-                createRanksPage(player, orderedRanks, ranksConfig, page - 1, totalPages);
+                createRanksPage(player, ranksByPage, ranksConfig, currentPage - 1);
             });
             pane.addItem(previousPage, Slot.fromIndex(36));
         }
@@ -86,11 +88,7 @@ public class RanksInventory {
                     .map(line -> line.replace("{price}", NumberFormat.formatNumber(config.getInt("ranks." + rank + ".coinsPrice"))))
                     .map(line -> line.replace("{flakes}", NumberFormat.formatNumber(config.getInt("ranks." + rank + ".flakesPrice"))))
                     .collect(Collectors.toList());
-            if (!lore.isEmpty()) {
-                meta.setLore(lore);
-            } else {
-                meta.setLore(Collections.singletonList("§7Sem lore na config."));
-            }
+            meta.setLore(lore);
             item.setItemMeta(meta);
         }
 

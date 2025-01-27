@@ -42,13 +42,13 @@ public class RanksUtils {
         for (String rankKey : ranks) {
             ConfigurationSection rankSection = ranksConfig.getConfigurationSection("ranks." + rankKey);
             assert rankSection != null;
-            String rankName = rankSection.getString("tag");
+            String rankName = rankSection.getString("name");
 
             if (Objects.equals(rankName, currentRank)) {
                 return rankSection.getString("tag");
             }
         }
-        return null;
+        return "NULL";
     }
 
     public static ConfigurationSection getNextRankSection(YamlConfiguration ranksConfig, ConfigurationSection currentRankSection) {
@@ -68,7 +68,7 @@ public class RanksUtils {
         return null;
     }
 
-    public static String getNextRank(YamlConfiguration ranksConfig, ConfigurationSection currentRankSection) {
+    public static String getNextRankName(YamlConfiguration ranksConfig, ConfigurationSection currentRankSection) {
         Set<String> ranks = (Objects.requireNonNull(ranksConfig.getConfigurationSection("ranks"))).getKeys(false);
 
         int currentOrder = currentRankSection.getInt("order");
@@ -80,6 +80,23 @@ public class RanksUtils {
 
             if (rankOrder == currentOrder + 1) {
                 return rankSection.getString("name");
+            }
+        }
+        return null;
+    }
+
+    public static String getNextRank(YamlConfiguration ranksConfig, ConfigurationSection currentRankSection) {
+        Set<String> ranks = (Objects.requireNonNull(ranksConfig.getConfigurationSection("ranks"))).getKeys(false);
+
+        int currentOrder = currentRankSection.getInt("order");
+
+        for (String rankKey : ranks) {
+            ConfigurationSection rankSection = ranksConfig.getConfigurationSection("ranks." + rankKey);
+            assert rankSection != null;
+            int rankOrder = rankSection.getInt("order");
+
+            if (rankOrder == currentOrder + 1) {
+                return rankKey;
             }
         }
         return null;

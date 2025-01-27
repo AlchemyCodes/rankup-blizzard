@@ -124,7 +124,7 @@ public class TopsInventory {
                 .map(line -> {
                     assert currentRankSection != null;
                     return line.replace("{current_rank}", Objects.requireNonNull(RanksUtils.getCurrentRankName(ranksConfig, currentRank)))
-                            .replace("{next_rank}", RanksUtils.getNextRank(ranksConfig, currentRankSection) != null ? Objects.requireNonNull(RanksUtils.getNextRank(ranksConfig, currentRankSection)) : "Nenhum")
+                            .replace("{next_rank}", RanksUtils.getNextRankName(ranksConfig, currentRankSection) != null ? Objects.requireNonNull(RanksUtils.getNextRankName(ranksConfig, currentRankSection)) : "Nenhum")
                             .replace("{prestige}", String.valueOf(prestige))
                             .replace("{next_prestige}", String.valueOf(prestige + 1))
                             .replace("{prestige_cost}", String.valueOf(PrestigeUtils.prestigeCoinsCostAdd(prestige)));

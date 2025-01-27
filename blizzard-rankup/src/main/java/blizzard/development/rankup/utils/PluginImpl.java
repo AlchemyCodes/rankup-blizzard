@@ -1,14 +1,12 @@
 package blizzard.development.rankup.utils;
 
 import blizzard.development.rankup.Main;
-import blizzard.development.rankup.commands.PrestigeCommand;
-import blizzard.development.rankup.commands.RankCommand;
-import blizzard.development.rankup.commands.RankUpCommand;
-import blizzard.development.rankup.commands.RanksCommand;
+import blizzard.development.rankup.commands.*;
 import blizzard.development.rankup.database.DatabaseConnection;
 import blizzard.development.rankup.database.cache.PlayersCacheManager;
 import blizzard.development.rankup.database.dao.PlayersDAO;
 import blizzard.development.rankup.database.storage.PlayersData;
+import blizzard.development.rankup.extensions.nchat.RanksPlaceholderExtension;
 import blizzard.development.rankup.listeners.TrafficListener;
 import blizzard.development.rankup.placeholder.PlaceholderRegistry;
 import blizzard.development.rankup.tasks.AutoRankup;
@@ -19,6 +17,7 @@ import java.sql.SQLException;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.Locales;
 import co.aikar.commands.PaperCommandManager;
+import com.nickuc.chat.api.nChatAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -65,6 +64,7 @@ public class PluginImpl {
         registerCommands();
         registerListeners();
         registerTasks();
+        registerExtensions();
     }
 
     public void loadConfigs() {
@@ -118,14 +118,22 @@ public class PluginImpl {
     }
 
     private void registerListeners() {
-        pluginManager.registerEvents((Listener)new TrafficListener(this.playersDAO), this.plugin);
+        pluginManager.registerEvents(new TrafficListener(this.playersDAO), this.plugin);
     }
 
     private void registerCommands() {
-        commandManager.registerCommand((BaseCommand)new RankCommand());
-        commandManager.registerCommand((BaseCommand)new RanksCommand());
-        commandManager.registerCommand((BaseCommand)new RankUpCommand());
-        commandManager.registerCommand((BaseCommand)new PrestigeCommand());
+        commandManager.registerCommand(new RankCommand());
+        commandManager.registerCommand(new RanksCommand());
+        commandManager.registerCommand(new RankUpCommand());
+        commandManager.registerCommand(new PrestigeCommand());
+        commandManager.registerCommand(new ReloadConfig());
+    }
+
+    private void registerExtensions() {
+        nChatAPI api = nChatAPI.getApi();
+        if (api != null) {
+            api.setGlobalTag("rankup_rank", new RanksPlaceholderExtension(plugin));
+        }
     }
 
     public static PluginImpl getInstance() {
