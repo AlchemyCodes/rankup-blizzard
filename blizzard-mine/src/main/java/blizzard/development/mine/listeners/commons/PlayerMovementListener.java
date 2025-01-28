@@ -15,10 +15,12 @@ public class PlayerMovementListener implements Listener {
         Location eventFrom = event.getFrom();
         Location eventTo = event.getTo();
 
-        BlockManager blockManager = BlockManager.getInstance();
+        BlockManager regionManager = BlockManager.getInstance();
 
-        if (blockManager.isBlock(eventTo.getBlockX(), eventTo.getBlockY(), eventTo.getBlockZ()
-        ) || blockManager.isBlock(eventFrom.getBlockX(), eventFrom.getBlockY(), eventFrom.getBlockZ())
-        ) event.setAllowed(true);
+        if (regionManager.hasBlock(eventTo.getBlockX(), eventTo.getBlockY(), eventTo.getBlockZ())
+                || regionManager.hasBlock(eventFrom.getBlockX(), eventFrom.getBlockY(), eventFrom.getBlockZ())
+        ) {
+            event.setAllowed(true);
+        }
     }
 }

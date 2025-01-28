@@ -1,6 +1,6 @@
 package blizzard.development.mine.utils.text;
 
-import blizzard.development.mine.listeners.mine.MineBlockBreakListener;
+import blizzard.development.mine.mine.adapters.ExtractorAdapter;
 import org.bukkit.entity.Player;
 
 public class ProgressBarUtils {
@@ -11,7 +11,7 @@ public class ProgressBarUtils {
     }
 
     public String extractor(Player player) {
-        int currentProgress = MineBlockBreakListener.extractorBlocks.getOrDefault(player, 0);
+        int currentProgress = ExtractorAdapter.getInstance().getExtractorBlocks(player) - 1;
         int maxProgress = 200;
         int greenBars = (int) ((currentProgress / (double) maxProgress) * 10);
         int grayBars = 10 - greenBars;

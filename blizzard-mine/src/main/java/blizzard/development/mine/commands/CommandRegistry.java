@@ -3,7 +3,7 @@ package blizzard.development.mine.commands;
 import blizzard.development.mine.commands.mine.MineCommand;
 import blizzard.development.mine.commands.mine.subcommands.admins.*;
 import blizzard.development.mine.commands.mine.subcommands.users.ResetCommand;
-import blizzard.development.mine.managers.events.Avalanche;
+import blizzard.development.mine.managers.events.AvalancheManager;
 import blizzard.development.mine.utils.PluginImpl;
 import co.aikar.commands.PaperCommandManager;
 
@@ -24,7 +24,7 @@ public class CommandRegistry {
                 new DisplayCommand(),
                 //users
                 new ResetCommand(),
-                new Avalanche()
+                new AvalancheManager()
         ).forEach(paperCommandManager::registerCommand);
     }
 }

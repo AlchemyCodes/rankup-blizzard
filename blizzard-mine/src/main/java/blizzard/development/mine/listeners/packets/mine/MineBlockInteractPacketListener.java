@@ -43,7 +43,7 @@ public class MineBlockInteractPacketListener extends PacketAdapter {
         final var blockY = blockPosition.getY();
         final var blockZ = blockPosition.getZ();
 
-        if (!BlockManager.getInstance().isBlock(blockX, blockY, blockZ)) return;
+        if (!BlockManager.getInstance().hasBlock(blockX, blockY, blockZ)) return;
 
         event.setCancelled(true);
 

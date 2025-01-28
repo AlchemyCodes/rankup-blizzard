@@ -1,7 +1,6 @@
 package blizzard.development.mine.mine.factory;
 
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
 
 public interface PodiumFactory {
 

@@ -4,7 +4,7 @@ import blizzard.development.core.Main;
 import blizzard.development.mine.builders.item.ItemBuilder;
 import blizzard.development.mine.database.cache.ToolCacheManager;
 import blizzard.development.mine.database.storage.ToolData;
-import blizzard.development.mine.managers.events.Avalanche;
+import blizzard.development.mine.managers.events.AvalancheManager;
 import blizzard.development.mine.utils.text.NumberUtils;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -21,7 +21,7 @@ public class ToolBuildItem {
 
         Material material;
 
-        if (Avalanche.isAvalancheActive) {
+        if (AvalancheManager.isAvalancheActive) {
             material = Material.IRON_SHOVEL;
         } else {
             material = Material.WOODEN_PICKAXE;

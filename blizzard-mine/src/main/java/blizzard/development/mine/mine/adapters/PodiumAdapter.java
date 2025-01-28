@@ -6,7 +6,7 @@ import blizzard.development.mine.database.cache.methods.ToolCacheMethods;
 import blizzard.development.mine.database.storage.ToolData;
 import blizzard.development.mine.mine.enums.LocationEnum;
 import blizzard.development.mine.mine.factory.PodiumFactory;
-import blizzard.development.mine.tasks.mine.UpdatePodiumTask;
+import blizzard.development.mine.tasks.mine.PodiumUpdateTask;
 import blizzard.development.mine.utils.locations.LocationUtils;
 import blizzard.development.mine.utils.text.NumberUtils;
 import net.citizensnpcs.api.CitizensAPI;
@@ -15,6 +15,7 @@ import net.citizensnpcs.api.npc.NPCRegistry;
 import net.citizensnpcs.trait.SkinTrait;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.*;
 
@@ -109,19 +110,21 @@ public class PodiumAdapter implements PodiumFactory {
             topTwo(topTwoLocation);
             topTree(topTreeLocation);
 
-            new UpdatePodiumTask().runTaskTimer(Main.getInstance(), 20L * 300, 20L * 300);
+            PodiumUpdateTask podiumUpdateTask = new PodiumUpdateTask();
+            BukkitTask task = podiumUpdateTask.runTaskTimer(Main.getInstance(), 20L * 300, 20L * 300);
+            podiumUpdateTask.setTask(task);
         }
     }
 
+    public Set<UUID> getPodiumNPCs() {
+        return Collections.unmodifiableSet(podiumNPCs);
+    }
+
     public void removeAllNPCs() {
-        for (UUID uuid : podiumNPCs) {
-            NPC npc = registry.getByUniqueId(uuid);
-            if (npc != null) {
-                npc.destroy();
-                HologramBuilder.getInstance().removeHologram(uuid);
-            }
+        Set<UUID> npcsToRemove = new HashSet<>(podiumNPCs);
+        for (UUID uuid : npcsToRemove) {
+            removeNPC(uuid);
         }
-        podiumNPCs.clear();
     }
 
     public void removeNPC(UUID uuid) {
