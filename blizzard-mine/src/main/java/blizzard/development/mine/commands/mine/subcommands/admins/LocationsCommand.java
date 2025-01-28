@@ -2,7 +2,6 @@ package blizzard.development.mine.commands.mine.subcommands.admins;
 
 import blizzard.development.mine.builders.display.ExtractorBuilder;
 import blizzard.development.mine.builders.hologram.HologramBuilder;
-import blizzard.development.mine.listeners.mine.MineBlockBreakListener;
 import blizzard.development.mine.managers.mine.DisplayManager;
 import blizzard.development.mine.mine.adapters.PodiumAdapter;
 import blizzard.development.mine.mine.enums.LocationEnum;
@@ -11,20 +10,12 @@ import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.Subcommand;
-import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import java.util.Arrays;
-import java.util.UUID;
-
-import static blizzard.development.mine.listeners.mine.MineBlockBreakListener.extractorBlocks;
 
 @CommandAlias("mina|mineracao|mine")
 @CommandPermission("blizzard.mine.admin")
 public class LocationsCommand extends BaseCommand {
-
-    private final UUID id = UUID.randomUUID();
 
     @Subcommand("setspawn")
     @CommandPermission("blizzard.mine.admin")
@@ -74,7 +65,7 @@ public class LocationsCommand extends BaseCommand {
         );
     }
 
-    @Subcommand("setextractornpc")
+    @Subcommand("setextractor")
     @CommandPermission("blizzard.mine.admin")
     public void onSetExtractorNPCCommand(CommandSender commandSender) {
         Player player = (Player) commandSender;
@@ -85,47 +76,16 @@ public class LocationsCommand extends BaseCommand {
                 player.getLocation()
         );
 
-        Location extractorLocation = LocationUtils.getLocation(LocationEnum.EXTRACTOR_NPC.getName());
-
         ExtractorBuilder.getInstance()
                 .createExtractor(
-                        player
+                        player.getLocation()
                 );
-
-
-        int currentProgress = extractorBlocks.getOrDefault(player, 0);
-        int maxProgress = 200;
-        int greenBars = (int) ((currentProgress / (double) maxProgress) * 10);
-        int grayBars = 10 - greenBars;
-
-        String progressBar = "§a" + "|".repeat(greenBars) + "§7" + "|".repeat(grayBars);
-
-        HologramBuilder.getInstance().createHologram(
-                player,
-                id,
-                extractorLocation.add(-0.5, 4.9, -0.5),
-                Arrays.asList(
-                        "§e§lEXTRATORA!",
-                        "§fQuebre blocos para conseguir",
-                        "§fativar o poder da extratora.",
-                        "",
-                        " §bProgresso:",
-                        " " + progressBar,
-                        ""
-                ),
-                false
-        );
     }
 
 
     @Subcommand("removeextractornpc")
     public void onRemoveExtractorNPC(CommandSender commandSender) {
         Player player = (Player) commandSender;
-
-        HologramBuilder.getInstance()
-                .removeHologram(
-                    id
-                );
         ExtractorBuilder.getInstance().removeExtractor();
     }
 
@@ -150,8 +110,14 @@ public class LocationsCommand extends BaseCommand {
 
         PodiumAdapter.getInstance()
             .topOne(
-                player
+                player.getLocation()
             );
+
+        LocationUtils.setLocation(
+                player,
+                LocationEnum.TOP_ONE_NPC.getName(),
+                player.getLocation()
+        );
     }
 
     @Subcommand("setpodiumtop2")
@@ -161,8 +127,14 @@ public class LocationsCommand extends BaseCommand {
 
         PodiumAdapter.getInstance()
             .topTwo(
-                player
+                player.getLocation()
             );
+
+        LocationUtils.setLocation(
+                player,
+                LocationEnum.TOP_TWO_NPC.getName(),
+                player.getLocation()
+        );
     }
 
     @Subcommand("setpodiumtop3")
@@ -172,8 +144,14 @@ public class LocationsCommand extends BaseCommand {
 
         PodiumAdapter.getInstance()
             .topTree(
-                player
+                 player.getLocation()
             );
+
+        LocationUtils.setLocation(
+                player,
+                LocationEnum.TOP_TREE_NPC.getName(),
+                player.getLocation()
+        );
     }
 
     @Subcommand("removepodiumtops")

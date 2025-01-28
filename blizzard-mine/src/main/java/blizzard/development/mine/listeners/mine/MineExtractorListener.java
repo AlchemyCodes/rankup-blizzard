@@ -1,5 +1,6 @@
 package blizzard.development.mine.listeners.mine;
 
+import blizzard.development.mine.inventories.extractor.ExtractorInventory;
 import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -18,7 +19,7 @@ public class MineExtractorListener implements Listener {
 
         if (entity instanceof EnderCrystal) {
             if (entity.hasMetadata(extractor_metadata)) {
-                player.sendMessage("tem nada aqui ainda");
+                new ExtractorInventory().open(player);
             }
         }
     }

@@ -3,21 +3,18 @@ package blizzard.development.mine.managers.events;
 import blizzard.development.core.Main;
 import blizzard.development.mine.database.cache.methods.PlayerCacheMethods;
 import blizzard.development.mine.mine.adapters.MineAdapter;
-import blizzard.development.mine.mine.enums.LocationEnum;
 import blizzard.development.mine.utils.PluginImpl;
-import blizzard.development.mine.utils.locations.LocationUtils;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.Default;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 @CommandAlias("avalanche")
-public class Avalanche extends BaseCommand {
+public class AvalancheManager extends BaseCommand {
 
     public static boolean isAvalancheActive = false;
 

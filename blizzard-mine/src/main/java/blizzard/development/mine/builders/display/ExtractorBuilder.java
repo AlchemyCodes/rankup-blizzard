@@ -1,8 +1,11 @@
 package blizzard.development.mine.builders.display;
 
 import blizzard.development.mine.utils.PluginImpl;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 
@@ -26,12 +29,12 @@ public class ExtractorBuilder {
         }
     }
 
-    public void createExtractor(Player player) {
+    public void createExtractor(Location location) {
         removeExtractor();
 
         String extractor_metadata = "blizzard_mine_extractor-metadata";
 
-        extractor = (EnderCrystal) player.getWorld().spawnEntity(player.getLocation().add(0, 0.9, 0), EntityType.ENDER_CRYSTAL);
+        extractor = (EnderCrystal) location.getWorld().spawnEntity(location.add(0, 0.9, 0), EntityType.ENDER_CRYSTAL);
         extractor.setMetadata(
             extractor_metadata,
             new FixedMetadataValue(
@@ -41,5 +44,11 @@ public class ExtractorBuilder {
         );
         extractor.setInvulnerable(true);
         extractor.setPersistent(true);
+    }
+
+    public void initializeExtractor(Location location) {
+        if (extractor == null) {
+            createExtractor(location);
+        }
     }
 }

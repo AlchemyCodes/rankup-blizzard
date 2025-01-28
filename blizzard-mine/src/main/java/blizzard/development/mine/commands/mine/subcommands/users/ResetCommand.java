@@ -26,14 +26,13 @@ public class ResetCommand extends BaseCommand {
 
         if (cacheMethods.isInMine(player)) {
             if (cooldown.isInCountdown(player, cooldownName) && !player.hasPermission("blizzard.mine.cooldown-bypass")) {
-                player.sendActionBar("§c§lEI! §cAguarde um pouco antes de fazer isso novamentee.");
+                player.sendActionBar("§c§lEI! §cAguarde um pouco antes de fazer isso novamente.");
                 return;
             }
 
-            Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> MineAdapter.getInstance().generateMine(player));
+            MineAdapter.getInstance().resetMine(player);
 
-            player.sendActionBar("§a§lYAY! §aVocê resetou sua mina com sucesso.");
-            cooldown.createCountdown(player, cooldownName, 3, TimeUnit.MINUTES);
+            cooldown.createCountdown(player, cooldownName, 5, TimeUnit.MINUTES);
         } else {
             player.sendActionBar("§c§lEI! §cVocê não está na mina.");
         }

@@ -1,6 +1,6 @@
 package blizzard.development.mine.utils;
 
-import blizzard.development.mine.builders.display.DisplayBuilder;
+import blizzard.development.mine.builders.display.PickaxeBuilder;
 import blizzard.development.mine.builders.display.ExtractorBuilder;
 import blizzard.development.mine.builders.hologram.HologramBuilder;
 import blizzard.development.mine.commands.CommandRegistry;
@@ -16,15 +16,21 @@ import blizzard.development.mine.listeners.ListenerRegistry;
 import blizzard.development.mine.mine.adapters.PodiumAdapter;
 import blizzard.development.mine.tasks.PlayerSaveTask;
 import blizzard.development.mine.tasks.ToolSaveTask;
+import blizzard.development.mine.tasks.mine.ExtractorUpdateTask;
+import blizzard.development.mine.tasks.mine.PodiumUpdateTask;
 import blizzard.development.mine.utils.config.ConfigUtils;
 import co.aikar.commands.Locales;
 import co.aikar.commands.PaperCommandManager;
+import net.citizensnpcs.api.CitizensAPI;
+import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.SQLException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public class PluginImpl {
@@ -63,16 +69,25 @@ public class PluginImpl {
         registerDatabase();
         registerListeners();
         registerCommands();
-        registerTasks();
 
         registerExpansions();
     }
 
     public void onDisable() {
-        DisplayBuilder.getInstance().removeCurrentDisplay();
+        new PodiumUpdateTask().cancelTask();
+        new ExtractorUpdateTask().cancelTask();
+
+        Set<UUID> npcsToRemove = new HashSet<>(PodiumAdapter.getInstance().getPodiumNPCs());
+        for (UUID uuid : npcsToRemove) {
+            NPC npc = CitizensAPI.getNPCRegistry().getByUniqueId(uuid);
+            if (npc != null) {
+                npc.destroy();
+            }
+        }
+
+        PickaxeBuilder.getInstance().removePickaxe();
         HologramBuilder.getInstance().removeAllHolograms();
         ExtractorBuilder.getInstance().removeExtractor();
-        PodiumAdapter.getInstance().removeAllNPCs();
         setupDisableData();
     }
 
@@ -85,7 +100,7 @@ public class PluginImpl {
         setupEnableData();
 
         new PlayerSaveTask(playerDAO).runTaskTimerAsynchronously(plugin, 0, 20L * 3);
-        new ToolSaveTask(toolDAO).runTaskTimerAsynchronously(plugin, 0, 20 * 3);
+        new ToolSaveTask(toolDAO).runTaskTimerAsynchronously(plugin, 0, 20L * 3);
     }
 
     private void setupEnableData() {
@@ -135,9 +150,6 @@ public class PluginImpl {
         ListenerRegistry listenerRegistry = new ListenerRegistry(playerDAO, toolDAO);
         listenerRegistry.register();
         listenerRegistry.registerPacket();
-    }
-
-    private void registerTasks() {
     }
 
     private void registerCommands() {

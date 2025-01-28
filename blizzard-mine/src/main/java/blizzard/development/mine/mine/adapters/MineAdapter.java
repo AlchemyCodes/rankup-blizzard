@@ -3,7 +3,6 @@ package blizzard.development.mine.mine.adapters;
 import blizzard.development.core.Main;
 import blizzard.development.mine.builders.hologram.HologramBuilder;
 import blizzard.development.mine.database.cache.methods.PlayerCacheMethods;
-import blizzard.development.mine.managers.mine.DisplayManager;
 import blizzard.development.mine.managers.mine.MineManager;
 import blizzard.development.mine.managers.mine.NPCManager;
 import blizzard.development.mine.mine.enums.LocationEnum;
@@ -22,39 +21,36 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.time.Duration;
-import java.util.Arrays;
-import java.util.UUID;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 public class MineAdapter implements MineFactory {
 
     private static final MineAdapter instance = new MineAdapter();
+    private final ToolAdapter toolAdapter = ToolAdapter.getInstance();
+    private final Map<UUID, BukkitRunnable> playerTasks = new HashMap<>();
+
     public static MineAdapter getInstance() {
         return instance;
     }
-
-    private final ToolAdapter toolAdapter = ToolAdapter.getInstance();
 
     @Override
     public void sendToMine(Player player) {
         Location spawnLocation = LocationUtils.getLocation(LocationEnum.SPAWN.getName());
 
         if (spawnLocation == null) {
-            player.sendActionBar("§c§lEI! §cO spawn da mina ainda não foi setado.");
+            player.sendActionBar(Component.text("§c§lEI! §cO spawn da mina ainda não foi setado."));
             return;
         }
 
         if (!isInventoryEmpty(player)) {
-            player.sendActionBar("§c§lEI! §cVocê precisa estar com o inventário vazio para entrar na mina.");
+            player.sendActionBar(Component.text("§c§lEI! §cVocê precisa estar com o inventário vazio para entrar na mina."));
             return;
         }
 
         player.teleport(spawnLocation);
-
-        manageTool(player, false);
-        manageVisibility(player, false);
-        PlayerCacheMethods.getInstance().setInMine(player);
-
-        startTask(player);
+        setupPlayerForMine(player);
+        initializeMineSequence(player);
     }
 
     public void resendToMine(Player player) {
@@ -68,67 +64,141 @@ public class MineAdapter implements MineFactory {
         Location exitLocation = LocationUtils.getLocation(LocationEnum.EXIT.getName());
 
         if (exitLocation == null) {
-            player.sendActionBar("§c§lEI! §cA saída da mina ainda não foi setado.");
+            player.sendActionBar(Component.text("§c§lEI! §cA saída da mina ainda não foi setada."));
             return;
         }
 
+        cleanupPlayerExit(player, exitLocation);
+    }
+
+    public void resetMine(Player player) {
+        Location spawnLocation = LocationUtils.getLocation(LocationEnum.SPAWN.getName());
+
+        if (spawnLocation == null) {
+            player.sendActionBar(Component.text("§c§lEI! §cO spawn da mina ainda não foi setado."));
+            return;
+        }
+
+        executeResetSequence(player, spawnLocation);
+    }
+
+    private void setupPlayerForMine(Player player) {
+        manageTool(player, false);
+        manageVisibility(player, false);
+        PlayerCacheMethods.getInstance().setInMine(player);
+        player.getInventory().setHeldItemSlot(4);
+    }
+
+    private void initializeMineSequence(Player player) {
+        BukkitRunnable task = new BukkitRunnable() {
+            private int step = 0;
+
+            @Override
+            public void run() {
+                if (step == 1) {
+                    CompletableFuture.runAsync(() -> {
+                        generateMine(player);
+                        spawnNPCAndHologram(player);
+                    });
+                }
+
+                updatePlayerEffects(player);
+                step++;
+
+                if (step == 4) {
+                    finalizeInitialization(player);
+                    this.cancel();
+                    playerTasks.remove(player.getUniqueId());
+                }
+            }
+        };
+
+        task.runTaskTimer(Main.getInstance(), 0L, 25L);
+        playerTasks.put(player.getUniqueId(), task);
+    }
+
+    private void spawnNPCAndHologram(Player player) {
+        Bukkit.getScheduler().runTask(Main.getInstance(), () -> {
+            Location npcLocation = LocationUtils.getLocation(LocationEnum.NPC.getName());
+            if (npcLocation != null) {
+                UUID uuid = NPCManager.getInstance().spawnNPC(player, npcLocation);
+                createHologram(player, uuid, npcLocation);
+            }
+        });
+    }
+
+    private void createHologram(Player player, UUID uuid, Location location) {
+        HologramBuilder.getInstance().createPlayerHologram(
+                player,
+                uuid,
+                location.add(0.0, 2.6, 0.0),
+                Arrays.asList(
+                        "§e§lMINERAÇÃO!",
+                        "§bClique para gerenciar."
+                )
+        );
+    }
+
+    private void updatePlayerEffects(Player player) {
+        player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 40, 8));
+        player.showTitle(Title.title(
+                Component.text("§c§lAguarde!"),
+                Component.text("§cEstamos carregando a sua mina."),
+                Title.Times.times(Duration.ZERO, Duration.ofSeconds(2), Duration.ofSeconds(3))
+        ));
+        player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 5F, 1F);
+    }
+
+    private void finalizeInitialization(Player player) {
+        player.clearActivePotionEffects();
+        player.sendTitle("§e§lMina!", "§eVocê entrou na mina.", 10, 70, 20);
+        player.getInventory().setHeldItemSlot(4);
+        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 5F, 1F);
+        player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, PotionEffect.INFINITE_DURATION, 1));
+
+        Bukkit.getScheduler().runTaskLater(Main.getInstance(), () -> {
+            PodiumAdapter.getInstance().createAllNPCs();
+            ExtractorAdapter.getInstance().createExtractor(player);
+        }, 100L);
+    }
+
+    private void cleanupPlayerExit(Player player, Location exitLocation) {
         player.teleport(exitLocation);
         player.sendTitle("§e§lMina!", "§eVocê saiu da mina.", 10, 70, 20);
 
         manageVisibility(player, true);
         manageTool(player, true);
         PlayerCacheMethods.getInstance().removeFromMine(player);
+        cancelTask(player);
     }
 
-    private void startTask(Player player) {
-        new BukkitRunnable() {
-            int i = 0;
+    private void executeResetSequence(Player player, Location spawnLocation) {
+        player.teleport(spawnLocation);
+        applyResetEffects(player);
 
-            @Override
-            public void run() {
-                if (i == 1) {
-                    Bukkit.getScheduler().runTaskLaterAsynchronously(Main.getInstance(), () -> {
-                        generateMine(player);
+        CompletableFuture.runAsync(() -> {
+            generateMine(player);
+            finalizeReset(player);
+        });
+    }
 
-                        Bukkit.getScheduler().runTask(Main.getInstance(), () -> {
-                            Location npcLocation = LocationUtils.getLocation(LocationEnum.NPC.getName());
-                            if (npcLocation != null) {
-                                UUID uuid = NPCManager.getInstance().spawnNPC(player, npcLocation);
-                                HologramBuilder.getInstance().createHologram(
-                                        player,
-                                        uuid,
-                                        npcLocation.add(0.0, 2.6, 0.0),
-                                        Arrays.asList(
-                                                "§e§lMINERAÇÃO!",
-                                                "§bClique para gerenciar."
-                                        ),
-                                    true
-                                );
-                            }
-                        });
-                    }, 20L);
-                }
+    private void applyResetEffects(Player player) {
+        player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 40, 8));
+        player.showTitle(Title.title(
+                Component.text("§c§lAguarde!"),
+                Component.text("§cSua mina está sendo resetada."),
+                Title.Times.times(Duration.ZERO, Duration.ofSeconds(2), Duration.ofSeconds(3))
+        ));
+        player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 5F, 1F);
+    }
 
-                player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 2, 8));
-                player.showTitle(
-                        Title.title(
-                                Component.text("§c§lAguarde!"),
-                                Component.text("§cEstamos carregando a sua mina."),
-                                Title.Times.times(Duration.ZERO, Duration.ofSeconds(2), Duration.ofSeconds(3))
-                        )
-                );
-                player.playSound(player, Sound.BLOCK_NOTE_BLOCK_PLING, 5L, 1L);
-
-                i++;
-                if (i == 4) {
-                    player.clearActivePotionEffects();
-                    player.sendTitle("§e§lMina!", "§eVocê entrou na mina.", 10, 70, 20);
-                    player.playSound(player, Sound.ENTITY_PLAYER_LEVELUP, 5L, 1L);
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, PotionEffect.INFINITE_DURATION, 1));
-                    this.cancel();
-                }
-            }
-        }.runTaskTimer(Main.getInstance(), 0L, 25L);
+    private void finalizeReset(Player player) {
+        Bukkit.getScheduler().runTask(Main.getInstance(), () -> {
+            player.clearActivePotionEffects();
+            player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, PotionEffect.INFINITE_DURATION, 1));
+            player.sendTitle("§e§lMina!", "§eSua mina foi resetada com sucesso!", 10, 70, 20);
+            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 5F, 1F);
+        });
     }
 
     public void generateMine(Player player) {
@@ -137,45 +207,37 @@ public class MineAdapter implements MineFactory {
 
     private void manageTool(Player player, Boolean state) {
         if (state) {
-            toolAdapter
-                    .removeTool(player);
+            toolAdapter.removeTool(player);
         } else {
-            toolAdapter
-                    .giveTool(player);
+            toolAdapter.giveTool(player);
         }
     }
 
     private void manageVisibility(Player player, Boolean state) {
-        if (state) {
-            for (Player players : Bukkit.getOnlinePlayers()) {
-                player.showPlayer(Main.getInstance(), players);
-            }
-
-            for (Player players : Bukkit.getOnlinePlayers()) {
-                players.showPlayer(Main.getInstance(), player);
-            }
-        } else {
-            for (Player players : Bukkit.getOnlinePlayers()) {
-                player.hidePlayer(Main.getInstance(), players);
-            }
-
-            for (Player players : Bukkit.getOnlinePlayers()) {
-                players.hidePlayer(Main.getInstance(), player);
+        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+            if (state) {
+                player.showPlayer(Main.getInstance(), onlinePlayer);
+                onlinePlayer.showPlayer(Main.getInstance(), player);
+            } else {
+                player.hidePlayer(Main.getInstance(), onlinePlayer);
+                onlinePlayer.hidePlayer(Main.getInstance(), player);
             }
         }
     }
 
     private Boolean isInventoryEmpty(Player player) {
-        for (ItemStack item : player.getInventory().getContents()) {
-            if (item != null && item.getType() != Material.AIR) {
-                return false;
-            }
+        if (Arrays.stream(player.getInventory().getContents())
+                .anyMatch(item -> item != null && item.getType() != Material.AIR)) {
+            return false;
         }
-        for (ItemStack armor : player.getInventory().getArmorContents()) {
-            if (armor != null && armor.getType() != Material.AIR) {
-                return false;
-            }
+        return Arrays.stream(player.getInventory().getArmorContents())
+                .allMatch(item -> item == null || item.getType() == Material.AIR);
+    }
+
+    private void cancelTask(Player player) {
+        BukkitRunnable task = playerTasks.remove(player.getUniqueId());
+        if (task != null) {
+            task.cancel();
         }
-        return true;
     }
 }

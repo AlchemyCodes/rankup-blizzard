@@ -42,7 +42,7 @@ public class MineBlockBreakPacketListener extends PacketAdapter{
         int blockY = blockPosition.getY();
         int blockZ = blockPosition.getZ();
 
-        if (!BlockManager.getInstance().isBlock(blockX, blockY, blockZ)) return;
+        if (!BlockManager.getInstance().hasBlock(blockX, blockY, blockZ)) return;
 
         event.setCancelled(true);
 

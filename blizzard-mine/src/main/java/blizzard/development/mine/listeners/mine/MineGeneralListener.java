@@ -37,6 +37,9 @@ public class MineGeneralListener implements Listener {
             HologramBuilder.getInstance().removeHologram(
                 NPCManager.getInstance().getNPCUUID(player)
             );
+            HologramBuilder.getInstance().removeHologram(
+                    player.getUniqueId()
+            );
             MineAdapter.getInstance().sendToExit(player);
         }
     }

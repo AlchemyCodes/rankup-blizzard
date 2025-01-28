@@ -6,7 +6,10 @@ public enum LocationEnum {
     CENTER("center"),
     DISPLAY("display"),
     EXTRACTOR_NPC("extractor_npc"),
-    NPC("npc");
+    NPC("npc"),
+    TOP_ONE_NPC("top_one_npc"),
+    TOP_TWO_NPC("top_two_npc"),
+    TOP_TREE_NPC("top_tree_npc");
 
     private final String name;
 

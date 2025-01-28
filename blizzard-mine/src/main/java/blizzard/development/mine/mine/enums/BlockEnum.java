@@ -7,7 +7,7 @@ public enum BlockEnum {
     BLUE_ICE("Gelo Azul", 3),
     COBBLED_DEEPSLATE("Rocha", 4),
     DEEPSLATE("Rocha Compacta", 5),
-    AVALANCHE_SNOW("tanto faz", 6);
+    AVALANCHE_SNOW("AvalancheManager", 6);
 
     private final String type;
     private final double value;
