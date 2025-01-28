@@ -1,11 +1,13 @@
 package blizzard.development.fishing.utils;
 
+import blizzard.development.fishing.Main;
 import blizzard.development.fishing.commands.CommandRegistry;
 import blizzard.development.fishing.database.DatabaseConnection;
 import blizzard.development.fishing.database.cache.PlayersCacheManager;
 import blizzard.development.fishing.database.dao.PlayersDAO;
 import blizzard.development.fishing.database.dao.RodsDAO;
 import blizzard.development.fishing.listeners.ListenerRegistry;
+import blizzard.development.fishing.placeholder.PlaceholderRegistry;
 import blizzard.development.fishing.tasks.*;
 import blizzard.development.fishing.tasks.database.PlayerSaveTask;
 import blizzard.development.fishing.tasks.database.RodSaveTask;
@@ -14,6 +16,7 @@ import blizzard.development.fishing.tasks.items.FurnaceTask;
 import co.aikar.commands.Locales;
 import co.aikar.commands.PaperCommandManager;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -50,6 +53,10 @@ public class PluginImpl {
     }
 
     public void onLoad() {
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            new PlaceholderRegistry((Main) plugin).register();
+        }
+
         loadConfigs();
         registerDatabase();
         registerCommands();

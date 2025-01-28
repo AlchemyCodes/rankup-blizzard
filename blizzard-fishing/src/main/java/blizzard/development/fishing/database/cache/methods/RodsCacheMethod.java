@@ -48,7 +48,7 @@ public class RodsCacheMethod {
     public void setXp(Player player, double xp) {
         RodsData data = RodsCacheManager.getInstance().getPlayerData(player);
         if (data != null) {
-            data.setXp(data.getXp() + xp);
+            data.setXp(xp);
             cache.cachePlayerData(player, data);
         }
     }
