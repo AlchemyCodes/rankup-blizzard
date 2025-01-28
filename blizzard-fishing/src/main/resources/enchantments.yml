@@ -2,7 +2,6 @@ enchantments:
   rod:
     especialista:
       chance: 1
-
       maxlevel: 10
 
     sortudo:

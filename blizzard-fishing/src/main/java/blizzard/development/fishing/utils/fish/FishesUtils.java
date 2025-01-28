@@ -29,6 +29,7 @@ public class FishesUtils {
     private final Random random = new Random();
     private final YamlConfiguration config = PluginImpl.getInstance().Config.getConfig();
     private final YamlConfiguration enchantmentsConfig = PluginImpl.getInstance().Enchantments.getConfig();
+    private final YamlConfiguration messagesConfig = PluginImpl.getInstance().Messages.getConfig();
 
     public HashMap<RodMaterials, Player> activeSkin = new HashMap<>();
     public HashMap<Player, Boolean> specialistActive = new HashMap<>();
@@ -162,6 +163,12 @@ public class FishesUtils {
 
     public void giveXp(Player player, String rarity, RodsCacheMethod rodsCacheMethod) {
         rodsCacheMethod.setXp(player, getXp(player, rarity, rodsCacheMethod));
+
+        if (hasXpForLeveling(player)) {
+            rodsCacheMethod.setXp(player, 0);
+            rodsCacheMethod.setStrength(player, rodsCacheMethod.getStrength(player) + 1);
+            player.sendMessage(messagesConfig.getString("pesca.upouForca"));
+        }
     }
 
     public double getXp(Player player, String rarity, RodsCacheMethod rodsCacheMethod) {
@@ -172,9 +179,20 @@ public class FishesUtils {
         return xp;
     }
 
-    public void giveFrozenFish(Player player, PlayersCacheMethod cacheMethod, RodsCacheMethod rodsCacheMethod, int quantity) {
-        YamlConfiguration messagesConfig = PluginImpl.getInstance().Messages.getConfig();
+    public double xpNecessaryForLeveling(Player player) {
+        double initialXp = config.getDouble("level.initial");
+        double xpPerLevel = config.getDouble("level.perLevel");
+        double xpMultiplier = config.getDouble("level.multiplier");
 
+
+        return (initialXp + (RodsCacheMethod.getInstance().getStrength(player) * xpPerLevel)) * xpMultiplier;
+    }
+
+    public boolean hasXpForLeveling(Player player) {
+        return RodsCacheMethod.getInstance().getXp(player) > xpNecessaryForLeveling(player);
+    }
+
+    public void giveFrozenFish(Player player, PlayersCacheMethod cacheMethod, RodsCacheMethod rodsCacheMethod, int quantity) {
         getFishMessage(player, messagesConfig, "§bPeixe Congelado§f", getXp(player, "frozen", rodsCacheMethod), quantity);
         cacheMethod.setFrozenFish(player, cacheMethod.getFrozenFish(player) + fishQuantity(player, rodsCacheMethod) * valuesWithSpecialistActive(player));
         giveXp(player, "frozen", rodsCacheMethod);

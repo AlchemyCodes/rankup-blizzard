@@ -166,17 +166,4 @@ public class SetCommands extends BaseCommand {
 
         PluginImpl.getInstance().Locations.saveConfig();
     }
-
-    @Subcommand("setgeyser")
-    @CommandPermission("pesca.admin")
-    public void setGeyser(Player player) {
-        YamlConfiguration locationsConfig = PluginImpl.getInstance().Locations.getConfig();
-
-        locationsConfig.set("geyser.world", player.getWorld().getName());
-        locationsConfig.set("geyser.x", player.getLocation().getX());
-        locationsConfig.set("geyser.y", player.getLocation().getY());
-        locationsConfig.set("geyser.z", player.getLocation().getZ());
-
-        PluginImpl.getInstance().Locations.saveConfig();
-    }
 }

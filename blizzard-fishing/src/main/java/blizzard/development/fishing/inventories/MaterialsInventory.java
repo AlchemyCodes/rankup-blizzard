@@ -33,11 +33,6 @@ public class MaterialsInventory {
         pane.addItem(new GuiItem(createBackItem(), event -> {
             event.setCancelled(true);
 
-            if (!FishingRodHandler.isRod(player)) {
-                player.sendActionBar("§cVocê deve estar com a vara na mão para fazer essa melhoria!");
-                return;
-            }
-
             FishingInventory.openFishing(player);
         }), Slot.fromIndex(45));
 

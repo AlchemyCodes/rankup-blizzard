@@ -28,6 +28,11 @@ fishes:
   baleia:
     rarity: "mystic"
 
+level:
+  initial: 100
+  perLevel: 20
+  multiplier: 1.5
+
 strengthNeeded:
   common: 1
   rare: 2

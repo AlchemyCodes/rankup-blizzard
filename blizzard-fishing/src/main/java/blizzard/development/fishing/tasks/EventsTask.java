@@ -34,7 +34,6 @@ public class EventsTask implements Runnable {
 
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (!worldHasPlayer(player)) {
-                System.out.println("Cancelando geyser pq nao tem player");
                 return;
             }
 

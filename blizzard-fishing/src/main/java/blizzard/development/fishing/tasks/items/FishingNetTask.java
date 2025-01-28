@@ -3,6 +3,7 @@ package blizzard.development.fishing.tasks.items;
 import blizzard.development.fishing.database.cache.methods.PlayersCacheMethod;
 import blizzard.development.fishing.database.cache.methods.RodsCacheMethod;
 import blizzard.development.fishing.handlers.FishingNetHandler;
+import blizzard.development.fishing.handlers.FishingRodHandler;
 import blizzard.development.fishing.utils.Countdown;
 import blizzard.development.fishing.utils.PluginImpl;
 import org.bukkit.Bukkit;
@@ -89,15 +90,16 @@ public class FishingNetTask implements Runnable {
 
         RodsCacheMethod rodsCacheMethod = RodsCacheMethod.getInstance();
 
-        YamlConfiguration config = PluginImpl.getInstance().Messages.getConfig();
+        YamlConfiguration messagesConfig = PluginImpl.getInstance().Messages.getConfig();
         YamlConfiguration enchantmentsConfig = PluginImpl.getInstance().Enchantments.getConfig();
 
-        String baseMessage = Objects.requireNonNull(config.getString("rede.melhorouEncantamento"));
+        String baseMessage = Objects.requireNonNull(messagesConfig.getString("rede.melhorouEncantamento"));
 
         switch (eventIndex) {
             case 0 -> {
-                if (rodsCacheMethod.getExperienced(player) >= enchantmentsConfig.getInt("enchantments.especialista.maxlevel")) {
+                if (rodsCacheMethod.getExperienced(player) >= enchantmentsConfig.getInt("enchantments.rod.especialista.maxlevel")) {
                     upRandomUpgrade(player);
+                    FishingRodHandler.setRod(player, 0);
                     return;
                 }
 
@@ -105,8 +107,9 @@ public class FishingNetTask implements Runnable {
                 player.sendMessage(message);
             }
             case 1 -> {
-                if (rodsCacheMethod.getExperienced(player) >= enchantmentsConfig.getInt("enchantments.experiente.maxlevel")) {
+                if (rodsCacheMethod.getExperienced(player) >= enchantmentsConfig.getInt("enchantments.rod.experiente.maxlevel")) {
                     upRandomUpgrade(player);
+                    FishingRodHandler.setRod(player, 0);
                     return;
                 }
 
@@ -115,8 +118,9 @@ public class FishingNetTask implements Runnable {
                 player.sendMessage(message);
             }
             case 2 -> {
-                if (rodsCacheMethod.getLucky(player) >= enchantmentsConfig.getInt("enchantments.sortudo.maxlevel")) {
+                if (rodsCacheMethod.getLucky(player) >= enchantmentsConfig.getInt("enchantments.rod.sortudo.maxlevel")) {
                     upRandomUpgrade(player);
+                    FishingRodHandler.setRod(player, 0);
                     return;
                 }
 
