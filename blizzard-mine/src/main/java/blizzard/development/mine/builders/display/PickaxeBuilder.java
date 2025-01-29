@@ -1,6 +1,6 @@
 package blizzard.development.mine.builders.display;
 
-import blizzard.development.core.Main;
+import blizzard.development.mine.utils.PluginImpl;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.ItemDisplay;
@@ -68,7 +68,7 @@ public class PickaxeBuilder {
 
                 ticks++;
             }
-        }.runTaskTimer(Main.getInstance(), 0L, 1L);
+        }.runTaskTimer(PluginImpl.getInstance().plugin, 0L, 1L);
 
         return currentDisplay;
     }

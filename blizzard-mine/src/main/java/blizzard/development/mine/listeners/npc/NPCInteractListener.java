@@ -1,6 +1,7 @@
 package blizzard.development.mine.listeners.npc;
 
 import blizzard.development.core.Main;
+import blizzard.development.mine.database.cache.methods.PlayerCacheMethods;
 import blizzard.development.mine.inventories.management.ManagementInventory;
 import blizzard.development.mine.mine.events.npc.NPCInteractEvent;
 import org.bukkit.Bukkit;
@@ -13,6 +14,10 @@ public class NPCInteractListener implements Listener {
     @EventHandler
     public void onNPCInteract(NPCInteractEvent event) {
         Player player = event.getPlayer();
+
+        if (!PlayerCacheMethods.getInstance().isInMine(player)) {
+            return;
+        }
 
         if (event.isCancelled()) return;
 

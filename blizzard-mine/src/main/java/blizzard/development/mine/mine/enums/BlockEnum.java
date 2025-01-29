@@ -2,11 +2,14 @@ package blizzard.development.mine.mine.enums;
 
 public enum BlockEnum {
 
-    ICE("Gelo", 1),
-    PACKED_ICE("Gelo Compacto", 2),
-    BLUE_ICE("Gelo Azul", 3),
-    COBBLED_DEEPSLATE("Rocha", 4),
-    DEEPSLATE("Rocha Compacta", 5),
+    STONE("Pedra", 1),
+    COBBLESTONE("Pedregulho", 2),
+    GRANITE("Granito", 3),
+    DIORITE("Diorito", 4),
+    ANDESITE("Andesito", 5),
+    DEEPSLATE("Ardosia", 6),
+    PRISMARINE("Prismarino", 7),
+    ICE("Gelo", 8),
     AVALANCHE_SNOW("AvalancheManager", 6);
 
     private final String type;

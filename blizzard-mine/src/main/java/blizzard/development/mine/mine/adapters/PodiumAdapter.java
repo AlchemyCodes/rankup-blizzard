@@ -111,7 +111,7 @@ public class PodiumAdapter implements PodiumFactory {
             topTree(topTreeLocation);
 
             PodiumUpdateTask podiumUpdateTask = new PodiumUpdateTask();
-            BukkitTask task = podiumUpdateTask.runTaskTimer(Main.getInstance(), 20L * 300, 20L * 300);
+            BukkitTask task = podiumUpdateTask.runTaskTimer(Main.getInstance(), 20L * 60 * 15, 20L * 60 * 15);
             podiumUpdateTask.setTask(task);
         }
     }
