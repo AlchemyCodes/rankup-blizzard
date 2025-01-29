@@ -1,9 +1,7 @@
 package blizzard.development.monsters.inventories.ranking;
 
-import blizzard.development.currencies.api.CurrenciesAPI;
-import blizzard.development.currencies.currencies.SoulsCurrency;
-import blizzard.development.currencies.database.storage.PlayersData;
-import blizzard.development.currencies.enums.Currencies;
+import blizzard.development.monsters.database.cache.methods.PlayersCacheMethods;
+import blizzard.development.monsters.database.storage.PlayersData;
 import blizzard.development.monsters.inventories.main.MonstersInventory;
 import blizzard.development.monsters.inventories.ranking.items.RankingItems;
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
@@ -16,17 +14,17 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.List;
 
-public class SoulsInventory {
-    private static SoulsInventory instance;
+public class LimitsInventory {
+    private static LimitsInventory instance;
 
     public void open(Player player) {
-        ChestGui inventory = new ChestGui(5, "§8Destaques (Almas)");
+        ChestGui inventory = new ChestGui(5, "§8Destaques (Limites)");
 
         RankingItems items = RankingItems.getInstance();
 
         StaticPane pane = new StaticPane(0, 0, 9, 5);
 
-        List<PlayersData> topPlayers = SoulsCurrency.getInstance().getTopPlayers();
+        List<PlayersData> topPlayers = PlayersCacheMethods.getInstance().getTopMonstersLimit();
 
         String[] slots = {"10", "11", "12", "13", "14", "15", "16", "21", "22", "23"};
 
@@ -35,9 +33,9 @@ public class SoulsInventory {
                 PlayersData playersData = topPlayers.get(i);
                 String name = playersData.getNickname();
 
-                double amount = playersData.getSouls();
+                double amount = playersData.getMonstersLimit();
 
-                GuiItem monstersItem = new GuiItem(items.monsters(name, "Almas", i, amount), event -> event.setCancelled(true));
+                GuiItem monstersItem = new GuiItem(items.monsters(name, "Limites", i, amount), event -> event.setCancelled(true));
                 pane.addItem(monstersItem, Slot.fromIndex(Integer.parseInt(slots[i])));
             } else {
                 GuiItem placeholderItem = new GuiItem(items.nothing(i), event -> event.setCancelled(true));
@@ -55,14 +53,14 @@ public class SoulsInventory {
                         "§7Mude a categoria",
                         "§7de destaques.",
                         "",
-                        "§d 👻 §fAlmas",
+                        "§d 👻 §7Almas",
                         "§c ✞ §7Mortos",
-                        "§b ⌛ §7Limites",
+                        "§b ⌛ §fLimites",
                         "",
                         "§aClique para mudar."
                 )
         ), event -> {
-            KilledInventory.getInstance().open(player);
+            SoulsInventory.getInstance().open(player);
             player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.5f, 0.5f);
             event.setCancelled(true);
         });
@@ -75,8 +73,8 @@ public class SoulsInventory {
         inventory.show(player);
     }
 
-    public static SoulsInventory getInstance() {
-        if (instance == null) instance = new SoulsInventory();
+    public static LimitsInventory getInstance() {
+        if (instance == null) instance = new LimitsInventory();
         return instance;
     }
 }
