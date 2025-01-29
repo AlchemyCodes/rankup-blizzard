@@ -6,6 +6,8 @@ import blizzard.development.rankup.database.cache.method.PlayersCacheMethod;
 import blizzard.development.rankup.utils.PluginImpl;
 import blizzard.development.rankup.utils.PrestigeUtils;
 import blizzard.development.rankup.utils.RanksUtils;
+
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -81,9 +83,20 @@ public class PrestigeCommand extends BaseCommand {
                 sendMessage(player, messagesConfig, "chat.prestige", prestige);
                 for (Player player1 : Bukkit.getOnlinePlayers()) {
                     YamlConfiguration prestigeConfig = PluginImpl.getInstance().Prestige.getConfig();
-                    player1.sendMessage(prestigeConfig.getString("prestige.messages.chat"));
-                    player1.sendActionBar(prestigeConfig.getString("prestige.messages.actionbar"));
-                    player1.sendTitle(prestigeConfig.getString("prestige.messages.title"), prestigeConfig.getString("prestige.messages.subtitle"));
+                    List<String> messages = prestigeConfig.getStringList("prestige.messages.chat");
+                    for (String message : messages) {
+                        player1.sendMessage(message
+                                .replace("{player}", player.getName())
+                                .replace("{prestige}", String.valueOf(playersData.getPrestige(player))));
+                    }
+
+                    player1.sendActionBar(prestigeConfig.getString("prestige.messages.actionbar")
+                            .replace("{player}", player.getName())
+                            .replace("{prestige}", String.valueOf(playersData.getPrestige(player))));
+
+                    player1.sendTitle(prestigeConfig.getString("prestige.messages.title"), prestigeConfig.getString("prestige.messages.subtitle")
+                            .replace("{player}", player.getName())
+                            .replace("{prestige}", String.valueOf(playersData.getPrestige(player))));
                 }
                 break;
             }

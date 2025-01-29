@@ -12,6 +12,7 @@ import com.github.stefvanschie.inventoryframework.gui.GuiItem;
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
 import com.github.stefvanschie.inventoryframework.pane.util.Slot;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -100,7 +101,7 @@ public class ConfirmationInventory {
         ConfigurationSection nextRankSection = RanksUtils.getNextRankSection(ranksConfig, RanksUtils.getCurrentRankSection(ranksConfig, currentRank));
 
         if (nextRankSection == null) {
-            sendActionMessage(player, messagesConfig, "chat.max-rank", nextRankSection, prestigeLevel);
+            sendActionMessage(player, player, messagesConfig, "chat.max-rank", nextRankSection, prestigeLevel);
             return;
         }
 
@@ -125,7 +126,10 @@ public class ConfirmationInventory {
         String nextRankName = nextRankSection.getString("name");
         playersData.setRank(player, nextRankName);
         executeRankUpCommand(player, nextRankSection);
-        sendActionMessage(player, messagesConfig, "chat.rank-up", nextRankSection, prestigeLevel);
+
+        for (Player player1 : Bukkit.getOnlinePlayers()) {
+            sendActionMessage(player, player1, messagesConfig, "chat.rank-up", nextRankSection, prestigeLevel);
+        }
     }
 
     private static void executeRankUpCommand(Player player, ConfigurationSection nextRankSection) {
@@ -143,13 +147,14 @@ public class ConfirmationInventory {
                         .replace("{rank}", PlayersCacheMethod.getInstance().getRank(player))));
     }
 
-    private static void sendActionMessage(Player player, YamlConfiguration messagesConfig, String path, ConfigurationSection nextRankSection, int prestigeLevel) {
+    private static void sendActionMessage(Player player1, Player player, YamlConfiguration messagesConfig, String path, ConfigurationSection nextRankSection, int prestigeLevel) {
         String message = messagesConfig.getString(path);
         if (message != null) {
             player.sendActionBar(message
                     .replace("{money}", NumberFormat.formatNumber(Math.max(0, RanksUtils.missingRankMoney(player, nextRankSection, prestigeLevel))))
                     .replace("{flakes}", NumberFormat.formatNumber(Math.max(0, RanksUtils.missingRankFlakes(player, nextRankSection, prestigeLevel))))
-                    .replace("{rank}", PlayersCacheMethod.getInstance().getRank(player)));
+                    .replace("{rank}", RanksUtils.getCurrentRankTag(PluginImpl.getInstance().Ranks.getConfig(), PlayersCacheMethod.getInstance().getRank(player1)))
+                    .replace("{player}", player1.getName()));
         }
     }
 }
