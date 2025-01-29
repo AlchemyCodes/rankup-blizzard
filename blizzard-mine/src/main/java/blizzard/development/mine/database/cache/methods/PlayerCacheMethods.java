@@ -6,6 +6,7 @@ import blizzard.development.currencies.enums.Currencies;
 import blizzard.development.mine.database.cache.PlayerCacheManager;
 import blizzard.development.mine.database.storage.PlayerData;
 import blizzard.development.mine.mine.enums.BlockEnum;
+import blizzard.development.rankup.database.cache.method.PlayersCacheMethod;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -33,18 +34,28 @@ public class PlayerCacheMethods {
         }
     }
 
+//    public String getAreaBlock(Player player) {
+//        PlayerData playerData = playerCacheManager.getPlayerData(player);
+//        return playerData != null ? playerData.getAreaBlock() : "§c§lERRO!";
+//    }
+
     public String getAreaBlock(Player player) {
         PlayerData playerData = playerCacheManager.getPlayerData(player);
-        return playerData != null ? playerData.getAreaBlock() : "§c§lERRO!";
+        if (playerData != null) {
+            String rank = PlayersCacheMethod.getInstance().getRank(player);
+            if (rank != null) {
+                for (BlockEnum block : BlockEnum.values()) {
+                    if (rank.startsWith(block.getType())) {
+                        return block.toString();
+                    }
+                }
+            }
+        }
+        return "";
     }
 
-    public void setAreaBlock(Player player, BlockEnum areaBlock) {
-        PlayerData playerData = playerCacheManager.getPlayerData(player);
-        if (playerData != null) {
-            playerData.setAreaBlock(areaBlock);
-            playerCacheManager.cachePlayerData(player, playerData);
-        }
-    }
+
+
 
     public Double getBlocks(Player player) {
         return CurrenciesAPI.getInstance().getBalance(player, Currencies.BLOCKS);
