@@ -1,10 +1,11 @@
 package blizzard.development.rankup.tasks;
 
 import blizzard.development.rankup.inventories.ConfirmationInventory;
-import blizzard.development.rankup.inventories.RankInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+
+import java.util.HashMap;
 
 public class AutoRankup implements Runnable {
 
@@ -14,11 +15,12 @@ public class AutoRankup implements Runnable {
                 .runTaskTimerAsynchronously(main, this, 0, 20L * 5);
     }
 
+    public static HashMap<Player, Boolean> autoRankUp = new HashMap<>();
+
     @Override
     public void run() {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            if (RankInventory.autoRank) {
-                player.sendMessage("ta auto rankup ativado e tentou upar");
+            if (autoRankUp.containsKey(player)) {
                 ConfirmationInventory.processRankUp(player);
             }
         }

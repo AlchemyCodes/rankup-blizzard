@@ -60,10 +60,6 @@ public class PlaceholderRegistry extends PlaceholderExpansion {
         assert currentRankSection != null;
         String nextRank = RanksUtils.getNextRank(config, currentRankSection);
 
-        if (nextRank == null) {
-            return "";
-        }
-
         double currentCoins = CurrenciesAPI.getInstance().getBalance(player, Currencies.COINS);
         double currentFlakes = CurrenciesAPI.getInstance().getBalance(player, Currencies.FLAKES);
 
@@ -77,13 +73,30 @@ public class PlaceholderRegistry extends PlaceholderExpansion {
         int percentage = (int) (totalProgress * 100);
 
         return switch (identifier) {
-            case "percentage" -> percentage + "%";
-            case "progressbar" -> createProgressBar(percentage, 5);
-            case "rank_name" -> rank;
+            case "percentage" -> {
+                if (nextRank != null) {
+                    yield "(" + percentage + "%)";
+                } else {
+                    yield "&a/prestigio";
+                }
+            }
+            case "progressbar" -> {
+                if (nextRank != null) {
+                    yield createProgressBar(percentage, 5);
+                } else {
+                    yield "§b■■■■■";
+                }
+            }
+            case "rank_name" -> {
+                if (nextRank != null) {
+                    yield rank;
+                } else {
+                    yield "";
+                }
+            }
             case "rank_tag" -> RanksUtils.getCurrentRankTag(config, rank);
             default -> null;
         };
-
     }
 
     private String createProgressBar(int percentage, int segments) {

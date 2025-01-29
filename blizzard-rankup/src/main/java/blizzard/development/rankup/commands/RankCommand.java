@@ -15,7 +15,5 @@ public class RankCommand extends BaseCommand {
     @Default
     public void onCommand(Player player) {
         RankInventory.openRankInventory(player);
-        player.sendMessage(RanksUtils.getCurrentRankTag(PluginImpl.getInstance().Ranks.getConfig(),
-                PlayersCacheMethod.getInstance().getRank(player)));
     }
 }

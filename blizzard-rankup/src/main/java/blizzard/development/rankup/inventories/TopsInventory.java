@@ -28,116 +28,80 @@ public class TopsInventory {
     public static void openTopInventory(Player player) {
         YamlConfiguration config = PluginImpl.getInstance().Inventories.getConfig();
         int size = config.getInt("topsInventory.size");
-        String title = config.getString("topsInventory.title");
+        String title = config.getString("topsInventory.title", "Tops Inventory");
 
-        assert title != null;
         ChestGui inventory = new ChestGui(size, title);
         StaticPane pane = new StaticPane(0, 0, 9, size);
 
         List<PlayersData> topPlayers = PlayersCacheManager.getInstance().getAllPlayersData().stream()
                 .sorted((p1, p2) -> Integer.compare(p2.getPrestige(), p1.getPrestige()))
+                .limit(10)
                 .toList();
-
-        int numberOfItems = Math.min(topPlayers.size(), 10);
 
         int[] itemSlots = {10, 11, 12, 13, 14, 15, 16, 21, 22, 23};
 
-        for (int i = 0; i < numberOfItems; i++) {
-            PlayersData playerData = topPlayers.get(i);
-
-            ConfigurationSection inventoryConfig = config.getConfigurationSection("topsInventory.items.head");
-
+        ConfigurationSection inventoryConfig = config.getConfigurationSection("topsInventory.items.head");
+        if (inventoryConfig != null) {
             Material itemType = Material.valueOf(inventoryConfig.getString("material"));
-            String displayName = inventoryConfig.getString("displayName").replace("{rank}", String.valueOf(i + 1));
-
-            List<String> lore = new ArrayList<>();
-            for (String line : inventoryConfig.getStringList("lore")) {
-                lore.add(
-                        line.replace("{nickname}", playerData.getNickname())
-                                .replace("{prestige}", String.valueOf(playerData.getPrestige()))
-                );
+            for (int i = 0; i < topPlayers.size(); i++) {
+                PlayersData playerData = topPlayers.get(i);
+                ItemStack ranking = SkullAPI.withName(new ItemStack(itemType), playerData.getNickname());
+                ItemMeta meta = ranking.getItemMeta();
+                if (meta != null) {
+                    meta.setDisplayName(inventoryConfig.getString("displayName").replace("{rank}", String.valueOf(i + 1)));
+                    meta.setLore(inventoryConfig.getStringList("lore").stream()
+                            .map(line -> line.replace("{nickname}", playerData.getNickname())
+                                    .replace("{prestige}", String.valueOf(playerData.getPrestige())))
+                            .collect(Collectors.toList()));
+                    ranking.setItemMeta(meta);
+                }
+                pane.addItem(new GuiItem(ranking, event -> event.setCancelled(true)), Slot.fromIndex(itemSlots[i]));
             }
-
-            ItemStack ranking = SkullAPI.withName(new ItemStack(itemType), playerData.getNickname());
-            ItemMeta meta = ranking.getItemMeta();
-            meta.setDisplayName(displayName);
-            meta.setLore(lore);
-            ranking.setItemMeta(meta);
-
-            GuiItem rankingItem = new GuiItem(ranking, event -> {
-                event.setCancelled(true);
-            });
-
-            pane.addItem(rankingItem, Slot.fromIndex(itemSlots[i]));
         }
 
-        GuiItem informationItem = new GuiItem(informations(player), event -> {
-            event.setCancelled(true);
-        });
-
-        GuiItem backItem = new GuiItem(back(), event -> {
+        pane.addItem(new GuiItem(createItem("topsInventory.items.information", player), event -> event.setCancelled(true)), Slot.fromIndex(41));
+        pane.addItem(new GuiItem(createItem("topsInventory.items.back", player), event -> {
             RankInventory.openRankInventory(player);
             event.setCancelled(true);
-        });
-
-        pane.addItem(informationItem, Slot.fromIndex(41));
-        pane.addItem(backItem, Slot.fromIndex(27));
+        }), Slot.fromIndex(27));
 
         inventory.addPane(pane);
         inventory.show(player);
         player.playSound(player.getLocation(), Sound.BLOCK_CHEST_OPEN, 0.5f, 0.5f);
     }
 
-    public static ItemStack back() {
+    private static ItemStack createItem(String path, Player player) {
         YamlConfiguration config = PluginImpl.getInstance().Inventories.getConfig();
-        ConfigurationSection backConfig = config.getConfigurationSection("topsInventory.items.back");
+        ConfigurationSection section = config.getConfigurationSection(path);
+        if (section == null) return new ItemStack(Material.BARRIER);
 
-        assert backConfig != null;
-        Material material = Material.valueOf(backConfig.getString("material"));
-        String displayName = backConfig.getString("displayName");
-        List<String> lore = backConfig.getStringList("lore");
-
-        ItemStack back = new ItemStack(material);
-        ItemMeta meta = back.getItemMeta();
-        meta.setDisplayName(displayName);
-        meta.setLore(lore);
-
-        back.setItemMeta(meta);
-
-        return back;
-    }
-
-    public static ItemStack informations(Player player) {
-        YamlConfiguration config = PluginImpl.getInstance().Inventories.getConfig();
-        YamlConfiguration ranksConfig = PluginImpl.getInstance().Ranks.getConfig();
-
-        PlayersCacheMethod playersData = PlayersCacheMethod.getInstance();
-        String currentRank = playersData.getRank(player);
-        int prestige = playersData.getPrestige(player);
-
-        ConfigurationSection currentRankSection = RanksUtils.getCurrentRankSection(ranksConfig, currentRank);
-        ConfigurationSection infoConfig = config.getConfigurationSection("topsInventory.items.information");
-
-        Material material = Material.valueOf(infoConfig.getString("material"));
-        String displayName = infoConfig.getString("displayName");
-        List<String> lore = infoConfig.getStringList("lore").stream()
-                .map(line -> {
-                    assert currentRankSection != null;
-                    return line.replace("{current_rank}", Objects.requireNonNull(RanksUtils.getCurrentRankName(ranksConfig, currentRank)))
-                            .replace("{next_rank}", RanksUtils.getNextRankName(ranksConfig, currentRankSection) != null ? Objects.requireNonNull(RanksUtils.getNextRankName(ranksConfig, currentRankSection)) : "Nenhum")
-                            .replace("{prestige}", String.valueOf(prestige))
-                            .replace("{next_prestige}", String.valueOf(prestige + 1))
-                            .replace("{prestige_cost}", String.valueOf(PrestigeUtils.prestigeCoinsCostAdd(prestige)));
-                })
+        Material material = Material.valueOf(section.getString("material", "BARRIER"));
+        String displayName = section.getString("displayName", "Item");
+        List<String> lore = section.getStringList("lore").stream()
+                .map(line -> formatPlaceholders(line, player))
                 .collect(Collectors.toList());
 
-        ItemStack info = new ItemStack(material);
-        ItemMeta meta = info.getItemMeta();
-        meta.setDisplayName(displayName);
-        meta.setLore(lore);
+        ItemStack item = new ItemStack(material);
+        ItemMeta meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(displayName);
+            meta.setLore(lore);
+            item.setItemMeta(meta);
+        }
+        return item;
+    }
 
-        info.setItemMeta(meta);
+    private static String formatPlaceholders(String text, Player player) {
+        PlayersCacheMethod playersData = PlayersCacheMethod.getInstance();
+        YamlConfiguration ranksConfig = PluginImpl.getInstance().Ranks.getConfig();
+        String currentRank = playersData.getRank(player);
+        int prestige = playersData.getPrestige(player);
+        ConfigurationSection currentRankSection = RanksUtils.getCurrentRankSection(ranksConfig, currentRank);
 
-        return info;
+        return text.replace("{current_rank}", Objects.requireNonNull(RanksUtils.getCurrentRankName(ranksConfig, currentRank)))
+                .replace("{next_rank}", RanksUtils.getNextRankName(ranksConfig, currentRankSection) != null ? Objects.requireNonNull(RanksUtils.getNextRankName(ranksConfig, currentRankSection)) : "Nenhum")
+                .replace("{prestige}", String.valueOf(prestige))
+                .replace("{next_prestige}", String.valueOf(prestige + 1))
+                .replace("{prestige_cost}", String.valueOf(PrestigeUtils.prestigeCoinsCostAdd(prestige)));
     }
 }
