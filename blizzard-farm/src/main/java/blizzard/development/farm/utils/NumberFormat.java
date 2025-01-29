@@ -1,4 +1,4 @@
-package blizzard.development.mine.utils;
+package blizzard.development.farm.utils;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;

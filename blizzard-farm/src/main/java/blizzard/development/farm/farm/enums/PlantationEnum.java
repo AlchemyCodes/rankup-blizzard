@@ -6,6 +6,7 @@ public enum PlantationEnum {
 
     CARROTS("Cenoura", Material.CARROTS),
     POTATOES("Batata", Material.POTATOES),
+    WHEAT("Milho", Material.WHEAT),
     MELON("Melancia", Material.MELON),
     CACTUS("Cacto", Material.CACTUS);
 
