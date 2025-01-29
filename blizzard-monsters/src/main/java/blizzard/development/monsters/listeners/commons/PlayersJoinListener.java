@@ -25,6 +25,7 @@ public class PlayersJoinListener implements Listener {
             playersData = new PlayersData(
                     player.getUniqueId().toString(),
                     player.getName(),
+                    0,
                     PluginImpl.getInstance().Config.getInt("monsters.initial-monsters-limit"),
                     new ArrayList<>()
                     );

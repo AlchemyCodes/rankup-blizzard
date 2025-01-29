@@ -13,6 +13,7 @@ import blizzard.development.monsters.database.dao.ToolsDAO;
 import blizzard.development.monsters.database.storage.MonstersData;
 import blizzard.development.monsters.database.storage.PlayersData;
 import blizzard.development.monsters.database.storage.ToolsData;
+import blizzard.development.monsters.expansions.PlaceholderExpansion;
 import blizzard.development.monsters.listeners.ListenerRegistry;
 import blizzard.development.monsters.listeners.packets.monsters.MonstersDamageListener;
 import blizzard.development.monsters.managers.DataBatchManager;
@@ -77,6 +78,7 @@ public class PluginImpl {
         registerDatabase();
         registerListeners();
         registerCommands();
+        registerExpansions();
 
         DataBatchManager.initialize(plugin);
     }
@@ -156,6 +158,12 @@ public class PluginImpl {
     private void registerListeners() {
         ListenerRegistry.getInstance().register();
         MonstersDamageListener.getInstance(plugin);
+    }
+
+    public void registerExpansions() {
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            new PlaceholderExpansion().register();
+        }
     }
 
     private void registerCommands() {

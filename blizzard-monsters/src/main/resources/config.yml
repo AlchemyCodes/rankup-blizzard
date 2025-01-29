@@ -1,7 +1,5 @@
 monsters:
 
-  max-level: 100
-
   initial-monsters-limit: 5
 
   hit-delay: 350 # in milliseconds

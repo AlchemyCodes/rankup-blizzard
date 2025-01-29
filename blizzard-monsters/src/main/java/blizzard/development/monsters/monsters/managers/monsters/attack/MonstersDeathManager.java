@@ -98,6 +98,7 @@ public class MonstersDeathManager {
         String formattedSouls = NumberFormatter.getInstance().formatNumber(souls);
 
         SoulsCurrency.getInstance().addSouls(player, souls);
+        PlayersCacheMethods.getInstance().addKilledMonsters(player, 1);
 
         player.sendActionBar("§3§lMonstros! §f✧ §f§l+§d§l👻" + formattedSouls);
     }
