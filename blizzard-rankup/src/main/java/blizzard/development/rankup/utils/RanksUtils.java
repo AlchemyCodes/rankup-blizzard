@@ -2,8 +2,12 @@ package blizzard.development.rankup.utils;
 
 import java.util.Objects;
 import java.util.Set;
+
+import blizzard.development.currencies.api.CurrenciesAPI;
+import blizzard.development.currencies.enums.Currencies;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 
 public class RanksUtils {
     public static ConfigurationSection getCurrentRankSection(YamlConfiguration ranksConfig, String currentRank) {
@@ -49,6 +53,23 @@ public class RanksUtils {
             }
         }
         return "NULL";
+    }
+
+    public static String getNextRankTag(YamlConfiguration ranksConfig, ConfigurationSection currentRankSection) {
+        Set<String> ranks = (Objects.requireNonNull(ranksConfig.getConfigurationSection("ranks"))).getKeys(false);
+
+        int currentOrder = currentRankSection.getInt("order");
+
+        for (String rankKey : ranks) {
+            ConfigurationSection rankSection = ranksConfig.getConfigurationSection("ranks." + rankKey);
+            assert rankSection != null;
+            int rankOrder = rankSection.getInt("order");
+
+            if (rankOrder == currentOrder + 1) {
+                return rankSection.getString("tag");
+            }
+        }
+        return null;
     }
 
     public static ConfigurationSection getNextRankSection(YamlConfiguration ranksConfig, ConfigurationSection currentRankSection) {
@@ -133,4 +154,25 @@ public class RanksUtils {
         return minRankName;
     }
 
+    public static double getRankUpCoinsPrice(ConfigurationSection nextRankSection, int prestigeLevel) {
+        return nextRankSection.getDouble("coinsPrice") * PrestigeUtils.prestigeCoinsCostAdd(prestigeLevel);
+    }
+
+    public static double getRankUpFlakesPrice(ConfigurationSection nextRankSection, int prestigeLevel) {
+        return nextRankSection.getDouble("flakesPrice") * PrestigeUtils.prestigeFlakesCostAdd(prestigeLevel);
+    }
+
+    public static double missingRankMoney(Player player, ConfigurationSection nextRankSection, int prestigeLevel) {
+        CurrenciesAPI currenciesAPI = CurrenciesAPI.getInstance();
+        Double balance = currenciesAPI.getBalance(player, Currencies.COINS);
+
+        return getRankUpCoinsPrice(nextRankSection, prestigeLevel) - balance;
+    }
+
+    public static double missingRankFlakes(Player player, ConfigurationSection nextRankSection, int prestigeLevel) {
+        CurrenciesAPI currenciesAPI = CurrenciesAPI.getInstance();
+        Double balance = currenciesAPI.getBalance(player, Currencies.FLAKES);
+
+        return getRankUpFlakesPrice(nextRankSection, prestigeLevel) - balance;
+    }
 }

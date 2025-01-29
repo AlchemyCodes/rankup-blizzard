@@ -2,6 +2,7 @@ package blizzard.development.rankup.inventories;
 
 import blizzard.development.rankup.utils.NumberFormat;
 import blizzard.development.rankup.utils.PluginImpl;
+import blizzard.development.rankup.utils.RanksUtils;
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
@@ -82,8 +83,8 @@ public class RanksInventory {
         ItemMeta meta = item.getItemMeta();
 
         if (meta != null) {
-            String displayName = config.getString("ranks." + rank + ".name");
-            meta.setDisplayName("§6Rank §6§l" + displayName);
+            String displayName = config.getString("ranks." + rank + ".displayName");
+            meta.setDisplayName(displayName.replace("{rank}", config.getString("ranks." + rank + ".name")));
             List<String> lore = config.getStringList("ranks." + rank + ".lore").stream()
                     .map(line -> line.replace("{price}", NumberFormat.formatNumber(config.getInt("ranks." + rank + ".coinsPrice"))))
                     .map(line -> line.replace("{flakes}", NumberFormat.formatNumber(config.getInt("ranks." + rank + ".flakesPrice"))))
