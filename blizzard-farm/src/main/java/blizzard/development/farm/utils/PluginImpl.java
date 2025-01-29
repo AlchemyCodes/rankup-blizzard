@@ -1,20 +1,33 @@
 package blizzard.development.farm.utils;
 
 import blizzard.development.farm.commands.CommandRegistry;
+import blizzard.development.farm.database.cache.StorageCacheManager;
+import blizzard.development.farm.database.cache.ToolCacheManager;
+import blizzard.development.farm.database.dao.StorageDAO;
+import blizzard.development.farm.database.dao.ToolDAO;
+import blizzard.development.farm.database.storage.StorageData;
+import blizzard.development.farm.database.storage.ToolData;
 import blizzard.development.farm.listeners.ListenerRegistry;
+import blizzard.development.farm.managers.BatchManager;
+import blizzard.development.farm.tasks.StorageSaveTask;
+import blizzard.development.farm.tasks.ToolSaveTask;
 import blizzard.development.farm.utils.config.ConfigUtils;
 import co.aikar.commands.Locales;
 import co.aikar.commands.PaperCommandManager;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.sql.SQLException;
+import java.util.List;
+import java.util.UUID;
+
 public class PluginImpl {
 
     public final Plugin plugin;
     private static PluginImpl instance;
 
-//    private PlayerDAO playerDAO;
-//    private ToolDAO toolDAO;
+    private StorageDAO storageDAO;
+    private ToolDAO toolDAO;
 
     public ConfigUtils Config;
     public ConfigUtils Locations;
@@ -24,8 +37,8 @@ public class PluginImpl {
     public PluginImpl(Plugin plugin) {
         this.plugin = plugin;
         instance = this;
-//        playerDAO = new PlayerDAO();
-//        toolDAO = new ToolDAO();
+        storageDAO = new StorageDAO();
+        toolDAO = new ToolDAO();
         Config = new ConfigUtils((JavaPlugin) plugin, "config.yml");
         Locations = new ConfigUtils((JavaPlugin) plugin, "locations.yml");
         Ranking = new ConfigUtils((JavaPlugin) plugin, "ranking.yml");
@@ -37,6 +50,7 @@ public class PluginImpl {
         Locations.saveDefaultConfig();
         Ranking.saveDefaultConfig();
         Database.saveDefaultConfig();
+        BatchManager.initialize(plugin);
 
         PaperCommandManager commandManager = new PaperCommandManager(plugin);
         commandManager.getLocales().setDefaultLocale(Locales.PORTUGUESE);
@@ -54,37 +68,37 @@ public class PluginImpl {
     }
 
     public void registerDatabase() {
-//        playerDAO = new PlayerDAO();
-//        playerDAO.initializeDatabase();
-//        toolDAO = new ToolDAO();
-//        toolDAO.initializeDatabase();
-//
-//        setupEnableData();
-//
-//        new PlayerSaveTask(playerDAO).runTaskTimerAsynchronously(plugin, 0, 20L * 3);
-//        new ToolSaveTask(toolDAO).runTaskTimerAsynchronously(plugin, 0, 20 * 3);
+        storageDAO = new StorageDAO();
+        storageDAO.initializeDatabase();
+        toolDAO = new ToolDAO();
+        toolDAO.initializeDatabase();
+
+        setupEnableData();
+
+        new StorageSaveTask(storageDAO).runTaskTimerAsynchronously(plugin, 0, 20L * 3);
+        new ToolSaveTask(toolDAO).runTaskTimerAsynchronously(plugin, 0, 20 * 3);
     }
 
     private void setupEnableData() {
-//        List<PlayerData> players;
-//        try {
-//            players = playerDAO.getAllPlayersData();
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
-//        for (PlayerData player : players) {
-//            PlayerCacheManager.getInstance().cachePlayerData(UUID.fromString(player.getUuid()), player);
-//        }
-//
-//        List<ToolData> tools;
-//        try {
-//            tools = toolDAO.getAllToolsData();
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
-//        for (ToolData tool : tools) {
-//            ToolCacheManager.getInstance().cacheToolData(UUID.fromString(tool.getUuid()), tool);
-//        }
+        List<StorageData> storages;
+        try {
+            storages = storageDAO.getAllStorageData();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        for (StorageData storage : storages) {
+            StorageCacheManager.getInstance().cacheStorageData(UUID.fromString(storage.getUuid()), storage);
+        }
+
+        List<ToolData> tools;
+        try {
+            tools = toolDAO.getAllToolsData();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        for (ToolData tool : tools) {
+            ToolCacheManager.getInstance().cacheToolData(tool.getUuid(), tool);
+        }
     }
 
     private void setupDisableData() {
@@ -109,7 +123,7 @@ public class PluginImpl {
     }
 
     private void registerListeners() {
-        ListenerRegistry listenerRegistry = new ListenerRegistry();
+        ListenerRegistry listenerRegistry = new ListenerRegistry(storageDAO);
         listenerRegistry.register();
     }
 

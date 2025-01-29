@@ -1,21 +1,18 @@
-package blizzard.development.farm.database;
+package blizzard.development.farm.database.storage;
 
 public class StorageData {
 
     private String uuid;
     private String nickname;
-    private String plotId;
     private int carrotStored;
     private int potatoStored;
     private int wheatStored;
     private int melonStored;
     private int cactusStored;
 
-
-    public StorageData(String uuid, String nickname, String plotId, int carrotStored, int potatoStored, int wheatStored, int melonStored, int cactusStored) {
+    public StorageData(String uuid, String nickname, int carrotStored, int potatoStored, int wheatStored, int melonStored, int cactusStored) {
         this.uuid = uuid;
         this.nickname = nickname;
-        this.plotId = plotId;
         this.carrotStored = carrotStored;
         this.potatoStored = potatoStored;
         this.wheatStored = wheatStored;
@@ -39,15 +36,7 @@ public class StorageData {
         this.nickname = nickname;
     }
 
-    public String getPlotId() {
-        return plotId;
-    }
-
-    public void setPlotId(String plotId) {
-        this.plotId = plotId;
-    }
-
-    public int getCarrotStored() {
+    public int getCarrotsStored() {
         return carrotStored;
     }
 
@@ -55,7 +44,7 @@ public class StorageData {
         this.carrotStored = carrotStored;
     }
 
-    public int getPotatoStored() {
+    public int getPotatoesStored() {
         return potatoStored;
     }
 
