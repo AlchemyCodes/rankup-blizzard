@@ -19,5 +19,4 @@ public class Main extends JavaPlugin {
     public void onDisable() {
         this.pluginImpl.onUnload();
     }
-// a
 }

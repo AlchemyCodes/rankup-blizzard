@@ -18,6 +18,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -27,7 +28,7 @@ import java.util.Objects;
 public class FishingInventory {
 
     public static void openFishing(Player player) {
-        ChestGui gui = new ChestGui(3, "Pesca");
+        ChestGui gui = new ChestGui(3, "Pescaria");
         StaticPane pane = new StaticPane(0, 0, 9, 3);
 
         if (player.getWorld().getName().equals("pesca")) {
@@ -36,9 +37,10 @@ public class FishingInventory {
             pane.addItem(createGoButton(player), Slot.fromIndex(13));
         }
 
-        pane.addItem(createBucketItem(player), Slot.fromIndex(15));
+        pane.addItem(createBucketItem(player), Slot.fromIndex(16));
+        pane.addItem(createTopItem(player), Slot.fromIndex(10));
 //        pane.addItem(createBoosterButton(player), Slot.fromIndex(16));
-        pane.addItem(createMaterialsButton(player), Slot.fromIndex(11));
+//        pane.addItem(createMaterialsButton(player), Slot.fromIndex(11));
 
         gui.addPane(pane);
         gui.show(player);
@@ -57,6 +59,12 @@ public class FishingInventory {
         return new GuiItem(openBucket(), event -> {
             event.setCancelled(true);
             FishBucketInventory.openBucket(player);
+        });
+    }
+
+    private static GuiItem createTopItem(Player player) {
+        return new GuiItem(top(), event -> {
+            event.setCancelled(true);
         });
     }
 
@@ -95,62 +103,76 @@ public class FishingInventory {
 //        });
 //    }
 
-    private static GuiItem createMaterialsButton(Player player) {
-        return new GuiItem(materials(), event -> {
-            event.setCancelled(true);
-            MaterialsInventory.materialsMenu(player);
-        });
-    }
+//    private static GuiItem createMaterialsButton(Player player) {
+//        return new GuiItem(materials(), event -> {
+//            event.setCancelled(true);
+//            MaterialsInventory.materialsMenu(player);
+//        });
+//    }
 
     public static ItemStack returnFishing() {
-        return new ItemBuilder(Material.BARRIER)
-                .setDisplayName("§cSair")
-                .setLore(Arrays.asList("§7Clique para sair da pesca!"))
-                .build();
+        return new ItemBuilder(Material.REDSTONE)
+            .setDisplayName("§cSair da Pesca.")
+            .setLore(Arrays.asList(
+                "§7Volta para a segurança",
+                "§7fora da pescaria.",
+                "",
+                "§cClique para sair."
+            ))
+            .addEnchant(Enchantment.DURABILITY, 10000, true)
+            .build();
     }
 
     public static ItemStack openBucket() {
-        return new ItemBuilder(Material.PUFFERFISH_BUCKET)
-                .setDisplayName("§6Balde")
-                .setLore(Arrays.asList("§7Clique para ver seu balde!"))
+        return new ItemBuilder(Material.WATER_BUCKET)
+                .setDisplayName("§bBalde de Peixes")
+                .setLore(Arrays.asList(
+                   "§7Venda peixes ou aprimore",
+                   "§7seu balde com melhorias.",
+                   "",
+                   "§bClique para visualizar."
+                ))
                 .build();
     }
 
     public static ItemStack goFishing() {
         return new ItemBuilder(Material.COMPASS)
-                .setDisplayName("§aEntrar")
-                .setLore(Arrays.asList("§7Clique para entrar na pesca!"))
+                .setDisplayName("§aEntrar na pesca")
+                .setLore(Arrays.asList(
+                    "§7Pesque grandes peixes para",
+                    "§7conseguir recompensas.",
+                    "",
+                    "§aClique para ir."
+                ))
+                .addEnchant(Enchantment.DURABILITY, 10000, false)
                 .build();
     }
 
-    public static ItemStack boosters() {
-        return new ItemBuilder(Material.EXPERIENCE_BOTTLE)
-                .setDisplayName("§eBoosters")
+    public static ItemStack top() {
+        return new ItemBuilder(Material.GOLD_INGOT)
+                .setDisplayName("§eClassificação")
                 .setLore(Arrays.asList(
-                        "§7Adquira boosters para",
-                        "§7aumentar sua produtividade.",
+                        "§7Confira agora os jogadores",
+                        "§7que mais se destacam.",
                         "",
-                        " §7▶ §fBoosters o fornecerá",
-                        "    §fmais ganhos de xp§l!",
-                        "",
-                        "§eClique para acessar."
+                        "§eClique para visualizar."
                 ))
                 .build();
     }
 
-    public static ItemStack materials() {
-        return new ItemBuilder(Material.MINECART)
-                .setDisplayName("§6Skins de Vara")
-                .setLore(Arrays.asList(
-                        "§7Gerencie suas skins",
-                        "",
-                        " §7▶ §fSkins o fornecerá mais",
-                        "    §fganhos de coins ao pescar§l!",
-                        "",
-                        "§6Clique para acessar."
-                ))
-                .build();
-    }
+//    public static ItemStack materials() {
+//        return new ItemBuilder(Material.MINECART)
+//                .setDisplayName("§6Skins de Vara")
+//                .setLore(Arrays.asList(
+//                        "§7Gerencie suas skins",
+//                        "",
+//                        " §7▶ §fSkins o fornecerá mais",
+//                        "    §fganhos de coins ao pescar§l!",
+//                        "",
+//                        "§6Clique para acessar."
+//                ))
+//                .build();
+//    }
 
     public static boolean isInventoryEmpty(Player player) {
         for (ItemStack item : player.getInventory().getContents()) {
