@@ -36,4 +36,30 @@ public class PlotSquaredAPI {
 
         return null;
     }
+
+    public static Player getPlotFromPlayer(Player player) {
+        Location location = player.getLocation();
+        com.plotsquared.core.location.Location plotLocation = com.plotsquared.core.location.Location.at(
+            location.getWorld().getName(),
+            BlockVector3.at(
+                location.getBlockX(),
+                location.getBlockY(),
+                location.getBlockZ()
+            ),
+            location.getYaw(),
+            location.getPitch()
+        );
+
+        Plot plot = plotLocation.getPlot();
+
+        if (plot != null) {
+            UUID ownerUUID = plot.getOwnerAbs();
+
+            if (ownerUUID != null) {
+                return Bukkit.getPlayer(ownerUUID);
+            }
+        }
+
+        return null;
+    }
 }

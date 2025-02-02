@@ -5,6 +5,7 @@ import blizzard.development.farm.farm.events.PlantationBreakEvent;
 import blizzard.development.farm.utils.PluginImpl;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.Ageable;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -26,6 +27,7 @@ public class PlantationBreakListener implements Listener {
 
         if (plantationBreakEvent.isCancelled()) {
             event.setCancelled(true);
+            return;
         }
 
         if (block.getType() == Material.CARROTS ||
@@ -33,6 +35,7 @@ public class PlantationBreakListener implements Listener {
             block.getType() == Material.WHEAT ||
             block.getType() == Material.MELON ||
             block.getType() == Material.CACTUS) {
+            event.setDropItems(false);
 
             plantationBreakEvent.callEvent();
         }
@@ -51,6 +54,15 @@ public class PlantationBreakListener implements Listener {
             return;
         }
 
+        if (block.getType() != Material.MELON && block.getType() != Material.CACTUS) {
+            Ageable ageable = (Ageable) block.getBlockData();
+            if (ageable.getAge() < ageable.getMaximumAge()) {
+                player.sendActionBar("§c§lEI! §cEspere a plantação crescer completamente!");
+                event.setCancelled(true);
+                return;
+            }
+        }
+
         switch (block.getType()) {
             case CARROTS:
 
@@ -60,6 +72,7 @@ public class PlantationBreakListener implements Listener {
                         block
                     );
 
+                block.setType(Material.DIAMOND_BLOCK);
                 break;
             case POTATOES:
 
