@@ -15,68 +15,68 @@ import java.util.Arrays;
 
 public class StorageInventory {
 
-    public void open(Player player) {
-        ChestGui inventory = new ChestGui(4, "Armazém");
+    public void open(Player player, Player owner) {
+        ChestGui inventory = new ChestGui(4, "Armazém §8[" + owner.getName() + "]");
         StaticPane pane = new StaticPane(0, 0, 9, 4);
 
-        int carrots_stored = StorageCacheMethod.getInstance().getCarrotsAmount(player);
-        int potatoes_stored = StorageCacheMethod.getInstance().getPotatoesAmount(player);
-        int wheat_stored = StorageCacheMethod.getInstance().getWheatAmount(player);
-        int melon_stored = StorageCacheMethod.getInstance().getMelonAmount(player);
-        int cactus_stored = StorageCacheMethod.getInstance().getCactusAmount(player);
+        int carrots_stored = StorageCacheMethod.getInstance().getCarrotsAmount(owner);
+        int potatoes_stored = StorageCacheMethod.getInstance().getPotatoesAmount(owner);
+        int wheat_stored = StorageCacheMethod.getInstance().getWheatAmount(owner);
+        int melon_stored = StorageCacheMethod.getInstance().getMelonAmount(owner);
+        int cactus_stored = StorageCacheMethod.getInstance().getCactusAmount(owner);
 
         GuiItem carrots = new GuiItem(carrots(carrots_stored), event -> {
             StorageCacheMethod.getInstance()
                 .setCarrotsAmount(
-                    player,
+                    owner,
                     0
                 );
 
-            open(player);
+            open(player, owner);
             event.setCancelled(true);
         });
 
         GuiItem potatoes = new GuiItem(potatoes(potatoes_stored), event -> {
             StorageCacheMethod.getInstance()
                 .setPotatoesAmount(
-                    player,
+                    owner,
                     0
                 );
 
-            open(player);
+            open(player, owner);
             event.setCancelled(true);
         });
 
         GuiItem wheat = new GuiItem(wheat(wheat_stored), event -> {
             StorageCacheMethod.getInstance()
                 .setWheatAmount(
-                    player,
+                    owner,
                     0
                 );
 
-            open(player);
+            open(player, owner);
             event.setCancelled(true);
         });
 
         GuiItem melon = new GuiItem(melon(melon_stored), event -> {
             StorageCacheMethod.getInstance()
                 .setMelonAmount(
-                    player,
+                    owner,
                     0
                 );
 
-            open(player);
+            open(player, owner);
             event.setCancelled(true);
         });
 
         GuiItem cactus = new GuiItem(cactus(cactus_stored), event -> {
             StorageCacheMethod.getInstance()
                     .setCactusAmount(
-                        player,
+                        owner,
                         0
                     );
 
-            open(player);
+            open(player, owner);
             event.setCancelled(true);
         });
 

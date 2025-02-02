@@ -3,6 +3,7 @@ package blizzard.development.farm.commands.storage;
 import blizzard.development.farm.farm.adapters.ToolAdapter;
 import blizzard.development.farm.inventories.StorageInventory;
 import blizzard.development.farm.utils.PluginImpl;
+import blizzard.development.farm.utils.apis.PlotSquaredAPI;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.Default;
@@ -30,9 +31,15 @@ public class StorageCommand extends BaseCommand {
     @Default
     public void onStorageCommand(CommandSender commandSender) {
         Player player = (Player) commandSender;
+        Player owner = PlotSquaredAPI.getPlotFromPlayer(player);
+
+        if (owner == null) {
+            player.sendActionBar("§c§lEI! §cVocê precisa estar em um terreno.");
+            return;
+        }
 
         StorageInventory storageInventory = new StorageInventory();
-        storageInventory.open(player);
+        storageInventory.open(player, owner);
     }
 
     @Subcommand("ferramenta")
