@@ -1,7 +1,10 @@
 package blizzard.development.monsters.listeners.monsters;
 
 import blizzard.development.monsters.builders.ItemBuilder;
+import blizzard.development.monsters.database.cache.managers.ToolsCacheManager;
+import blizzard.development.monsters.database.storage.ToolsData;
 import blizzard.development.monsters.inventories.tools.RadarInventory;
+import blizzard.development.monsters.inventories.tools.SwordInventory;
 import blizzard.development.monsters.monsters.managers.world.MonstersWorldManager;
 import blizzard.development.monsters.utils.PluginImpl;
 import blizzard.development.monsters.utils.items.TextAPI;
@@ -20,6 +23,28 @@ public class MonstersToolListener implements Listener {
 
         if (MonstersWorldManager.getInstance().containsPlayer(player)) {
             event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onSwordInteract(PlayerInteractEvent event) {
+        if (event.getAction().isRightClick()) {
+            Player player = event.getPlayer();
+
+            ItemStack item = player.getInventory().getItemInMainHand();
+
+            if (ItemBuilder.hasPersistentData(PluginImpl.getInstance().plugin, item, "blizzard.monsters.sword")) {
+                ToolsData toolsData = ToolsCacheManager.getInstance().getToolData(
+                        ItemBuilder.getPersistentData(
+                                PluginImpl.getInstance().plugin,
+                                item,
+                                "blizzard.monsters.sword"
+                        )
+                );
+
+                SwordInventory.getInstance().open(player, toolsData);
+                event.setCancelled(true);
+            }
         }
     }
 
