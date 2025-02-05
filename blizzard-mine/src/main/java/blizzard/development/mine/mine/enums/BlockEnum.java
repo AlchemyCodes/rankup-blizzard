@@ -8,7 +8,7 @@ public enum BlockEnum {
     DIORITE("Diorito", 4),
     ANDESITE("Andesito", 5),
     DEEPSLATE("Ardosia", 6),
-    PRISMARINE("Prismarino", 7),
+    PRISMARINE("Prismarinho", 7),
     ICE("Gelo", 8),
     AVALANCHE_SNOW("AvalancheManager", 6);
 

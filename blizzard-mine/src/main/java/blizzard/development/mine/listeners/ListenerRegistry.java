@@ -1,7 +1,9 @@
 package blizzard.development.mine.listeners;
 
+import blizzard.development.mine.database.dao.BoosterDAO;
 import blizzard.development.mine.database.dao.PlayerDAO;
 import blizzard.development.mine.database.dao.ToolDAO;
+import blizzard.development.mine.listeners.booster.BoosterListener;
 import blizzard.development.mine.listeners.commons.PlayerTrafficListener;
 import blizzard.development.mine.listeners.mine.*;
 import blizzard.development.mine.listeners.npc.NPCInteractListener;
@@ -21,10 +23,12 @@ public class ListenerRegistry {
 
     private final PlayerDAO playerDAO;
     private final ToolDAO toolDAO;
+    private final BoosterDAO boosterDAO;
 
-    public ListenerRegistry(PlayerDAO playerDAO, ToolDAO toolDAO) {
+    public ListenerRegistry(PlayerDAO playerDAO, ToolDAO toolDAO, BoosterDAO boosterDAO) {
         this.playerDAO = playerDAO;
         this.toolDAO = toolDAO;
+        this.boosterDAO = boosterDAO;
     }
 
     public void register() {
@@ -42,7 +46,9 @@ public class ListenerRegistry {
                 new MineJumpPadListener(),
                 // npc
                 new NPCInteractListener(),
-                new NPCRotationListener()
+                new NPCRotationListener(),
+                // booster
+                new BoosterListener()
         ).forEach(listener -> pluginManager.registerEvents(listener, PluginImpl.getInstance().plugin));
     }
 

@@ -2,6 +2,8 @@ package blizzard.development.mine.commands;
 
 import blizzard.development.mine.commands.mine.MineCommand;
 import blizzard.development.mine.commands.mine.subcommands.admins.*;
+import blizzard.development.mine.commands.mine.subcommands.booster.BoosterCommands;
+import blizzard.development.mine.commands.mine.subcommands.users.BoosterCommand;
 import blizzard.development.mine.commands.mine.subcommands.users.ResetCommand;
 import blizzard.development.mine.managers.events.AvalancheManager;
 import blizzard.development.mine.utils.PluginImpl;
@@ -24,7 +26,10 @@ public class CommandRegistry {
                 new DisplayCommand(),
                 //users
                 new ResetCommand(),
-                new AvalancheManager()
+                new AvalancheManager(),
+                //booster
+                new BoosterCommand(),
+                new BoosterCommands()
         ).forEach(paperCommandManager::registerCommand);
     }
 }

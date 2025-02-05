@@ -3,16 +3,20 @@ package blizzard.development.mine.listeners.commons;
 import blizzard.development.core.Main;
 import blizzard.development.mine.database.cache.PlayerCacheManager;
 import blizzard.development.mine.database.cache.ToolCacheManager;
+import blizzard.development.mine.database.cache.methods.PlayerCacheMethods;
 import blizzard.development.mine.database.dao.PlayerDAO;
 import blizzard.development.mine.database.dao.ToolDAO;
 import blizzard.development.mine.database.storage.PlayerData;
 import blizzard.development.mine.database.storage.ToolData;
+import blizzard.development.mine.mine.adapters.MineAdapter;
 import blizzard.development.mine.mine.enums.BlockEnum;
+import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.vehicle.VehicleEnterEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.SQLException;
@@ -94,5 +98,14 @@ public class PlayerTrafficListener implements Listener {
 
         ToolData toolData = ToolCacheManager.getInstance().getToolData(player);
         toolDAO.updateToolData(toolData);
+    }
+
+    @EventHandler
+    public void onVehicleEnter(VehicleEnterEvent event) {
+        if (!PlayerCacheMethods.getInstance().isInMine((Player) event.getEntered())) return;
+
+        if (event.getVehicle() instanceof Minecart && event.getEntered() instanceof Player) {
+            event.setCancelled(true);
+        }
     }
 }

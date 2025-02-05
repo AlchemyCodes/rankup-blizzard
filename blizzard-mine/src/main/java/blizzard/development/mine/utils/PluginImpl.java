@@ -5,17 +5,20 @@ import blizzard.development.mine.builders.display.ExtractorBuilder;
 import blizzard.development.mine.builders.hologram.HologramBuilder;
 import blizzard.development.mine.commands.CommandRegistry;
 import blizzard.development.mine.database.DatabaseConnection;
+import blizzard.development.mine.database.cache.BoosterCacheManager;
 import blizzard.development.mine.database.cache.PlayerCacheManager;
 import blizzard.development.mine.database.cache.ToolCacheManager;
+import blizzard.development.mine.database.dao.BoosterDAO;
 import blizzard.development.mine.database.dao.PlayerDAO;
 import blizzard.development.mine.database.dao.ToolDAO;
+import blizzard.development.mine.database.storage.BoosterData;
 import blizzard.development.mine.database.storage.PlayerData;
 import blizzard.development.mine.database.storage.ToolData;
 import blizzard.development.mine.expansions.PlaceholderExpansion;
 import blizzard.development.mine.listeners.ListenerRegistry;
 import blizzard.development.mine.mine.adapters.PodiumAdapter;
-import blizzard.development.mine.tasks.PlayerSaveTask;
-import blizzard.development.mine.tasks.ToolSaveTask;
+import blizzard.development.mine.tasks.DatabaseSaveTask;
+import blizzard.development.mine.tasks.manager.TaskManager;
 import blizzard.development.mine.tasks.mine.ExtractorUpdateTask;
 import blizzard.development.mine.tasks.mine.PodiumUpdateTask;
 import blizzard.development.mine.utils.config.ConfigUtils;
@@ -40,17 +43,21 @@ public class PluginImpl {
 
     private PlayerDAO playerDAO;
     private ToolDAO toolDAO;
+    private BoosterDAO boosterDAO;
 
     public ConfigUtils Config;
     public ConfigUtils Locations;
     public ConfigUtils Ranking;
     public ConfigUtils Database;
 
+    public TaskManager taskManager;
+
     public PluginImpl(Plugin plugin) {
         this.plugin = plugin;
         instance = this;
         playerDAO = new PlayerDAO();
         toolDAO = new ToolDAO();
+        boosterDAO = new BoosterDAO();
         Config = new ConfigUtils((JavaPlugin) plugin, "config.yml");
         Locations = new ConfigUtils((JavaPlugin) plugin, "locations.yml");
         Ranking = new ConfigUtils((JavaPlugin) plugin, "ranking.yml");
@@ -74,8 +81,11 @@ public class PluginImpl {
     }
 
     public void onDisable() {
+        if (taskManager != null) {
+            taskManager.stop();
+        }
+
         new PodiumUpdateTask().cancelTask();
-        new ExtractorUpdateTask().cancelTask();
 
         Set<UUID> npcsToRemove = new HashSet<>(PodiumAdapter.getInstance().getPodiumNPCs());
         for (UUID uuid : npcsToRemove) {
@@ -96,11 +106,13 @@ public class PluginImpl {
         playerDAO.initializeDatabase();
         toolDAO = new ToolDAO();
         toolDAO.initializeDatabase();
+        boosterDAO = new BoosterDAO();
+        boosterDAO.initializeDatabase();
 
         setupEnableData();
 
-        new PlayerSaveTask(playerDAO).runTaskTimerAsynchronously(plugin, 0, 20L * 3);
-        new ToolSaveTask(toolDAO).runTaskTimerAsynchronously(plugin, 0, 20L * 3);
+        taskManager = new TaskManager(plugin, toolDAO, playerDAO, boosterDAO);
+        taskManager.start();
     }
 
     private void setupEnableData() {
@@ -123,6 +135,16 @@ public class PluginImpl {
         for (ToolData tool : tools) {
             ToolCacheManager.getInstance().cacheToolData(UUID.fromString(tool.getUuid()), tool);
         }
+
+        List<BoosterData> boosters;
+        try {
+            boosters = boosterDAO.getAllBoostersData();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        for (BoosterData booster : boosters) {
+            BoosterCacheManager.getInstance().cacheBoosterData(UUID.fromString(booster.getUuid()), booster);
+        }
     }
 
     private void setupDisableData() {
@@ -143,11 +165,19 @@ public class PluginImpl {
             }
         });
 
+        BoosterCacheManager.getInstance().boosterCache.forEach((player, boosterData) -> {
+            try {
+                boosterDAO.updateBoosterData(boosterData);
+            } catch (SQLException exception) {
+                throw new RuntimeException("Error when update player date " + boosterData.getNickname(), exception);
+            }
+        });
+
         DatabaseConnection.getInstance().close();
     }
 
     private void registerListeners() {
-        ListenerRegistry listenerRegistry = new ListenerRegistry(playerDAO, toolDAO);
+        ListenerRegistry listenerRegistry = new ListenerRegistry(playerDAO, toolDAO, boosterDAO);
         listenerRegistry.register();
         listenerRegistry.registerPacket();
     }
