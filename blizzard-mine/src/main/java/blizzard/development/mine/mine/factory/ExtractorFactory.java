@@ -5,5 +5,5 @@ import org.bukkit.entity.Player;
 
 public interface ExtractorFactory {
 
-    void activeExtractor(Player player, Block block, double money, int blocks);
+    void activeExtractor(Player player, Block block, double money, double blocks);
 }

@@ -26,6 +26,7 @@ dependencies {
 
     compileOnly project(":blizzard-currencies")
     compileOnly project(":blizzard-core")
+    compileOnly project(":blizzard-rankup")
 }
 
 def targetJavaVersion = 21

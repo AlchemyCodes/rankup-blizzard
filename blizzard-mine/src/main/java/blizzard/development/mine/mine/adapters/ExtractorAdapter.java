@@ -36,7 +36,7 @@ public class ExtractorAdapter implements ExtractorFactory {
     private final HashMap<Player, Integer> extractorBlocks = new HashMap<>();
 
     @Override
-    public void activeExtractor(Player player, Block block, double money, int blocks) {
+    public void activeExtractor(Player player, Block block, double money, double blocks) {
         int currentBlocks = getExtractorBlocks(player) + 1;
         extractorBlocks.put(player, currentBlocks);
         if (currentBlocks >= 200) {
@@ -49,7 +49,7 @@ public class ExtractorAdapter implements ExtractorFactory {
         return extractorBlocks.getOrDefault(player, 0);
     }
 
-    private void giveExtractorRewards(Player player, Block block, int blocks, double money) {
+    private void giveExtractorRewards(Player player, Block block, double blocks, double money) {
         Location effectLocation = block.getLocation().add(0.5, 0.5, 0.5);
         player.playSound(effectLocation, Sound.ENTITY_ENDER_DRAGON_GROWL, 0.7f, 1.5f);
 
@@ -96,7 +96,7 @@ public class ExtractorAdapter implements ExtractorFactory {
         }.runTaskTimer(Main.getInstance(), 0L, 1L);
 
         int brokenBlocks = breakBlocksInRadius(player, block.getLocation());
-        int blocksPrice = blocks * brokenBlocks;
+        double blocksPrice = blocks * brokenBlocks;
         double moneyToAdd = money * brokenBlocks;
 
         CurrenciesAPI currenciesAPI = CurrenciesAPI.getInstance();
