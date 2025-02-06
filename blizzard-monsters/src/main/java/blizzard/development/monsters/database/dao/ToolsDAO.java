@@ -12,10 +12,10 @@ public class ToolsDAO {
     public void initializeDatabase() {
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              Statement stat = conn.createStatement()) {
-
             String sql_tools = "CREATE TABLE IF NOT EXISTS monsters_tools (" +
                     "id VARCHAR(36) PRIMARY KEY, " +
                     "type VARCHAR(36), " +
+                    "skin VARCHAR(36), " +
                     "damage INTEGER, " +
                     "experienced INTEGER, " +
                     "owner VARCHAR(36)" +
@@ -42,12 +42,12 @@ public class ToolsDAO {
         try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement statement = conn.prepareStatement(sql)) {
             statement.setString(1, id);
-
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     return new ToolsData(
                             resultSet.getString("id"),
                             resultSet.getString("type"),
+                            resultSet.getString("skin"),
                             resultSet.getInt("damage"),
                             resultSet.getInt("experienced"),
                             resultSet.getString("owner")
@@ -61,14 +61,15 @@ public class ToolsDAO {
     }
 
     public void createToolData(ToolsData toolData) throws SQLException {
-        String sql = "INSERT INTO monsters_tools (id, type, damage, experienced, owner) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO monsters_tools (id, type, skin, damage, experienced, owner) VALUES (?, ?, ?, ?, ?, ?)";
         executeUpdate(sql, statement -> {
             try {
                 statement.setString(1, toolData.getId());
                 statement.setString(2, toolData.getType());
-                statement.setInt(3, toolData.getDamage());
-                statement.setInt(4, toolData.getExperienced());
-                statement.setString(5, toolData.getOwner());
+                statement.setString(3, toolData.getSkin());
+                statement.setInt(4, toolData.getDamage());
+                statement.setInt(5, toolData.getExperienced());
+                statement.setString(6, toolData.getOwner());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -87,14 +88,15 @@ public class ToolsDAO {
     }
 
     public void updateToolData(ToolsData toolData) throws SQLException {
-        String sql = "UPDATE monsters_tools SET type = ?, damage = ?, experienced = ?, owner = ? WHERE id = ?";
+        String sql = "UPDATE monsters_tools SET type = ?, skin = ?, damage = ?, experienced = ?, owner = ? WHERE id = ?";
         executeUpdate(sql, statement -> {
             try {
                 statement.setString(1, toolData.getType());
-                statement.setInt(2, toolData.getDamage());
-                statement.setInt(3, toolData.getExperienced());
-                statement.setString(4, toolData.getOwner());
-                statement.setString(5, toolData.getId());
+                statement.setString(2, toolData.getSkin());
+                statement.setInt(3, toolData.getDamage());
+                statement.setInt(4, toolData.getExperienced());
+                statement.setString(5, toolData.getOwner());
+                statement.setString(6, toolData.getId());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -104,15 +106,14 @@ public class ToolsDAO {
     public List<ToolsData> getAllToolsData() throws SQLException {
         String sql = "SELECT * FROM monsters_tools";
         List<ToolsData> toolsDataList = new ArrayList<>();
-
         try (Connection connection = DatabaseConnection.getInstance().getConnection();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
-
             while (resultSet.next()) {
                 toolsDataList.add(new ToolsData(
                         resultSet.getString("id"),
                         resultSet.getString("type"),
+                        resultSet.getString("skin"),
                         resultSet.getInt("damage"),
                         resultSet.getInt("experienced"),
                         resultSet.getString("owner")
@@ -121,7 +122,6 @@ public class ToolsDAO {
         } catch (SQLException e) {
             System.out.println("Failed to retrieve tools data: " + e.getMessage());
         }
-
         return toolsDataList;
     }
 }

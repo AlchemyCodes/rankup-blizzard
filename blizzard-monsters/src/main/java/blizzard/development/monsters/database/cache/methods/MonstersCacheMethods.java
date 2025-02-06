@@ -2,6 +2,7 @@ package blizzard.development.monsters.database.cache.methods;
 
 import blizzard.development.monsters.database.cache.managers.MonstersCacheManager;
 import blizzard.development.monsters.database.storage.MonstersData;
+import blizzard.development.monsters.monsters.enums.Tools;
 import blizzard.development.monsters.utils.LocationUtils;
 import org.bukkit.Location;
 

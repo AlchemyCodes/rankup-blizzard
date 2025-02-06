@@ -7,6 +7,7 @@ import blizzard.development.monsters.listeners.eggs.MonstersEggListener;
 import blizzard.development.monsters.listeners.monsters.MonstersToolListener;
 import blizzard.development.monsters.listeners.monsters.MonstersWorldListener;
 import blizzard.development.monsters.listeners.packets.players.PlayersPacketMoveListener;
+import blizzard.development.monsters.listeners.visuals.VisualApplyListener;
 import blizzard.development.monsters.utils.PluginImpl;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
@@ -31,6 +32,7 @@ public class ListenerRegistry {
                 new MonstersEggListener(),
                 // tools
                 new MonstersToolListener(),
+                new VisualApplyListener(),
                 // packets
                 new PlayersPacketMoveListener()
         ).forEach(listener -> pluginManager.registerEvents(listener, PluginImpl.getInstance().plugin));
