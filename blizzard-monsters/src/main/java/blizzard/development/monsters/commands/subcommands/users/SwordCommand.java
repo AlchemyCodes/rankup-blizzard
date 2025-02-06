@@ -1,5 +1,6 @@
 package blizzard.development.monsters.commands.subcommands.users;
 
+import blizzard.development.monsters.monsters.enums.Tools;
 import blizzard.development.monsters.monsters.managers.tools.MonstersToolManager;
 import blizzard.development.monsters.utils.CooldownUtils;
 import blizzard.development.monsters.utils.items.TextAPI;
@@ -30,7 +31,7 @@ public class SwordCommand extends BaseCommand {
         }
 
         player.sendActionBar(TextAPI.parse("§a§lYAY! §aVocê recebeu uma aniquiladora."));
-        MonstersToolManager.getInstance().giveSword(player, 2, 1);
+        MonstersToolManager.getInstance().giveSword(player, true, Tools.WOODEN,2, 1);
 
         cooldown.createCountdown(player, cooldownName, 2, TimeUnit.SECONDS);
     }

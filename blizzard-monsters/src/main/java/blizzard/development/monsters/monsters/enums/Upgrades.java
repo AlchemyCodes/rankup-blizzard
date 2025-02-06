@@ -1,4 +1,14 @@
 package blizzard.development.monsters.monsters.enums;
 
-public enum Upgrades {
+import lombok.Getter;
+
+public @Getter enum Upgrades {
+
+    DAMAGE("damage");
+
+    private final String type;
+
+    Upgrades(String type) {
+        this.type = type;
+    }
 }

@@ -5,6 +5,7 @@ import blizzard.development.monsters.inventories.main.items.MonstersItems;
 import blizzard.development.monsters.inventories.ranking.SoulsInventory;
 import blizzard.development.monsters.inventories.rewards.RewardsInventory;
 import blizzard.development.monsters.monsters.enums.Locations;
+import blizzard.development.monsters.monsters.enums.Tools;
 import blizzard.development.monsters.monsters.managers.tools.MonstersToolManager;
 import blizzard.development.monsters.monsters.managers.world.MonstersWorldManager;
 import blizzard.development.monsters.utils.LocationUtils;
@@ -116,7 +117,7 @@ public class MonstersInventory {
         }
 
         player.sendActionBar(TextAPI.parse("§a§lYAY! §aVocê recebeu uma aniquiladora."));
-        MonstersToolManager.getInstance().giveSword(player, 2, 1);
+        MonstersToolManager.getInstance().giveSword(player, true, Tools.WOODEN, 2, 1);
     }
 
     public static MonstersInventory getInstance() {

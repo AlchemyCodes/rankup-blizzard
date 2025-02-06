@@ -18,13 +18,14 @@ import java.util.UUID;
 public class MonstersToolManager {
     private static MonstersToolManager instance;
 
-    public void giveSword(Player player, Integer damage, Integer experienced) {
+    public ItemStack giveSword(Player player, Boolean give, Tools skin, Integer damage, Integer experienced) {
         String swordId = UUID.randomUUID().toString().substring(0, 10);
 
-        String sword = "blizzard.monsters.sword";
+        String swordKey = "blizzard.monsters.sword";
+        String skinKey = "blizzard.monsters.sword-skin";
 
-        ItemStack item = new ItemBuilder(Material.WOODEN_SWORD)
-                .setDisplayName("§6Aniquiladora §l✂")
+        ItemStack item = new ItemBuilder(skin.getMaterial())
+                .setDisplayName(skin.getDisplay())
                 .setLore(Arrays.asList(
                         "§7Use esta espada para",
                         "§7aniquilar os monstros.",
@@ -34,22 +35,26 @@ public class MonstersToolManager {
                         ""
                 ))
                 .addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE)
-                .addPersistentData(PluginImpl.getInstance().plugin, sword, swordId)
+                .addPersistentData(PluginImpl.getInstance().plugin, swordKey, swordId)
+                .addPersistentData(PluginImpl.getInstance().plugin, skinKey, skin.getType())
                 .build(true);
 
-        player.getInventory().addItem(item);
+        if (give) {
+            player.getInventory().addItem(item);
+            String type = Tools.SWORD.getType();
+            createSwordData(player, swordId, type, skin.getType(), damage, experienced);
+        }
 
-        String type = Tools.SWORD.getType();
-
-        createSwordData(player, swordId, type, damage, experienced);
+        return item;
     }
 
-    private void createSwordData(Player player, String id, String type, Integer damage, Integer experienced) {
+    private void createSwordData(Player player, String id, String type, String skin, Integer damage, Integer experienced) {
         String owner = player.getName();
 
         ToolsData toolsData = new ToolsData(
                 id,
                 type,
+                skin,
                 damage,
                 experienced,
                 owner
