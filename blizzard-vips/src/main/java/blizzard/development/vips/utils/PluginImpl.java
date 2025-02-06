@@ -103,7 +103,7 @@ public class PluginImpl {
     }
 
     private void registerTasks() {
-        new VipTask(playersDAO).runTaskTimer(plugin, 0L, 20L);
+        new VipTask().runTaskTimer(plugin, 20L, 20L);
     }
 
     private void registerListeners() {

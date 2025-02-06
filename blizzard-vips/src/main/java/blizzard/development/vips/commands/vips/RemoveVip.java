@@ -17,7 +17,7 @@ public class RemoveVip extends BaseCommand {
     @Default
     @Syntax("<player> <vip>")
     @CommandCompletion("@playerName @vipName")
-    public void onCommand(Player sender, String player, String vipName) throws SQLException {
-        VipUtils.getInstance().removeVip(sender, player, vipName);
+    public void onCommand(Player sender, String player, String vipName) {
+        VipUtils.getInstance().removeVip(sender, vipName);
     }
 }

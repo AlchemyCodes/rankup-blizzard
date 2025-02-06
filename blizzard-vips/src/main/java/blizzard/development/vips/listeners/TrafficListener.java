@@ -39,21 +39,16 @@ public class TrafficListener implements Listener {
 
         VipUtils vipUtils = VipUtils.getInstance();
 
-
-        try {
-            if (vipUtils.hasVip(player.getName(), "alchemy")) {
-                vipUtils.setActiveVip(player, "alchemy");
-            } else if (vipUtils.hasVip(player.getName(), "blizzard")) {
-                vipUtils.setActiveVip(player, "blizzard");
-            } else if (vipUtils.hasVip(player.getName(), "esmeralda")) {
-                vipUtils.setActiveVip(player, "esmeralda");
-            } else if (vipUtils.hasVip(player.getName(), "diamante")) {
-                vipUtils.setActiveVip(player, "diamante");
-            } else if (vipUtils.hasVip(player.getName(), "ouro")) {
-                vipUtils.setActiveVip(player, "ouro");
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        if (vipUtils.hasVip( "alchemy")) {
+            vipUtils.setActiveVip(player, "alchemy");
+        } else if (vipUtils.hasVip("blizzard")) {
+            vipUtils.setActiveVip(player, "blizzard");
+        } else if (vipUtils.hasVip("esmeralda")) {
+            vipUtils.setActiveVip(player, "esmeralda");
+        } else if (vipUtils.hasVip("diamante")) {
+            vipUtils.setActiveVip(player, "diamante");
+        } else if (vipUtils.hasVip("ouro")) {
+            vipUtils.setActiveVip(player, "ouro");
         }
     }
 }

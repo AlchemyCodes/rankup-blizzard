@@ -3,99 +3,96 @@ package blizzard.development.vips.database.cache.methods;
 import blizzard.development.vips.database.cache.PlayersCacheManager;
 import blizzard.development.vips.database.storage.PlayersData;
 import blizzard.development.vips.utils.RandomIdGenerator;
-import org.bukkit.entity.Player;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import blizzard.development.vips.utils.vips.VipUtils;
 
 public class PlayersCacheMethod {
     private static PlayersCacheMethod instance;
     
     private final PlayersCacheManager cache = PlayersCacheManager.getInstance();
 
-//    public int getId(Player player) {
-//        PlayersData data = cache.getPlayerData(player);
-//        return data.getId();
-//    }
-//
-//    public String getNickname(Player player) {
-//        PlayersData data = cache.getPlayerData(player);
-//        return (data != null) ? data.getNickname() : "";
-//    }
-//
-//    public String getVipActivationDate(Player player) {
-//        PlayersData data = cache.getPlayerData(player);
-//        return (data != null) ? data.getVipActivationDate() : "Sem Vip";
-//    }
-//
-//
-//    public void setVipActivationDate(Player player) {
-//        PlayersData data = cache.getPlayerData(player);
-//
-//        if (data != null) {
-//            data.setVipActivationDate(getDate());
-//            cache.cachePlayerData(player.getName(), data);
-//        }
-//    }
-//
-//    public String getVipId(Player player) {
-//        PlayersData data = cache.getPlayerData(player);
-//        return (data != null) ? data.getVipId() : "Sem Vip";
-//    }
-//
-//    public void setVipId(Player player) {
-//        PlayersData data = cache.getPlayerData(player);
-//
-//        if (data != null) {
-//            data.setVipId(RandomIdGenerator.generateVipId());
-//            cache.cachePlayerData(player.getName(), data);
-//        }
-//    }
-//
-//    public String getVipName(Player player) {
-//        PlayersData data = cache.getPlayerData(player);
-//        return (data != null) ? data.getVipName() : "Sem Vip";
-//    }
-//
-//    public void setVipName(Player player, String vipName) {
-//        PlayersData data = cache.getPlayerData(player);
-//        if (data != null) {
-//            data.setVipName(vipName);
-//            cache.cachePlayerData(player.getName(), data);
-//        }
-//    }
-//
-//    public long getVipDuration(Player player) {
-//        PlayersData data = cache.getPlayerData(player);
-//        return (data != null) ? data.getVipDuration() : 0L;
-//    }
-//
-//    public void setDuration(Player player, long duration) {
-//        PlayersData data = cache.getPlayerData(player);
-//        if (data != null) {
-//            data.setVipDuration(duration);
-//            cache.cachePlayerData(player.getName(), data);
-//        }
-//    }
-//
-//    public void removeVip(Player player) {
-//        PlayersData data = cache.getPlayerData(player);
-//        if (data != null) {
-//            data.setVipName("");
-//            data.setVipId("");
-//            data.setVipActivationDate("");
-//            data.setVipDuration(0);
-//            cache.cachePlayerData(player.getName(), data);
-//        }
-//    }
-//
-//    public boolean hasVip(Player player) {
-//        return getVipId(player) != null;
-//    }
-//
-//    public boolean hasSpecificVip(Player player, String vipName) {
-//        return getVipName(player) != null && getVipName(player).equalsIgnoreCase(vipName);
-//    }
+    public int getId(String vipId) {
+        PlayersData data = cache.getPlayerData(vipId);
+        return data.getId();
+    }
+
+    public String getNickname(String vipId) {
+        PlayersData data = cache.getPlayerData(vipId);
+        return (data != null) ? data.getNickname() : "";
+    }
+
+    public String getVipActivationDate(String vipId) {
+        PlayersData data = cache.getPlayerData(vipId);
+        return (data != null) ? data.getVipActivationDate() : "Sem Vip";
+    }
+
+
+    public void setVipActivationDate(String vipId) {
+        PlayersData data = cache.getPlayerData(vipId);
+
+        if (data != null) {
+            data.setVipActivationDate(VipUtils.getInstance().getDate());
+            cache.cachePlayerData(vipId, data);
+        }
+    }
+
+    public String getVipId(String vipId) {
+        PlayersData data = cache.getPlayerData(vipId);
+        return (data != null) ? data.getVipId() : "Sem Vip";
+    }
+
+    public void setVipId(String vipId) {
+        PlayersData data = cache.getPlayerData(vipId);
+
+        if (data != null) {
+            data.setVipId(RandomIdGenerator.generateVipId());
+            cache.cachePlayerData(vipId, data);
+        }
+    }
+
+    public String getVipName(String vipId) {
+        PlayersData data = cache.getPlayerData(vipId);
+        return (data != null) ? data.getVipName() : "Sem Vip";
+    }
+
+    public void setVipName(String vipId, String vipName) {
+        PlayersData data = cache.getPlayerData(vipId);
+        if (data != null) {
+            data.setVipName(vipName);
+            cache.cachePlayerData(vipId, data);
+        }
+    }
+
+    public long getVipDuration(String vipId) {
+        PlayersData data = cache.getPlayerData(vipId);
+        return (data != null) ? data.getVipDuration() : 0L;
+    }
+
+    public void setVipDuration(String vipId, long duration) {
+        PlayersData data = cache.getPlayerData(vipId);
+        if (data != null) {
+            data.setVipDuration(duration);
+            cache.cachePlayerData(vipId, data);
+        }
+    }
+
+    public void removeVip(String vipId) {
+        PlayersData data = cache.getPlayerData(vipId);
+        if (data != null) {
+            data.setVipName("");
+            data.setVipId("");
+            data.setVipActivationDate("");
+            data.setVipDuration(0);
+            cache.cachePlayerData(vipId, data);
+        }
+    }
+
+    public boolean hasVip(String vipId) {
+        return getVipId(vipId) != null;
+    }
+
+    public boolean hasSpecificVip(String vipId, String vipName) {
+        return getVipName(vipId) != null && getVipName(vipId).equalsIgnoreCase(vipName);
+    }
 
     public static PlayersCacheMethod getInstance() {
         if (instance == null) {

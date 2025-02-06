@@ -39,8 +39,8 @@ public class UseKey extends BaseCommand {
         VipUtils vipUtils = VipUtils.getInstance();
         String date = vipUtils.getDate();
 
-        if (vipUtils.hasVip(player.getName(), vipName)) {
-            vipUtils.extendVip(player, player.getName(), vipName, vipUtils, duration);
+        if (vipUtils.hasVip( vipName)) {
+            vipUtils.extendVip(player, vipName, vipUtils, duration);
             instance.removeKeyData(key);
             KeysCacheManager.getInstance().cacheKeyData(key, keyData);
             keysDao.removeKeyData(key);

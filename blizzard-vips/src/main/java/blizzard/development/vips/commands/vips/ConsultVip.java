@@ -1,5 +1,6 @@
 package blizzard.development.vips.commands.vips;
 
+import blizzard.development.vips.database.cache.PlayersCacheManager;
 import blizzard.development.vips.database.dao.PlayersDAO;
 import blizzard.development.vips.database.storage.PlayersData;
 import blizzard.development.vips.utils.PluginImpl;
@@ -15,6 +16,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.List;
 
 @CommandAlias("vip|vips")
@@ -23,7 +25,7 @@ public class ConsultVip extends BaseCommand {
     @Default
     @Syntax("<id|playerName>")
     @CommandCompletion("@playerName")
-    public void onCommand(Player player, @Optional String argument) throws SQLException {
+    public void onCommand(Player player, @Optional String argument) {
         if (argument == null) {
             sendPlayerVips(player, player.getName());
             return;
@@ -32,8 +34,7 @@ public class ConsultVip extends BaseCommand {
         sendPlayerVips(player, argument);
     }
 
-    public void sendPlayerVips(Player sender, String playerName) throws SQLException {
-        PlayersDAO playersDAO = new PlayersDAO();
+    public void sendPlayerVips(Player sender, String playerName) {
         YamlConfiguration messagesConfig = PluginImpl.getInstance().Messages.getConfig();
 
         Player specificPlayer = Bukkit.getPlayer(playerName);
@@ -43,14 +44,14 @@ public class ConsultVip extends BaseCommand {
             return;
         }
 
-        List<PlayersData> allPlayerVips = playersDAO.getAllPlayerVips(specificPlayer.getName());
+        Collection<PlayersData> allPlayersData = PlayersCacheManager.getInstance().getAllPlayersData();
 
-        if (allPlayerVips.isEmpty()) {
+        if (allPlayersData.isEmpty()) {
             sender.sendMessage(messagesConfig.getString("commands.consultVip.noActiveVip"));
             return;
         }
 
-        for (PlayersData playerVip : allPlayerVips) {
+        for (PlayersData playerVip : allPlayersData) {
             String vipName = playerVip.getVipName();
             String activationDate = playerVip.getVipActivationDate();
             long vipDuration = playerVip.getVipDuration();
@@ -73,12 +74,11 @@ public class ConsultVip extends BaseCommand {
 
     @Subcommand("details")
     @Syntax("<vipName>")
-    public void onVipDetailsCommand(Player player, String vipName) throws SQLException {
-        PlayersDAO playersDAO = new PlayersDAO();
+    public void onVipDetailsCommand(Player player, String vipName) {
         YamlConfiguration messagesConfig = PluginImpl.getInstance().Messages.getConfig();
-        List<PlayersData> allPlayerVips = playersDAO.getAllPlayerVips(player.getName());
+        Collection<PlayersData> allPlayersData = PlayersCacheManager.getInstance().getAllPlayersData();
 
-        for (PlayersData playerVip : allPlayerVips) {
+        for (PlayersData playerVip : allPlayersData) {
             String vipName1 = playerVip.getVipName();
             String vipActivationDate = playerVip.getVipActivationDate();
             String converted = TimeConverter.convertSecondsToTimeFormat(playerVip.getVipDuration());

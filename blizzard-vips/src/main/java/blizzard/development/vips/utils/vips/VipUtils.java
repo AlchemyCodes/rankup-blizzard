@@ -1,8 +1,10 @@
 package blizzard.development.vips.utils.vips;
 
 import blizzard.development.vips.database.cache.PlayersCacheManager;
+import blizzard.development.vips.database.cache.methods.PlayersCacheMethod;
 import blizzard.development.vips.database.dao.PlayersDAO;
 import blizzard.development.vips.database.storage.PlayersData;
+import blizzard.development.vips.enums.VipEnum;
 import blizzard.development.vips.utils.PluginImpl;
 import blizzard.development.vips.utils.TimeParser;
 import org.bukkit.Bukkit;
@@ -13,8 +15,7 @@ import org.bukkit.entity.Player;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class VipUtils {
 
@@ -36,15 +37,16 @@ public class VipUtils {
         return activeVip.get(player.getName());
     }
 
-    public void removeVip(Player player, String playerName, String vipName) throws SQLException {
+    public void removeVip(Player player, String vipName) {
         YamlConfiguration messagesConfig = PluginImpl.getInstance().Messages.getConfig();
-        List<PlayersData> allPlayerVips = playersDAO.getAllPlayerVips(playerName);
+        Collection<PlayersData> allPlayersData = PlayersCacheManager.getInstance().getAllPlayersData();
 
         boolean vipFound = false;
 
-        for (PlayersData playersData : allPlayerVips) {
+        for (PlayersData playersData : allPlayersData) {
             if (playersData.getVipName().equalsIgnoreCase(vipName)) {
-                playersDAO.deletePlayerVip(playersData);
+                PlayersCacheMethod.getInstance().removeVip(playersData.getVipId());
+                PlayersCacheManager.getInstance().cachePlayerData(playersData.getVipId(), playersData);
 
                 player.sendMessage(messagesConfig.getString("commands.removeVip.vipRemoved")
                         .replace("{vipName}", vipName));
@@ -60,10 +62,10 @@ public class VipUtils {
         }
     }
 
-    public boolean hasVip(String playerName, String vipName) throws SQLException {
-        List<PlayersData> allPlayerVips = playersDAO.getAllPlayerVips(playerName);
+    public boolean hasVip(String vipName) {
+        Collection<PlayersData> allPlayersData = PlayersCacheManager.getInstance().getAllPlayersData();
 
-        for (PlayersData playersData : allPlayerVips) {
+        for (PlayersData playersData : allPlayersData) {
             if (playersData.getVipName().equalsIgnoreCase(vipName)) {
                 return true;
             }
@@ -71,18 +73,18 @@ public class VipUtils {
         return false;
     }
 
-    public void extendVip(Player sender, String targetPlayer, String vipName, VipUtils vipUtils, long duration) throws SQLException {
+    public void extendVip(Player sender, String vipName, VipUtils vipUtils, long duration) {
         YamlConfiguration messagesConfig = PluginImpl.getInstance().Messages.getConfig();
 
-        List<PlayersData> playerVips = playersDAO.getAllPlayerVips(targetPlayer);
+        Collection<PlayersData> allPlayersData = PlayersCacheManager.getInstance().getAllPlayersData();
 
-        boolean hasVip = vipUtils.hasVip(targetPlayer, vipName);
+        boolean hasVip = vipUtils.hasVip(vipName);
 
         if (hasVip) {
-            for (PlayersData vipData : playerVips) {
+            for (PlayersData vipData : allPlayersData) {
                 if (vipData.getVipName().equalsIgnoreCase(vipName)) {
-                    vipData.setVipDuration(vipData.getVipDuration() + duration);
-                    playersDAO.updatePlayerData(vipData);
+                    PlayersCacheMethod.getInstance().setVipDuration(vipData.getVipId(), vipData.getVipDuration() + duration);
+                    PlayersCacheManager.getInstance().cachePlayerData(vipData.getVipId(), vipData);
                 }
             }
 
@@ -90,20 +92,32 @@ public class VipUtils {
         }
     }
 
-    public void giveVip(Player targetPlayer, String date, String vipId, String vipName, long duration) throws SQLException {
-        PlayersData newPlayerData = new PlayersData(
-                targetPlayer.getUniqueId().toString(),
-                playersDAO.getNextVipIndex(targetPlayer.getName()),
-                targetPlayer.getName(),
-                date,
+    public void giveVip(Player targetPlayer, String date, String vipId, String vipName, long duration) {
+        PlayersData playerData = playersDAO.findPlayerData(targetPlayer.getUniqueId().toString());
+
+        if (playerData == null) {
+            try {
+                playerData = new PlayersData(
+                    targetPlayer.getUniqueId().toString(),
+                    playersDAO.getNextVipIndex(targetPlayer.getName()),
+                    targetPlayer.getName(),
+                    date,
+                    vipId,
+                    vipName.toUpperCase(),
+                    duration
+
+            );
+
+                playersDAO.createPlayerData(playerData);
+            } catch (SQLException exception) {
+                exception.printStackTrace();
+            }
+        }
+
+        PlayersCacheManager.getInstance().cachePlayerData(
                 vipId,
-                vipName.toUpperCase(),
-                duration
+                playerData
         );
-
-        playersDAO.createPlayerData(newPlayerData);
-
-        PlayersCacheManager.getInstance().cachePlayerData(targetPlayer.getName(), newPlayerData);
 
         Bukkit.dispatchCommand(
                 Bukkit.getConsoleSender(), "lp user " + targetPlayer.getName() + " parent add " + vipName);
@@ -143,6 +157,10 @@ public class VipUtils {
         return now.format(formatter);
     }
 
+    public boolean vipExist(String vipName) {
+        return Arrays.stream(VipEnum.values())
+                .anyMatch(vipEnum -> vipEnum.getName().equalsIgnoreCase(vipName));
+    }
 
     public static VipUtils getInstance() {
         if (instance == null) {
