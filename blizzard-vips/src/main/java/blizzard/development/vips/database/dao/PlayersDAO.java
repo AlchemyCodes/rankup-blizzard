@@ -122,31 +122,6 @@ public class PlayersDAO {
     }
 
 
-    public List<PlayersData> getAllPlayerVips(String playerName) throws SQLException {
-        String query = "SELECT * FROM vip_users WHERE nickname = ?";
-        try (Connection connection = DatabaseConnection.getInstance().getConnection();
-        PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, playerName);
-
-            ResultSet resultSet = statement.executeQuery();
-            List<PlayersData> playerVips = new ArrayList<>();
-
-            while (resultSet.next()) {
-                playerVips.add(new PlayersData(
-                        resultSet.getString("uuid"),
-                        resultSet.getInt("id"),
-                        resultSet.getString("nickname"),
-                        resultSet.getString("vipActivationDate"),
-                        resultSet.getString("vipId"),
-                        resultSet.getString("vipName"),
-                        resultSet.getLong("vipDuration")
-                ));
-            }
-
-            return playerVips;
-        }
-    }
-
     public int getNextVipIndex(String nickname) throws SQLException {
         String sql = "SELECT MAX(id) FROM vip_users WHERE nickname = ?";
         try (Connection conn = DatabaseConnection.getInstance().getConnection();

@@ -8,6 +8,7 @@ import blizzard.development.vips.utils.RandomIdGenerator;
 import blizzard.development.vips.utils.vips.VipUtils;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import java.sql.SQLException;
@@ -30,6 +31,12 @@ public class GenerateKey extends BaseCommand {
         long durationConverted = VipUtils.getInstance().getDuration(duration);
 
         KeysData keysData = new KeysData(vipId, vipName, durationConverted);
+
+        YamlConfiguration messagesConfig = PluginImpl.getInstance().Messages.getConfig();
+        if (!VipUtils.getInstance().vipExist(vipName)) {
+            player.sendMessage(messagesConfig.getString("messages.vipNotFound"));
+            return;
+        }
 
         keysDao.createKeyData(keysData);
         player.sendMessage(PluginImpl.getInstance().Messages.getConfig().getString("commands.keyCommand.keyCreated")

@@ -60,14 +60,10 @@ public class VipChangeInventory {
     }
 
     private void changeVip(Player player, InventoryClickEvent event, String vip) {
-        try {
-            if (!vipUtils.hasVip(player.getName(), vip)) {
-                player.sendMessage("§cVocê não tem esse vip!");
-                event.setCancelled(true);
-                return;
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        if (!vipUtils.hasVip(vip)) {
+            player.sendMessage("§cVocê não tem esse vip!");
+            event.setCancelled(true);
+            return;
         }
 
         if (vipUtils.getActiveVip(player) == null) {

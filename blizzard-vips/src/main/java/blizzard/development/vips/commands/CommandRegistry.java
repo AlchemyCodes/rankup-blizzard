@@ -11,6 +11,7 @@ import blizzard.development.vips.commands.vips.RemoveVip;
 import blizzard.development.vips.database.cache.PlayersCacheManager;
 import blizzard.development.vips.database.dao.KeysDao;
 import blizzard.development.vips.database.dao.PlayersDAO;
+import blizzard.development.vips.enums.VipEnum;
 import co.aikar.commands.PaperCommandManager;
 import org.bukkit.entity.Player;
 
@@ -21,13 +22,12 @@ import java.util.stream.Collectors;
 public class CommandRegistry {
 
     public void register() {
-        PlayersDAO playersDAO = new PlayersDAO();
         KeysDao keysDAO = new KeysDao();
 
         PaperCommandManager paperCommandManager = new PaperCommandManager(Main.getInstance());
 
         Arrays.asList(
-                new GiveVip(playersDAO),
+                new GiveVip(),
                 new ConsultVip(),
                 new RemoveVip(),
                 new ChangeVip(),
@@ -49,9 +49,12 @@ public class CommandRegistry {
                 .map(Player::getName)
                 .collect(Collectors.toList()));
 
-        String[] vipNames = {"ouro", "diamante", "esmeralda", "blizzard", "alchemy"};
         manager.getCommandCompletions().registerAsyncCompletion
-                ("vipName", c -> List.of(vipNames));
+                ("vipName",
+                        c -> Arrays.stream(VipEnum.values())
+                        .map(VipEnum::getName)
+                        .collect(Collectors.toList())
+        );
 
         String[] vipDates = {"1s", "1m", "1h", "1d"};
         manager.getCommandCompletions().registerAsyncCompletion

@@ -1,5 +1,7 @@
 package blizzard.development.vips.tasks;
 
+import blizzard.development.vips.database.cache.PlayersCacheManager;
+import blizzard.development.vips.database.cache.methods.PlayersCacheMethod;
 import blizzard.development.vips.database.dao.PlayersDAO;
 import blizzard.development.vips.database.storage.PlayersData;
 import blizzard.development.vips.utils.vips.VipUtils;
@@ -9,32 +11,26 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.List;
 
 public class VipTask extends BukkitRunnable {
-
-    private final PlayersDAO playersDAO;
-
-    public VipTask(PlayersDAO playersDAO) {
-        this.playersDAO = playersDAO;
-    }
 
     @Override
     public void run() {
         if (VipUtils.getInstance().isVipTimeFrozen) return;
 
         for (@NotNull OfflinePlayer player : Bukkit.getOfflinePlayers()) {
-            try {
-                List<PlayersData> allPlayerVips = playersDAO.getAllPlayerVips(player.getName());
+                Collection<PlayersData> allPlayersData = PlayersCacheManager.getInstance().getAllPlayersData();
 
-                for (PlayersData playerVip : allPlayerVips) {
+                for (PlayersData playerVip : allPlayersData) {
                     long vipDuration = playerVip.getVipDuration();
                     String vipName = playerVip.getVipName();
 
                     if (vipDuration <= 0) continue;
 
                     if (vipDuration <= 2) {
-                        playersDAO.deletePlayerVip(playerVip);
+                        PlayersCacheMethod.getInstance().removeVip(playerVip.getVipId());
 
                         Bukkit.dispatchCommand(
                                 Bukkit.getConsoleSender(), "lp user " + player.getName() + " parent remove " + vipName.toLowerCase());
@@ -42,13 +38,8 @@ public class VipTask extends BukkitRunnable {
                     }
 
                     playerVip.setVipDuration(vipDuration - 1);
-                    playersDAO.updatePlayerData(playerVip);
+                    PlayersCacheManager.getInstance().cachePlayerData(playerVip.getVipId(), playerVip);
                 }
-
-
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-             }
             }
         }
     }
