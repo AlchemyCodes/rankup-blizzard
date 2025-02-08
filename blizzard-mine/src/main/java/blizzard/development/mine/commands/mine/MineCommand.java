@@ -37,7 +37,7 @@ public class MineCommand extends BaseCommand {
                     player
                 );
 
-            cooldown.createCountdown(player, cooldownName, 15, TimeUnit.SECONDS);
+            cooldown.createCountdown(player, cooldownName, 5, TimeUnit.SECONDS);
         } else {
             player.sendActionBar("§c§lEI! §cVocê já está na mina.");
         }
@@ -79,7 +79,7 @@ public class MineCommand extends BaseCommand {
                             player
                     );
 
-            cooldown.createCountdown(player, cooldownName, 15, TimeUnit.SECONDS);
+            cooldown.createCountdown(player, cooldownName, 5, TimeUnit.SECONDS);
         } else {
             player.sendActionBar("§c§lEI! §cVocê não está na mina.");
         }

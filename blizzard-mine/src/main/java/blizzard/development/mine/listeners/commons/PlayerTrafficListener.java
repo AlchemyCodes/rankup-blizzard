@@ -25,11 +25,9 @@ import java.util.ArrayList;
 public class PlayerTrafficListener implements Listener {
 
     private final PlayerDAO playerDAO;
-    private final ToolDAO toolDAO;
 
-    public PlayerTrafficListener(PlayerDAO playerDAO, ToolDAO toolDAO) {
+    public PlayerTrafficListener(PlayerDAO playerDAO) {
         this.playerDAO = playerDAO;
-        this.toolDAO = toolDAO;
     }
 
     @EventHandler
@@ -59,27 +57,6 @@ public class PlayerTrafficListener implements Listener {
                 playerData
         );
 
-        ToolData toolData = toolDAO.findToolData(player.getUniqueId().toString());
-
-        if (toolData == null) {
-            toolData = new ToolData(
-                    player.getUniqueId().toString(),
-                    player.getName(),
-                    0,
-                    0
-            );
-            try {
-                toolDAO.createToolData(toolData);
-            } catch (SQLException exception) {
-                exception.printStackTrace();
-            }
-        }
-
-        ToolCacheManager.getInstance().cacheToolData(
-                player.getUniqueId(),
-                toolData
-        );
-
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -95,17 +72,5 @@ public class PlayerTrafficListener implements Listener {
         PlayerData playerData = PlayerCacheManager.getInstance().getPlayerData(player);
         playerData.setInMine(false);
         playerDAO.updatePlayerData(playerData);
-
-        ToolData toolData = ToolCacheManager.getInstance().getToolData(player);
-        toolDAO.updateToolData(toolData);
-    }
-
-    @EventHandler
-    public void onVehicleEnter(VehicleEnterEvent event) {
-        if (!PlayerCacheMethods.getInstance().isInMine((Player) event.getEntered())) return;
-
-        if (event.getVehicle() instanceof Minecart && event.getEntered() instanceof Player) {
-            event.setCancelled(true);
-        }
     }
 }

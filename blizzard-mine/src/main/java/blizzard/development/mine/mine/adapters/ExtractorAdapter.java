@@ -14,8 +14,11 @@ import blizzard.development.mine.utils.packets.MinePacketUtils;
 import blizzard.development.mine.utils.text.NumberUtils;
 import blizzard.development.mine.utils.text.ProgressBarUtils;
 import blizzard.development.mine.utils.text.TextUtils;
+import com.comphenix.protocol.wrappers.BlockPosition;
+import com.comphenix.protocol.wrappers.WrappedBlockData;
 import net.kyori.adventure.title.Title;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
@@ -24,8 +27,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.time.Duration;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.*;
 
 public class ExtractorAdapter implements ExtractorFactory {
     private static final ExtractorAdapter instance = new ExtractorAdapter();
@@ -111,28 +113,106 @@ public class ExtractorAdapter implements ExtractorFactory {
     }
 
     private int breakBlocksInRadius(Player player, Location center) {
-        int radius = 15;
-        int startX = center.getBlockX() - radius;
-        int endX = center.getBlockX() + radius;
-        int startY = Math.max(center.getBlockY() - radius, 0);
-        int endY = Math.min(center.getBlockY() + radius, center.getWorld().getMaxHeight());
-        int startZ = center.getBlockZ() - radius;
-        int endZ = center.getBlockZ() + radius;
+        int radius = 5;
         int blockCount = 0;
+        BlockManager blockManager = BlockManager.getInstance();
+        List<Location> blockLocations = new ArrayList<>();
 
-        for (int x = startX; x <= endX; x++) {
-            for (int y = startY; y <= endY; y++) {
-                for (int z = startZ; z <= endZ; z++) {
-                    Block block = center.getWorld().getBlockAt(x, y, z);
-                    if (BlockManager.getInstance().hasBlock(x, y, z)) {
+        int radiusSquared = radius * radius;
+
+        for (int x = center.getBlockX() - radius; x <= center.getBlockX() + radius; x++) {
+            for (int y = Math.max(center.getBlockY() - radius, 0); y <= Math.min(center.getBlockY() + radius, center.getWorld().getMaxHeight()); y++) {
+                for (int z = center.getBlockZ() - radius; z <= center.getBlockZ() + radius; z++) {
+                    int dx = x - center.getBlockX();
+                    int dy = y - center.getBlockY();
+                    int dz = z - center.getBlockZ();
+                    int distanceSquared = dx * dx + dy * dy + dz * dz;
+
+                    if (distanceSquared <= radiusSquared && blockManager.hasBlock(x, y, z)) {
                         blockCount++;
-                        MinePacketUtils.getInstance().sendAirBlock(player, block);
+                        blockLocations.add(new Location(center.getWorld(), x, y, z));
                     }
                 }
             }
         }
+
+        final int batchSize = 100;
+        new BukkitRunnable() {
+            final Iterator<Location> iterator = blockLocations.iterator();
+            Map<BlockPosition, WrappedBlockData> currentBatch = new HashMap<>();
+
+            @Override
+            public void run() {
+                if (!iterator.hasNext()) {
+                    if (!currentBatch.isEmpty()) {
+                        sendBatchAndClear();
+                    }
+                    cancel();
+                    return;
+                }
+
+                while (iterator.hasNext() && currentBatch.size() < batchSize) {
+                    Location loc = iterator.next();
+                    BlockPosition pos = new BlockPosition(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+                    currentBatch.put(pos, WrappedBlockData.createData(Material.AIR));
+
+                    if (currentBatch.size() >= batchSize) {
+                        sendBatchAndClear();
+                    }
+                }
+            }
+
+            private void sendBatchAndClear() {
+                if (!currentBatch.isEmpty()) {
+                    Map<ChunkSection, Map<BlockPosition, WrappedBlockData>> sectionChanges = new HashMap<>();
+
+                    for (Map.Entry<BlockPosition, WrappedBlockData> entry : currentBatch.entrySet()) {
+                        BlockPosition pos = entry.getKey();
+                        ChunkSection section = new ChunkSection(
+                                pos.getX() >> 4,
+                                pos.getY() >> 4,
+                                pos.getZ() >> 4
+                        );
+
+                        sectionChanges.computeIfAbsent(section, k -> new HashMap<>())
+                                .put(pos, entry.getValue());
+                    }
+
+                    for (Map.Entry<ChunkSection, Map<BlockPosition, WrappedBlockData>> entry : sectionChanges.entrySet()) {
+                        MinePacketUtils.getInstance().sendMultiBlockChange(player, entry.getValue());
+                    }
+
+                    currentBatch.clear();
+                }
+            }
+        }.runTaskTimer(Main.getInstance(), 0L, 1L);
+
         return blockCount;
     }
+
+    private static class ChunkSection {
+        final int x, y, z;
+
+        ChunkSection(int x, int y, int z) {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            ChunkSection that = (ChunkSection) o;
+            return x == that.x && y == that.y && z == that.z;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(x, y, z);
+        }
+    }
+
 
     public void createExtractor(Player player) {
         Location location = LocationUtils.getLocation(LocationEnum.EXTRACTOR_NPC.getName());

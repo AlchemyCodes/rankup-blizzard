@@ -111,4 +111,30 @@ public class Cuboid {
         return loc.getWorld() == this.world && loc.getX() >= this.xMinCentered - marge && loc.getX() <= this.xMaxCentered + marge && loc.getY() >= this.yMinCentered - marge && loc
             .getY() <= this.yMaxCentered + marge && loc.getZ() >= this.zMinCentered - marge && loc.getZ() <= this.zMaxCentered + marge;
     }
+
+    public Cuboid removeBlock(int x, int y, int z) {
+        if (!isIn(new Location(this.world, x, y, z))) {
+            return this;
+        }
+
+        if (xMin == xMax && yMin == yMax && zMin == zMax) {
+            return null;
+        }
+
+        int newXMin = xMin == x ? xMin + 1 : xMin;
+        int newXMax = xMax == x ? xMax - 1 : xMax;
+        int newYMin = yMin == y ? yMin + 1 : yMin;
+        int newYMax = yMax == y ? yMax - 1 : yMax;
+        int newZMin = zMin == z ? zMin + 1 : zMin;
+        int newZMax = zMax == z ? zMax - 1 : zMax;
+
+        if (newXMin > newXMax || newYMin > newYMax || newZMin > newZMax) {
+            return null;
+        }
+
+        Location newPoint1 = new Location(this.world, newXMin, newYMin, newZMin);
+        Location newPoint2 = new Location(this.world, newXMax, newYMax, newZMax);
+
+        return new Cuboid(newPoint1, newPoint2);
+    }
 }

@@ -3,7 +3,7 @@ package blizzard.development.mine.tasks.manager;
 import blizzard.development.mine.database.dao.BoosterDAO;
 import blizzard.development.mine.database.dao.PlayerDAO;
 import blizzard.development.mine.database.dao.ToolDAO;
-import blizzard.development.mine.tasks.DatabaseSaveTask;
+import blizzard.development.mine.tasks.data.DataSaveTask;
 import blizzard.development.mine.tasks.booster.BoosterTask;
 import blizzard.development.mine.tasks.mine.ExtractorUpdateTask;
 import org.bukkit.plugin.Plugin;
@@ -12,7 +12,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 public class TaskManager {
     private final Plugin plugin;
-    private final DatabaseSaveTask databaseSaveTask;
+    private final DataSaveTask databaseSaveTask;
     private final ExtractorUpdateTask extractorUpdateTask;
     private final BoosterTask boosterTask;
     private BukkitTask task;
@@ -20,7 +20,7 @@ public class TaskManager {
     public TaskManager(Plugin plugin, ToolDAO toolDAO, PlayerDAO playerDAO, BoosterDAO boosterDAO) {
         this.plugin = plugin;
         this.boosterTask = new BoosterTask();
-        this.databaseSaveTask = new DatabaseSaveTask(toolDAO, playerDAO, boosterDAO);
+        this.databaseSaveTask = new DataSaveTask(toolDAO, playerDAO, boosterDAO);
         this.extractorUpdateTask = new ExtractorUpdateTask();
     }
 

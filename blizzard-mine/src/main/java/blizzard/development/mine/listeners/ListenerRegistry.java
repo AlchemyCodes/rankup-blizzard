@@ -11,6 +11,7 @@ import blizzard.development.mine.listeners.npc.NPCRotationListener;
 import blizzard.development.mine.listeners.packets.mine.MineBlockBreakPacketListener;
 import blizzard.development.mine.listeners.packets.mine.MineBlockInteractPacketListener;
 import blizzard.development.mine.listeners.packets.npc.NPCInteractPacketListener;
+import blizzard.development.mine.listeners.visual.VisualApplyListener;
 import blizzard.development.mine.utils.PluginImpl;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
@@ -22,13 +23,9 @@ import java.util.Arrays;
 public class ListenerRegistry {
 
     private final PlayerDAO playerDAO;
-    private final ToolDAO toolDAO;
-    private final BoosterDAO boosterDAO;
 
-    public ListenerRegistry(PlayerDAO playerDAO, ToolDAO toolDAO, BoosterDAO boosterDAO) {
+    public ListenerRegistry(PlayerDAO playerDAO) {
         this.playerDAO = playerDAO;
-        this.toolDAO = toolDAO;
-        this.boosterDAO = boosterDAO;
     }
 
     public void register() {
@@ -36,7 +33,7 @@ public class ListenerRegistry {
 
         Arrays.asList(
                 // mine
-                new PlayerTrafficListener(playerDAO, toolDAO),
+                new PlayerTrafficListener(playerDAO),
                 new MineBlockBreakListener(),
                 new MineGeneralListener(),
                 new MineChatListener(),
@@ -48,7 +45,9 @@ public class ListenerRegistry {
                 new NPCInteractListener(),
                 new NPCRotationListener(),
                 // booster
-                new BoosterListener()
+                new BoosterListener(),
+                // visual
+                new VisualApplyListener()
         ).forEach(listener -> pluginManager.registerEvents(listener, PluginImpl.getInstance().plugin));
     }
 

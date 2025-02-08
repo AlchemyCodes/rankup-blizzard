@@ -1,4 +1,4 @@
-package blizzard.development.mine.tasks;
+package blizzard.development.mine.tasks.data;
 
 import blizzard.development.mine.database.cache.BoosterCacheManager;
 import blizzard.development.mine.database.cache.PlayerCacheManager;
@@ -10,12 +10,12 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.SQLException;
 
-public class DatabaseSaveTask extends BukkitRunnable {
+public class DataSaveTask extends BukkitRunnable {
     private final ToolDAO toolDAO;
     private final PlayerDAO playerDAO;
     private final BoosterDAO boosterDAO;
 
-    public DatabaseSaveTask(ToolDAO toolDAO, PlayerDAO playerDAO, BoosterDAO boosterDAO) {
+    public DataSaveTask(ToolDAO toolDAO, PlayerDAO playerDAO, BoosterDAO boosterDAO) {
         this.toolDAO = toolDAO;
         this.playerDAO = playerDAO;
         this.boosterDAO = boosterDAO;
@@ -31,7 +31,7 @@ public class DatabaseSaveTask extends BukkitRunnable {
             }
         });
 
-        ToolCacheManager.getInstance().toolCache.forEach((player, toolData) -> {
+        ToolCacheManager.getInstance().toolCache.forEach((id, toolData) -> {
             try {
                 toolDAO.updateToolData(toolData);
             } catch (SQLException e) {

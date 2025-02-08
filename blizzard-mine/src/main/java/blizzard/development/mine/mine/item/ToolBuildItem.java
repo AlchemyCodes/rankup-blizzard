@@ -1,12 +1,11 @@
 package blizzard.development.mine.mine.item;
 
-import blizzard.development.core.Main;
 import blizzard.development.mine.builders.item.ItemBuilder;
-import blizzard.development.mine.database.cache.ToolCacheManager;
+import blizzard.development.mine.database.cache.methods.ToolCacheMethods;
 import blizzard.development.mine.database.storage.ToolData;
-import blizzard.development.mine.managers.events.AvalancheManager;
+import blizzard.development.mine.mine.enums.ToolEnum;
+import blizzard.development.mine.utils.PluginImpl;
 import blizzard.development.mine.utils.text.NumberUtils;
-import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -15,38 +14,61 @@ import java.util.Arrays;
 
 public class ToolBuildItem {
 
-    public static ItemStack tool(Player player) {
+    public static ItemStack tool(Player player, Boolean give, String id, ToolEnum skin, Integer blocks, Integer meteor) {
+        ItemStack item;
 
-        ToolData toolData = ToolCacheManager.getInstance().getToolData(player);
+        String enchantmentsField = skin.getColor() + " Encantamentos:" +  skin.getColor();
+        String rightButtonField = skin.getColor() + "Pressione shift + b. direito." + skin.getColor();
 
-        Material material;
+        if (give) {
+            ToolData toolData = ToolCacheMethods.getInstance()
+                    .createTool(
+                            player,
+                            id,
+                            ToolEnum.TOOL.getType(),
+                            skin.getType(),
+                            0,
+                            0
+                    );
 
-        if (AvalancheManager.isAvalancheActive) {
-            material = Material.IRON_SHOVEL;
+            item = new ItemBuilder(skin.getMaterial())
+                    .setDisplayName(skin.getDisplay() + "§7[" + NumberUtils.getInstance().formatNumber(toolData.getBlocks()) + "§7]")
+                    .setLore(Arrays.asList(
+                            "§7Use esta picareta para",
+                            "§7quebrar blocos da mina.",
+                            "",
+                            enchantmentsField,
+                            "  §7Durabilidade §l∞",
+                            "  §7Eficiência §l∞",
+                            "  §7Meteoro §l" + meteor,
+                            "",
+                            rightButtonField
+                    ))
+                    .addEnchant(Enchantment.DURABILITY, 1000, true)
+                    .addEnchant(Enchantment.DIG_SPEED, 1000, true)
+                    .addPersistentData(PluginImpl.getInstance().plugin, "blizzard.mine.tool", id)
+                    .build(1);
+
+            player.getInventory().addItem(item);
         } else {
-            material = Material.WOODEN_PICKAXE;
+            item = new ItemBuilder(skin.getMaterial())
+                    .setDisplayName(skin.getDisplay() + "§7[" + NumberUtils.getInstance().formatNumber(blocks) + "§7]")
+                    .setLore(Arrays.asList(
+                            "§7Use esta picareta para",
+                            "§7quebrar blocos da mina.",
+                            "",
+                            enchantmentsField,
+                            "  §7Durabilidade §l∞",
+                            "  §7Eficiência §l∞",
+                            "  §7Meteoro §l" + meteor,
+                            "",
+                            rightButtonField
+                    ))
+                    .addEnchant(Enchantment.DURABILITY, 1000, true)
+                    .addEnchant(Enchantment.DIG_SPEED, 1000, true)
+                    .addPersistentData(PluginImpl.getInstance().plugin, "blizzard.mine.tool", id)
+                    .build(1);
         }
-
-        return new ItemBuilder(material)
-            .setDisplayName("<#a88459>Picareta de<#a88459> <bold><#a88459>Madeira<#a88459></bold><#a88459> §7[" + NumberUtils.getInstance().formatNumber(toolData.getBlocks()) + "§7]")
-            .setLore(Arrays.asList(
-                    "§7Use esta picareta para",
-                    "§7quebrar blocos da mina.",
-                    "",
-                    " <#a88459>Encantamentos:<#a88459>",
-                    "  §7Durabilidade §l∞",
-                    "  §7Eficiência §l∞",
-                    "  §7Agilidade §l0",
-                    "  §7Avalanche §l0",
-                    "  §7Dinamite §l0",
-                    "  §7Meteoro §l0",
-                    "  §7Abdução §l0",
-                    "  §7Zeus §l0",
-                    ""
-            ))
-            .addEnchant(Enchantment.DURABILITY, 1000, true)
-            .addEnchant(Enchantment.DIG_SPEED, 1000, true)
-            .addPersistentData(Main.getInstance(), "blizzard.mine.tool", player.getName())
-            .build(1);
+        return item;
     }
 }

@@ -18,10 +18,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class MinePacketUtils {
     private static final MinePacketUtils instance = new MinePacketUtils();
@@ -91,6 +88,36 @@ public class MinePacketUtils {
 
         protocolManager.sendServerPacket(player, packet);
     }
+
+    public void sendMultiBlockChange(Player player, Map<BlockPosition, WrappedBlockData> blockChanges) {
+        try {
+            PacketContainer packet = protocolManager.createPacket(PacketType.Play.Server.MULTI_BLOCK_CHANGE);
+
+            BlockPosition firstPos = blockChanges.keySet().iterator().next();
+            int chunkX = firstPos.getX() >> 4;
+            int chunkZ = firstPos.getZ() >> 4;
+            int sectionY = firstPos.getY() >> 4;
+
+            packet.getSectionPositions().write(0, new BlockPosition(chunkX, sectionY, chunkZ));
+
+            List<Short> positions = new ArrayList<>();
+            List<WrappedBlockData> blockDataList = new ArrayList<>();
+
+            for (Map.Entry<BlockPosition, WrappedBlockData> entry : blockChanges.entrySet()) {
+                BlockPosition pos = entry.getKey();
+                positions.add(getPackedPosition(pos.getX() & 15, pos.getY() & 15, pos.getZ() & 15));
+                blockDataList.add(entry.getValue());
+            }
+
+            packet.getShortArrays().write(0, Shorts.toArray(positions));
+            packet.getBlockDataArrays().write(0, blockDataList.toArray(new WrappedBlockData[0]));
+
+            protocolManager.sendServerPacket(player, packet);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public void sendAirBlock(Player player, Block block) {
         try {

@@ -1,7 +1,5 @@
 package blizzard.development.mine.mine.enums;
 
-import org.bukkit.entity.Player;
-
 public enum VipEnum {
     ALCHEMY("alchemy", 1.2),
     BLIZZARD("blizzard", 1.2),
@@ -24,5 +22,4 @@ public enum VipEnum {
     public Double getBonus() {
         return bonus;
     }
-
 }

@@ -2,4 +2,20 @@ mine:
 
   y-blocks: -38 # mine y size
   avalanche: 10
-  extractor: 200
+
+  command-whitelist:
+    - "/spawn"
+    - "/lobby"
+    - "/l"
+    - "/mina"
+    - "/mina sair"
+    - "/mina booster"
+    - "/mine"
+    - "/mine leave"
+    - "/mine booster"
+    - "/g"
+    - "/l"
+    - "/global"
+    - "/local"
+    - "/c"
+    - "/fly"

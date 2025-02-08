@@ -16,10 +16,9 @@ import blizzard.development.mine.database.storage.PlayerData;
 import blizzard.development.mine.database.storage.ToolData;
 import blizzard.development.mine.expansions.PlaceholderExpansion;
 import blizzard.development.mine.listeners.ListenerRegistry;
+import blizzard.development.mine.managers.data.DataBatchManager;
 import blizzard.development.mine.mine.adapters.PodiumAdapter;
-import blizzard.development.mine.tasks.DatabaseSaveTask;
 import blizzard.development.mine.tasks.manager.TaskManager;
-import blizzard.development.mine.tasks.mine.ExtractorUpdateTask;
 import blizzard.development.mine.tasks.mine.PodiumUpdateTask;
 import blizzard.development.mine.utils.config.ConfigUtils;
 import co.aikar.commands.Locales;
@@ -78,6 +77,8 @@ public class PluginImpl {
         registerCommands();
 
         registerExpansions();
+
+        DataBatchManager.initialize(plugin);
     }
 
     public void onDisable() {
@@ -133,7 +134,7 @@ public class PluginImpl {
             throw new RuntimeException(e);
         }
         for (ToolData tool : tools) {
-            ToolCacheManager.getInstance().cacheToolData(UUID.fromString(tool.getUuid()), tool);
+            ToolCacheManager.getInstance().cacheToolData(tool.getId(), tool);
         }
 
         List<BoosterData> boosters;
@@ -161,7 +162,7 @@ public class PluginImpl {
             try {
                 toolDAO.updateToolData(toolData);
             } catch (SQLException exception) {
-                throw new RuntimeException("Error when update player date " + toolData.getNickname(), exception);
+                throw new RuntimeException("Error when update player date " + toolData.getId(), exception);
             }
         });
 
@@ -177,7 +178,7 @@ public class PluginImpl {
     }
 
     private void registerListeners() {
-        ListenerRegistry listenerRegistry = new ListenerRegistry(playerDAO, toolDAO, boosterDAO);
+        ListenerRegistry listenerRegistry = new ListenerRegistry(playerDAO);
         listenerRegistry.register();
         listenerRegistry.registerPacket();
     }
