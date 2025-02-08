@@ -10,17 +10,17 @@ import java.util.function.Consumer;
 public class ToolDAO {
 
     public void initializeDatabase() {
+        String sql = "CREATE TABLE IF NOT EXISTS mine_tool ("
+                + "id VARCHAR(36) PRIMARY KEY, "
+                + "type VARCHAR(50), "
+                + "skin VARCHAR(50), "
+                + "owner VARCHAR(50), "
+                + "blocks INT, "
+                + "meteor INT)";
+
         try (Connection connection = DatabaseConnection.getInstance().getConnection();
              Statement statement = connection.createStatement()) {
-
-            String sql = "CREATE TABLE IF NOT EXISTS mine_tool (" +
-                    "uuid VARCHAR(36) PRIMARY KEY, " +
-                    "nickname VARCHAR(36), " +
-                    "blocks INT, " +
-                    "meteor INT)";
-
             statement.execute(sql);
-
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
@@ -29,7 +29,6 @@ public class ToolDAO {
     private void executeUpdate(String sql, Consumer<PreparedStatement> setter) throws SQLException {
         try (Connection connection = DatabaseConnection.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
-
             setter.accept(statement);
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -38,18 +37,20 @@ public class ToolDAO {
         }
     }
 
-    public ToolData findToolData(String uuid) {
-        String sql = "SELECT * FROM mine_tool WHERE uuid = ?";
+    public ToolData findToolData(String id) {
+        String sql = "SELECT * FROM mine_tool WHERE id = ?";
         try (Connection connection = DatabaseConnection.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
-            statement.setString(1, uuid);
+            statement.setString(1, id);
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     return new ToolData(
-                            resultSet.getString("uuid"),
-                            resultSet.getString("nickname"),
+                            resultSet.getString("id"),
+                            resultSet.getString("type"),
+                            resultSet.getString("skin"),
+                            resultSet.getString("owner"),
                             resultSet.getInt("blocks"),
                             resultSet.getInt("meteor")
                     );
@@ -62,24 +63,26 @@ public class ToolDAO {
     }
 
     public void createToolData(ToolData toolData) throws SQLException {
-        String sql = "INSERT INTO mine_tool (uuid, nickname, blocks, meteor) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO mine_tool (id, type, skin, owner, blocks, meteor) VALUES (?, ?, ?, ?, ?, ?)";
         executeUpdate(sql, statement -> {
             try {
-                statement.setString(1, toolData.getUuid());
-                statement.setString(2, toolData.getNickname());
-                statement.setInt(3, toolData.getBlocks());
-                statement.setInt(4, toolData.getMeteor());
+                statement.setString(1, toolData.getId());
+                statement.setString(2, toolData.getType());
+                statement.setString(3, toolData.getSkin());
+                statement.setString(4, toolData.getOwner());
+                statement.setInt(5, toolData.getBlocks());
+                statement.setInt(6, toolData.getMeteor());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         });
     }
 
-    public void deleteToolData(String uuid) throws SQLException {
-        String sql = "DELETE FROM mine_tool WHERE uuid = ?";
+    public void deleteToolData(String id) throws SQLException {
+        String sql = "DELETE FROM mine_tool WHERE id = ?";
         executeUpdate(sql, statement -> {
             try {
-                statement.setString(1, uuid);
+                statement.setString(1, id);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -87,13 +90,15 @@ public class ToolDAO {
     }
 
     public void updateToolData(ToolData toolData) throws SQLException {
-        String sql = "UPDATE mine_tool SET nickname = ?, blocks = ?, meteor = ? WHERE uuid = ?";
+        String sql = "UPDATE mine_tool SET type = ?, skin = ?, owner = ?, blocks = ?, meteor = ? WHERE id = ?";
         executeUpdate(sql, statement -> {
             try {
-                statement.setString(1, toolData.getNickname());
-                statement.setInt(2, toolData.getBlocks());
-                statement.setInt(3, toolData.getMeteor());
-                statement.setString(4, toolData.getUuid());
+                statement.setString(1, toolData.getType());
+                statement.setString(2, toolData.getSkin());
+                statement.setString(3, toolData.getOwner());
+                statement.setInt(4, toolData.getBlocks());
+                statement.setInt(5, toolData.getMeteor());
+                statement.setString(6, toolData.getId());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -110,8 +115,10 @@ public class ToolDAO {
 
             while (resultSet.next()) {
                 toolDataList.add(new ToolData(
-                        resultSet.getString("uuid"),
-                        resultSet.getString("nickname"),
+                        resultSet.getString("id"),
+                        resultSet.getString("type"),
+                        resultSet.getString("skin"),
+                        resultSet.getString("owner"),
                         resultSet.getInt("blocks"),
                         resultSet.getInt("meteor")
                 ));
@@ -120,3 +127,4 @@ public class ToolDAO {
         return toolDataList;
     }
 }
+

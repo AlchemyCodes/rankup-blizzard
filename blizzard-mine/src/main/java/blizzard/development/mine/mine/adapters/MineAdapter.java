@@ -2,11 +2,13 @@ package blizzard.development.mine.mine.adapters;
 
 import blizzard.development.core.Main;
 import blizzard.development.mine.builders.hologram.HologramBuilder;
+import blizzard.development.mine.builders.item.ItemBuilder;
 import blizzard.development.mine.database.cache.methods.PlayerCacheMethods;
 import blizzard.development.mine.managers.mine.MineManager;
 import blizzard.development.mine.managers.mine.NPCManager;
 import blizzard.development.mine.mine.enums.LocationEnum;
 import blizzard.development.mine.mine.factory.MineFactory;
+import blizzard.development.mine.utils.PluginImpl;
 import blizzard.development.mine.utils.locations.LocationUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
@@ -27,7 +29,6 @@ import java.util.concurrent.CompletableFuture;
 public class MineAdapter implements MineFactory {
 
     private static final MineAdapter instance = new MineAdapter();
-    private final ToolAdapter toolAdapter = ToolAdapter.getInstance();
     private final Map<UUID, BukkitRunnable> playerTasks = new HashMap<>();
 
     public static MineAdapter getInstance() {
@@ -43,8 +44,8 @@ public class MineAdapter implements MineFactory {
             return;
         }
 
-        if (!isInventoryEmpty(player)) {
-            player.sendActionBar(Component.text("§c§lEI! §cVocê precisa estar com o inventário vazio para entrar na mina."));
+        if (!hasPickaxe(player)) {
+            player.sendActionBar(Component.text("§c§lEI! §cVocê precisa estar com uma picareta para entrar na mina. §f'/mina picareta'§c."));
             return;
         }
 
@@ -56,7 +57,6 @@ public class MineAdapter implements MineFactory {
     public void resendToMine(Player player) {
         Location spawnLocation = LocationUtils.getLocation(LocationEnum.SPAWN.getName());
         player.teleport(spawnLocation);
-        manageTool(player, false);
     }
 
     @Override
@@ -83,10 +83,8 @@ public class MineAdapter implements MineFactory {
     }
 
     private void setupPlayerForMine(Player player) {
-        manageTool(player, false);
         manageVisibility(player, false);
         PlayerCacheMethods.getInstance().setInMine(player);
-        player.getInventory().setHeldItemSlot(4);
     }
 
     private void initializeMineSequence(Player player) {
@@ -152,7 +150,6 @@ public class MineAdapter implements MineFactory {
     private void finalizeInitialization(Player player) {
         player.clearActivePotionEffects();
         player.sendTitle("§e§lMina!", "§eVocê entrou na mina.", 10, 70, 20);
-        player.getInventory().setHeldItemSlot(4);
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 5F, 1F);
         player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, PotionEffect.INFINITE_DURATION, 1));
 
@@ -167,7 +164,6 @@ public class MineAdapter implements MineFactory {
         player.sendTitle("§e§lMina!", "§eVocê saiu da mina.", 10, 70, 20);
 
         manageVisibility(player, true);
-        manageTool(player, true);
         PlayerCacheMethods.getInstance().removeFromMine(player);
         cancelTask(player);
     }
@@ -205,14 +201,6 @@ public class MineAdapter implements MineFactory {
         MineManager.getInstance().transformArea(player);
     }
 
-    private void manageTool(Player player, Boolean state) {
-        if (state) {
-            toolAdapter.removeTool(player);
-        } else {
-            toolAdapter.giveTool(player);
-        }
-    }
-
     private void manageVisibility(Player player, Boolean state) {
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
             if (state) {
@@ -225,13 +213,14 @@ public class MineAdapter implements MineFactory {
         }
     }
 
-    private Boolean isInventoryEmpty(Player player) {
-        if (Arrays.stream(player.getInventory().getContents())
-                .anyMatch(item -> item != null && item.getType() != Material.AIR)) {
-            return false;
+    private Boolean hasPickaxe(Player player) {
+        for (ItemStack itemStack : player.getInventory().getContents()) {
+            if (itemStack != null &&
+                    ItemBuilder.hasPersistentData(PluginImpl.getInstance().plugin, itemStack, "blizzard.mine.tool")) {
+                return true;
+            }
         }
-        return Arrays.stream(player.getInventory().getArmorContents())
-                .allMatch(item -> item == null || item.getType() == Material.AIR);
+        return false;
     }
 
     private void cancelTask(Player player) {

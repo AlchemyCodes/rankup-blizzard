@@ -10,6 +10,7 @@ import com.comphenix.protocol.PacketType;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.EnderCrystal;
+import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -18,6 +19,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.vehicle.VehicleEnterEvent;
 
 public class MineGeneralListener implements Listener {
 

@@ -13,18 +13,15 @@ public class ToolCacheManager {
         return instance;
     }
 
-    public final ConcurrentHashMap<UUID, ToolData> toolCache = new ConcurrentHashMap<>();
+    public final ConcurrentHashMap<String, ToolData> toolCache = new ConcurrentHashMap<>();
 
-    public void cacheToolData(Player player, ToolData playerData) {
-        toolCache.put(player.getUniqueId(), playerData);
+    public void cacheToolData(String id, ToolData toolData) {
+        toolCache.put(id, toolData);
     }
-    public void cacheToolData(UUID uuid, ToolData playerData) {
-        toolCache.put(uuid, playerData);
+    public ToolData getToolData(String id) {
+        return toolCache.get(id);
     }
-    public ToolData getToolData(Player player) {
-        return toolCache.get(player.getUniqueId());
-    }
-    public void removeToolData(Player player) {
-        toolCache.remove(player.getUniqueId());
+    public void removeToolData(String id) {
+        toolCache.remove(id);
     }
 }

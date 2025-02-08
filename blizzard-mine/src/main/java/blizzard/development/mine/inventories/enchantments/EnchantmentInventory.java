@@ -16,7 +16,7 @@ public class EnchantmentInventory {
 
     private final ToolCacheMethods toolCacheMethods = ToolCacheMethods.getInstance();
 
-    public void open(Player player) {
+    public void open(Player player, String id) {
         ChestGui inventory = new ChestGui(3, "Encantamentos");
 
         StaticPane pane = new StaticPane(0, 0, 9, 3);
@@ -24,7 +24,7 @@ public class EnchantmentInventory {
         GuiItem meteorItem = new GuiItem(createMeteorItem(), event -> {
             event.setCancelled(true);
 
-            handleMeteorClick(player, event.isShiftClick(), event.isRightClick());
+            handleMeteorClick(id, player, event.isShiftClick(), event.isRightClick());
         });
 
         pane.addItem(meteorItem, Slot.fromIndex(13));
@@ -44,13 +44,13 @@ public class EnchantmentInventory {
                 .build();
     }
 
-    private void handleMeteorClick(Player player, boolean isShiftClick, boolean isRightClick) {
-        Integer meteor = toolCacheMethods.getMeteor(player);
+    private void handleMeteorClick(String id, Player player, boolean isShiftClick, boolean isRightClick) {
+        Integer meteor = toolCacheMethods.getMeteor(id);
 
         int increment = calculateIncrement(isShiftClick, isRightClick);
         int newMeteorValue = meteor + increment;
-        toolCacheMethods.setMeteor(player, newMeteorValue);
-        player.sendMessage("Nivel: " + toolCacheMethods.getMeteor(player));
+        toolCacheMethods.setMeteor(id, newMeteorValue);
+        player.sendMessage("Nivel: " + toolCacheMethods.getMeteor(id));
     }
 
     private int calculateIncrement(boolean isShiftClick, boolean isRightClick) {

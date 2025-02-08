@@ -1,17 +1,17 @@
-package blizzard.development.mine.commands.mine.subcommands.booster;
+package blizzard.development.mine.commands.mine.subcommands.users.booster;
 
 import blizzard.development.mine.database.cache.methods.BoosterCacheMethods;
-import blizzard.development.mine.database.dao.BoosterDAO;
 import blizzard.development.mine.mine.adapters.BoosterAdapter;
 import blizzard.development.mine.mine.enums.BoosterEnum;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
-import co.aikar.commands.annotation.Default;
+import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.Subcommand;
 import org.bukkit.entity.Player;
 
 @CommandAlias("booster")
-public class BoosterCommands extends BaseCommand {
+@CommandPermission("blizzard.mine.user")
+public class BoosterCommand extends BaseCommand {
 
     @Subcommand("confirmar")
     public void onConfirm(Player player) {

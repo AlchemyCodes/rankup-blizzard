@@ -13,7 +13,6 @@ public enum ToolsEnum {
     GOLD("Ouro", Material.GOLDEN_HOE, "§6", "2.6§lx"),
     DIAMOND("Diamante", Material.DIAMOND_HOE, "§b", "3.3§lx");
 
-
     private final String type;
     private final Material material;
     private final String colorCode;

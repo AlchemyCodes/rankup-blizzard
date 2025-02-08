@@ -1,28 +1,32 @@
 package blizzard.development.mine.listeners.mine;
 
-import blizzard.development.core.Main;
 import blizzard.development.currencies.api.CurrenciesAPI;
 import blizzard.development.currencies.enums.Currencies;
 import blizzard.development.mine.builders.item.ItemBuilder;
+import blizzard.development.mine.database.cache.ToolCacheManager;
 import blizzard.development.mine.database.cache.methods.BoosterCacheMethods;
 import blizzard.development.mine.database.cache.methods.PlayerCacheMethods;
 import blizzard.development.mine.database.cache.methods.ToolCacheMethods;
+import blizzard.development.mine.database.storage.ToolData;
 import blizzard.development.mine.managers.events.AvalancheManager;
 import blizzard.development.mine.managers.mine.BlockManager;
 import blizzard.development.mine.mine.adapters.EnchantmentAdapter;
 import blizzard.development.mine.mine.adapters.ExtractorAdapter;
 import blizzard.development.mine.mine.enums.BlockEnum;
+import blizzard.development.mine.mine.enums.ToolEnum;
 import blizzard.development.mine.mine.enums.VipEnum;
 import blizzard.development.mine.mine.events.mine.MineBlockBreakEvent;
-import blizzard.development.mine.mine.item.ToolBuildItem;
+import blizzard.development.mine.utils.PluginImpl;
 import blizzard.development.mine.utils.packets.MinePacketUtils;
 import blizzard.development.mine.utils.text.NumberUtils;
 import blizzard.development.mine.utils.text.ProgressBarUtils;
+import blizzard.development.mine.utils.text.TextUtils;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class MineBlockBreakListener implements Listener {
 
@@ -40,7 +44,8 @@ public class MineBlockBreakListener implements Listener {
 
     private boolean hasValidTool(Player player) {
         ItemStack item = player.getInventory().getItemInMainHand();
-        if (!ItemBuilder.hasPersistentData(Main.getInstance(), item, "blizzard.mine.tool")) {
+        if (item == null || item.getType().isAir()) return false;
+        if (!ItemBuilder.hasPersistentData(PluginImpl.getInstance().plugin, item, "blizzard.mine.tool")) {
             player.sendActionBar("§c§lEI! §cVocê precisa de uma picareta para fazer isso.");
             return false;
         }
@@ -49,12 +54,26 @@ public class MineBlockBreakListener implements Listener {
 
     private void updateBlockState(Player player, Block block) {
         MinePacketUtils.getInstance().sendAirBlock(player, block);
+        if (!hasValidTool(player)) return;
 
         ToolCacheMethods toolCacheMethods = ToolCacheMethods.getInstance();
-        toolCacheMethods.setBlocks(player, toolCacheMethods.getBlocks(player) + 1);
+        String toolId = getToolId(player);
+        if (toolId == null) return;
+
+        toolCacheMethods.setBlocks(toolId, toolCacheMethods.getBlocks(toolId) + 1);
+    }
+
+    private String getToolId(Player player) {
+        return ItemBuilder.getPersistentData(
+                PluginImpl.getInstance().plugin,
+                player.getInventory().getItemInMainHand(),
+                "blizzard.mine.tool"
+        );
     }
 
     private void processRewards(Player player, Block block) {
+        if (!hasValidTool(player)) return;
+
         PlayerCacheMethods playerCacheMethods = PlayerCacheMethods.getInstance();
         BoosterCacheMethods boosterCacheMethods = BoosterCacheMethods.getInstance();
         double booster = boosterCacheMethods.getBoosterMultiplier(boosterCacheMethods.getBoosterName(player));
@@ -71,11 +90,30 @@ public class MineBlockBreakListener implements Listener {
                 moneyToAdd,
                 blockToAdd);
 
-        player.getInventory().setItem(4, ToolBuildItem.tool(player));
+        String toolId = getToolId(player);
+        if (toolId == null) return;
+
+        ToolData toolData = ToolCacheManager.getInstance().getToolData(toolId);
+        updateToolName(player, toolData);
 
         EnchantmentAdapter.getInstance().meteor(player);
-
         sendActionBarMessage(player, moneyToAdd, blockToAdd, booster, bonus);
+    }
+
+    private void updateToolName(Player player, ToolData toolData) {
+        ItemStack item = player.getInventory().getItemInMainHand();
+        if (item == null || !ItemBuilder.hasPersistentData(PluginImpl.getInstance().plugin, item, "blizzard.mine.tool")) {
+            return;
+        }
+
+        ItemMeta meta = item.getItemMeta();
+        if (meta == null) return;
+
+        meta.displayName(TextUtils.parse(
+                ToolEnum.valueOf(
+                toolData.getSkin().toUpperCase()
+        ).getDisplay() + "§7[" + NumberUtils.getInstance().formatNumber(toolData.getBlocks()) + "§7]"));
+        item.setItemMeta(meta);
     }
 
     private double getBlockPrice(Player player, PlayerCacheMethods playerCacheMethods) {

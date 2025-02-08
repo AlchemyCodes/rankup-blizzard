@@ -1,5 +1,6 @@
 package blizzard.development.mine.mine.adapters;
 
+import blizzard.development.mine.builders.item.ItemBuilder;
 import blizzard.development.mine.database.cache.methods.ToolCacheMethods;
 import blizzard.development.mine.managers.enchantments.meteor.MeteorEffect;
 import blizzard.development.mine.mine.enums.LocationEnum;
@@ -13,6 +14,7 @@ import net.kyori.adventure.title.Title;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.time.Duration;
@@ -72,7 +74,7 @@ public class EnchantmentAdapter implements EnchantmentFactory {
 
     @Override
     public void meteor(Player player) {
-        int meteor = ToolCacheMethods.getInstance().getMeteor(player);
+        int meteor = ToolCacheMethods.getInstance().getMeteor(getToolId(player));
 
         double random = ThreadLocalRandom.current().nextDouble(0, 100);
 
@@ -140,5 +142,13 @@ public class EnchantmentAdapter implements EnchantmentFactory {
 
         double result = base + (increase * level);
         return Math.min(result, 100.0);
+    }
+
+    private String getToolId(Player player) {
+        return ItemBuilder.getPersistentData(
+                PluginImpl.getInstance().plugin,
+                player.getInventory().getItemInMainHand(),
+                "blizzard.mine.tool"
+        );
     }
 }

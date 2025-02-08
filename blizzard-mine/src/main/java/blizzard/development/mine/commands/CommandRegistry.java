@@ -2,8 +2,8 @@ package blizzard.development.mine.commands;
 
 import blizzard.development.mine.commands.mine.MineCommand;
 import blizzard.development.mine.commands.mine.subcommands.admins.*;
-import blizzard.development.mine.commands.mine.subcommands.booster.BoosterCommands;
-import blizzard.development.mine.commands.mine.subcommands.users.BoosterCommand;
+import blizzard.development.mine.commands.mine.subcommands.users.booster.BoosterCommand;
+import blizzard.development.mine.commands.mine.subcommands.users.PickaxeCommand;
 import blizzard.development.mine.commands.mine.subcommands.users.ResetCommand;
 import blizzard.development.mine.managers.events.AvalancheManager;
 import blizzard.development.mine.utils.PluginImpl;
@@ -24,12 +24,13 @@ public class CommandRegistry {
                 new LocationsCommand(),
                 new VisibilityCommand(),
                 new DisplayCommand(),
-                //users
+                // users
                 new ResetCommand(),
+                new PickaxeCommand(),
                 new AvalancheManager(),
-                //booster
+                // booster
                 new BoosterCommand(),
-                new BoosterCommands()
+                new BoosterCommand()
         ).forEach(paperCommandManager::registerCommand);
     }
 }

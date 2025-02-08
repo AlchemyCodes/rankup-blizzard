@@ -1,8 +1,11 @@
 package blizzard.development.mine.mine.adapters;
 
 import blizzard.development.core.Main;
+import blizzard.development.currencies.database.storage.PlayersData;
 import blizzard.development.mine.builders.hologram.HologramBuilder;
+import blizzard.development.mine.database.cache.methods.PlayerCacheMethods;
 import blizzard.development.mine.database.cache.methods.ToolCacheMethods;
+import blizzard.development.mine.database.storage.PlayerData;
 import blizzard.development.mine.database.storage.ToolData;
 import blizzard.development.mine.mine.enums.LocationEnum;
 import blizzard.development.mine.mine.factory.PodiumFactory;
@@ -27,19 +30,19 @@ public class PodiumAdapter implements PodiumFactory {
         return instance;
     }
 
-    private final ToolCacheMethods toolCacheMethods = ToolCacheMethods.getInstance();
-    private final List<ToolData> top = toolCacheMethods.getTopBlocks();
+    private final PlayerCacheMethods playerCacheMethods = PlayerCacheMethods.getInstance();
+    private final List<PlayersData> top = playerCacheMethods.getTopBlocks();
     private final NPCRegistry registry = CitizensAPI.getNPCRegistry();
     private final Set<UUID> podiumNPCs = new HashSet<>();
 
     private final NumberUtils numberUtils = NumberUtils.getInstance();
 
-    private void createPodiumNPC(ToolData toolData, List<String> hologramLines, Location location) {
-        NPC npc = registry.createNPC(EntityType.PLAYER, toolData.getNickname());
+    private void createPodiumNPC(PlayersData playersData, List<String> hologramLines, Location location) {
+        NPC npc = registry.createNPC(EntityType.PLAYER, playersData.getNickname());
         NPC npc1 = registry.createNPC(EntityType.MINECART, "");
 
         SkinTrait skinTrait = npc.getOrAddTrait(SkinTrait.class);
-        skinTrait.setSkinName(toolData.getNickname());
+        skinTrait.setSkinName(playersData.getNickname());
 
         npc.spawn(location);
         npc1.spawn(location);
@@ -62,7 +65,7 @@ public class PodiumAdapter implements PodiumFactory {
             Arrays.asList(
                 "§e§lO MELHOR!",
                 "§f",
-                "§7Blocos quebrados:",
+                "§7Saldo de Blocos:",
                 "§b§l❒§b" + numberUtils.formatNumber(top.getFirst().getBlocks())
             ), location
         );
@@ -77,7 +80,7 @@ public class PodiumAdapter implements PodiumFactory {
             Arrays.asList(
                 "§e§lSEGUNDO MELHOR!",
                 "§f",
-                "§7Blocos quebrados:",
+                "§7Saldo de Blocos:",
                 "§b§l❒§b" + numberUtils.formatNumber(top.get(1).getBlocks())
             ), location
         );
@@ -92,7 +95,7 @@ public class PodiumAdapter implements PodiumFactory {
             Arrays.asList(
                 "§e§lTERCEIRO MELHOR!",
                 "§f",
-                "§7Blocos quebrados:",
+                "§7Saldo de Blocos:",
                 "§b§l❒§b" + numberUtils.formatNumber(top.get(2).getBlocks())
             ), location
         );

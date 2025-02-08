@@ -6,11 +6,13 @@ import blizzard.development.mine.database.cache.methods.PlayerCacheMethods;
 import blizzard.development.mine.mine.adapters.MineAdapter;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
+import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.Subcommand;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 @CommandAlias("mina|mineracao|mine")
+@CommandPermission("blizzard.mine.visibility")
 public class VisibilityCommand extends BaseCommand {
 
     private final PlayerCacheMethods cacheMethods = PlayerCacheMethods.getInstance();
