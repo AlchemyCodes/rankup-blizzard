@@ -9,6 +9,7 @@ import blizzard.development.mine.managers.mine.BlockManager;
 import blizzard.development.mine.mine.enums.LocationEnum;
 import blizzard.development.mine.mine.factory.ExtractorFactory;
 import blizzard.development.mine.tasks.mine.ExtractorUpdateTask;
+import blizzard.development.mine.tasks.mine.RecentRewardsTask;
 import blizzard.development.mine.utils.locations.LocationUtils;
 import blizzard.development.mine.utils.packets.MinePacketUtils;
 import blizzard.development.mine.utils.text.NumberUtils;
@@ -105,15 +106,17 @@ public class ExtractorAdapter implements ExtractorFactory {
         currenciesAPI.addBalance(player, Currencies.COINS, moneyToAdd);
         currenciesAPI.addBalance(player, Currencies.BLOCKS, blocksPrice);
 
+        RecentRewardsTask.getInstance().addRewards(player, moneyToAdd, blocksPrice);
+
         String formattedMoney = NumberUtils.getInstance().formatNumber(moneyToAdd);
-        String formattedBlocks = NumberUtils.getInstance().formatNumber(brokenBlocks);
+        String formattedBlocks = NumberUtils.getInstance().formatNumber(blocksPrice);
 
         player.sendMessage(TextUtils.parse(" <bold><#FF55FF>Ext<#ff6bff><#ff6bff>rat<#ff6bff><#ff6bff>ora!<#FF55FF></bold> " +
                 "§8✈ §f§l+§a" + formattedMoney + "§l$ §7♦ §fBlocos: §7" + formattedBlocks));
     }
 
     private int breakBlocksInRadius(Player player, Location center) {
-        int radius = 5;
+        int radius = 10;
         int blockCount = 0;
         BlockManager blockManager = BlockManager.getInstance();
         List<Location> blockLocations = new ArrayList<>();
@@ -190,29 +193,7 @@ public class ExtractorAdapter implements ExtractorFactory {
         return blockCount;
     }
 
-    private static class ChunkSection {
-        final int x, y, z;
-
-        ChunkSection(int x, int y, int z) {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            ChunkSection that = (ChunkSection) o;
-            return x == that.x && y == that.y && z == that.z;
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(x, y, z);
-        }
-    }
-
+    private record ChunkSection(int x, int y, int z) {}
 
     public void createExtractor(Player player) {
         Location location = LocationUtils.getLocation(LocationEnum.EXTRACTOR_NPC.getName());

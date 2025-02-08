@@ -6,8 +6,13 @@ import org.bukkit.scheduler.BukkitTask;
 
 public class PodiumUpdateTask extends BukkitRunnable {
 
+    private static final PodiumUpdateTask instance = new PodiumUpdateTask();
     private final PodiumAdapter podiumAdapter = PodiumAdapter.getInstance();
     private BukkitTask task;
+
+    public static PodiumUpdateTask getInstance() {
+        return instance;
+    }
 
     @Override
     public void run() {
@@ -20,8 +25,10 @@ public class PodiumUpdateTask extends BukkitRunnable {
     }
 
     public void cancelTask() {
-        if (task != null && !task.isCancelled()) {
-            task.cancel();
-        }
+        try {
+            if (task != null && !task.isCancelled()) {
+                task.cancel();
+            }
+        } catch (Exception ignored) {}
     }
 }

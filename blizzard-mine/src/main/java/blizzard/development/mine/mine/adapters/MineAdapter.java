@@ -8,6 +8,7 @@ import blizzard.development.mine.managers.mine.MineManager;
 import blizzard.development.mine.managers.mine.NPCManager;
 import blizzard.development.mine.mine.enums.LocationEnum;
 import blizzard.development.mine.mine.factory.MineFactory;
+import blizzard.development.mine.tasks.mine.RecentRewardsTask;
 import blizzard.development.mine.utils.PluginImpl;
 import blizzard.development.mine.utils.locations.LocationUtils;
 import net.kyori.adventure.text.Component;
@@ -21,6 +22,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.time.Duration;
 import java.util.*;
@@ -144,7 +146,6 @@ public class MineAdapter implements MineFactory {
                 Component.text("§cEstamos carregando a sua mina."),
                 Title.Times.times(Duration.ZERO, Duration.ofSeconds(2), Duration.ofSeconds(3))
         ));
-        player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 5F, 1F);
     }
 
     private void finalizeInitialization(Player player) {
@@ -156,6 +157,13 @@ public class MineAdapter implements MineFactory {
         Bukkit.getScheduler().runTaskLater(Main.getInstance(), () -> {
             PodiumAdapter.getInstance().createAllNPCs();
             ExtractorAdapter.getInstance().createExtractor(player);
+
+            RecentRewardsTask recentRewardsTask = RecentRewardsTask.getInstance();
+
+            if (recentRewardsTask.getTask() == null) {
+                BukkitTask task = recentRewardsTask.runTaskTimer(Main.getInstance(), 20L * 60 * 3, 20L * 60 * 3);
+                recentRewardsTask.setTask(task);
+            }
         }, 100L);
     }
 

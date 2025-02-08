@@ -8,6 +8,7 @@ import blizzard.development.mine.database.DatabaseConnection;
 import blizzard.development.mine.database.cache.BoosterCacheManager;
 import blizzard.development.mine.database.cache.PlayerCacheManager;
 import blizzard.development.mine.database.cache.ToolCacheManager;
+import blizzard.development.mine.database.cache.methods.PlayerCacheMethods;
 import blizzard.development.mine.database.dao.BoosterDAO;
 import blizzard.development.mine.database.dao.PlayerDAO;
 import blizzard.development.mine.database.dao.ToolDAO;
@@ -19,7 +20,9 @@ import blizzard.development.mine.listeners.ListenerRegistry;
 import blizzard.development.mine.managers.data.DataBatchManager;
 import blizzard.development.mine.mine.adapters.PodiumAdapter;
 import blizzard.development.mine.tasks.manager.TaskManager;
+import blizzard.development.mine.tasks.mine.ExtractorUpdateTask;
 import blizzard.development.mine.tasks.mine.PodiumUpdateTask;
+import blizzard.development.mine.tasks.mine.RecentRewardsTask;
 import blizzard.development.mine.utils.config.ConfigUtils;
 import co.aikar.commands.Locales;
 import co.aikar.commands.PaperCommandManager;
@@ -61,6 +64,7 @@ public class PluginImpl {
         Locations = new ConfigUtils((JavaPlugin) plugin, "locations.yml");
         Ranking = new ConfigUtils((JavaPlugin) plugin, "ranking.yml");
         Database = new ConfigUtils((JavaPlugin) plugin, "database.yml");
+        taskManager = new TaskManager(plugin, toolDAO, playerDAO, boosterDAO);
     }
 
     public void onEnable() {
@@ -82,11 +86,22 @@ public class PluginImpl {
     }
 
     public void onDisable() {
-        if (taskManager != null) {
-            taskManager.stop();
+        if (taskManager != null) taskManager.stop();
+
+        PodiumUpdateTask podiumTask = PodiumUpdateTask.getInstance();
+        if (podiumTask != null) {
+            podiumTask.cancelTask();
         }
 
-        new PodiumUpdateTask().cancelTask();
+        ExtractorUpdateTask extractorUpdateTask = ExtractorUpdateTask.getInstance();
+        if (extractorUpdateTask != null) {
+            extractorUpdateTask.cancelTask();
+        }
+
+        RecentRewardsTask recentRewardsTask = RecentRewardsTask.getInstance();
+        if (recentRewardsTask != null) {
+            recentRewardsTask.cancelTask();
+        }
 
         Set<UUID> npcsToRemove = new HashSet<>(PodiumAdapter.getInstance().getPodiumNPCs());
         for (UUID uuid : npcsToRemove) {
@@ -99,6 +114,7 @@ public class PluginImpl {
         PickaxeBuilder.getInstance().removePickaxe();
         HologramBuilder.getInstance().removeAllHolograms();
         ExtractorBuilder.getInstance().removeExtractor();
+
         setupDisableData();
     }
 

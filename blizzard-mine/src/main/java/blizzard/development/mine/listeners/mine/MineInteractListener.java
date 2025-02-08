@@ -1,6 +1,9 @@
 package blizzard.development.mine.listeners.mine;
 
+import blizzard.development.mine.builders.item.ItemBuilder;
 import blizzard.development.mine.database.cache.methods.PlayerCacheMethods;
+import blizzard.development.mine.inventories.enchantments.EnchantmentInventory;
+import blizzard.development.mine.utils.PluginImpl;
 import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,6 +19,16 @@ public class MineInteractListener implements Listener {
         Player player = event.getPlayer();
 
         ItemStack itemStack = player.getInventory().getItemInMainHand();
+
+        String pickaxeData = "blizzard.mine.tool";
+
+        boolean isPickaxe = ItemBuilder.hasPersistentData(PluginImpl.getInstance().plugin, itemStack, pickaxeData);
+
+        String pickaxeId = ItemBuilder.getPersistentData(PluginImpl.getInstance().plugin, itemStack, pickaxeData);
+
+        if (isPickaxe && event.getAction().isRightClick()) {
+            new EnchantmentInventory().open(player, pickaxeId);
+        }
     }
 
     @EventHandler
