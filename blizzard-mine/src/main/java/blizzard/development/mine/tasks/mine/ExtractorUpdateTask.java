@@ -15,7 +15,12 @@ import java.util.Arrays;
 
 public class ExtractorUpdateTask extends BukkitRunnable {
 
+    private static final ExtractorUpdateTask instance = new ExtractorUpdateTask();
     private BukkitTask task;
+
+    public static ExtractorUpdateTask getInstance() {
+        return instance;
+    }
 
     @Override
     public void run() {
@@ -51,8 +56,10 @@ public class ExtractorUpdateTask extends BukkitRunnable {
     }
 
     public void cancelTask() {
-        if (task != null && !task.isCancelled()) {
-            task.cancel();
-        }
+        try {
+            if (task != null && !task.isCancelled()) {
+                task.cancel();
+            }
+        } catch (Exception ignored) {}
     }
 }

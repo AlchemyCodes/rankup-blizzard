@@ -16,6 +16,7 @@ import blizzard.development.mine.mine.enums.BlockEnum;
 import blizzard.development.mine.mine.enums.ToolEnum;
 import blizzard.development.mine.mine.enums.VipEnum;
 import blizzard.development.mine.mine.events.mine.MineBlockBreakEvent;
+import blizzard.development.mine.tasks.mine.RecentRewardsTask;
 import blizzard.development.mine.utils.PluginImpl;
 import blizzard.development.mine.utils.packets.MinePacketUtils;
 import blizzard.development.mine.utils.text.NumberUtils;
@@ -128,6 +129,7 @@ public class MineBlockBreakListener implements Listener {
         CurrenciesAPI currenciesAPI = CurrenciesAPI.getInstance();
         currenciesAPI.addBalance(player, Currencies.COINS, coins);
         currenciesAPI.addBalance(player, Currencies.BLOCKS, blocks);
+        RecentRewardsTask.getInstance().addRewards(player, coins, blocks);
     }
 
     private double getBonus(Player player) {

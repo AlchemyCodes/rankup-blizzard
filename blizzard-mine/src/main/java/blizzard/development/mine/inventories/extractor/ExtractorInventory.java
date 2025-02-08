@@ -38,8 +38,8 @@ public class ExtractorInventory {
                         "§7e utilizar a extratora.",
                         "",
                         "§d Informações",
-                        "§f  Objetivo §8: §70/100", //ficticio
-                        "§f  Progresso §8: " + ProgressBarUtils.getInstance().extractor(player),
+                        "§f  Objetivo§8: §70/100", //ficticio
+                        "§f  Progresso§8: " + ProgressBarUtils.getInstance().extractor(player),
                         ""
                         ))
                 .build();
