@@ -1,17 +1,14 @@
 package blizzard.development.vips.commands;
 
 import blizzard.development.vips.Main;
-import blizzard.development.vips.commands.subcommands.freeze.FreezeVip;
-import blizzard.development.vips.commands.subcommands.keys.GenerateKey;
-import blizzard.development.vips.commands.subcommands.keys.UseKey;
-import blizzard.development.vips.commands.vips.ChangeVip;
-import blizzard.development.vips.commands.vips.ConsultVip;
-import blizzard.development.vips.commands.vips.GiveVip;
-import blizzard.development.vips.commands.vips.RemoveVip;
-import blizzard.development.vips.database.cache.PlayersCacheManager;
-import blizzard.development.vips.database.dao.KeysDao;
-import blizzard.development.vips.database.dao.PlayersDAO;
-import blizzard.development.vips.enums.VipEnum;
+import blizzard.development.vips.commands.key.GenerateKeyCommand;
+import blizzard.development.vips.commands.key.UseKeyCommand;
+import blizzard.development.vips.commands.vips.ChangeVipCommand;
+import blizzard.development.vips.commands.vips.ConsultVipCommand;
+import blizzard.development.vips.commands.subcommands.FreezeVipCommand;
+import blizzard.development.vips.commands.vips.GiveVipCommand;
+import blizzard.development.vips.database.dao.KeyDAO;
+import blizzard.development.vips.vips.enums.VipEnum;
 import co.aikar.commands.PaperCommandManager;
 import org.bukkit.entity.Player;
 
@@ -22,26 +19,25 @@ import java.util.stream.Collectors;
 public class CommandRegistry {
 
     public void register() {
-        KeysDao keysDAO = new KeysDao();
+        KeyDAO keyDAO = new KeyDAO();
 
         PaperCommandManager paperCommandManager = new PaperCommandManager(Main.getInstance());
 
         Arrays.asList(
-                new GiveVip(),
-                new ConsultVip(),
-                new RemoveVip(),
-                new ChangeVip(),
-                new GenerateKey(keysDAO),
-                new UseKey(keysDAO),
-                new FreezeVip()
+                new GenerateKeyCommand(keyDAO),
+                new UseKeyCommand(keyDAO),
+                new ConsultVipCommand(),
+                new GiveVipCommand(),
+                new FreezeVipCommand(),
+                new ChangeVipCommand()
         ).forEach(paperCommandManager::registerCommand);
 
         registerCompletions(paperCommandManager);
     }
 
     private void registerCompletions(PaperCommandManager manager) {
-        manager.getCommandCompletions().registerAsyncCompletion
-                ("vipIds", c -> PlayersCacheManager.getInstance().getAllVipIds());
+//        manager.getCommandCompletions().registerAsyncCompletion
+//                ("vipIds", c -> PlayersCacheManager.getInstance().getAllVipIds());
 
         manager.getCommandCompletions().registerAsyncCompletion
                 ("playerName",

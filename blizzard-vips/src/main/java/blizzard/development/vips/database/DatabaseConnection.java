@@ -1,6 +1,6 @@
 package blizzard.development.vips.database;
 
-import blizzard.development.vips.utils.PluginImpl;
+import blizzard.development.vips.plugin.PluginImpl;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
