@@ -7,7 +7,7 @@ public class RandomIdGenerator {
     private static final int NUMERIC_LENGTH = 6;
     private static final SecureRandom RANDOM = new SecureRandom();
 
-    public static String generateVipId() {
+    public static String generateId() {
         StringBuilder vipId = new StringBuilder();
         for (int i = 0; i < 2; i++) {
             char randomLetter = LETTERS.charAt(RANDOM.nextInt(LETTERS.length()));
