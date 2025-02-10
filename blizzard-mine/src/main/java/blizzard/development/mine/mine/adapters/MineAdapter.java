@@ -74,7 +74,7 @@ public class MineAdapter implements MineFactory {
     }
 
     public void resetMine(Player player) {
-        Location spawnLocation = LocationUtils.getLocation(LocationEnum.SPAWN.getName());
+        Location spawnLocation = LocationUtils.getLocation(LocationEnum.CENTER.getName()).add(0, 2, 0);
 
         if (spawnLocation == null) {
             player.sendActionBar(Component.text("§c§lEI! §cO spawn da mina ainda não foi setado."));
