@@ -14,11 +14,8 @@ import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
 import com.github.stefvanschie.inventoryframework.pane.StaticPane;
 import com.github.stefvanschie.inventoryframework.pane.util.Slot;
 import org.bukkit.Material;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
 
 import java.util.Arrays;
 

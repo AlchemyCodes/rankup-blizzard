@@ -60,12 +60,4 @@ public class TrafficListener implements Listener {
 
         TemperatureDecayTask.stopPlayerRunnable(player);
     }
-
-    @EventHandler
-    public void onWorldChange(PlayerChangedWorldEvent event) {
-        if (GeneratorManager.hasGenerator(event.getPlayer())) {
-            event.getPlayer().sendMessage("§cVocê trocou de mundo e seu gerador foi retirado!");
-            GeneratorManager.removeGenerator(event.getPlayer());
-        }
-    }
 }
