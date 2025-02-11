@@ -43,7 +43,7 @@ public class CoreAPI {
             World world = player.getWorld();
             world.setStorm(false);
             instance.setBlizzardFalse();
-            GeneratorManager.removeGenerator(player);
+            GeneratorManager.getInstance().deactivateGenerator(player);
             player.sendTitle("§b§lA TEMPESTADE PASSOU.", "§fAproveite a calmaria antes que ela volte.", 10, 70, 20);
         }
     }
@@ -70,7 +70,7 @@ public class CoreAPI {
     }
 
     public boolean hasGeneratorOn(Player player) {
-        return GeneratorManager.hasGenerator(player);
+        return GeneratorManager.getInstance().hasGenerator(player);
     }
 
     public double getPlayerBonus(Player player) {

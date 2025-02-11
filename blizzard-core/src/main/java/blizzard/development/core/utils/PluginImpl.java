@@ -67,7 +67,6 @@ public class PluginImpl {
     private void registerListeners() {
         ListenerRegistry listenerRegistry = new ListenerRegistry(playersDAO, protocolManager);
         listenerRegistry.register();
-        listenerRegistry.registerPacket();
     }
 
     private void registerTasks() {

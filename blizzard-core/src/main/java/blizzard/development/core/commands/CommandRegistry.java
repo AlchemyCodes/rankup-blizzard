@@ -2,7 +2,6 @@ package blizzard.development.core.commands;
 
 import blizzard.development.core.Main;
 import blizzard.development.core.commands.clothings.ClothingCommand;
-import blizzard.development.core.commands.schematic.SchemCommand;
 import blizzard.development.core.commands.subcommands.SetsCommand;
 import blizzard.development.core.commands.temperature.TemperatureCommand;
 import java.util.Arrays;
@@ -20,10 +19,9 @@ public class CommandRegistry {
                 new ClothingCommand(),
                         new TemperatureCommand(),
                         new SetsCommand(),
-                        new SchemCommand(),
                         new ActiveCoreDebug(),
-                        new ReloadConfig(),
-                        new CampfireCommand()})
+                        new ReloadConfig()
+        })
                 .forEach(paperCommandManager::registerCommand);
     }
 }
