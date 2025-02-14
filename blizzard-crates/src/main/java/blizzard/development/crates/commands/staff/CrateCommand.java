@@ -1,5 +1,7 @@
 package blizzard.development.crates.commands.staff;
 
+import blizzard.development.crates.Main;
+import blizzard.development.crates.builder.ItemBuilder;
 import co.aikar.commands.annotation.*;
 import co.aikar.commands.BaseCommand;
 import net.kyori.adventure.text.Component;
@@ -10,7 +12,6 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-import static blizzard.development.crates.builder.ItemBuilder.buildItem;
 import static blizzard.development.crates.managers.CrateManager.removeCrate;
 
 @CommandAlias("crates|caixas")
@@ -37,13 +38,11 @@ public class CrateCommand extends BaseCommand {
                 commomLore.add("");
                 commomLore.add("§8Clique para colocar.");
 
-                buildItem(
-                        target,
-                        "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODAxMzk4YTY5MWFiYjg1NWNjZTFjY2I2YmQzYmFkZTUwYmEyNWJlMDEyY2FiZWYzMWZiZGYwM2FlNDliYzg4NSJ9fX0=",
-                        "§8Caixa §lComum!",
-                        commomLore,
-                        "comum"
-                );
+                target.getInventory().addItem(new ItemBuilder("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODAxMzk4YTY5MWFiYjg1NWNjZTFjY2I2YmQzYmFkZTUwYmEyNWJlMDEyY2FiZWYzMWZiZGYwM2FlNDliYzg4NSJ9fX0=")
+                    .setDisplayName("§8Caixa §lComum!")
+                    .setLore(commomLore)
+                    .addPersistentData(Main.getInstance(), "comum", "comum")
+                    .build());
 
                 break;
             case "rara":
@@ -54,13 +53,11 @@ public class CrateCommand extends BaseCommand {
                 rareLore.add("");
                 rareLore.add("§aClique para colocar.");
 
-                buildItem(
-                        target,
-                        "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWIwODRlODlhNzBkNzA5OGI2OTQ4MzRlNTM0OTY3NDE1NjcwYjgwODM3YWZiOWJiOWY0YTI2ZmZiNzk3Zjg5MSJ9fX0=",
-                        "§aCaixa §lRara!",
-                        rareLore,
-                        "rara"
-                );
+                target.getInventory().addItem(new ItemBuilder("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWIwODRlODlhNzBkNzA5OGI2OTQ4MzRlNTM0OTY3NDE1NjcwYjgwODM3YWZiOWJiOWY0YTI2ZmZiNzk3Zjg5MSJ9fX0=")
+                    .setDisplayName("§aCaixa §lRara!")
+                    .setLore(rareLore)
+                    .addPersistentData(Main.getInstance(), "rara", "rara")
+                    .build());
 
                 break;
             case "mistica":
@@ -71,13 +68,11 @@ public class CrateCommand extends BaseCommand {
                 mysticLore.add("");
                 mysticLore.add("§5Clique para colocar.");
 
-                buildItem(
-                        target,
-                        "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYWM0NmUyZTkzNmRjY2IwZWRjNzAzNmJiNWRjYjEyNjJhYzAwMDYzODUxNWVmZTM0ZmZiOTdkYjY4NzY0NjIyMSJ9fX0=",
-                        "§5Caixa §lMística!",
-                        mysticLore,
-                        "mitica"
-                );
+                target.getInventory().addItem(new ItemBuilder("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYWM0NmUyZTkzNmRjY2IwZWRjNzAzNmJiNWRjYjEyNjJhYzAwMDYzODUxNWVmZTM0ZmZiOTdkYjY4NzY0NjIyMSJ9fX0=")
+                    .setDisplayName("§5Caixa §lMística!")
+                    .setLore(mysticLore)
+                    .addPersistentData(Main.getInstance(), "mistica", "mistica")
+                    .build());
 
                 break;
             case "lendaria":
@@ -88,13 +83,11 @@ public class CrateCommand extends BaseCommand {
                 legendaryLore.add("");
                 legendaryLore.add("§6Clique para colocar.");
 
-                buildItem(
-                        target,
-                        "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTBmYzk4MTk1MDBmNmQxMWEwM2IzMjJhMmZmM2I2ZjU1NDg4Y2MyMzI4ODRhZDZmNDczNjZmZTU4MGEzYmE0ZiJ9fX0=",
-                        "§6Caixa §lLendária!",
-                        legendaryLore,
-                        "lendaria"
-                );
+               target.getInventory().addItem(new ItemBuilder("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTBmYzk4MTk1MDBmNmQxMWEwM2IzMjJhMmZmM2I2ZjU1NDg4Y2MyMzI4ODRhZDZmNDczNjZmZTU4MGEzYmE0ZiJ9fX0=")
+                    .setDisplayName("§6Caixa §lLendária!")
+                    .setLore(legendaryLore)
+                    .addPersistentData(Main.getInstance(), "lendaria", "lendaria")
+                    .build());
 
                 break;
             case "blizzard":
@@ -105,13 +98,11 @@ public class CrateCommand extends BaseCommand {
                 blizzardLore.add("");
                 blizzardLore.add("§bClique para colocar.");
 
-                buildItem(
-                        target,
-                        "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYTMzMzZkNzQxNjI1ZGMwYWY0NjAyNGE4YzY1NDMwN2U1Njk1ZWZkMzc5YjE1OTY3OGFlNjVjZmEwNGEyMzkxNCJ9fX0=",
-                        "§bCaixa §lBlizzard!",
-                        blizzardLore,
-                        "blizzard"
-                );
+                target.getInventory().addItem(new ItemBuilder("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYTMzMzZkNzQxNjI1ZGMwYWY0NjAyNGE4YzY1NDMwN2U1Njk1ZWZkMzc5YjE1OTY3OGFlNjVjZmEwNGEyMzkxNCJ9fX0=")
+                    .setDisplayName("§bCaixa §lBlizzard!")
+                    .setLore(blizzardLore)
+                    .addPersistentData(Main.getInstance(), "blizzard", "blizzard")
+                    .build());
 
                 break;
             case "remove":

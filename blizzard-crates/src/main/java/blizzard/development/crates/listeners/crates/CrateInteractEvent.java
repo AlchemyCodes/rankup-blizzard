@@ -16,11 +16,10 @@ public class CrateInteractEvent implements Listener {
         Player player = event.getPlayer();
 
         if (!player.isSneaking()) {
-
-            event.setCancelled(true);
+            return;
         }
 
-        if (player.isSneaking() && armorStand.hasMetadata("lendaria")) {
+        if (armorStand.hasMetadata("lendaria")) {
             LegendaryInventory legendaryInventory = new LegendaryInventory();
             legendaryInventory.open(player);
 
@@ -29,7 +28,7 @@ public class CrateInteractEvent implements Listener {
             return;
         }
 
-        if (player.isSneaking() && armorStand.hasMetadata("mitica")) {
+        if (armorStand.hasMetadata("mistica")) {
             MysticInventory mysticInventory = new MysticInventory();
             mysticInventory.open(player);
 

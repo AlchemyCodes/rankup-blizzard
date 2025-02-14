@@ -2,7 +2,7 @@ package blizzard.development.crates.managers;
 
 import blizzard.development.crates.Main;
 import blizzard.development.crates.builder.HologramBuilder;
-import blizzard.development.crates.utils.item.skull.SkullUtils;
+import blizzard.development.crates.utils.apis.Skull;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.entity.ArmorStand;
@@ -39,7 +39,7 @@ public class CrateManager {
         stand.setMetadata(metaData, new FixedMetadataValue(Main.getInstance(), true));
         stand.setInvisible(true);
         stand.setGravity(false);
-        stand.setHelmet(new ItemStack(SkullUtils.fromBase64(SkullUtils.Type.ITEM, base64)));
+        stand.setHelmet(new ItemStack(Skull.fromBase64(Skull.Type.ITEM, base64)));
 
         armorStandList.add(stand);
 

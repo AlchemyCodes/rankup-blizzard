@@ -4,20 +4,19 @@ import blizzard.development.crates.utils.PluginImpl;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin {
-
+    public PluginImpl pluginImpl;
     public static Main instance;
 
     @Override
     public void onEnable() {
         instance = this;
 
-        PluginImpl pluginImpl = new PluginImpl(this);
+        pluginImpl = new PluginImpl(this);
         pluginImpl.onLoad();
     }
 
-    @Override
     public void onDisable() {
-
+        pluginImpl.onUnload();
     }
 
     public static Main getInstance() {
