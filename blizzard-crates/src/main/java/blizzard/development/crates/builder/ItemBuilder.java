@@ -1,26 +1,24 @@
 package blizzard.development.crates.builder;
 
 
-import blizzard.development.crates.Main;
 import blizzard.development.crates.utils.TextUtil;
-import blizzard.development.crates.utils.item.skull.SkullUtils;
+import blizzard.development.crates.utils.apis.Skull;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.block.Skull;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.plugin.Plugin;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static blizzard.development.crates.utils.item.NBTUtils.setTag;
 
 public class ItemBuilder {
 
@@ -28,20 +26,20 @@ public class ItemBuilder {
     private final ItemMeta itemMeta;
     private final PersistentDataContainer pdc;
 
-    public ItemBuilder(Material material) {
+    public  ItemBuilder(Material material) {
         this.itemStack = new ItemStack(material);
         this.itemMeta = itemStack.getItemMeta();
         this.pdc = itemMeta.getPersistentDataContainer();
     }
 
     public ItemBuilder(String value) {
-        this.itemStack = SkullUtils.fromBase64(SkullUtils.Type.BLOCK, value);
+        this.itemStack = Skull.fromBase64(Skull.Type.BLOCK, value);
         this.itemMeta = itemStack.getItemMeta();
         this.pdc = itemMeta.getPersistentDataContainer();
     }
 
     public ItemBuilder(Player player) {
-        this.itemStack = SkullUtils.withName(new ItemStack(Material.PLAYER_HEAD), player.getName());
+        this.itemStack = blizzard.development.crates.utils.apis.Skull.withName(new ItemStack(Material.PLAYER_HEAD), player.getName());
         this.itemMeta = itemStack.getItemMeta();
         this.pdc = itemMeta.getPersistentDataContainer();
     }
@@ -53,8 +51,8 @@ public class ItemBuilder {
 
     public ItemBuilder setLore(List<String> lore) {
         List<Component> component = lore.stream()
-                .map(line -> TextUtil.parse(line.replace("&", "§")))
-                .collect(Collectors.toList());
+            .map(line -> TextUtil.parse(line.replace("&", "§")))
+            .collect(Collectors.toList());
         itemMeta.lore(component);
         return this;
     }
@@ -79,76 +77,80 @@ public class ItemBuilder {
         return this;
     }
 
-    public ItemBuilder addPersistentData(Main plugin, String value) {
-        NamespacedKey key = new NamespacedKey(plugin, value);
+    public ItemBuilder setColor(Color color) {
+        LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) itemMeta;
+        leatherArmorMeta.setColor(color);
+        return this;
+    }
+
+    public ItemBuilder addPersistentData(Plugin plugin, String keyName, String value) {
+        NamespacedKey key = new NamespacedKey(plugin, keyName);
         pdc.set(key, PersistentDataType.STRING, value);
         return this;
     }
 
-    public ItemBuilder addPersistentData(Main plugin, Integer value) {
-        NamespacedKey key = new NamespacedKey(plugin, String.valueOf(value));
+    public ItemBuilder addPersistentData(Plugin plugin, String keyName, Integer value) {
+        NamespacedKey key = new NamespacedKey(plugin, keyName);
         pdc.set(key, PersistentDataType.INTEGER, value);
         return this;
     }
 
-    public ItemBuilder addPersistentData(Main plugin, Boolean value) {
-        NamespacedKey key = new NamespacedKey(plugin, String.valueOf(value));
+    public ItemBuilder addPersistentData(Plugin plugin, String keyName, Boolean value) {
+        NamespacedKey key = new NamespacedKey(plugin, keyName);
         pdc.set(key, PersistentDataType.BOOLEAN, value);
         return this;
     }
 
-    public ItemBuilder addPersistentData(Main plugin, Double value) {
-        NamespacedKey key = new NamespacedKey(plugin, String.valueOf(value));
+
+    public ItemBuilder addPersistentData(Plugin plugin, String keyName, Double value) {
+        NamespacedKey key = new NamespacedKey(plugin, keyName);
         pdc.set(key, PersistentDataType.DOUBLE, value);
         return this;
     }
 
-    public ItemStack build(Player player) {
+    public ItemStack build(int amount) {
+        itemMeta.setUnbreakable(true);
+        itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        itemMeta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
         itemStack.setItemMeta(itemMeta);
-        player.getInventory().addItem(itemStack);
+        itemStack.setAmount(amount);
         return itemStack;
     }
 
-    public static boolean hasPersistentData(Main plugin, ItemStack item, String value) {
-        NamespacedKey key = new NamespacedKey(plugin, value);
+    public ItemStack build() {
+        itemMeta.setUnbreakable(true);
+        itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        itemMeta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+        itemStack.setItemMeta(itemMeta);
+        return itemStack;
+    }
+
+    public static boolean hasPersistentData(Plugin plugin, ItemStack item, String keyName) {
+        NamespacedKey key = new NamespacedKey(plugin, keyName);
 
         if (item.hasItemMeta()) {
             ItemMeta meta = item.getItemMeta();
             PersistentDataContainer pdc = meta.getPersistentDataContainer();
             return pdc.has(key, PersistentDataType.STRING)
-                    || pdc.has(key, PersistentDataType.INTEGER)
-                    || pdc.has(key, PersistentDataType.BOOLEAN)
-                    || pdc.has(key, PersistentDataType.DOUBLE);
+                || pdc.has(key, PersistentDataType.INTEGER)
+                || pdc.has(key, PersistentDataType.BOOLEAN)
+                || pdc.has(key, PersistentDataType.DOUBLE);
         }
 
         return false;
     }
 
-    public static String getPersistentData(ItemStack item) {
+    public static String getPersistentData(Plugin plugin, ItemStack item, String key) {
         if (item.hasItemMeta()) {
             ItemMeta meta = item.getItemMeta();
             PersistentDataContainer pdc = meta.getPersistentDataContainer();
-            return Arrays.toString(pdc.getKeys().toArray());
+            NamespacedKey namespacedKey = new NamespacedKey(plugin, key);
+            if (pdc.has(namespacedKey, PersistentDataType.STRING)) {
+                return pdc.get(namespacedKey, PersistentDataType.STRING);
+            }
         }
         return null;
-    }
-
-    public static void buildItem(Player player, String base64, String displayName, List<String> lore, String nbt) {
-
-        ItemStack item = new ItemStack(SkullUtils.fromBase64(SkullUtils.Type.ITEM, base64));
-        ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(displayName);
-
-        List<String> replacedLore = lore.stream()
-                .map(s -> s.replace("&", "§"))
-                .toList();
-
-        meta.setLore(replacedLore);
-
-        item.setItemMeta(meta);
-
-        setTag(item, nbt);
-
-        player.getInventory().addItem(item);
     }
 }

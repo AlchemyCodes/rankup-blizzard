@@ -17,11 +17,7 @@ public class ListenerRegistry {
         Arrays.asList(
                 new CratePlaceEvent(),
                 new CrateInteractEvent(),
-                new CommonKeyInteractEvent(),
-                new RareKeyInteractEvent(),
-                new MysticKeyInteractEvent(),
-                new LegendaryKeyInteractEvent(),
-                new BlizzardKeyInteractEvent()
+                new CrateKeyInteractEvent()
         ).forEach(listener -> pluginManager.registerEvents(listener, Main.getInstance()));
     }
 }

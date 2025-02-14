@@ -2,7 +2,6 @@ package blizzard.development.crates.commands.staff;
 
 import blizzard.development.crates.Main;
 import blizzard.development.crates.builder.ItemBuilder;
-import blizzard.development.crates.utils.item.NBTUtils;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.CommandPermission;
@@ -15,7 +14,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
 
@@ -37,7 +35,7 @@ public class KeyCommand extends BaseCommand {
         switch (key) {
             case "comum":
 
-                ItemStack key2 = new ItemBuilder(Material.TRIPWIRE_HOOK)
+                target.getInventory().addItem(new ItemBuilder(Material.TRIPWIRE_HOOK)
                         .setDisplayName("§8Chave §lComum!")
                         .setLore(Arrays.asList(
                                 "§7Use esta chave para",
@@ -48,15 +46,13 @@ public class KeyCommand extends BaseCommand {
                         .addUnsafeEnchantment(Enchantment.DURABILITY, 1)
                         .addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
                         .addItemFlags(ItemFlag.HIDE_ENCHANTS)
-                        .addPersistentData(Main.getInstance(), "chave.comum")
-                        .build(target);
-
-                NBTUtils.setTag(key2, "chave.comum");
+                        .addPersistentData(Main.getInstance(), "chave.comum", "chave.comum")
+                        .build());
 
                 break;
             case "rara":
 
-                new ItemBuilder(Material.TRIPWIRE_HOOK)
+                target.getInventory().addItem(new ItemBuilder(Material.TRIPWIRE_HOOK)
                         .setDisplayName("§aChave §lRara!")
                         .setLore(Arrays.asList(
                                 "§7Use esta chave para",
@@ -67,13 +63,13 @@ public class KeyCommand extends BaseCommand {
                         .addUnsafeEnchantment(Enchantment.DURABILITY, 1)
                         .addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
                         .addItemFlags(ItemFlag.HIDE_ENCHANTS)
-                        .addPersistentData(Main.getInstance(), "chave.rara")
-                        .build(target);
+                        .addPersistentData(Main.getInstance(), "chave.rara", "chave.rara")
+                        .build());
 
                 break;
             case "mistica":
 
-                new ItemBuilder(Material.TRIPWIRE_HOOK)
+                target.getInventory().addItem(new ItemBuilder(Material.TRIPWIRE_HOOK)
                         .setDisplayName("§5Chave §lMística!")
                         .setLore(Arrays.asList(
                                 "§7Use esta chave para",
@@ -84,13 +80,13 @@ public class KeyCommand extends BaseCommand {
                         .addUnsafeEnchantment(Enchantment.DURABILITY, 1)
                         .addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
                         .addItemFlags(ItemFlag.HIDE_ENCHANTS)
-                        .addPersistentData(Main.getInstance(), "chave.mistica")
-                        .build(target);
+                        .addPersistentData(Main.getInstance(), "chave.mistica", "chave.mistica")
+                        .build());
 
                 break;
             case "lendaria":
 
-                new ItemBuilder(Material.TRIPWIRE_HOOK)
+                target.getInventory().addItem(new ItemBuilder(Material.TRIPWIRE_HOOK)
                         .setDisplayName("§6Chave §lLendária!")
                         .setLore(Arrays.asList(
                                 "§7Use esta chave para",
@@ -101,13 +97,13 @@ public class KeyCommand extends BaseCommand {
                         .addUnsafeEnchantment(Enchantment.DURABILITY, 1)
                         .addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
                         .addItemFlags(ItemFlag.HIDE_ENCHANTS)
-                        .addPersistentData(Main.getInstance(), "chave.lendaria")
-                        .build(target);
+                        .addPersistentData(Main.getInstance(), "chave.lendaria", "chave.lendaria")
+                        .build());
 
                 break;
             case "blizzard":
 
-                new ItemBuilder(Material.TRIPWIRE_HOOK)
+                target.getInventory().addItem(new ItemBuilder(Material.TRIPWIRE_HOOK)
                         .setDisplayName("§bChave §lBlizzard!")
                         .setLore(Arrays.asList(
                                 "§7Use esta chave para",
@@ -118,8 +114,8 @@ public class KeyCommand extends BaseCommand {
                         .addUnsafeEnchantment(Enchantment.DURABILITY, 1)
                         .addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
                         .addItemFlags(ItemFlag.HIDE_ENCHANTS)
-                        .addPersistentData(Main.getInstance(), "chave.blizzard")
-                        .build(target);
+                        .addPersistentData(Main.getInstance(), "chave.blizzard", "chave.blizzard")
+                        .build());
 
                 break;
             default:

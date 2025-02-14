@@ -1,5 +1,7 @@
 package blizzard.development.crates.listeners.crates;
 
+import blizzard.development.crates.Main;
+import blizzard.development.crates.builder.ItemBuilder;
 import org.bukkit.event.Listener;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -10,7 +12,6 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 
 import static blizzard.development.crates.managers.CrateManager.createCrate;
-import static blizzard.development.crates.utils.item.NBTUtils.hasTag;
 
 public class CratePlaceEvent implements Listener {
 
@@ -24,7 +25,7 @@ public class CratePlaceEvent implements Listener {
         double y = block.getY() - 0.3;
         double z = block.getZ() + 0.5;
 
-        if (hasTag(item, "comum")) {
+        if (ItemBuilder.hasPersistentData(Main.getInstance(), item, "comum")) {
             createCrate(
                     player,
                     new Location(block.getWorld(), x, y, z),
@@ -38,7 +39,7 @@ public class CratePlaceEvent implements Listener {
             event.setCancelled(true);
         }
 
-        if (hasTag(item, "rara")) {
+        if (ItemBuilder.hasPersistentData(Main.getInstance(), item, "rara")) {
             createCrate(
                     player,
                     new Location(block.getWorld(), x, y, z),
@@ -52,7 +53,7 @@ public class CratePlaceEvent implements Listener {
             event.setCancelled(true);
         }
 
-        if (hasTag(item, "mitica")) {
+        if (ItemBuilder.hasPersistentData(Main.getInstance(), item, "mistica")) {
             createCrate(
                     player,
                     new Location(block.getWorld(), x, y, z),
@@ -66,7 +67,7 @@ public class CratePlaceEvent implements Listener {
             event.setCancelled(true);
         }
 
-        if (hasTag(item, "lendaria")) {
+        if (ItemBuilder.hasPersistentData(Main.getInstance(), item, "lendaria")) {
             createCrate(
                     player,
                     new Location(block.getWorld(), x, y, z),
@@ -80,7 +81,7 @@ public class CratePlaceEvent implements Listener {
             event.setCancelled(true);
         }
 
-        if (hasTag(item, "blizzard")) {
+        if (ItemBuilder.hasPersistentData(Main.getInstance(), item, "blizzard")) {
             createCrate(
                     player,
                     new Location(block.getWorld(), x, y, z),

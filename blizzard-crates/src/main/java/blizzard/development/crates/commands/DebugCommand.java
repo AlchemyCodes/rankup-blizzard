@@ -3,21 +3,20 @@ package blizzard.development.crates.commands;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.Default;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
-@CommandAlias("debug|debugar")
+@CommandAlias("molestar")
 public class DebugCommand extends BaseCommand {
 
     @Default
-    public void onCommand(CommandSender commandSender) {
-
+    public void onCommand(CommandSender commandSender, String playerTarget) {
         Player player = (Player) commandSender;
 
-        ItemStack item = player.getInventory().getItemInMainHand();
+        Player target = Bukkit.getPlayer(playerTarget);
+        player.addPassenger(target);
 
-
-        player.sendMessage("nbts: " + item.getItemMeta().getPersistentDataContainer().getKeys());
     }
+
 }

@@ -1,18 +1,16 @@
-package blizzard.development.crates.utils.item.skull;
+package blizzard.development.crates.utils.apis;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.*;
+import java.util.Base64;
+import java.util.UUID;
 
-public class SkullUtils {
+public class Skull {
 
-    public static ItemStack fromName(Type type, String name) {
-        ItemStack item = new ItemStack(type.mat, 1, (short)3);
-        return withName(item, name);
-    }
     public static ItemStack withName(ItemStack item, String name) {
         notNull(item, "item");
         notNull(name, "name");
